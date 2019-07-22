@@ -1,0 +1,14 @@
+{
+  "name": "objectum-react",
+  "version": "0.1.0",
+  "description": "Objectum react components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dmitry Samortsev <objectum.ru@gmail.com> (http://objectum.org)",
+  "license": "MIT",
+  "dependencies": {
+    "objectum-client": "^1.0.4"
+  }
+}
