@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash, toString} from "./helper";
+import {getHash, setHash, valueToString} from "./helper";
 
 class Grid extends Component {
 	constructor (props) {
@@ -261,7 +261,7 @@ class Grid extends Component {
 								<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
 									{me.cols.map ((col, j) => {
 										return (
-											<td key={i + "_" + j}>{toString (rec [col.code], col)}</td>
+											<td key={i + "_" + j}>{valueToString (rec [col.code], col)}</td>
 										);
 									})}
 								</tr>

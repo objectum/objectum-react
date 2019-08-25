@@ -31,7 +31,47 @@ import ViewAttr from "./components/ViewAttr";
 import ViewAttrs from "./components/ViewAttrs";
 import Views from "./components/Views";
 
-module.exports = {
+// export Foo and Bar as named exports
+export {
+	Action,
+	Auth,
+	BooleanField,
+	ChooseField,
+	Class,
+	ClassAttr,
+	ClassAttrs,
+	Classes,
+	Confirm,
+	DateField,
+	Field,
+	FileField,
+	Form,
+	Grid,
+	Menu,
+	Menus,
+	NumberField,
+	ObjectumApp,
+	Role,
+	Roles,
+	SelectField,
+	StringField,
+	Tab,
+	Tabs,
+	TreeGrid,
+	Types,
+	User,
+	Users,
+	View,
+	ViewAttr,
+	ViewAttrs,
+	Views
+};
+
+// alternative, more concise syntax for named exports
+// export { default as Foo } from './Foo'
+
+// you can optionally also set a default export for your module
+export default {
 	Action,
 	Auth,
 	BooleanField,

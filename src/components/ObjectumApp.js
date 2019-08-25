@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
-import store from "objectum-client";
+//import store from "objectum-client";
 import Auth from "./Auth";
 import Classes from "./Classes";
 import Class from "./Class";
@@ -16,14 +16,15 @@ class ObjectumApp extends Component {
 		let me = this;
 		
 		me.state = {};
-		store.setUrl ("/api/projects/tests/");
+		me.store = me.props.store;
+		//store.setUrl ("/api/projects/tests/");
 	}
 	
 	async componentDidMount () {
 		let me = this;
 		
 		if (me.props.username && me.props.password) {
-			let sid = await store.auth ({
+			let sid = await me.store.auth ({
 				username: me.props.username,
 				password: me.props.password
 			});
@@ -58,12 +59,12 @@ class ObjectumApp extends Component {
 							</div>
 						</nav>
 						<div className="container mt-1">
-							<Route path="/views" render={props => <Views {...props} store={store} />} />
-							<Route path="/view/:rid" render={props => <View {...props} store={store} />} />
-							<Route path="/view_attr/:rid" render={props => <ViewAttr {...props} store={store} />} />
-							<Route path="/classes" render={props => <Classes {...props} store={store} />} />
-							<Route path="/class/:rid" render={props => <Class {...props} store={store} />} />
-							<Route path="/class_attr/:rid" render={props => <ClassAttr {...props} store={store} />} />
+							<Route path="/views" render={props => <Views {...props} store={me.store} />} />
+							<Route path="/view/:rid" render={props => <View {...props} store={me.store} />} />
+							<Route path="/view_attr/:rid" render={props => <ViewAttr {...props} store={me.store} />} />
+							<Route path="/classes" render={props => <Classes {...props} store={me.store} />} />
+							<Route path="/class/:rid" render={props => <Class {...props} store={me.store} />} />
+							<Route path="/class_attr/:rid" render={props => <ClassAttr {...props} store={me.store} />} />
 						</div>
 					</Router>
 				</div>
@@ -73,7 +74,7 @@ class ObjectumApp extends Component {
 				<div className="container">
 					<div className="row">
 						<div className="col-sm-4 offset-sm-4 col-md-2 offset-md-5 col-lg-2 offset-lg-5">
-							<Auth store={store} onConnect={sid => me.setState ({sid})} />
+							<Auth store={me.store} onConnect={sid => me.setState ({sid})} />
 						</div>
 					</div>
 				</div>

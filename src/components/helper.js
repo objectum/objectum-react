@@ -97,7 +97,7 @@ function setHash (next) {
 	window.location.hash = JSON.stringify (hash);
 };
 
-function toString (value, col) {
+function valueToString (value, col) {
 	if (value === null) {
 		value = "";
 	} else
@@ -154,7 +154,7 @@ function loadJS (file) {
 module.exports = {
 	getHash,
 	setHash,
-	toString,
+	valueToString,
 	loadCSS,
 	loadJS,
 	getDateString
