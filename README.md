@@ -1,31 +1,16 @@
 # objectum-react
 
-> React components for objectum platform
+[![Travis][build-badge]][build]
+[![npm package][npm-badge]][npm]
+[![Coveralls][coveralls-badge]][coveralls]
 
-[![NPM](https://img.shields.io/npm/v/objectum-react.svg)](https://www.npmjs.com/package/objectum-react) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+Describe objectum-react here.
 
-## Install
+[build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
+[build]: https://travis-ci.org/user/repo
 
-```bash
-npm install --save objectum-react
-```
+[npm-badge]: https://img.shields.io/npm/v/npm-package.png?style=flat-square
+[npm]: https://www.npmjs.org/package/npm-package
 
-## Usage
-
-```jsx
-import React, { Component } from 'react'
-
-import MyComponent from 'objectum-react'
-
-class Example extends Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
-```
-
-## License
-
-MIT © [objectum](https://github.com/objectum)
+[coveralls-badge]: https://img.shields.io/coveralls/user/repo/master.png?style=flat-square
+[coveralls]: https://coveralls.io/github/user/repo
