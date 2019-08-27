@@ -8,6 +8,11 @@ import ClassAttr from "./ClassAttr";
 import Views from "./Views";
 import View from "./View";
 import ViewAttr from "./ViewAttr";
+import Roles from "./components/Roles";
+import Role from "./components/Role";
+import Users from "./components/Users";
+import User from "./components/User";
+import Menu from "./components/Menu";
 
 class ObjectumApp extends Component {
 	constructor (props) {
@@ -43,7 +48,7 @@ class ObjectumApp extends Component {
 				<div>
 					<Router>
 						<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-							<button className="navbar-brand">Objectum</button>
+							<a className="navbar-brand" href="#">Objectum</a>
 							<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 								<span className="navbar-toggler-icon"></span>
 							</button>
@@ -55,6 +60,12 @@ class ObjectumApp extends Component {
 									<li className="nav-item">
 										<Link className="nav-link" to="/views">Views</Link>
 									</li>
+									<li className="nav-item">
+										<Link className="nav-link" to="/roles">Roles</Link>
+									</li>
+									<li className="nav-item">
+										<Link className="nav-link" to="/users">Users</Link>
+									</li>
 								</ul>
 							</div>
 						</nav>
@@ -65,6 +76,11 @@ class ObjectumApp extends Component {
 							<Route path="/classes" render={props => <Classes {...props} store={me.store} />} />
 							<Route path="/class/:rid" render={props => <Class {...props} store={me.store} />} />
 							<Route path="/class_attr/:rid" render={props => <ClassAttr {...props} store={me.store} />} />
+							<Route path="/roles" render={props => <Roles {...props} store={store} />} />
+							<Route path="/role/:rid" render={props => <Role {...props} store={store} />} />
+							<Route path="/users" render={props => <Users {...props} store={store} />} />
+							<Route path="/user/:rid" render={props => <User {...props} store={store} />} />
+							<Route path="/menu/:rid" render={props => <Menu {...props} store={store} />} />
 						</div>
 					</Router>
 				</div>
