@@ -8,11 +8,11 @@ import ClassAttr from "./ClassAttr";
 import Views from "./Views";
 import View from "./View";
 import ViewAttr from "./ViewAttr";
-import Roles from "./components/Roles";
-import Role from "./components/Role";
-import Users from "./components/Users";
-import User from "./components/User";
-import Menu from "./components/Menu";
+import Roles from "./Roles";
+import Role from "./Role";
+import Users from "./Users";
+import User from "./User";
+import Menu from "./Menu";
 
 class ObjectumApp extends Component {
 	constructor (props) {
@@ -76,11 +76,11 @@ class ObjectumApp extends Component {
 							<Route path="/classes" render={props => <Classes {...props} store={me.store} />} />
 							<Route path="/class/:rid" render={props => <Class {...props} store={me.store} />} />
 							<Route path="/class_attr/:rid" render={props => <ClassAttr {...props} store={me.store} />} />
-							<Route path="/roles" render={props => <Roles {...props} store={store} />} />
-							<Route path="/role/:rid" render={props => <Role {...props} store={store} />} />
-							<Route path="/users" render={props => <Users {...props} store={store} />} />
-							<Route path="/user/:rid" render={props => <User {...props} store={store} />} />
-							<Route path="/menu/:rid" render={props => <Menu {...props} store={store} />} />
+							<Route path="/roles" render={props => <Roles {...props} store={me.store} />} />
+							<Route path="/role/:rid" render={props => <Role {...props} store={me.store} />} />
+							<Route path="/users" render={props => <Users {...props} store={me.store} />} />
+							<Route path="/user/:rid" render={props => <User {...props} store={me.store} />} />
+							<Route path="/menu/:rid" render={props => <Menu {...props} store={me.store} />} />
 						</div>
 					</Router>
 				</div>
