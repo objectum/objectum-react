@@ -97,16 +97,6 @@ function setHash (next) {
 	window.location.hash = JSON.stringify (hash);
 };
 
-function valueToString (value, col) {
-	if (value === null) {
-		value = "";
-	} else
-	if (col.type == 3) {
-		value = getDateString (value);
-	}
-	return value;
-};
-
 function loadCSS (file) {
 	return new Promise (resolve => {
 		let link = document.createElement ("link");
@@ -154,7 +144,6 @@ function loadJS (file) {
 module.exports = {
 	getHash,
 	setHash,
-	valueToString,
 	loadCSS,
 	loadJS,
 	getDateString

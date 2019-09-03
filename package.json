@@ -26,15 +26,26 @@
     "react-router-dom": "^5.0.1"
   },
   "devDependencies": {
+    "fastify": "^2.8.0",
+    "fastify-http-proxy": "^2.2.0",
     "nwb": "0.23.x",
+    "objectum-client": "^1.0.22",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
-  "author": "",
+  "author": "Dmitriy Samortsev",
   "homepage": "",
   "license": "MIT",
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/objectum/objectum-react.git"
+  },
   "keywords": [
     "react-component"
-  ]
+  ],
+  "dependencies": {
+    "react-dropzone": "^10.1.8",
+    "react-modal": "^3.10.1",
+    "react-router-dom": "^5.0.1"
+  }
 }

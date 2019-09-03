@@ -2,7 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash, valueToString} from "./helper";
+import {getHash, setHash} from "./helper";
+import Cell from "./Cell";
 
 class TreeGrid extends Component {
 	constructor (props) {
@@ -346,7 +347,7 @@ class TreeGrid extends Component {
 								<td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder"></i> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>
 								{me.cols.map ((col, j) => {
 									return (
-										<td key={i + "_" + j}>{valueToString (rec [col.code], col)}</td>
+										<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} /></td>
 									);
 								})}
 							</tr>
