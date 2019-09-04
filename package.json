@@ -1,6 +1,6 @@
 {
   "name": "objectum-react",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "objectum-react React component",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -42,10 +42,5 @@
   },
   "keywords": [
     "react-component"
-  ],
-  "dependencies": {
-    "react-dropzone": "^10.1.8",
-    "react-modal": "^3.10.1",
-    "react-router-dom": "^5.0.1"
-  }
+  ]
 }
