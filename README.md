@@ -2,7 +2,7 @@ Under construction.
 
 # objectum-react
 
-Simple react components.
+Simple react components for objectum UI.
 
 ## Components
 * [ObjectumApp](#objectum_app)  
@@ -57,7 +57,7 @@ Quick login:
 <a name="auth" />
 
 ### Auth
-Authorization form.
+Authentication form.
 
 <a name="grid" />
 
