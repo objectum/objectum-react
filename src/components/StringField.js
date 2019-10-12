@@ -56,7 +56,7 @@ class StringField extends Component {
 		let id = me.props.attr;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
-		let cmp = <input type="text" className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;
+		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;
 		
 		if (me.props.textarea) {
 			cmp = <textarea className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;

@@ -60,6 +60,7 @@ class Form extends Component {
 					me.map [attr].type = ca.get ("type");
 					me.map [attr].label = me.map [attr].label || ca.get ("name");
 					me.map [attr].notNull = ca.get ("notNull");
+					me.map [attr].secure = ca.get ("secure");
 
 					if (ca.get ("type") >= 1000 && me.map [attr].dict) {
 						let cls = me.props.store.getClass (ca.get ("type"));
@@ -179,10 +180,18 @@ class Form extends Component {
 				attrs ["class"] = me.props.cid;
 			}
 			for (let attr in me.map) {
+				let ma = me.map [attr];
+				
 				if (me.state.hasOwnProperty (attr)) {
 					let v = me.state [attr];
 					
-					me.map [attr].value = v;
+					if (ma.type == 2 || ma.type >= 1000) {
+						v = Number (v);
+					}
+					if (ma.secure) {
+						v = require ("crypto").createHash ("sha1").update (String (v)).digest ("hex").toUpperCase ();
+					}
+					ma.value = v;
 					
 					if (v === "") {
 						v = null;
@@ -324,7 +333,7 @@ class Form extends Component {
 		return (
 			<div className="bg-white">
 				{me.props.title && <h5>{me.props.title}</h5>}
-				{me.state.ready && <div className="objectum-toolbar">
+				{me.state.ready && <div className="mb-3">
 					{!me.state.rid && <button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={createDisabled}><i className="fas fa-plus-circle mr-2"></i> {me.state.creating ? "Creating" : "Create"}</button>}
 					{me.state.rid && <button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={saveDisabled}><i className="fas fa-save mr-2"></i> {me.state.saving ? "Saving" : "Save"}</button>}
 					<button type="button" className="btn btn-primary" onClick={me.onRefresh}><i className="fas fa-sync mr-2"></i> Refresh</button>

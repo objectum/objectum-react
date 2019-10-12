@@ -44,6 +44,7 @@ class ObjectumApp extends Component {
 			return (<div/>);
 		}
 		if (me.state.sid) {
+			console.log ("data", store.getUserId (), store.getRoleId (), store.getMenuId ());
 			return (
 				<div>
 					<Router>
