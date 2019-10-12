@@ -24,13 +24,13 @@ class ClassAttr extends Component {
 		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
-			classAttrName: "-",
+			label: "-",
 			"class": hash.opts ["class"]
 		};
 		if (me.state.rid) {
 			let o = me.props.store.getClassAttr (me.state.rid);
 			
-			me.state.classAttrName = o.get ("name") + " (" + o.getPath () + ")";
+			me.state.label = o.getLabel ();
 			me.state.type = o.get ("type");
 		}
 		me.onChange = me.onChange.bind (me);
@@ -50,7 +50,7 @@ class ClassAttr extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i> Back</button>
-				<Tabs key="tabs" id="tabs" title={"Class attribute: " + me.state.classAttrName}>
+				<Tabs key="tabs" id="tabs" title={"Class attribute: " + me.state.label}>
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="classAttr" rid={me.state.rid} onChange={me.onChange} >
 							<div className="form-row">

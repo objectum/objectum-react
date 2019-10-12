@@ -23,18 +23,13 @@ class ViewAttr extends Component {
 		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
-			viewAttrName: "-",
+			label: "-",
 			view: hash.opts.view
 		};
-	}
-	
-	async componentDidMount () {
-		let me = this;
-		
 		if (me.state.rid) {
 			let o = me.props.store.getViewAttr (me.state.rid);
 			
-			me.setState ({viewAttrName: o.get ("name") + " (" + o.getPath () + ")"});
+			me.state.label = o.getLabel ();
 		}
 	}
 	
@@ -47,7 +42,7 @@ class ViewAttr extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i> Back</button>
-				<Tabs key="tabs" id="tabs" title={"View attribute: " + me.state.viewAttrName}>
+				<Tabs key="tabs" id="tabs" title={"View attribute: " + me.state.label}>
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="viewAttr" rid={me.state.rid}>
 							<div className="form-row">

@@ -22,20 +22,15 @@ class Class extends Component {
 		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
-			className: "-",
+			label: "-",
 			parent: hash.opts.parent,
 			removeConfirm: false,
 			refresh: false
 		};
-	}
-	
-	async componentDidMount () {
-		let me = this;
-		
 		if (me.state.rid) {
 			let o = me.props.store.getClass (me.state.rid);
 			
-			me.setState ({className: o.get ("name") + " (" + o.getPath () + ")"});
+			me.state.label = o.getLabel ();
 		}
 	}
 	
@@ -45,7 +40,7 @@ class Class extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i> Back</button>
-				<Tabs key="tabs" id="tabs" title={"Class: " + me.state.className}>
+				<Tabs key="tabs" id="tabs" title={"Class: " + me.state.label}>
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="class" rid={me.state.rid}>
 							<div className="form-row">

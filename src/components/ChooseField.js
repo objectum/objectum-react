@@ -27,7 +27,7 @@ function objectField (ComponentClass) {
 			if (me.state.value) {
 				let o = await me.props.store.getRsc (me.props.rsc, me.state.value);
 				
-				name = o.getName ();
+				name = o.getLabel ();
 			}
 			me.setState ({name});
 		}

@@ -23,18 +23,13 @@ class View extends Component {
 		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
-			viewName: "-",
+			label: "-",
 			parent: hash.opts.parent
 		};
-	}
-	
-	async componentDidMount () {
-		let me = this;
-		
 		if (me.state.rid) {
 			let o = me.props.store.getView (me.state.rid);
 			
-			me.setState ({viewName: o.get ("name") + " (" + o.getPath () + ")"});
+			me.state.label = o.getLabel ();
 		}
 	}
 	
@@ -44,7 +39,7 @@ class View extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i> Back</button>
-				<Tabs key="tabs" id="tabs" title={"View: " + me.state.viewName}>
+				<Tabs key="tabs" id="tabs" title={"View: " + me.state.label}>
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="view" rid={me.state.rid}>
 							<div className="form-row">

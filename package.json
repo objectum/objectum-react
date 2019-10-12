@@ -1,6 +1,6 @@
 {
   "name": "objectum-react",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "objectum-react React component",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -29,7 +29,7 @@
     "fastify": "^2.8.0",
     "fastify-http-proxy": "^2.2.0",
     "nwb": "0.23.x",
-    "objectum-client": "^1.0.22",
+    "objectum-client": "^1.0.27",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
@@ -42,5 +42,10 @@
   },
   "keywords": [
     "react-component"
-  ]
+  ],
+  "dependencies": {
+    "react-dropzone": "^10.1.10",
+    "react-modal": "^3.10.1",
+    "react-router-dom": "^5.1.2"
+  }
 }
