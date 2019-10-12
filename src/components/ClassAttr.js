@@ -31,7 +31,13 @@ class ClassAttr extends Component {
 			let o = me.props.store.getClassAttr (me.state.rid);
 			
 			me.state.classAttrName = o.get ("name") + " (" + o.getPath () + ")";
+			me.state.type = o.get ("type");
 		}
+		me.onChange = me.onChange.bind (me);
+	}
+
+	onChange (id, v) {
+		this.setState ({[id]: v});
 	}
 	
 	render () {
@@ -83,7 +89,7 @@ class ClassAttr extends Component {
 									<BooleanField attr="secure" label="Secure" />
 								</div>
 								<div className="form-group col-md-6">
-									<SelectField attr="removeRule" label="Remove rule" recs={removeRuleRecs} />
+									{me.state.type >= 1000 && <SelectField attr="removeRule" label="Remove rule" recs={removeRuleRecs} />}
 								</div>
 							</div>
 						</Form>

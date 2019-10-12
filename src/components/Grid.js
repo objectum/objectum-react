@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash} from "./helper";
+import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
 import Cell from "./Cell";
 
 class Grid extends Component {
@@ -17,7 +17,7 @@ class Grid extends Component {
 		let page = 1;
 		let pageRecs = me.props.pageRecs || 10;
 		let selected = null;
-		let hash = getHash ();
+		let hash = getHash (me);
 		
 		if (hash [me.props.id]) {
 			if (hash [me.props.id].page) {
@@ -51,7 +51,7 @@ class Grid extends Component {
 		let page = me.state.page;
 		let pageRecs = me.state.pageRecs;
 		let selected = me.state.selected;
-		let hash = getHash ();
+		let hash = getHash (me);
 		let ready = true;
 		
 		if (hash [me.props.id]) {
@@ -74,15 +74,17 @@ class Grid extends Component {
 	}
 	
 	componentDidMount () {
-		window.addEventListener ("hashchange", this.hashChange);
+		//window.addEventListener ("hashchange", this.hashChange);
+		addHashListener (this, this.hashChange);
 	}
 	
 	componentWillUnmount () {
-		window.removeEventListener ("hashchange", this.hashChange);
+//		window.removeEventListener ("hashchange", this.hashChange);
+		removeHashListener (this, this.hashChange);
 	}
 	
 	onRowClick (row) {
-		setHash ({[this.props.id]: {selected: row}});
+		setHash (this, {[this.props.id]: {selected: row}});
 	}
 	
 	onChange (val) {
@@ -97,24 +99,24 @@ class Grid extends Component {
 			v = 1;
 		}
 		if (id == "pageRecs" || id == "page") {
-			setHash ({[me.props.id]: {[id]: v}});
+			setHash (me, {[me.props.id]: {[id]: v}});
 		}
 	}
 	
 	onFirst () {
-		setHash ({[this.props.id]: {page: 1}});
+		setHash (this, {[this.props.id]: {page: 1}});
 	}
 	
 	onPrev () {
-		setHash ({[this.props.id]: {page: Number (this.state.page) - 1}});
+		setHash (this, {[this.props.id]: {page: Number (this.state.page) - 1}});
 	}
 	
 	onLast () {
-		setHash ({[this.props.id]: {page: this.state.pageNum}});
+		setHash (this, {[this.props.id]: {page: this.state.pageNum}});
 	}
 	
 	onNext () {
-		setHash ({[this.props.id]: {page: Number (this.state.page) + 1}});
+		setHash (this, {[this.props.id]: {page: Number (this.state.page) + 1}});
 	}
 	
 	async load () {
@@ -138,7 +140,7 @@ class Grid extends Component {
 			me.cols = result.cols;
 			me.length = result.length;
 			
-			let hash = getHash ();
+			let hash = getHash (me);
 			
 			if (me.props.id && hash [me.props.id]) {
 				if (hash [me.props.id].page) {

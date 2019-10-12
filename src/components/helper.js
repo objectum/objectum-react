@@ -16,61 +16,13 @@ function getDateString (d) {
 	return d.getFullYear () + "-" + pad (d.getMonth () + 1) + "-" + pad (d.getDate ());
 };
 
-/*
-function getHash () {
-	try {
-		let hash = {};
-		let s1 = window.location.hash.substr (1);
-		
-		if (s1) {
-			s1.split ("&").forEach (s2 => {
-				let tokens1 = s2.split ("=");
-				let key = tokens1 [0];
-				
-				hash [key] = hash [key] || {};
-				
-				tokens1 [1].split (",").forEach (s3 => {
-					let tokens2 = s3.split (":");
-					
-					hash [key][tokens2 [0]] = tokens2 [1] == "null" ? null : Number (tokens2 [1]);
-				});
-			});
-		}
-		return hash;
-	} catch (err) {
-		return {};
-	}
-};
+let localHash = {};
+let hashListeners = [];
 
-function setHash (next) {
-	let hash = getHash ();
-	
-	for (let key in next) {
-		hash [key] = hash [key] || {};
-		
-		let o1 = next [key];
-		let o2 = hash [key];
-		
-		for (let a in o1) {
-			o2 [a] = o1 [a];
-		}
+function getHash (cmp) {
+	if (cmp && cmp.props && cmp.props.localHash) {
+		return localHash;
 	}
-	let s1 = [];
-	
-	for (let key in hash) {
-		let o = hash [key];
-		let s2 = [];
-		
-		for (let a in o) {
-			s2.push (`${a}:${o [a]}`);
-		}
-		s1.push (`${key}=${s2.join (",")}`);
-	}
-	window.location.hash = s1.join ("&");
-};
-*/
-
-function getHash () {
 	try {
 		let s = unescape (window.location.hash.substr (1) || "{}");
 		
@@ -81,8 +33,8 @@ function getHash () {
 	}
 };
 
-function setHash (next) {
-	let hash = getHash ();
+function setHash (cmp, next) {
+	let hash = getHash (cmp);
 	
 	for (let key in next) {
 		hash [key] = hash [key] || {};
@@ -94,7 +46,36 @@ function setHash (next) {
 			o2 [a] = o1 [a];
 		}
 	}
-	window.location.hash = JSON.stringify (hash);
+	if (cmp.props && cmp.props.localHash) {
+		localHash = hash;
+
+		for (let i = 0; i < hashListeners.length; i ++) {
+			hashListeners [i] ();
+		}
+	} else {
+		window.location.hash = JSON.stringify (hash);
+	}
+};
+
+function addHashListener (cmp, fn) {
+	if (cmp.props && cmp.props.localHash) {
+		hashListeners.push (fn);
+	} else {
+		window.addEventListener ("hashchange", fn);
+	}
+};
+
+function removeHashListener (cmp, fn) {
+	if (cmp.props && cmp.props.localHash) {
+		for (let i = 0; i < hashListeners.length; i ++) {
+			if (hashListeners [i] == fn) {
+				hashListeners.splice (i, 1);
+				break;
+			}
+		}
+	} else {
+		window.removeEventListener ("hashchange", fn);
+	}
 };
 
 function loadCSS (file) {
@@ -144,6 +125,8 @@ function loadJS (file) {
 module.exports = {
 	getHash,
 	setHash,
+	addHashListener,
+	removeHashListener,
 	loadCSS,
 	loadJS,
 	getDateString

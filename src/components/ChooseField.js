@@ -14,7 +14,7 @@ function objectField (ComponentClass) {
 			me.onChoose = me.onChoose.bind (me);
 			me.onVisible = me.onVisible.bind (me);
 			me.state = {
-				visible: props.visible || false,
+				visible: false,
 				value: props.value,
 				name: ""
 			};
@@ -45,7 +45,6 @@ function objectField (ComponentClass) {
 		onVisible () {
 			let me = this;
 			
-			me.props.onVisible ();
 			me.setState ({visible: !me.state.visible});
 		}
 		
@@ -62,7 +61,6 @@ function objectField (ComponentClass) {
 			if (selected !== null) {
 				value = cmp.recs [selected].id;
 			}
-			me.props.onVisible ();
 			me.setState ({value, visible: false});
 			me.props.onChange ({
 				target: {
@@ -120,8 +118,7 @@ class ChooseField extends Component {
 		
 		me.onChange = me.onChange.bind (me);
 		me.state = {
-			value: me.props.value,
-			visible: false
+			value: me.props.value
 		};
 	}
 	
@@ -144,8 +141,7 @@ class ChooseField extends Component {
 		}
 		let ObjectField = objectField (me.props.choose);
 		let props = {
-			...me.props, addCls, onChange: me.onChange, disabled, value: me.state.value, id, visible: me.state.visible,
-			onVisible: () => me.setState ({visible: !me.state.visible})
+			...me.props, addCls, onChange: me.onChange, disabled, value: me.state.value, id, localHash: true
 		};
 		return (
 			<div className="form-group">

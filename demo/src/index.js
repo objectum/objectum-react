@@ -16,7 +16,9 @@ class Demo extends Component {
 	render () {
 		return (
 			<div>
-				<ObjectumApp store={store} />
+				<ObjectumApp store={store} username="admin" password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()} name="Catalog">
+				
+				</ObjectumApp>
 			</div>
 		);
 	}

@@ -66,7 +66,7 @@ class Views extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<TreeGrid id="views" title="Views" store={me.props.store} view="objectum.view" pageRecs={10} refresh={me.state.refresh} onSelectParent={(parent) => me.parent = parent}>
+					<TreeGrid {...me.props} id="views" ref="views" title="Views" store={me.props.store} view="objectum.view" pageRecs={10} refresh={me.state.refresh} onSelectParent={(parent) => me.parent = parent}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>

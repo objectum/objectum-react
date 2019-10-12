@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash} from "./helper";
+import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
 
 class Tabs extends Component {
 	constructor (props) {
@@ -14,7 +14,7 @@ class Tabs extends Component {
 		me.hashChange = me.hashChange.bind (me);
 		
 		let tab = 0;
-		let hash = getHash ();
+		let hash = getHash (me);
 
 		if (hash [me.props.id]) {
 			tab = hash [me.props.id].tab;
@@ -27,7 +27,7 @@ class Tabs extends Component {
 	
 	hashChange () {
 		let me = this;
-		let hash = getHash ();
+		let hash = getHash (me);
 		let tab = 0;
 		
 		if (hash [me.props.id] && hash [me.props.id].tab) {
@@ -37,15 +37,17 @@ class Tabs extends Component {
 	}
 	
 	componentDidMount () {
-		window.addEventListener ("hashchange", this.hashChange);
+		//window.addEventListener ("hashchange", this.hashChange);
+		addHashListener (this, this.hashChange);
 	}
 	
 	componentWillUnmount () {
-		window.removeEventListener ("hashchange", this.hashChange);
+//		window.removeEventListener ("hashchange", this.hashChange);
+		removeHashListener (this, this.hashChange);
 	}
 	
 	changeTab (i) {
-		setHash ({[this.props.id]: {tab: i}});
+		setHash (this, {[this.props.id]: {tab: i}});
 	}
 	
 	render () {

@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash} from "./helper";
+import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
 import Cell from "./Cell";
 
 class TreeGrid extends Component {
@@ -21,7 +21,7 @@ class TreeGrid extends Component {
 		let pageRecs = me.props.pageRecs || 10;
 		let selected = null;
 		let parent = null;
-		let hash = getHash ();
+		let hash = getHash (me);
 		
 		if (hash [me.props.id]) {
 			if (hash [me.props.id].page) {
@@ -65,7 +65,7 @@ class TreeGrid extends Component {
 		let pageRecs = me.state.pageRecs;
 		let selected = me.state.selected;
 		let parent = me.state.parent;
-		let hash = getHash ();
+		let hash = getHash (me);
 		let ready = true;
 		
 		if (hash [me.props.id]) {
@@ -99,19 +99,21 @@ class TreeGrid extends Component {
 	}
 	
 	componentDidMount () {
-		window.addEventListener ("hashchange", this.hashChange);
+		//window.addEventListener ("hashchange", this.hashChange);
+		addHashListener (this, this.hashChange);
 	}
 	
 	componentWillUnmount () {
-		window.removeEventListener ("hashchange", this.hashChange);
+		//window.removeEventListener ("hashchange", this.hashChange);
+		removeHashListener (this, this.hashChange);
 	}
 	
 	onRowClick (row) {
-		setHash ({[this.props.id]: {selected: row}});
+		setHash (this, {[this.props.id]: {selected: row}});
 	}
 	
 	onFolderClick (id) {
-		setHash ({[this.props.id]: {parent: id, selected: null}});
+		setHash (this, {[this.props.id]: {parent: id, selected: null}});
 	}
 	
 	onChange (val) {
@@ -126,24 +128,24 @@ class TreeGrid extends Component {
 			v = 1;
 		}
 		if (id == "pageRecs" || id == "page") {
-			setHash ({[me.props.id]: {[id]: v, selected: null}});
+			setHash (me, {[me.props.id]: {[id]: v, selected: null}});
 		}
 	}
 	
 	onFirst () {
-		setHash ({[this.props.id]: {page: 1, selected: null}});
+		setHash (this, {[this.props.id]: {page: 1, selected: null}});
 	}
 	
 	onPrev () {
-		setHash ({[this.props.id]: {page: Number (this.state.page) - 1, selected: null}});
+		setHash (this, {[this.props.id]: {page: Number (this.state.page) - 1, selected: null}});
 	}
 	
 	onLast () {
-		setHash ({[this.props.id]: {page: this.state.pageNum, selected: null}});
+		setHash (this, {[this.props.id]: {page: this.state.pageNum, selected: null}});
 	}
 	
 	onNext () {
-		setHash ({[this.props.id]: {page: Number (this.state.page) + 1, selected: null}});
+		setHash (this, {[this.props.id]: {page: Number (this.state.page) + 1, selected: null}});
 	}
 	
 	async load () {
@@ -175,7 +177,7 @@ class TreeGrid extends Component {
 			result.recs.forEach (rec => {
 				me.nodeMap [rec.id] = rec;
 			});
-			let hash = getHash ();
+			let hash = getHash (me);
 			
 			if (me.props.id && hash [me.props.id]) {
 				if (hash [me.props.id].page) {
