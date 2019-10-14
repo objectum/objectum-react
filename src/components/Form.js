@@ -125,10 +125,18 @@ class Form extends Component {
 		
 		try {
 			for (let attr in me.map) {
+				let ma = me.map [attr];
+				
 				if (me.state.hasOwnProperty (attr) && me.state [attr] !== me.map [attr].value) {
 					let v = me.state [attr];
 					
-					me.map [attr].value = v;
+					if (v && (ma.type == 2 || ma.type >= 1000)) {
+						v = Number (v);
+					}
+					if (ma.secure) {
+						v = require ("crypto").createHash ("sha1").update (String (v)).digest ("hex").toUpperCase ();
+					}
+					ma.value = v;
 					
 					if (v === "") {
 						v = null;
@@ -185,7 +193,7 @@ class Form extends Component {
 				if (me.state.hasOwnProperty (attr)) {
 					let v = me.state [attr];
 					
-					if (ma.type == 2 || ma.type >= 1000) {
+					if (v && (ma.type == 2 || ma.type >= 1000)) {
 						v = Number (v);
 					}
 					if (ma.secure) {

@@ -1,7 +1,7 @@
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import Grid from "./Grid";
 import Action from "./Action";
 import Confirm from "./Confirm";

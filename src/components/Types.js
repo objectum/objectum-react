@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import TreeGrid from "./TreeGrid";
 
 class Types extends Component {

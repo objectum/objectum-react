@@ -1,51 +1,46 @@
 {
-  "name": "objectum-react",
-  "version": "1.0.9",
-  "description": "objectum-react React component",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "files": [
-    "css",
-    "es",
-    "lib",
-    "umd"
-  ],
-  "scripts": {
-    "build": "nwb build-react-component --copy-files",
-    "clean": "nwb clean-module && nwb clean-demo",
-    "prepublishOnly": "npm run build",
-    "start": "nwb serve-react-demo",
-    "test": "nwb test-react",
-    "test:coverage": "nwb test-react --coverage",
-    "test:watch": "nwb test-react --server"
-  },
-  "peerDependencies": {
-    "react": "16.x",
-    "react-dropzone": "^10.1.7",
-    "react-modal": "^3.10.1",
-    "react-router-dom": "^5.0.1"
-  },
-  "devDependencies": {
-    "fastify": "^2.8.0",
-    "fastify-http-proxy": "^2.2.0",
-    "nwb": "0.23.x",
-    "objectum-client": "^1.0.30",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
-  },
-  "author": "Dmitriy Samortsev",
-  "homepage": "",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/objectum/objectum-react.git"
-  },
-  "keywords": [
-    "react-component"
-  ],
-  "dependencies": {
-    "react-dropzone": "^10.1.10",
-    "react-modal": "^3.10.1",
-    "react-router-dom": "^5.1.2"
-  }
+	"name": "objectum-react",
+	"version": "1.0.9",
+	"description": "objectum-react React component",
+	"main": "lib/index.js",
+	"module": "es/index.js",
+	"files": [
+		"css",
+		"es",
+		"lib",
+		"umd"
+	],
+	"scripts": {
+		"build": "nwb build-react-component --copy-files",
+		"clean": "nwb clean-module && nwb clean-demo",
+		"prepublishOnly": "npm run build",
+		"start": "nwb serve-react-demo",
+		"test": "nwb test-react",
+		"test:coverage": "nwb test-react --coverage",
+		"test:watch": "nwb test-react --server"
+	},
+	"peerDependencies": {
+		"react": "16.x",
+		"react-dropzone": "^10.1.7",
+		"react-modal": "^3.10.1",
+		"react-router-dom": "^5.0.1"
+	},
+	"devDependencies": {
+		"fastify": "^2.8.0",
+		"fastify-http-proxy": "^2.2.0",
+		"nwb": "0.23.x",
+		"objectum-client": "^1.0.31",
+		"react": "^16.9.0",
+		"react-dom": "^16.9.0"
+	},
+	"author": "Dmitriy Samortsev",
+	"homepage": "",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/objectum/objectum-react.git"
+	},
+	"keywords": [
+		"react-component"
+	]
 }

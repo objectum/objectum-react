@@ -1,7 +1,7 @@
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import StringField from "./StringField";
 import BooleanField from "./BooleanField";
 import SelectField from "./SelectField";

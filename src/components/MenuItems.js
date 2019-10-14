@@ -1,18 +1,20 @@
 import React, {Component} from "react";
 import Action from "./Action";
 import Confirm from "./Confirm";
-import Grid from "./Grid";
+import TreeGrid from "./TreeGrid";
 
-class Menus extends Component {
+class MenuItems extends Component {
 	constructor (props) {
 		super (props);
 		
 		let me = this;
-
+		
+		me.menu = me.props.menu;
 		me.onCreate = me.onCreate.bind (me);
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
 		me.state = {
+			parent: null,
 			removeConfirm: false,
 			refresh: false
 		};
@@ -22,9 +24,11 @@ class Menus extends Component {
 		let me = this;
 		
 		me.props.history.push ({
-			pathname: "/menu/new#" + JSON.stringify ({
+			pathname: "/menu_item/new#" + JSON.stringify ({
 				opts: {
-					from: unescape (window.location.pathname + window.location.hash)
+					from: unescape (window.location.pathname + window.location.hash),
+					menu: me.menu,
+					parent: me.state.parent
 				}
 			})
 		});
@@ -34,7 +38,7 @@ class Menus extends Component {
 		let me = this;
 		
 		me.props.history.push ({
-			pathname: "/menu/" + id + "#" + JSON.stringify ({
+			pathname: "/menu_item/" + id + "#" + JSON.stringify ({
 				opts: {
 					from: unescape (window.location.pathname + window.location.hash)
 				}
@@ -46,7 +50,7 @@ class Menus extends Component {
 		let me = this;
 		
 		if (confirmed) {
-			await me.props.store.startTransaction ("Removing menu: " + me.state.removeId);
+			await me.props.store.startTransaction ("Removing menu item: " + me.state.removeId);
 			await me.props.store.removeObject (me.state.removeId);
 			await me.props.store.commitTransaction ();
 		}
@@ -60,11 +64,11 @@ class Menus extends Component {
 			<div>
 				<div className="row">
 					<div className="col-sm-12">
-						<Grid {...me.props} id="menus" ref="menus" title="Menus" store={me.props.store} view="objectum.menu" refresh={me.state.refresh}>
+						<TreeGrid {...me.props} id="menuItems" ref="menuItems" store={me.props.store} view="objectum.menuItem" refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}}>
 							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
 							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
 							<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>
-						</Grid>
+						</TreeGrid>
 					</div>
 					<Confirm title="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
 				</div>
@@ -73,4 +77,4 @@ class Menus extends Component {
 	}
 };
 
-export default Menus;
+export default MenuItems;

@@ -1,7 +1,7 @@
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
@@ -34,10 +34,8 @@ class Role extends Component {
 						<Form key="form1" store={me.props.store} rsc="object" rid={me.state.rid} cid="objectum.role">
 							<Field attr="name" />
 							<Field attr="code" />
+							<Field attr="menu" dict={true} />
 						</Form>
-					</Tab>
-					<Tab key="Tab2" title="Menu">
-						<Menus {...me.props} role={me.state.rid} />
 					</Tab>
 				</Tabs>
 			</div>

@@ -6,10 +6,12 @@ import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
-import MenuItems from "./MenuItems";
 import {getHash} from "./helper";
+import Menus from "./Menus";
+import MenuItems from "./MenuItems";
+import ChooseField from "./ChooseField";
 
-class Menu extends Component {
+class MenuItem extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -19,8 +21,15 @@ class Menu extends Component {
 		
 		me.from = hash.opts.from;
 		me.state = {
-			rid: rid == "new" ? null : rid
+			rid: rid == "new" ? null : rid,
+			menu: hash.opts.menu,
+			parent: hash.opts.parent
 		};
+		me.onChange = me.onChange.bind (me);
+	}
+	
+	onChange (id, v) {
+		this.setState ({[id]: v});
 	}
 	
 	render () {
@@ -31,14 +40,14 @@ class Menu extends Component {
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>Back</button>
 				<Tabs key="tabs" id="tabs">
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="object" rid={me.state.rid} cid="objectum.menu">
+						<Form key="form1" store={me.props.store} rsc="object" rid={me.state.rid} cid="objectum.menuItem" onChange={me.onChange}>
+							<ChooseField attr="menu" label="Menu" disabled={true} rsc="object" value={me.state.menu} choose={Menus} chooseRef="menus" />
+							<ChooseField attr="parent" label="Parent" rsc="object" value={me.state.parent} choose={MenuItems} chooseRef="menuItems" chooseProps={{menu: me.state.menu}} />
 							<Field attr="name" />
-							<Field attr="code" />
 							<Field attr="order" />
+							<Field attr="path" />
+							<Field attr="icon" />
 						</Form>
-					</Tab>
-					<Tab key="Tab2" title="Menu items">
-						<MenuItems {...me.props} menu={me.state.rid} />
 					</Tab>
 				</Tabs>
 			</div>
@@ -46,4 +55,4 @@ class Menu extends Component {
 	}
 };
 
-export default Menu;
+export default MenuItem;

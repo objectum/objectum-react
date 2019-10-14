@@ -18,7 +18,7 @@ fastify.register (proxy, {
 });
 async function start () {
 	await fastify.listen (3100);
-	console.log (`server listening on ${fastify.server.address().port}`);
+	console.log (`server listening on ${fastify.server.address ().port}`);
 };
 start ().catch (err => {
 	console.error (err);

@@ -1,7 +1,7 @@
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
