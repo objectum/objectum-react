@@ -42,7 +42,7 @@ class MenuItem extends Component {
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="object" rid={me.state.rid} cid="objectum.menuItem" onChange={me.onChange}>
 							<ChooseField attr="menu" label="Menu" disabled={true} rsc="object" value={me.state.menu} choose={Menus} chooseRef="menus" />
-							<ChooseField attr="parent" label="Parent" rsc="object" value={me.state.parent} choose={MenuItems} chooseRef="menuItems" chooseProps={{menu: me.state.menu}} />
+							<ChooseField attr="parent" label="Parent" rsc="object" value={me.state.parent} choose={MenuItems} chooseRef="menuItems" menu={me.state.menu} />
 							<Field attr="name" />
 							<Field attr="order" />
 							<Field attr="path" />

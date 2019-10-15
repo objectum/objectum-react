@@ -28,7 +28,9 @@ class Auth extends Component {
 			username: me.state.username,
 			password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase ()
 		}).then (sid => {
-			me.props.onConnect (sid);
+			if (me.props.onConnect) {
+				me.props.onConnect (sid);
+			}
 		});
 	}
 

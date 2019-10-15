@@ -40,7 +40,9 @@ class MenuItems extends Component {
 		me.props.history.push ({
 			pathname: "/menu_item/" + id + "#" + JSON.stringify ({
 				opts: {
-					from: unescape (window.location.pathname + window.location.hash)
+					from: unescape (window.location.pathname + window.location.hash),
+					menu: me.menu,
+					parent: me.state.parent
 				}
 			})
 		});
