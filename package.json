@@ -42,13 +42,5 @@
 	},
 	"keywords": [
 		"react-component"
-	],
-	"dependencies": {
-		"bootstrap": "^4.3.1",
-		"jquery": "^3.4.1",
-		"popper.js": "^1.15.0",
-		"react-dropzone": "^10.1.10",
-		"react-modal": "^3.10.1",
-		"react-router-dom": "^5.1.2"
-	}
+	]
 }
