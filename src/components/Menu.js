@@ -37,9 +37,9 @@ class Menu extends Component {
 							<Field attr="order" />
 						</Form>
 					</Tab>
-					<Tab key="Tab2" title="Menu items">
+					{me.state.rid &&<Tab key="Tab2" title="Menu items">
 						<MenuItems {...me.props} menu={me.state.rid} />
-					</Tab>
+					</Tab>}
 				</Tabs>
 			</div>
 		);

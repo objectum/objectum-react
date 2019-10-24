@@ -346,7 +346,7 @@ class TreeGrid extends Component {
 						
 						return (
 							<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-								<td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder"></i> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>
+								<td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder"></i> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>
 								{me.cols.map ((col, j) => {
 									return (
 										<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} /></td>

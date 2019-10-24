@@ -16,6 +16,7 @@ import Menu from "./Menu";
 import MenuItem from "./MenuItem";
 import Logout from "./Logout";
 
+import "../css/objectum.css";
 import "../css/bootstrap.css";
 import "../css/sidebar.css";
 import "../fontawesome/css/all.css";
