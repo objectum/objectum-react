@@ -30,8 +30,16 @@ import View from "./components/View";
 import ViewAttr from "./components/ViewAttr";
 import ViewAttrs from "./components/ViewAttrs";
 import Views from "./components/Views";
+import {
+	getHash,
+	setHash,
+	addHashListener,
+	removeHashListener,
+	loadCSS,
+	loadJS,
+	getDateString
+} from "./helper";
 
-// export Foo and Bar as named exports
 export {
 	Action,
 	Auth,
@@ -67,10 +75,6 @@ export {
 	Views
 };
 
-// alternative, more concise syntax for named exports
-// export { default as Foo } from './Foo'
-
-// you can optionally also set a default export for your module
 export default {
 	Action,
 	Auth,
@@ -103,5 +107,12 @@ export default {
 	View,
 	ViewAttr,
 	ViewAttrs,
-	Views
+	Views,
+	getHash,
+	setHash,
+	addHashListener,
+	removeHashListener,
+	loadCSS,
+	loadJS,
+	getDateString
 };
