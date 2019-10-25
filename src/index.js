@@ -38,7 +38,7 @@ import {
 	loadCSS,
 	loadJS,
 	getDateString
-} from "./helper";
+} from "./components/helper";
 
 export {
 	Action,
@@ -72,7 +72,14 @@ export {
 	View,
 	ViewAttr,
 	ViewAttrs,
-	Views
+	Views,
+	getHash,
+	setHash,
+	addHashListener,
+	removeHashListener,
+	loadCSS,
+	loadJS,
+	getDateString
 };
 
 export default {
