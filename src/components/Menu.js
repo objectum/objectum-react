@@ -31,7 +31,7 @@ class Menu extends Component {
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>Back</button>
 				<Tabs key="tabs" id="tabs">
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="object" rid={me.state.rid} cid="objectum.menu">
+						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu">
 							<Field attr="name" />
 							<Field attr="code" />
 							<Field attr="order" />

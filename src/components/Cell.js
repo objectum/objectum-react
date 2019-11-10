@@ -27,7 +27,7 @@ class Cell extends Component {
 			} else
 			if (col.type == 6) {
 				// Class
-				let cls = me.props.store.getClass (value);
+				let cls = me.props.store.getModel (value);
 				
 				return (<span>{`${cls.get ("name")} (${cls.getPath ()} : ${cls.get ("id")})`}</span>);
 			} else {

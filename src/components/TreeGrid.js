@@ -156,7 +156,7 @@ class TreeGrid extends Component {
 		
 		try {
 			let opts = {
-				view: me.props.view,
+				query: me.props.query,
 				offset: (me.state.page - 1) * me.state.pageRecs,
 				limit: me.state.pageRecs,
 				parent: me.state.parent

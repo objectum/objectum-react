@@ -53,7 +53,7 @@ class MenuItems extends Component {
 		
 		if (confirmed) {
 			await me.props.store.startTransaction ("Removing menu item: " + me.state.removeId);
-			await me.props.store.removeObject (me.state.removeId);
+			await me.props.store.removeRecord (me.state.removeId);
 			await me.props.store.commitTransaction ();
 		}
 		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
@@ -66,7 +66,7 @@ class MenuItems extends Component {
 			<div>
 				<div className="row">
 					<div className="col-sm-12">
-						<TreeGrid {...me.props} id="menuItems" ref="menuItems" store={me.props.store} view="objectum.menuItem" refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}}>
+						<TreeGrid {...me.props} id="menuItems" ref="menuItems" store={me.props.store} query="objectum.menuItem" refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}}>
 							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
 							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
 							<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>

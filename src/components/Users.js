@@ -47,7 +47,7 @@ class Users extends Component {
 		
 		if (confirmed) {
 			await me.props.store.startTransaction ("Removing user: " + me.state.removeId);
-			await me.props.store.removeObject (me.state.removeId);
+			await me.props.store.removeRecord (me.state.removeId);
 			await me.props.store.commitTransaction ();
 		}
 		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
@@ -59,7 +59,7 @@ class Users extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<Grid {...me.props} id="users" ref="users" title="Users" store={me.props.store} view="objectum.user" refresh={me.state.refresh}>
+					<Grid {...me.props} id="users" ref="users" title="Users" store={me.props.store} query="objectum.user" refresh={me.state.refresh}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>

@@ -6,8 +6,8 @@ fastify.addHook ("onError", async (req, res, error) => {
 });
 fastify.register (proxy, {
 	upstream: "http://127.0.0.1:8200",
-	prefix: "/api/projects/catalog/",
-	rewritePrefix: "/projects/catalog/",
+	prefix: "/api/projects/objectum/",
+	rewritePrefix: "/projects/objectum/",
 	http2: false
 });
 fastify.register (proxy, {

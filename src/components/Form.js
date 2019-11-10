@@ -36,12 +36,12 @@ class Form extends Component {
 			if (me.props.rsc && me.props.rid) {
 				me.object = await me.props.store.getRsc (me.props.rsc, me.props.rid);
 				
-				if (me.props.rsc == "object") {
-					me.cls = me.props.store.getClass (me.object.get ("class"));
+				if (me.props.rsc == "record") {
+					me.cls = me.props.store.getModel (me.object.get ("model"));
 				}
 			}
-			if (!me.cls && me.props.rsc == "object" && me.props.cid) {
-				me.cls = me.props.store.getClass (me.props.cid);
+			if (!me.cls && me.props.rsc == "record" && me.props.mid) {
+				me.cls = me.props.store.getModel (me.props.mid);
 			}
 			for (let attr in me.map) {
 				let value = me.map [attr].value || "";
@@ -55,7 +55,7 @@ class Form extends Component {
 					let ca = me.cls.attrs [attr];
 
 					if (!ca) {
-						throw new Error (`unknown attr: ${attr}`);
+						throw new Error (`unknown property: ${attr}`);
 					}
 					me.map [attr].type = ca.get ("type");
 					me.map [attr].label = me.map [attr].label || ca.get ("name");
@@ -63,7 +63,7 @@ class Form extends Component {
 					me.map [attr].secure = ca.get ("secure");
 
 					if (ca.get ("type") >= 1000 && me.map [attr].dict) {
-						let cls = me.props.store.getClass (ca.get ("type"));
+						let cls = me.props.store.getModel (ca.get ("type"));
 						
 						me.map [attr].recs = await me.props.store.getDict (cls.getPath ());
 					}
@@ -148,7 +148,7 @@ class Form extends Component {
 
 			for (let attr in me.map) {
 				if (me.fileMap [attr]) {
-					let cls = me.props.store.getClass (me.object.get ("class"));
+					let cls = me.props.store.getModel (me.object.get ("model"));
 					
 					await me.upload ({
 						sessionId: me.props.store.getSessionId (),
@@ -164,7 +164,7 @@ class Form extends Component {
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
 			state.error = err.message;
-			console.log (err.stack);
+			console.error (err.stack);
 		}
 		me.setState (state);
 	}
@@ -177,15 +177,15 @@ class Form extends Component {
 		}
 		me.setState ({creating: true});
 		
-		await me.props.store.startTransaction (`Creating rsc: ${me.props.rsc}${me.props.cid ? `, cid: ${me.props.cid}` : ""}`);
+		await me.props.store.startTransaction (`Creating rsc: ${me.props.rsc}${me.props.mid ? `, mid: ${me.props.mid}` : ""}`);
 		
 		let state = {creating: false};
 		
 		try {
 			let attrs = {};
 			
-			if (me.props.rsc == "object") {
-				attrs ["class"] = me.props.cid;
+			if (me.props.rsc == "record") {
+				attrs ["model"] = me.props.mid;
 			}
 			for (let attr in me.map) {
 				let ma = me.map [attr];
@@ -335,8 +335,8 @@ class Form extends Component {
 		let createDisabled = me.state.creating;
 		let saveDisabled = !me.isChanged () || me.state.saving;
 		
-		if (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.cid && me.props.rsc == "object")) {
-			return (<div className="alert alert-danger" role="alert">need props: store, rsc, rid or cid (object)</div>);
+		if (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.mid && me.props.rsc == "record")) {
+			return (<div className="alert alert-danger" role="alert">need props: store, rsc, rid or mid (record)</div>);
 		}
 		return (
 			<div className="bg-white">

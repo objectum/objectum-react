@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import Auth from "./Auth";
-import Classes from "./Classes";
-import Class from "./Class";
-import ClassAttr from "./ClassAttr";
-import Views from "./Views";
-import View from "./View";
-import ViewAttr from "./ViewAttr";
+import Models from "./Models";
+import Model from "./Model";
+import Property from "./Property";
+import Queries from "./Queries";
+import Query from "./Query";
+import Column from "./Column";
 import Roles from "./Roles";
 import Role from "./Role";
 import Users from "./Users";
@@ -58,7 +58,7 @@ class ObjectumApp extends Component {
 		
 		if (menuId == "admin") {
 			let menuResult = await me.store.getData ({
-				view: "objectum.menu",
+				query: "objectum.menu",
 				offset: 0,
 				limit: 100000
 			});
@@ -71,7 +71,7 @@ class ObjectumApp extends Component {
 		}
 		if (menuId) {
 			let result = await me.store.getData ({
-				view: "objectum.userMenuItems",
+				query: "objectum.userMenuItems",
 				menu: menuId
 			});
 			me.menuItemRecs = result.recs;
@@ -90,10 +90,10 @@ class ObjectumApp extends Component {
 						<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">Objectum</a>
 						<ul className="collapse list-unstyled" id="homeSubmenu">
 							<li>
-								<Link className="nav-link" to="/classes">Classes</Link>
+								<Link className="nav-link" to="/models">Models</Link>
 							</li>
 							<li>
-								<Link className="nav-link" to="/views">Views</Link>
+								<Link className="nav-link" to="/queries">Queries</Link>
 							</li>
 							<li>
 								<Link className="nav-link" to="/menus">Menus</Link>
@@ -103,17 +103,6 @@ class ObjectumApp extends Component {
 							</li>
 							<li>
 								<Link className="nav-link" to="/users">Users</Link>
-							</li>
-							<li>
-								<a href="#homeSubmenu2" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">Submenu</a>
-								<ul className="collapse list-unstyled" id="homeSubmenu2">
-									<li className="ml-2">
-										<Link className="nav-link" to="/classes">Classes 222</Link>
-									</li>
-									<li className="ml-2">
-										<Link className="nav-link" to="/views">Views 222</Link>
-									</li>
-								</ul>
 							</li>
 						</ul>
 					</li>
@@ -125,7 +114,7 @@ class ObjectumApp extends Component {
 		}
 		function renderIcon (icon) {
 			if (icon) {
-				return (<i className={`${icon} mr-2`} />);
+				return (<i className={`${icon} menu-icon`} />);
 			} else {
 				return (<span />);
 			}
@@ -167,12 +156,12 @@ class ObjectumApp extends Component {
 	renderRoutes () {
 		let me = this;
 		let items = [
-			<Route key="objectum-1" path="/views" render={props => <Views {...props} store={me.store} />} />,
-			<Route key="objectum-2" path="/view/:rid" render={props => <View {...props} store={me.store} />} />,
-			<Route key="objectum-3" path="/view_attr/:rid" render={props => <ViewAttr {...props} store={me.store} />} />,
-			<Route key="objectum-4" path="/classes" render={props => <Classes {...props} store={me.store} />} />,
-			<Route key="objectum-5" path="/class/:rid" render={props => <Class {...props} store={me.store} />} />,
-			<Route key="objectum-6" path="/class_attr/:rid" render={props => <ClassAttr {...props} store={me.store} />} />,
+			<Route key="objectum-1" path="/queries" render={props => <Queries {...props} store={me.store} />} />,
+			<Route key="objectum-2" path="/query/:rid" render={props => <Query {...props} store={me.store} />} />,
+			<Route key="objectum-3" path="/column/:rid" render={props => <Column {...props} store={me.store} />} />,
+			<Route key="objectum-4" path="/models" render={props => <Models {...props} store={me.store} />} />,
+			<Route key="objectum-5" path="/model/:rid" render={props => <Model {...props} store={me.store} />} />,
+			<Route key="objectum-6" path="/property/:rid" render={props => <Property {...props} store={me.store} />} />,
 			<Route key="objectum-7" path="/roles" render={props => <Roles {...props} store={me.store} />} />,
 			<Route key="objectum-8" path="/role/:rid" render={props => <Role {...props} store={me.store} />} />,
 			<Route key="objectum-9" path="/users" render={props => <Users {...props} store={me.store} />} />,

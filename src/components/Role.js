@@ -6,7 +6,6 @@ import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
-import Menus from "./Menus";
 import {getHash} from "./helper";
 
 class Role extends Component {
@@ -31,7 +30,7 @@ class Role extends Component {
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>Back</button>
 				<Tabs key="tabs" id="tabs">
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="object" rid={me.state.rid} cid="objectum.role">
+						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.role">
 							<Field attr="name" />
 							<Field attr="code" />
 							<Field attr="menu" dict={true} />
