@@ -16,6 +16,7 @@ import Menu from "./components/Menu";
 import Menus from "./components/Menus";
 import NumberField from "./components/NumberField";
 import ObjectumApp from "./components/ObjectumApp";
+import ObjectumRoute from "./components/ObjectumRoute";
 import Role from "./components/Role";
 import Roles from "./components/Roles";
 import SelectField from "./components/SelectField";
@@ -59,6 +60,7 @@ export {
 	Menus,
 	NumberField,
 	ObjectumApp,
+	ObjectumRoute,
 	Role,
 	Roles,
 	SelectField,
@@ -101,6 +103,7 @@ export default {
 	Menus,
 	NumberField,
 	ObjectumApp,
+	ObjectumRoute,
 	Role,
 	Roles,
 	SelectField,
