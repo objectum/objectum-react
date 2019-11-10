@@ -3,7 +3,7 @@ import TreeGrid from "./TreeGrid";
 import Action from "./Action";
 import Confirm from "./Confirm";
 
-class Views extends Component {
+class Queries extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -24,7 +24,7 @@ class Views extends Component {
 		let me = this;
 		
 		me.props.history.push ({
-			pathname: "/view/new#" + JSON.stringify ({
+			pathname: "/query/new#" + JSON.stringify ({
 				opts: {
 					from: unescape (window.location.pathname + window.location.hash),
 					parent: me.parent
@@ -37,7 +37,7 @@ class Views extends Component {
 		let me = this;
 		
 		me.props.history.push ({
-			pathname: "/view/" + id + "#" + JSON.stringify ({
+			pathname: "/query/" + id + "#" + JSON.stringify ({
 				opts: {
 					from: unescape (window.location.pathname + window.location.hash)
 				}
@@ -53,8 +53,8 @@ class Views extends Component {
 		let me = this;
 		
 		if (confirmed) {
-			await me.props.store.startTransaction ("Removing view: " + me.state.removeId);
-			await me.props.store.removeView (me.state.removeId);
+			await me.props.store.startTransaction ("Removing query: " + me.state.removeId);
+			await me.props.store.removeQuery (me.state.removeId);
 			await me.props.store.commitTransaction ();
 		}
 		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
@@ -66,7 +66,7 @@ class Views extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<TreeGrid {...me.props} id="views" ref="views" title="Views" store={me.props.store} view="objectum.view" pageRecs={10} refresh={me.state.refresh} onSelectParent={(parent) => me.parent = parent}>
+					<TreeGrid {...me.props} id="queries" ref="queries" title="Queries" store={me.props.store} query="objectum.query" pageRecs={10} refresh={me.state.refresh} onSelectParent={(parent) => me.parent = parent}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>
@@ -79,4 +79,4 @@ class Views extends Component {
 	}
 };
 
-export default Views;
+export default Queries;

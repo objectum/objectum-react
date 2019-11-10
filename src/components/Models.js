@@ -1,15 +1,15 @@
 import React, {Component} from "react";
-import Grid from "./Grid";
+import TreeGrid from "./TreeGrid";
 import Action from "./Action";
 import Confirm from "./Confirm";
 
-class ViewAttrs extends Component {
+class Models extends Component {
 	constructor (props) {
 		super (props);
 		
 		let me = this;
 		
-		me.view = me.props.view;
+		me.parent = null;
 		me.onCreate = me.onCreate.bind (me);
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
@@ -21,14 +21,13 @@ class ViewAttrs extends Component {
 	
 	onCreate () {
 		let me = this;
-		
 		me.props.history.push ({
-			pathname: "/view_attr/new#" + JSON.stringify ({
+			pathname: "/model/new#" + JSON.stringify ({
 				opts: {
 					from: unescape (window.location.pathname + window.location.hash),
-					view: me.view
+					parent: me.parent
 				}
-			})
+			}),
 		});
 	}
 	
@@ -36,9 +35,10 @@ class ViewAttrs extends Component {
 		let me = this;
 		
 		me.props.history.push ({
-			pathname: "/view_attr/" + id + "#" + JSON.stringify ({
+			pathname: "/model/" + id + "#" + JSON.stringify ({
 				opts: {
-					from: unescape (window.location.pathname + window.location.hash)
+					from: unescape (window.location.pathname + window.location.hash),
+					parent: me.parent
 				}
 			})
 		});
@@ -48,8 +48,8 @@ class ViewAttrs extends Component {
 		let me = this;
 		
 		if (confirmed) {
-			await me.props.store.startTransaction ("Removing view attr: " + me.state.removeId);
-			await me.props.store.removeViewAttr (me.state.removeId);
+			await me.props.store.startTransaction ("Removing model: " + me.state.removeId);
+			await me.props.store.removeModel (me.state.removeId);
 			await me.props.store.commitTransaction ();
 		}
 		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
@@ -61,11 +61,11 @@ class ViewAttrs extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<Grid id="viewAttrs" store={me.props.store} view="objectum.viewAttr" pageRecs={10} refresh={me.state.refresh} params={{viewId: me.view}}>
+					<TreeGrid {...me.props} id="models" ref="models" title="Models" store={me.props.store} query="objectum.model" pageRecs={10} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>
-					</Grid>
+					</TreeGrid>
 				</div>
 				<Confirm title="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
 			</div>
@@ -74,4 +74,4 @@ class ViewAttrs extends Component {
 	}
 };
 
-export default ViewAttrs;
+export default Models;

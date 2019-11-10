@@ -10,3 +10,9 @@
     width: 25px;
     text-align: center
 }
+.numberfield {
+    width: 200px !important;
+}
+.datefield {
+    width: 200px !important;
+}

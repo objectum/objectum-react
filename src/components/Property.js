@@ -10,10 +10,10 @@ import Types from "./Types";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
-import Classes from "./Classes";
+import Models from "./Models";
 import {getHash} from "./helper";
 
-class ClassAttr extends Component {
+class Property extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -25,10 +25,10 @@ class ClassAttr extends Component {
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			label: "-",
-			"class": hash.opts ["class"]
+			model: hash.opts.model
 		};
 		if (me.state.rid) {
-			let o = me.props.store.getClassAttr (me.state.rid);
+			let o = me.props.store.getProperty (me.state.rid);
 			
 			me.state.label = o.getLabel ();
 			me.state.type = o.get ("type");
@@ -50,15 +50,15 @@ class ClassAttr extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i> Back</button>
-				<Tabs key="tabs" id="tabs" title={"Class attribute: " + me.state.label}>
+				<Tabs key="tabs" id="tabs" title={"Property: " + me.state.label}>
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="classAttr" rid={me.state.rid} onChange={me.onChange} >
+						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} >
 							<div className="form-row">
 								<div className="form-group col-md-6">
 									<StringField attr="name" label="Name" notNull={true} />
 								</div>
 								<div className="form-group col-md-6">
-									<ChooseField attr="class" label="Class" disabled={true} rsc="class" value={me.state ["class"]} choose={Classes} chooseRef="classes" />
+									<ChooseField attr="model" label="Model" disabled={true} rsc="model" value={me.state.model} choose={Models} chooseRef="models" />
 								</div>
 							</div>
 							<div className="form-row">
@@ -70,7 +70,7 @@ class ClassAttr extends Component {
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<ChooseField attr="type" label="Type" disabled={!!me.state.rid} rsc="class" notNull={true} choose={Types} chooseRef="types" />
+									<ChooseField attr="type" label="Type" disabled={!!me.state.rid} rsc="model" notNull={true} choose={Types} chooseRef="types" />
 								</div>
 								<div className="form-group col-md-6">
 									<StringField attr="description" label="Description" textarea={true} />
@@ -100,4 +100,4 @@ class ClassAttr extends Component {
 	}
 };
 
-export default ClassAttr;
+export default Property;

@@ -2,10 +2,10 @@ import Action from "./components/Action";
 import Auth from "./components/Auth";
 import BooleanField from "./components/BooleanField";
 import ChooseField from "./components/ChooseField";
-import Class from "./components/Class";
-import ClassAttr from "./components/ClassAttr";
-import ClassAttrs from "./components/ClassAttrs";
-import Classes from "./components/Classes";
+import Model from "./components/Model";
+import Property from "./components/Property";
+import Properties from "./components/Properties";
+import Models from "./components/Models";
 import Confirm from "./components/Confirm";
 import DateField from "./components/DateField";
 import Field from "./components/Field";
@@ -26,10 +26,10 @@ import TreeGrid from "./components/TreeGrid";
 import Types from "./components/Types";
 import User from "./components/User";
 import Users from "./components/Users";
-import View from "./components/View";
-import ViewAttr from "./components/ViewAttr";
-import ViewAttrs from "./components/ViewAttrs";
-import Views from "./components/Views";
+import Query from "./components/Query";
+import Column from "./components/Column";
+import Columns from "./components/Columns";
+import Queries from "./components/Queries";
 import {
 	getHash,
 	setHash,
@@ -45,10 +45,10 @@ export {
 	Auth,
 	BooleanField,
 	ChooseField,
-	Class,
-	ClassAttr,
-	ClassAttrs,
-	Classes,
+	Model,
+	Property,
+	Properties,
+	Models,
 	Confirm,
 	DateField,
 	Field,
@@ -69,10 +69,10 @@ export {
 	Types,
 	User,
 	Users,
-	View,
-	ViewAttr,
-	ViewAttrs,
-	Views,
+	Query,
+	Column,
+	Columns,
+	Queries,
 	getHash,
 	setHash,
 	addHashListener,
@@ -87,10 +87,10 @@ export default {
 	Auth,
 	BooleanField,
 	ChooseField,
-	Class,
-	ClassAttr,
-	ClassAttrs,
-	Classes,
+	Model,
+	Property,
+	Properties,
+	Models,
 	Confirm,
 	DateField,
 	Field,
@@ -111,10 +111,10 @@ export default {
 	Types,
 	User,
 	Users,
-	View,
-	ViewAttr,
-	ViewAttrs,
-	Views,
+	Query,
+	Column,
+	Columns,
+	Queries,
 	getHash,
 	setHash,
 	addHashListener,

@@ -3,15 +3,16 @@
 
 import React, {Component} from "react";
 import StringField from "./StringField";
-import ChooseField from "./ChooseField";
-import Classes from "./Classes";
+import NumberField from "./NumberField";
+import SelectField from "./SelectField";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
-import ClassAttrs from "./ClassAttrs";
+import ChooseField from "./ChooseField";
+import Queries from "./Queries";
 import {getHash} from "./helper";
 
-class Class extends Component {
+class Column extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -23,12 +24,10 @@ class Class extends Component {
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			label: "-",
-			parent: hash.opts.parent,
-			removeConfirm: false,
-			refresh: false
+			query: hash.opts.query
 		};
 		if (me.state.rid) {
-			let o = me.props.store.getClass (me.state.rid);
+			let o = me.props.store.getColumn (me.state.rid);
 			
 			me.state.label = o.getLabel ();
 		}
@@ -36,19 +35,22 @@ class Class extends Component {
 	
 	render () {
 		let me = this;
-		
+		let areaRecs = [
+			{id: 0, name: "Hidden"},
+			{id: 1, name: "Visible"}
+		];
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i> Back</button>
-				<Tabs key="tabs" id="tabs" title={"Class: " + me.state.label}>
+				<Tabs key="tabs" id="tabs" title={"Column: " + me.state.label}>
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="class" rid={me.state.rid}>
+						<Form key="form1" store={me.props.store} rsc="column" rid={me.state.rid}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
 									<StringField attr="name" label="Name" />
 								</div>
 								<div className="form-group col-md-6">
-									<ChooseField attr="parent" label="Parent" rsc="class" disabled={!!me.state.rid} value={me.state.parent} choose={Classes} chooseRef="classes" />
+									<ChooseField attr="query" label="Query" disabled={!!me.state.rid} rsc="query" value={me.state.query} choose={Queries} chooseRef="queries" />
 								</div>
 							</div>
 							<div className="form-row">
@@ -56,25 +58,30 @@ class Class extends Component {
 									<StringField attr="code" label="Code" />
 								</div>
 								<div className="form-group col-md-6">
-									<StringField attr="description" label="Description" textarea={true} />
+									<NumberField attr="order" label="Order" />
 								</div>
 							</div>
 							<div className="form-row">
-								<div className="form-group col-md-12">
-									<StringField attr="formatFunc" label="Format function" codemirror={true} />
+								<div className="form-group col-md-6">
+									<SelectField attr="area" label="Area" recs={areaRecs} />
+								</div>
+								<div className="form-group col-md-6">
+									<NumberField attr="columnWidth" label="Column width" />
+								</div>
+							</div>
+							<div className="form-row">
+								<div className="form-group col-md-6">
+									<StringField attr="description" label="Description" textarea={true} />
+								</div>
+								<div className="form-group col-md-6">
 								</div>
 							</div>
 						</Form>
 					</Tab>
-					{me.state.rid &&
-					<Tab key="Tab2" title="Attributes">
-						<ClassAttrs {...me.props} class={me.state.rid} />
-					</Tab>
-					}
 				</Tabs>
 			</div>
 		);
 	}
 };
 
-export default Class;
+export default Column;

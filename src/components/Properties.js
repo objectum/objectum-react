@@ -1,15 +1,18 @@
+/* eslint-disable no-whitespace-before-property */
+/* eslint-disable eqeqeq */
+
 import React, {Component} from "react";
-import TreeGrid from "./TreeGrid";
+import Grid from "./Grid";
 import Action from "./Action";
 import Confirm from "./Confirm";
 
-class Classes extends Component {
+class Properties extends Component {
 	constructor (props) {
 		super (props);
 		
 		let me = this;
 		
-		me.parent = null;
+		me ["model"] = me.props ["model"];
 		me.onCreate = me.onCreate.bind (me);
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
@@ -21,13 +24,14 @@ class Classes extends Component {
 	
 	onCreate () {
 		let me = this;
+		
 		me.props.history.push ({
-			pathname: "/class/new#" + JSON.stringify ({
+			pathname: "/property/new#" + JSON.stringify ({
 				opts: {
 					from: unescape (window.location.pathname + window.location.hash),
-					parent: me.parent
+					model: me ["model"]
 				}
-			}),
+			})
 		});
 	}
 	
@@ -35,10 +39,9 @@ class Classes extends Component {
 		let me = this;
 		
 		me.props.history.push ({
-			pathname: "/class/" + id + "#" + JSON.stringify ({
+			pathname: "/property/" + id + "#" + JSON.stringify ({
 				opts: {
-					from: unescape (window.location.pathname + window.location.hash),
-					parent: me.parent
+					from: unescape (window.location.pathname + window.location.hash)
 				}
 			})
 		});
@@ -48,8 +51,8 @@ class Classes extends Component {
 		let me = this;
 		
 		if (confirmed) {
-			await me.props.store.startTransaction ("Removing class: " + me.state.removeId);
-			await me.props.store.removeClass (me.state.removeId);
+			await me.props.store.startTransaction ("Removing property: " + me.state.removeId);
+			await me.props.store.removeProperty (me.state.removeId);
 			await me.props.store.commitTransaction ();
 		}
 		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
@@ -61,11 +64,11 @@ class Classes extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<TreeGrid {...me.props} id="classes" ref="classes" title="Classes" store={me.props.store} view="objectum.class" pageRecs={10} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent}>
+					<Grid id="properties" store={me.props.store} query="objectum.property" pageRecs={10} refresh={me.state.refresh} params={{modelId: me.model}}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>
-					</TreeGrid>
+					</Grid>
 				</div>
 				<Confirm title="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
 			</div>
@@ -74,4 +77,4 @@ class Classes extends Component {
 	}
 };
 
-export default Classes;
+export default Properties;
