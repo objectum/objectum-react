@@ -44,23 +44,23 @@ class Query extends Component {
 						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField attr="name" label="Name" />
+									<StringField property="name" label="Name" />
 								</div>
 								<div className="form-group col-md-6">
-									<ChooseField attr="parent" label="Parent" disabled={!!me.state.rid} rsc="query" value={me.state.parent} choose={Queries} chooseRef="queries" />
+									<ChooseField property="parent" label="Parent" disabled={!!me.state.rid} rsc="query" value={me.state.parent} choose={Queries} chooseRef="queries" />
 								</div>
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField attr="code" label="Code" />
+									<StringField property="code" label="Code" />
 								</div>
 								<div className="form-group col-md-6">
-									<StringField attr="description" label="Description" textarea={true} />
+									<StringField property="description" label="Description" textarea={true} />
 								</div>
 							</div>
 							<div className="row">
 								<div className="col-md-12">
-									<StringField attr="query" label="Query" codemirror={true} />
+									<StringField property="query" label="Query" codemirror={true} />
 								</div>
 							</div>
 						</Form>

@@ -42,7 +42,7 @@ class StringField extends Component {
 				me.codemirror.on ("change", function () {
 					me.onChange ({
 						target: {
-							id: me.props.attr,
+							id: me.props.attr || me.props.property || me.props.prop,
 							value: me.codemirror.getValue ()
 						}
 					});
@@ -53,7 +53,7 @@ class StringField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.attr;
+		let id = me.props.attr || me.props.property || me.props.prop;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
 		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;

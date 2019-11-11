@@ -47,31 +47,31 @@ class Column extends Component {
 						<Form key="form1" store={me.props.store} rsc="column" rid={me.state.rid}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField attr="name" label="Name" />
+									<StringField property="name" label="Name" />
 								</div>
 								<div className="form-group col-md-6">
-									<ChooseField attr="query" label="Query" disabled={!!me.state.rid} rsc="query" value={me.state.query} choose={Queries} chooseRef="queries" />
-								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField attr="code" label="Code" />
-								</div>
-								<div className="form-group col-md-6">
-									<NumberField attr="order" label="Order" />
+									<ChooseField property="query" label="Query" disabled={!!me.state.rid} rsc="query" value={me.state.query} choose={Queries} chooseRef="queries" />
 								</div>
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<SelectField attr="area" label="Area" recs={areaRecs} />
+									<StringField property="code" label="Code" />
 								</div>
 								<div className="form-group col-md-6">
-									<NumberField attr="columnWidth" label="Column width" />
+									<NumberField property="order" label="Order" />
 								</div>
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField attr="description" label="Description" textarea={true} />
+									<SelectField property="area" label="Area" recs={areaRecs} />
+								</div>
+								<div className="form-group col-md-6">
+									<NumberField property="columnWidth" label="Column width" />
+								</div>
+							</div>
+							<div className="form-row">
+								<div className="form-group col-md-6">
+									<StringField property="description" label="Description" textarea={true} />
 								</div>
 								<div className="form-group col-md-6">
 								</div>

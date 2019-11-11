@@ -55,41 +55,41 @@ class Property extends Component {
 						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} >
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField attr="name" label="Name" notNull={true} />
+									<StringField property="name" label="Name" notNull={true} />
 								</div>
 								<div className="form-group col-md-6">
-									<ChooseField attr="model" label="Model" disabled={true} rsc="model" value={me.state.model} choose={Models} chooseRef="models" />
-								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField attr="code" label="Code" disabled={!!me.state.rid} notNull={true} />
-								</div>
-								<div className="form-group col-md-6">
+									<ChooseField property="model" label="Model" disabled={true} rsc="model" value={me.state.model} choose={Models} chooseRef="models" />
 								</div>
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<ChooseField attr="type" label="Type" disabled={!!me.state.rid} rsc="model" notNull={true} choose={Types} chooseRef="types" />
+									<StringField property="code" label="Code" disabled={!!me.state.rid} notNull={true} />
 								</div>
 								<div className="form-group col-md-6">
-									<StringField attr="description" label="Description" textarea={true} />
-								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<BooleanField attr="notNull" label="Not null" />
-								</div>
-								<div className="form-group col-md-6">
-									<BooleanField attr="unique" label="Unique" />
 								</div>
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<BooleanField attr="secure" label="Secure" />
+									<ChooseField property="type" label="Type" disabled={!!me.state.rid} rsc="model" notNull={true} choose={Types} chooseRef="types" />
 								</div>
 								<div className="form-group col-md-6">
-									{me.state.type >= 1000 && <SelectField attr="removeRule" label="Remove rule" recs={removeRuleRecs} />}
+									<StringField property="description" label="Description" textarea={true} />
+								</div>
+							</div>
+							<div className="form-row">
+								<div className="form-group col-md-6">
+									<BooleanField property="notNull" label="Not null" />
+								</div>
+								<div className="form-group col-md-6">
+									<BooleanField property="unique" label="Unique" />
+								</div>
+							</div>
+							<div className="form-row">
+								<div className="form-group col-md-6">
+									<BooleanField property="secure" label="Secure" />
+								</div>
+								<div className="form-group col-md-6">
+									{me.state.type >= 1000 && <SelectField property="removeRule" label="Remove rule" recs={removeRuleRecs} />}
 								</div>
 							</div>
 						</Form>

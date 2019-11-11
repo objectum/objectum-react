@@ -68,14 +68,14 @@ class FileField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.attr;
+		let id = me.props.attr || me.props.property || me.props.prop;
 		//let disabled = me.props.disabled;
 		//let addCls = me.props.error ? " is-invalid" : "";
 		
 		return (
 			<div className="form-group">
 				<label htmlFor={id}>{me.props.label}</label>
-				<File id={id} onFile={me.onFile} value={me.state.value} store={me.props.store} object={me.props.object} cls={me.props.cls} />
+				<File id={id} onFile={me.onFile} value={me.state.value} store={me.props.store} object={me.props.object || me.props.record} cls={me.props.cls || me.props.model} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>
 		);

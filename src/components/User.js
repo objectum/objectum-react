@@ -31,10 +31,10 @@ class User extends Component {
 				<Tabs key="tabs" id="tabs">
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.user">
-							<Field attr="name" />
-							<Field attr="login" />
-							<Field attr="password" />
-							<Field attr="role" dict={true} />
+							<Field property="name" />
+							<Field property="login" />
+							<Field property="password" />
+							<Field property="role" dict={true} />
 						</Form>
 					</Tab>
 				</Tabs>

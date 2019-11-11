@@ -31,9 +31,9 @@ class Role extends Component {
 				<Tabs key="tabs" id="tabs">
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.role">
-							<Field attr="name" />
-							<Field attr="code" />
-							<Field attr="menu" dict={true} />
+							<Field property="name" />
+							<Field property="code" />
+							<Field property="menu" dict={true} />
 						</Form>
 					</Tab>
 				</Tabs>

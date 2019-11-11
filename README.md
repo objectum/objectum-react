@@ -72,20 +72,20 @@ props:
 * **id**: - used in url hash navigation
 * **ref**: - used in ChooseField.chooseRef
 * **title**: - title of grid
-* **view**: - view query
+* **query**: - query
 * **pageRecs**: default 10 - recs on page
 * **refresh**: *boolean* - change for refresh grid 
 
 ```html
-<Grid id="roles" ref="roles" title="Roles" store={this.props.store} view="objectum.role" pageRecs={10} refresh={this.state.refresh} />
+<Grid id="roles" ref="roles" title="Roles" store={this.props.store} query="objectum.role" pageRecs={10} refresh={this.state.refresh} />
 ```
-View query "objectum.role":
+Query "objectum.role":
 ```sql
 {"data": "begin"}
 select
-    {"attr": "a.id", "as": "id"},
-    {"attr": "a.name", "as": "name"},
-    {"attr": "a.code", "as": "code"}
+    {"prop": "a.id", "as": "id"},
+    {"prop": "a.name", "as": "name"},
+    {"prop": "a.code", "as": "code"}
 {"data": "end"}
 
 {"count": "begin"}
@@ -94,7 +94,7 @@ select
 {"count": "end"}
 
 from
-    {"class": "objectum.role", "alias": "a"}
+    {"model": "objectum.role", "alias": "a"}
 limit {"param": "limit"}
 offset {"param": "offset"}
 ```
@@ -106,15 +106,18 @@ props:
 * **onSelectParent**: *function* - event listener 
 
 ```html
-<TreeGrid id="classes" ref="classes" title="Classes" store={this.props.store} view="objectum.class" pageRecs={10} refresh={this.state.refresh} onSelectParent={parent => this.parent = parent}>
+<TreeGrid id="menuItems" ref="menuItems" title="Menu items" store={this.props.store} query="objectum.class" pageRecs={10} refresh={this.state.refresh} onSelectParent={parent => this.parent = parent}>
 ```
 ```sql
 {"data": "begin"}
 select
-    fid as id,
-    fname as name,
-    fcode as code,
-    fparent_id as parent
+    {"prop": "a.id", "as": "id"},
+    {"prop": "a.name", "as": "name"},
+    {"prop": "a.order", "as": "order"},
+    {"prop": "a.menu", "as": "menu"},
+    {"prop": "a.parent", "as": "parent"},
+    {"prop": "a.path", "as": "path"},
+    {"prop": "a.icon", "as": "icon"}
 {"data": "end"}
 
 {"count": "begin"}
@@ -124,21 +127,28 @@ select
 
 {"tree": "begin"}
 select
-    fparent_id as parent, count (*) as num
+    {"prop": "a.parent", "as": "parent"}, count (*) as num
 {"tree": "end"}
 
 from
-    _class
-where
-    fparent_id {"tree": "filter"}
+    {"model": "objectum.menuItem", "alias": "a"}
+
+{"where": "begin"}
+    {"prop": "a.menu"} = {"param": "menu"} and
+    {"prop": "a.parent"} {"tree": "filter"}
+{"where": "end"}    
+
+{"order": "begin"}
+    {"prop": "a.order"}
+{"order": "end"}
 
 {"tree": "begin"}
 group by
-    fparent_id
+    {"prop": "a.parent"}
 {"tree": "end"}
 
 limit {"param": "limit"}
-offset {"param": "offset"}
+offset {"param": "offset"}  
 ```
 
 <a name="form" />
@@ -148,7 +158,7 @@ props:
 * **store** - objectum store 
 * **rsc** - objectum resource 
 * **rid** - resource id
-* **cid** - class id. Used with resource "object"
+* **mid** - model id. Used with resource "record"
 
 ```js
 class User extends Component {
@@ -164,7 +174,7 @@ class User extends Component {
     
     render () {
         return (
-            <Form key="form1" store={this.props.store} rsc="object" rid={this.state.rid} cid="objectum.user">
+            <Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.user">
                 <Field attr="name" />
                 <Field attr="login" />
                 <Field attr="password" />
@@ -199,10 +209,10 @@ class User extends Component {
 ### Field
 Component selects objectum field by type.
 props:
-* **type**: *number* - objectum class id
+* **type**: *number* - objectum model id
 
 Common props for all fields:
-* **attr**: *string* - resource attribute
+* **property**: *string* - resource property
 * **label**: *string* - field label
 * **value**: field value
 * **disabled**: *boolean*
@@ -237,15 +247,15 @@ Boolean field. Type id: 4
 ### FileField
 props:
 * **store** - objectum store
-* **object** - object
-* **cls** - object class
+* **record** - record
+* **model** - record model
 
 <a name="choose_field" />
 
 ### ChooseField
-Field for selecting from view. Type id: >= 1000
+Field for selecting from query. Type id: >= 1000
 ```html
-<ChooseField attr="type" label="Type" rsc="object" value={this.state.type} choose={ItemTypes} chooseRef="d.item.type" />
+<ChooseField property="type" label="Type" rsc="record" value={this.state.type} choose={ItemTypes} chooseRef="d.item.type" />
 ```
 
 <a name="select_field" />
@@ -256,7 +266,7 @@ Field for selecting from list (dictionary). Type id: >= 1000
 let recs = [{id: 1, name: "Item 1"}, {id: 2, name: "Item 2"}];
 ```
 ```html
-<SelectField attr="type" label="Type" recs={recs} />
+<SelectField property="type" label="Type" recs={recs} />
 ```
 
 <a name="confirm" />

@@ -22,7 +22,7 @@ class SelectField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.attr;
+		let id = me.props.attr || me.props.property || me.props.prop;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
 		

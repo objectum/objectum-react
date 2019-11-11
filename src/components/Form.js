@@ -270,7 +270,7 @@ class Form extends Component {
 			if (!child.props) {
 				return child;
 			}
-			let attr = child.props.attr;
+			let attr = child.props.attr || child.props.property || child.props.prop;
 			
 			if (attr) {
 				let value = me.state [attr] || child.props.value || "";

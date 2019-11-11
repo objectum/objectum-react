@@ -32,9 +32,9 @@ class Menu extends Component {
 				<Tabs key="tabs" id="tabs">
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu">
-							<Field attr="name" />
-							<Field attr="code" />
-							<Field attr="order" />
+							<Field property="name" />
+							<Field property="code" />
+							<Field property="order" />
 						</Form>
 					</Tab>
 					{me.state.rid &&<Tab key="Tab2" title="Menu items">
