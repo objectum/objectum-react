@@ -11,7 +11,7 @@ class ObjectumRoute extends Component {
 	
 	render () {
 		return (
-			<Route path={this.props.path} render={this.props.render} />
+			<Route {...this.props.path} />
 		);
 	}
 };
