@@ -180,7 +180,7 @@ class ObjectumApp extends Component {
 				
 				items.push (React.cloneElement (child, props));
 */
-				items.push (<Route {...child.props} />);
+				items.push (<Route key={i} {...child.props} />);
 			}
 		});
 		return items;
