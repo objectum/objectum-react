@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import store from "objectum-client";
-import {ObjectumApp} from '../../src'
+import {ObjectumApp, ObjectumRoute} from '../../src'
 
 class Test extends Component {
 	render () {
@@ -22,7 +22,7 @@ class Demo extends Component {
 		return (
 			<div>
 				<ObjectumApp store={store} _username="admin" _password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()} name="objectum-react">
-					<Route path="/test" render={props => <Test {...props} store={store} />} />
+					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 				</ObjectumApp>
 			</div>
 		);

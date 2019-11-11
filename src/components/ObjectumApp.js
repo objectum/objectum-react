@@ -173,11 +173,14 @@ class ObjectumApp extends Component {
 		];
 		React.Children.forEach (me.props.children, (child, i) => {
 			if (child.type && (child.type.name == "ObjectumRoute" || child.type.name == "Route")) {
+/*
 				let props = {...child.props};
 				
 				props.key = i;
 				
 				items.push (React.cloneElement (child, props));
+*/
+				items.push (<Route {...child.props} />);
 			}
 		});
 		return items;
