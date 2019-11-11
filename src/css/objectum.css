@@ -16,3 +16,6 @@
 .datefield {
     width: 200px !important;
 }
+.booleanfield {
+    margin-top: 2px;
+}

@@ -27,12 +27,12 @@ class BooleanField extends Component {
 		let me = this;
 		let id = me.props.attr;
 		let disabled = me.props.disabled;
-		let addCls = me.props.error ? " is-invalid" : "";
+		let addCls = me.props.error ? "is-invalid" : "";
 		
 		return (
-			<div className="form-check">
-				<input type="checkbox" className={"form-check-input" + addCls} id={id} checked={me.state.value} onChange={me.onChange} disabled={disabled} />
-				<label className="form-check-label" htmlFor={id}>
+			<div className="form-check mb-2">
+				<input type="checkbox" className={`form-check-input ${addCls}`} id={id} checked={me.state.value} onChange={me.onChange} disabled={disabled} />
+				<label className="form-check-label booleanfield" htmlFor={id}>
 					{me.props.label}
 				</label>
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
