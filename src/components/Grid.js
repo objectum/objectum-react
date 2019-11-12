@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
 import Cell from "./Cell";
+import Filters from "./Filters";
 
 class Grid extends Component {
 	constructor (props) {
@@ -35,7 +36,8 @@ class Grid extends Component {
 			page,
 			pageNum: 1,
 			pageRecs,
-			selected
+			selected,
+			showFilter: false
 		};
 		me.onRowClick = me.onRowClick.bind (me);
 		me.onChange = me.onChange.bind (me);
@@ -155,8 +157,18 @@ class Grid extends Component {
 			if (me.length % state.pageRecs) {
 				state.pageNum ++;
 			}
+			for (let i = 0; i < me.cols.length; i ++) {
+				let c = me.cols [i];
+				
+				if (c.type >= 1000) {
+					let m = await me.props.store.getModel (c.type);
+					
+					if (m.isDictionary ()) {
+						c.recs = await me.props.store.getDict (c.type);
+					}
+				}
+			}
 			state.ready = true;
-			
 		} catch (err) {
 			state.error = err.message;
 		}
@@ -272,6 +284,9 @@ class Grid extends Component {
 						})}
 					</tbody>
 				</table>
+				
+				{me.state.showFilter &&	<Filters cols={me.cols} store={me.props.store} />}
+				
 				<div className="btn-toolbar bg-white border shadow-sm p-1" role="toolbar">
 					<div className="objectum-5em">
 						<div className="input-group">
@@ -297,6 +312,7 @@ class Grid extends Component {
 						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}><i className="fas fa-angle-right"></i></button>
 						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right"></i></button>
 						<button type="button" className="btn btn-link" onClick={() => me.setState ({ready: false})}><i className="fas fa-sync"></i></button>
+						<button type="button" className="btn btn-link" onClick={() => me.setState ({showFilter: !me.state.showFilter})}><i className="fas fa-filter"></i></button>
 					</div>
 				</div>
 				<small className="text-muted ml-3">

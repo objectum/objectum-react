@@ -30,6 +30,14 @@ class Cell extends Component {
 				let cls = me.props.store.getModel (value);
 				
 				return (<span>{`${cls.get ("name")} (${cls.getPath ()} : ${cls.get ("id")})`}</span>);
+			} else
+			if (col.recs) {
+				let rec = col.recs.find ((rec) => {
+					if (rec.id == value) {
+						return true;
+					}
+				});
+				return (<span>{`${rec.name} (${value})`}</span>);
 			} else {
 				return (<span>{value}</span>);
 			}

@@ -8,7 +8,7 @@
 }
 .menu-icon {
     width: 25px;
-    text-align: center
+    text-align: center;
 }
 .numberfield {
     width: 200px !important;
@@ -19,3 +19,10 @@
 .booleanfield {
     margin-top: 2px;
 }
+.filter-select {
+    width: 100% !important;
+}
+.filter-block {
+    height: 115px;
+}
+
