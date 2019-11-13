@@ -23,7 +23,7 @@ class Cell extends Component {
 			} else
 			if (col.type == 4) {
 				// Boolean
-				return (<input type="checkbox" checked={value} readOnly={true} />);
+				return (<input type="checkbox" checked={value} disabled />);
 			} else
 			if (col.type == 6) {
 				// Class

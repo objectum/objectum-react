@@ -12,15 +12,12 @@ class Grid extends Component {
 		super (props);
 		
 		let me = this;
-		
-		me.recs = [];
-		me.cols = [];
-		
 		let page = 1;
 		let pageRecs = me.props.pageRecs || 10;
 		let selected = null;
 		let showFilters = false;
 		let filters = [];
+		let order = [];
 		let hash = getHash (me);
 		
 		if (hash [me.props.id]) {
@@ -39,15 +36,21 @@ class Grid extends Component {
 			if (hash [me.props.id].filters) {
 				filters = hash [me.props.id].filters;
 			}
+			if (hash [me.props.id].hasOwnProperty ("order")) {
+				order = hash [me.props.id].order;
+			}
 		}
 		me.state = {
 			ready: false,
+			cols: [],
+			recs: [],
 			page,
 			pageNum: 1,
 			pageRecs,
 			selected,
 			showFilters,
-			filters
+			filters,
+			order
 		};
 		me.onRowClick = me.onRowClick.bind (me);
 		me.onChange = me.onChange.bind (me);
@@ -58,6 +61,7 @@ class Grid extends Component {
 		me.onShowFilters = me.onShowFilters.bind (me);
 		me.hashChange = me.hashChange.bind (me);
 		me.onFilter = me.onFilter.bind (me);
+		me.onOrder = me.onOrder.bind (me);
 	}
 	
 	hashChange () {
@@ -67,6 +71,7 @@ class Grid extends Component {
 		let selected = me.state.selected;
 		let showFilters = me.state.showFilters;
 		let filters = me.state.filters;
+		let order = me.state.order;
 		let hash = getHash (me);
 		let ready = true;
 		
@@ -83,6 +88,10 @@ class Grid extends Component {
 				filters = hash [me.props.id].filters;
 				ready = false;
 			}
+			if (hash [me.props.id].hasOwnProperty ("order") && JSON.stringify (hash [me.props.id].order) !== JSON.stringify (me.state.order)) {
+				order = hash [me.props.id].order;
+				ready = false;
+			}
 			if (hash [me.props.id].hasOwnProperty ("selected") && hash [me.props.id].selected != me.state.selected) {
 				selected = hash [me.props.id].selected;
 			}
@@ -91,9 +100,9 @@ class Grid extends Component {
 			}
 		}
 		if (selected != me.state.selected && me.props.onSelect) {
-			me.props.onSelect (me.recs [selected] && me.recs [selected].id);
+			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
 		}
-		me.setState ({page, pageRecs, selected, showFilters, filters, ready});
+		me.setState ({page, pageRecs, selected, showFilters, filters, order, ready});
 	}
 	
 	componentDidMount () {
@@ -145,8 +154,23 @@ class Grid extends Component {
 	}
 	
 	onFilter (filters) {
-		console.log (filters);
 		setHash (this, {[this.props.id]: {filters}});
+	}
+	
+	onOrder (colCode) {
+		let me = this;
+		let order = [...me.state.order];
+		
+		if (me.state.order [0] === colCode) {
+			if (me.state.order [1] == "asc") {
+				order [1] = "desc";
+			} else {
+				order = [];
+			}
+		} else {
+			order = [colCode, "asc"];
+		}
+		setHash (this, {[this.props.id]: {order}});
 	}
 	
 	async load () {
@@ -162,13 +186,16 @@ class Grid extends Component {
 				limit: me.state.pageRecs,
 				filters: me.state.filters
 			};
+			if (me.state.order.length) {
+				opts.order = me.state.order;
+			}
 			if (me.props.params) {
 				opts = {...opts, ...me.props.params};
 			}
 			let result = await me.props.store.getData (opts);
 			
-			me.recs = result.recs;
-			me.cols = _.sortBy (result.cols, ["order", "name"]);
+			me.state.recs = result.recs;
+			state.cols = _.sortBy (result.cols, ["order", "name"]);
 			me.length = result.length;
 			
 			let hash = getHash (me);
@@ -186,8 +213,8 @@ class Grid extends Component {
 			if (me.length % state.pageRecs) {
 				state.pageNum ++;
 			}
-			for (let i = 0; i < me.cols.length; i ++) {
-				let c = me.cols [i];
+			for (let i = 0; i < state.cols.length; i ++) {
+				let c = state.cols [i];
 				
 				if (c.type >= 1000) {
 					let m = await me.props.store.getModel (c.type);
@@ -234,7 +261,7 @@ class Grid extends Component {
 			} else
 			if (child.props.onClickSelected) {
 				o.onClick = () => {
-					child.props.onClickSelected (me.recs [me.state.selected].id);
+					child.props.onClickSelected (me.state.recs [me.state.selected].id);
 				}
 			}
 			if (child.type && child.type.name == "Action") {
@@ -249,10 +276,10 @@ class Grid extends Component {
 		});
 	}
 	
-	componentWillReceiveProps (props) {
+	componentDidUpdate (prevProps) {
 		let me = this;
 		
-		if (props.refresh !== me.props.refresh || JSON.stringify (props.params) != JSON.stringify (me.props.params)) {
+		if (prevProps.refresh !== me.props.refresh || JSON.stringify (prevProps.params) != JSON.stringify (me.props.params)) {
 			me.setState ({ready: false});
 		}
 	}
@@ -268,7 +295,7 @@ class Grid extends Component {
 		let selected = me.state.selected;
 		
 		if (selected !== null && me.props.onSelect) {
-			me.props.onSelect (me.recs [selected] && me.recs [selected].id);
+			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
 		}
 	}
 	
@@ -292,7 +319,7 @@ class Grid extends Component {
 				<table className="table table-hover border bg-white shadow-sm mt-1">
 					<thead>
 					<tr>
-						{me.cols.map ((col, i) => {
+						{me.state.cols.map ((col, i) => {
 							let cls = "";
 							let f = me.state.filters.find (f => {
 								if (f [0] == col.code) {
@@ -300,19 +327,30 @@ class Grid extends Component {
 								}
 							});
 							if (f) {
-								cls = "text-primary";
+								cls = "text-success";
+							}
+							let orderIcon = "fas fa-sort";
+							
+							if (col.code === me.state.order [0]) {
+								if (me.state.order [1] == "asc") {
+									orderIcon = "fas fa-sort-up";
+								} else {
+									orderIcon = "fas fa-sort-down";
+								}
 							}
 							return (
-								<th key={i} scope="col" className={cls}>{col.name}</th>
+								<th key={i} scope="col" className={cls}>
+									{col.name}<button type="button" className="btn btn-link" onClick={() => me.onOrder (col.code)}><i className={orderIcon}></i></button>
+								</th>
 							);
 						})}
 					</tr>
 					</thead>
 					<tbody>
-						{me.recs.map ((rec, i) => {
+						{me.state.recs.map ((rec, i) => {
 							return (
 								<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-									{me.cols.map ((col, j) => {
+									{me.state.cols.map ((col, j) => {
 										return (
 											<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} /></td>
 										);
@@ -323,7 +361,7 @@ class Grid extends Component {
 					</tbody>
 				</table>
 				
-				{me.state.showFilters && <Filters cols={me.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
+				{me.state.showFilters && <Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
 				
 				<div className="btn-toolbar bg-white border shadow-sm p-1" role="toolbar">
 					<div className="objectum-5em">

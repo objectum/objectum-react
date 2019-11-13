@@ -258,10 +258,11 @@ class TreeGrid extends Component {
 		});
 	}
 	
-	componentWillReceiveProps (props) {
+	//componentWillReceiveProps (props) {
+	componentDidUpdate (prevProps) {
 		let me = this;
 		
-		if (props.refresh !== me.props.refresh) {
+		if (prevProps.refresh !== me.props.refresh) {
 			me.setState ({ready: false});
 		}
 	}

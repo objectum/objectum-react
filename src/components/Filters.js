@@ -15,11 +15,10 @@ class Filter extends Component {
 		me.debouncedOnChange = _.debounce (me.debouncedOnChange.bind (me), 500);
 		me.onClick = me.onClick.bind (me);
 		
-		me.state = {...me.props.value};
-		me.operatorRecs = [];
+		me.state = {...me.props.value, operatorRecs: []};
 		
 		if (me.state.column) {
-			me.updateOperatorRecs (me.state.column);
+			me.state.operatorRecs = me.getOperatorRecs (me.state.column);
 		}
 	}
 	
@@ -29,7 +28,7 @@ class Filter extends Component {
 		me.props.onRemove (me.props.id);
 	}
 	
-	updateOperatorRecs (column) {
+	getOperatorRecs (column) {
 		let me = this;
 		
 		me.col = me.props.cols.find ((rec) => {
@@ -38,10 +37,11 @@ class Filter extends Component {
 			}
 		});
 		let t = me.col && me.col.type;
+		let operatorRecs = [];
 		
 		if (t >= 1000) {
 			if (me.col.recs) {
-				me.operatorRecs = [{
+				operatorRecs = [{
 					code: "=", name: "="
 				}, {
 					code: "<>", name: "<>"
@@ -55,7 +55,7 @@ class Filter extends Component {
 			}
 		}
 		if (t == 1 || t == 5) {
-			me.operatorRecs = [{
+			operatorRecs = [{
 				code: "=", name: "="
 			}, {
 				code: "<>", name: "<>"
@@ -70,7 +70,7 @@ class Filter extends Component {
 			}];
 		}
 		if (t == 2 || t == 3) {
-			me.operatorRecs = [{
+			operatorRecs = [{
 				code: "=", name: "="
 			}, {
 				code: ">", name: ">"
@@ -89,7 +89,7 @@ class Filter extends Component {
 			}];
 		}
 		if (t == 4) {
-			me.operatorRecs = [{
+			operatorRecs = [{
 				code: "1", name: "Yes"
 			}, {
 				code: "0", name: "No"
@@ -99,6 +99,7 @@ class Filter extends Component {
 				code: "is not null", name: "not null"
 			}];
 		}
+		return operatorRecs;
 	}
 	
 	
@@ -111,7 +112,7 @@ class Filter extends Component {
 		state [id] = v;
 		
 		if (id == "column") {
-			me.updateOperatorRecs (v);
+			state.operatorRecs = me.getOperatorRecs (v);
 			state.operator = "";
 			state.value = "";
 		}
@@ -126,7 +127,7 @@ class Filter extends Component {
 	renderValue () {
 		let me = this;
 		
-		let t = me.col.type;
+		let t = me.col && me.col.type;
 		
 		if (t >= 1000) {
 			if (me.col.recs) {
@@ -143,7 +144,7 @@ class Filter extends Component {
 				t = 2;
 			}
 		}
-		if (t == 1) {
+		if (t == 1 || t == 5) {
 			return (
 				<input id="value" type="text" className="filter-select mt-1" value={me.state.value} onChange={me.onChange} placeholder="Enter value" />
 			);
@@ -160,6 +161,14 @@ class Filter extends Component {
 		}
 		if (t == 4) {
 			return (<div />);
+		}
+	}
+	
+	componentDidUpdate (prevProps) {
+		let me = this;
+		
+		if (!prevProps.cols.length) {
+			me.setState ({operatorRecs: me.getOperatorRecs (me.state.column)});
 		}
 	}
 	
@@ -182,7 +191,7 @@ class Filter extends Component {
 				</select>
 				<br />
 				{me.state.column && <select id="operator" className="filter-select mt-1" value={me.state.operator} onChange={me.onChange} disabled={!me.state.column}>
-					{[{code: "", name: "Choose operator"}, ...me.operatorRecs].map ((rec, i) => {
+					{[{code: "", name: "Choose operator"}, ...me.state.operatorRecs].map ((rec, i) => {
 						return (
 							<option value={rec.code} key={"operator-" + i}>{rec.name}</option>
 						);
