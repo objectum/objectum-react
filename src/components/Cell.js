@@ -37,7 +37,11 @@ class Cell extends Component {
 						return true;
 					}
 				});
-				return (<span>{`${rec.name} (${value})`}</span>);
+				if (rec) {
+					return (<span>{`${rec.name} (${value})`}</span>);
+				} else {
+					return (<span>{`${value}`}</span>);
+				}
 			} else {
 				return (<span>{value}</span>);
 			}

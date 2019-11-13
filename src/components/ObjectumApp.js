@@ -126,12 +126,14 @@ class ObjectumApp extends Component {
 				let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
 				
 				if (childRecs.length) {
-					return [
-						<a key={`a-${parent}-${i}`} href={`#submenu-${parent}-${i}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{renderIcon (rec.icon)}{rec.name}</a>,
-						<ul key={`ul-${parent}-${i}`} className="collapse list-unstyled" id={`submenu-${parent}-${i}`}>
-							{renderItems (rec.id)}
-						</ul>
-					];
+					return (
+						<li className="active" key={`active-${parent}-${i}`}>
+							<a key={`a-${parent}-${i}`} href={`#submenu-${parent}-${i}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{renderIcon (rec.icon)}{rec.name}</a>
+							<ul key={`ul-${parent}-${i}`} className="collapse list-unstyled" id={`submenu-${parent}-${i}`}>
+								{renderItems (rec.id)}
+							</ul>
+						</li>
+					);
 				} else {
 					return (
 						<li key={`${parent}-${i}`}>
@@ -143,9 +145,7 @@ class ObjectumApp extends Component {
 		};
 		return (
 			<ul className="list-unstyled components">
-				<li className="active">
-					{renderItems (null)}
-				</li>
+				{renderItems (null)}
 				<li className="mt-3">
 					<Link className="nav-link" to="/logout"><i className="fas fa-sign-out-alt mr-2" />Logout</Link>
 				</li>

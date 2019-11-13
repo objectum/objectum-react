@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {getDateString} from "./helper";
+import _ from "lodash";
 
 class Filter extends Component {
 	constructor (props) {
@@ -11,10 +12,15 @@ class Filter extends Component {
 		let me = this;
 		
 		me.onChange = me.onChange.bind (me);
+		me.debouncedOnChange = _.debounce (me.debouncedOnChange.bind (me), 500);
 		me.onClick = me.onClick.bind (me);
 		
 		me.state = {...me.props.value};
 		me.operatorRecs = [];
+		
+		if (me.state.column) {
+			me.updateOperatorRecs (me.state.column);
+		}
 	}
 	
 	onClick () {
@@ -23,86 +29,98 @@ class Filter extends Component {
 		me.props.onRemove (me.props.id);
 	}
 	
+	updateOperatorRecs (column) {
+		let me = this;
+		
+		me.col = me.props.cols.find ((rec) => {
+			if (rec.code == column) {
+				return true;
+			}
+		});
+		let t = me.col && me.col.type;
+		
+		if (t >= 1000) {
+			if (me.col.recs) {
+				me.operatorRecs = [{
+					code: "=", name: "="
+				}, {
+					code: "<>", name: "<>"
+				}, {
+					code: "is null", name: "null"
+				}, {
+					code: "is not null", name: "not null"
+				}];
+			} else {
+				t = 2;
+			}
+		}
+		if (t == 1 || t == 5) {
+			me.operatorRecs = [{
+				code: "=", name: "="
+			}, {
+				code: "<>", name: "<>"
+			}, {
+				code: "like", name: "like"
+			}, {
+				code: "not like", name: "not like"
+			}, {
+				code: "is null", name: "null"
+			}, {
+				code: "is not null", name: "not null"
+			}];
+		}
+		if (t == 2 || t == 3) {
+			me.operatorRecs = [{
+				code: "=", name: "="
+			}, {
+				code: ">", name: ">"
+			}, {
+				code: "<", name: "<"
+			}, {
+				code: ">=", name: ">="
+			}, {
+				code: "<=", name: "<="
+			}, {
+				code: "<>", name: "<>"
+			}, {
+				code: "is null", name: "null"
+			}, {
+				code: "is not null", name: "not null"
+			}];
+		}
+		if (t == 4) {
+			me.operatorRecs = [{
+				code: "1", name: "Yes"
+			}, {
+				code: "0", name: "No"
+			}, {
+				code: "is null", name: "null"
+			}, {
+				code: "is not null", name: "not null"
+			}];
+		}
+	}
+	
+	
 	onChange (val) {
 		let me = this;
 		let id = val.target.id;
 		let v = val.target.value;
-		
-		if (id == "column") {
-			me.col = me.props.cols.find ((rec) => {
-				if (rec.code == v) {
-					return true;
-				}
-			});
-			let t = me.col && me.col.type;
-			
-			if (t >= 1000) {
-				if (me.col.recs) {
-					me.operatorRecs = [{
-						code: "=", name: "="
-					}, {
-						code: "<>", name: "<>"
-					}, {
-						code: "is null", name: "null"
-					}, {
-						code: "is not null", name: "not null"
-					}];
-				} else {
-					t = 2;
-				}
-			}
-			if (t == 1 || t == 5) {
-				me.operatorRecs = [{
-					code: "=", name: "="
-				}, {
-					code: "<>", name: "<>"
-				}, {
-					code: "like", name: "like"
-				}, {
-					code: "not like", name: "not like"
-				}, {
-					code: "is null", name: "null"
-				}, {
-					code: "is not null", name: "not null"
-				}];
-			}
-			if (t == 2 || t == 3) {
-				me.operatorRecs = [{
-					code: "=", name: "="
-				}, {
-					code: ">", name: ">"
-				}, {
-					code: "<", name: "<"
-				}, {
-					code: ">=", name: ">="
-				}, {
-					code: "<=", name: "<="
-				}, {
-					code: "<>", name: "<>"
-				}, {
-					code: "is null", name: "null"
-				}, {
-					code: "is not null", name: "not null"
-				}];
-			}
-			if (t == 4) {
-				me.operatorRecs = [{
-					code: "1", name: "Yes"
-				}, {
-					code: "0", name: "No"
-				}, {
-					code: "is null", name: "null"
-				}, {
-					code: "is not null", name: "not null"
-				}];
-			}
-		}
-		me.setState ({[id]: v});
-		
 		let state = {...me.state};
 		
 		state [id] = v;
-		me.props.onChangeState (me.props.id, state);
+		
+		if (id == "column") {
+			me.updateOperatorRecs (v);
+			state.operator = "";
+			state.value = "";
+		}
+		me.setState (state);
+		me.debouncedOnChange (me.props.id, state);
+	}
+	
+	debouncedOnChange (id, state) {
+		this.props.onChangeState (id, state);
 	}
 	
 	renderValue () {
@@ -114,9 +132,9 @@ class Filter extends Component {
 			if (me.col.recs) {
 				return (
 					<select id="value" className="filter-select mt-1" value={me.state.value} onChange={me.onChange}>
-						{me.col.recs.map ((rec, i) => {
+						{[{id: "", name: "Choose value"}, ...me.col.recs].map ((rec, i) => {
 							return (
-								<option value={rec.id} key={i}>{rec.name}</option>
+								<option value={rec.id} key={"value-" + i}>{rec.name}</option>
 							);
 						})}
 					</select>
@@ -158,7 +176,7 @@ class Filter extends Component {
 				<select id="column" className="filter-select" value={me.state.column} onChange={me.onChange}>
 					{[{code: "", name: "Choose column"}, ...me.props.cols].map ((rec, i) => {
 						return (
-							<option value={rec.code} key={i}>{rec.name}</option>
+							<option value={rec.code} key={"column-" + i}>{rec.name}</option>
 						);
 					})}
 				</select>
@@ -166,7 +184,7 @@ class Filter extends Component {
 				{me.state.column && <select id="operator" className="filter-select mt-1" value={me.state.operator} onChange={me.onChange} disabled={!me.state.column}>
 					{[{code: "", name: "Choose operator"}, ...me.operatorRecs].map ((rec, i) => {
 						return (
-							<option value={rec.code} key={i}>{rec.name}</option>
+							<option value={rec.code} key={"operator-" + i}>{rec.name}</option>
 						);
 					})}
 				</select>}
@@ -197,6 +215,33 @@ class Filters extends Component {
 				value: ""
 			}]
 		};
+		if (me.props.filters && me.props.filters.length) {
+			me.state.filters = me.props.filters.map (f => {
+				return {
+					id: me.gen ++,
+					column: f [0],
+					operator: f [1],
+					value: f [2]
+				};
+			});
+		}
+	}
+
+	sendFilters (filters) {
+		let me = this;
+		let data = [];
+		
+		filters.forEach (f => {
+			if (f.column) {
+				if ((f.operator && f.value !== "") || f.operator == "is null" || f.operator == "is not null") {
+					data.push ([f.column, f.operator, f.value]);
+				}
+				if (f.operator === "0" || f.operator === "1") {
+					data.push ([f.column, "=", f.operator]);
+				}
+			}
+		});
+		me.props.onFilter (data);
 	}
 	
 	onChangeState (id, state) {
@@ -210,6 +255,7 @@ class Filters extends Component {
 			}
 		}
 		me.setState ({filters});
+		me.sendFilters (filters);
 	}
 	
 	onAdd () {
@@ -236,6 +282,7 @@ class Filters extends Component {
 			}
 		}
 		me.setState ({filters});
+		me.sendFilters (filters);
 	}
 	
 	render () {
@@ -245,8 +292,8 @@ class Filters extends Component {
 			<div className="row no-gutters">
 				{me.state.filters.map ((rec) => {
 					return (
-						<div className="col-sm-2 mr-1" key={rec.id}>
-							<Filter id={rec.id} key={rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
+						<div className="col-sm-2 mr-1" key={"div-filter-" + rec.id}>
+							<Filter id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
 						</div>
 					);
 				})}

@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
 import Cell from "./Cell";
 import Filters from "./Filters";
+import _ from "lodash";
 
 class Grid extends Component {
 	constructor (props) {
@@ -18,6 +19,8 @@ class Grid extends Component {
 		let page = 1;
 		let pageRecs = me.props.pageRecs || 10;
 		let selected = null;
+		let showFilters = false;
+		let filters = [];
 		let hash = getHash (me);
 		
 		if (hash [me.props.id]) {
@@ -30,6 +33,12 @@ class Grid extends Component {
 			if (hash [me.props.id].hasOwnProperty ("selected")) {
 				selected = Number (hash [me.props.id].selected);
 			}
+			if (hash [me.props.id].hasOwnProperty ("showFilters")) {
+				showFilters = hash [me.props.id].showFilters;
+			}
+			if (hash [me.props.id].filters) {
+				filters = hash [me.props.id].filters;
+			}
 		}
 		me.state = {
 			ready: false,
@@ -37,7 +46,8 @@ class Grid extends Component {
 			pageNum: 1,
 			pageRecs,
 			selected,
-			showFilter: false
+			showFilters,
+			filters
 		};
 		me.onRowClick = me.onRowClick.bind (me);
 		me.onChange = me.onChange.bind (me);
@@ -45,7 +55,9 @@ class Grid extends Component {
 		me.onPrev = me.onPrev.bind (me);
 		me.onNext = me.onNext.bind (me);
 		me.onLast = me.onLast.bind (me);
+		me.onShowFilters = me.onShowFilters.bind (me);
 		me.hashChange = me.hashChange.bind (me);
+		me.onFilter = me.onFilter.bind (me);
 	}
 	
 	hashChange () {
@@ -53,6 +65,8 @@ class Grid extends Component {
 		let page = me.state.page;
 		let pageRecs = me.state.pageRecs;
 		let selected = me.state.selected;
+		let showFilters = me.state.showFilters;
+		let filters = me.state.filters;
 		let hash = getHash (me);
 		let ready = true;
 		
@@ -65,23 +79,28 @@ class Grid extends Component {
 				pageRecs = hash [me.props.id].pageRecs;
 				ready = false;
 			}
+			if (hash [me.props.id].filters && JSON.stringify (hash [me.props.id].filters) != JSON.stringify (me.state.filters)) {
+				filters = hash [me.props.id].filters;
+				ready = false;
+			}
 			if (hash [me.props.id].hasOwnProperty ("selected") && hash [me.props.id].selected != me.state.selected) {
 				selected = hash [me.props.id].selected;
+			}
+			if (hash [me.props.id].hasOwnProperty ("showFilters") && hash [me.props.id].showFilters != me.state.showFilters) {
+				showFilters = hash [me.props.id].showFilters;
 			}
 		}
 		if (selected != me.state.selected && me.props.onSelect) {
 			me.props.onSelect (me.recs [selected] && me.recs [selected].id);
 		}
-		me.setState ({page, pageRecs, selected, ready});
+		me.setState ({page, pageRecs, selected, showFilters, filters, ready});
 	}
 	
 	componentDidMount () {
-		//window.addEventListener ("hashchange", this.hashChange);
 		addHashListener (this, this.hashChange);
 	}
 	
 	componentWillUnmount () {
-//		window.removeEventListener ("hashchange", this.hashChange);
 		removeHashListener (this, this.hashChange);
 	}
 	
@@ -121,6 +140,15 @@ class Grid extends Component {
 		setHash (this, {[this.props.id]: {page: Number (this.state.page) + 1}});
 	}
 	
+	onShowFilters () {
+		setHash (this, {[this.props.id]: {showFilters: !this.state.showFilters}});
+	}
+	
+	onFilter (filters) {
+		console.log (filters);
+		setHash (this, {[this.props.id]: {filters}});
+	}
+	
 	async load () {
 		let me = this;
 		let state = {
@@ -131,7 +159,8 @@ class Grid extends Component {
 			let opts = {
 				query: me.props.query,
 				offset: (me.state.page - 1) * me.state.pageRecs,
-				limit: me.state.pageRecs
+				limit: me.state.pageRecs,
+				filters: me.state.filters
 			};
 			if (me.props.params) {
 				opts = {...opts, ...me.props.params};
@@ -139,7 +168,7 @@ class Grid extends Component {
 			let result = await me.props.store.getData (opts);
 			
 			me.recs = result.recs;
-			me.cols = result.cols;
+			me.cols = _.sortBy (result.cols, ["order", "name"]);
 			me.length = result.length;
 			
 			let hash = getHash (me);
@@ -264,8 +293,17 @@ class Grid extends Component {
 					<thead>
 					<tr>
 						{me.cols.map ((col, i) => {
+							let cls = "";
+							let f = me.state.filters.find (f => {
+								if (f [0] == col.code) {
+									return true;
+								}
+							});
+							if (f) {
+								cls = "text-primary";
+							}
 							return (
-								<th key={i} scope="col">{col.name}</th>
+								<th key={i} scope="col" className={cls}>{col.name}</th>
 							);
 						})}
 					</tr>
@@ -285,7 +323,7 @@ class Grid extends Component {
 					</tbody>
 				</table>
 				
-				{me.state.showFilter &&	<Filters cols={me.cols} store={me.props.store} />}
+				{me.state.showFilters && <Filters cols={me.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
 				
 				<div className="btn-toolbar bg-white border shadow-sm p-1" role="toolbar">
 					<div className="objectum-5em">
@@ -312,7 +350,7 @@ class Grid extends Component {
 						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}><i className="fas fa-angle-right"></i></button>
 						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right"></i></button>
 						<button type="button" className="btn btn-link" onClick={() => me.setState ({ready: false})}><i className="fas fa-sync"></i></button>
-						<button type="button" className="btn btn-link" onClick={() => me.setState ({showFilter: !me.state.showFilter})}><i className="fas fa-filter"></i></button>
+						<button type="button" className="btn btn-link" onClick={me.onShowFilters}><i className="fas fa-filter"></i></button>
 					</div>
 				</div>
 				<small className="text-muted ml-3">

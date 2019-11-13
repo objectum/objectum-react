@@ -8,6 +8,7 @@ class Auth extends Component {
 
 		me.fieldChange = me.fieldChange.bind (me);
 		me.buttonClick = me.buttonClick.bind (me);
+		me.onKeyDown = me.onKeyDown.bind (me);
 		
 		me.store = me.props.store;
 		me.state = {};
@@ -32,7 +33,19 @@ class Auth extends Component {
 			}
 		});
 	}
-
+	
+	onKeyDown (e) {
+		let me = this;
+		
+		if (e.key === "Enter" && me.state.username && me.state.password) {
+			me.buttonClick ();
+		}
+	}
+	
+	componentDidMount () {
+		this.usernameInput.focus ();
+	}
+	
 	render () {
 		let me = this;
 		let disabledButton = false;
@@ -45,12 +58,12 @@ class Auth extends Component {
 				<h5>Sign in</h5>
 				<div className="form-group row">
 					<div className="col-sm">
-						<input type="text" className="form-control" id="username" placeholder="Username" onChange={me.fieldChange} />
+						<input type="text" className="form-control" id="username" placeholder="Username" onChange={me.fieldChange} ref={input => me.usernameInput = input} />
 					</div>
 				</div>
 				<div className="form-group row">
 					<div className="col-sm">
-						<input type="password" className="form-control" id="password" placeholder="Password" onChange={me.fieldChange} />
+						<input type="password" className="form-control" id="password" placeholder="Password" onChange={me.fieldChange} onKeyDown={me.onKeyDown} />
 					</div>
 				</div>
 				{me.state.showError && (
