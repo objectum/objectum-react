@@ -60,12 +60,12 @@ class StringField extends Component {
 		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;
 		
 		if (me.props.textarea) {
-			cmp = <textarea className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;
+			cmp = <textarea className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} rows={me.props.rows || 10} />;
 		}
 		if (me.props.codemirror) {
 			cmp = (
 				<div className="border">
-					<textarea ref="codemirror" className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} rows={me.props.rows || 10} />
+					<textarea ref="codemirror" className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} />
 				</div>
 			);
 		}
