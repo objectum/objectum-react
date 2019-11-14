@@ -28,7 +28,8 @@ class DictionaryList extends Component {
 		me.props.history.push ({
 			pathname: "/dictionary_record/new#" + JSON.stringify ({
 				opts: {
-					from: unescape (window.location.pathname + window.location.hash)
+					from: unescape (window.location.pathname + window.location.hash),
+					dictionary_id: me.state.rid
 				}
 			})
 		});
@@ -40,7 +41,8 @@ class DictionaryList extends Component {
 		me.props.history.push ({
 			pathname: "/dictionary_record/" + id + "#" + JSON.stringify ({
 				opts: {
-					from: unescape (window.location.pathname + window.location.hash)
+					from: unescape (window.location.pathname + window.location.hash),
+					dictionary_id: me.state.rid
 				}
 			})
 		});

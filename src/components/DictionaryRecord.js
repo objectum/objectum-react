@@ -18,32 +18,23 @@ class DictionaryRecord extends Component {
 		let hash = getHash ();
 		
 		me.from = hash.opts.from;
+		me.dictionary_id = hash.opts.dictionary_id;
+		me.model = me.props.store.getModel (me.dictionary_id);
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			record: null
 		};
 	}
 	
-	async componentDidMount () {
-		let me = this;
-		let record = await me.props.store.getRecord (me.state.rid);
-		let modelPath = me.props.store.getModel (record.get ("model")).getPath ();
-		
-		me.setState ({record, modelPath});
-	}
-	
 	render () {
 		let me = this;
 		
-		if (!me.state.record) {
-			return (<div />);
-		}
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
 				<Tabs key="tabs" id="tabs">
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.modelPath}>
+						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.model.getPath ()}>
 							<Field property="name" />
 						</Form>
 					</Tab>
