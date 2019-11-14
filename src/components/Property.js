@@ -51,7 +51,7 @@ class Property extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs" title={"Property: " + me.state.label}>
+				<Tabs key="tabs" id="tabs" title={i18n ("Property") + ": " + me.state.label}>
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} >
 							<div className="form-row">

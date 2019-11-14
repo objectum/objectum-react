@@ -182,11 +182,16 @@ class Grid extends Component {
 		
 		try {
 			let opts = {
-				query: me.props.query,
 				offset: (me.state.page - 1) * me.state.pageRecs,
 				limit: me.state.pageRecs,
 				filters: me.state.filters
 			};
+			if (me.props.query) {
+				opts.query = me.props.query;
+			}
+			if (me.props.model) {
+				opts.model = me.props.model;
+			}
 			if (me.state.order.length) {
 				opts.order = me.state.order;
 			}
