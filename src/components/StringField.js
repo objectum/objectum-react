@@ -65,7 +65,7 @@ class StringField extends Component {
 		if (me.props.codemirror) {
 			cmp = (
 				<div className="border">
-					<textarea ref="codemirror" className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} />
+					<textarea ref="codemirror" className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} rows={me.props.rows || 10} />
 				</div>
 			);
 		}
