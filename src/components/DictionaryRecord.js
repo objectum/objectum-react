@@ -27,7 +27,7 @@ class DictionaryRecord extends Component {
 	async componentDidMount () {
 		let me = this;
 		let record = await me.props.store.getRecord (me.state.rid);
-		let modelPath = me.props.store.getModel (record.get ("model"));
+		let modelPath = me.props.store.getModel (record.get ("model")).getPath ();
 		
 		me.setState ({record, modelPath});
 	}
