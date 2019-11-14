@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Action from "./Action";
 import Confirm from "./Confirm";
 import Grid from "./Grid";
+import {i18n} from "./../i18n";
 
 class Menus extends Component {
 	constructor (props) {
@@ -61,9 +62,9 @@ class Menus extends Component {
 				<div className="row">
 					<div className="col-sm-12">
 						<Grid {...me.props} id="menus" ref="menus" title="Menus" store={me.props.store} query="objectum.menu" refresh={me.state.refresh}>
-							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
-							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
-							<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>
+							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
+							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
+							<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
 						</Grid>
 					</div>
 					<Confirm title="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
