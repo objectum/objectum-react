@@ -60,6 +60,19 @@ class DictionaryList extends Component {
 		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
 	}
 	
+	componentDidUpdate () {
+		let me = this;
+		let rid = me.props.match.params.rid;
+		
+		if (me.state.rid != rid) {
+			me.model = me.props.store.getModel (rid);
+			me.setState ({
+				rid,
+				modelPath: me.model.getPath ()
+			});
+		}
+	}
+	
 	render () {
 		let me = this;
 		

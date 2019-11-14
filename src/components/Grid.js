@@ -285,7 +285,11 @@ class Grid extends Component {
 	componentDidUpdate (prevProps) {
 		let me = this;
 		
-		if (prevProps.refresh !== me.props.refresh || JSON.stringify (prevProps.params) != JSON.stringify (me.props.params)) {
+		if (prevProps.refresh !== me.props.refresh ||
+			JSON.stringify (prevProps.params) != JSON.stringify (me.props.params) ||
+			prevProps.query != me.props.query ||
+			prevProps.model != me.props.model
+		) {
 			me.setState ({ready: false});
 		}
 	}

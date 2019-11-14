@@ -212,6 +212,10 @@ class Form extends Component {
 			state.rid = me.object.get ("id");
 			state.error = "";
 			await me.props.store.commitTransaction ();
+			
+			if (me.props.onCreate) {
+				me.props.onCreate (state.rid);
+			}
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
 			state.error = err.message;

@@ -23,7 +23,7 @@ class Query extends Component {
 		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
-			label: "-",
+			label: "",
 			parent: hash.opts.parent
 		};
 		if (me.state.rid) {
@@ -31,6 +31,14 @@ class Query extends Component {
 			
 			me.state.label = o.getLabel ();
 		}
+		me.onCreate = me.onCreate.bind (me);
+	}
+	
+	onCreate (rid) {
+		let me = this;
+		let o = me.props.store.getQuery (rid);
+		
+		me.setState ({rid, label: o.getLabel ()});
 	}
 	
 	render () {
@@ -41,7 +49,7 @@ class Query extends Component {
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
 				<Tabs key="tabs" id="tabs" title={i18n ("Query") + ": " + me.state.label}>
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid}>
+						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid} onCreate={me.onCreate}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
 									<StringField property="name" label="Name" />

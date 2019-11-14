@@ -20,8 +20,27 @@ class Menu extends Component {
 		
 		me.from = hash.opts.from;
 		me.state = {
-			rid: rid == "new" ? null : rid
+			rid: rid == "new" ? null : rid,
+			label: ""
 		};
+		me.onCreate = me.onCreate.bind (me);
+	}
+	
+	async componentDidMount () {
+		let me = this;
+
+		if (me.state.rid) {
+			let o = await me.props.store.getRecord (me.state.rid);
+			
+			me.setState ({label: o.getLabel ()});
+		}
+	}
+	
+	async onCreate (rid) {
+		let me = this;
+		let o = await me.props.store.getRecord (rid);
+		
+		me.setState ({rid, label: o.getLabel ()});
 	}
 	
 	render () {
@@ -30,9 +49,9 @@ class Menu extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs">
+				<Tabs key="tabs" id="tabs" title={i18n ("Menu") + ": " + me.state.label}>
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu">
+						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu" onCreate={me.onCreate}>
 							<Field property="name" />
 							<Field property="code" />
 							<Field property="order" />

@@ -25,7 +25,7 @@ class Property extends Component {
 		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
-			label: "-",
+			label: "",
 			model: hash.opts.model
 		};
 		if (me.state.rid) {
@@ -35,10 +35,18 @@ class Property extends Component {
 			me.state.type = o.get ("type");
 		}
 		me.onChange = me.onChange.bind (me);
+		me.onCreate = me.onCreate.bind (me);
 	}
 
 	onChange (id, v) {
 		this.setState ({[id]: v});
+	}
+	
+	onCreate (rid) {
+		let me = this;
+		let o = me.props.store.getProperty (rid);
+		
+		me.setState ({rid, label: o.getLabel ()});
 	}
 	
 	render () {
@@ -53,7 +61,7 @@ class Property extends Component {
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
 				<Tabs key="tabs" id="tabs" title={i18n ("Property") + ": " + me.state.label}>
 					<Tab key="Tab1" title="Information">
-						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} >
+						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} onCreate={me.onCreate}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
 									<StringField property="name" label="Name" notNull={true} />
