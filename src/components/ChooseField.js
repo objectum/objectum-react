@@ -79,7 +79,7 @@ function objectField (ComponentClass) {
 					<div className="col-md">
 						<div className="input-group input-group-md">
 					    	<span className="input-group-btn">
-								{!me.props.disabled && <button type="button" className="btn btn-primary mr-1" onClick={me.onVisible}><i className="fas fa-edit mr-2"></i>Choose</button>}
+								{!me.props.disabled && <button type="button" className="btn btn-primary mr-1" onClick={me.onVisible}><i className="fas fa-edit mr-2"></i>{i18n ("Choose")}</button>}
 						    </span>
 							<input type="text" className={"form-control" + me.props.addCls} id={me.props.id} value={me.state.name} disabled={true} />
 							<Modal
