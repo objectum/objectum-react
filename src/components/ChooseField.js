@@ -98,7 +98,7 @@ function objectField (ComponentClass) {
 								<div className="row">
 									<div className="col-md mb-1">
 										<button type="button" className="btn btn-primary mr-1" onClick={me.onChoose}><i className="fas fa-check mr-1"></i>{i18n ("Choose")}</button>
-										<button type="button" className="btn btn-primary" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1"></i>Cancel</button>
+										<button type="button" className="btn btn-primary" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1"></i>{i18n ("Cancel")}</button>
 									</div>
 								</div>
 								<ComponentClass {...me.props} ref="component" disableActions={true} />
