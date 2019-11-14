@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {useDropzone} from "react-dropzone";
+import {i18n} from "./../i18n";
 
 function File (props) {
 	const {acceptedFiles, getRootProps, getInputProps} = useDropzone ({
@@ -74,7 +75,7 @@ class FileField extends Component {
 		
 		return (
 			<div className="form-group">
-				<label htmlFor={id}>{me.props.label}</label>
+				<label htmlFor={id}>{i18n (me.props.label)}</label>
 				<File id={id} onFile={me.onFile} value={me.state.value} store={me.props.store} object={me.props.object || me.props.record} cls={me.props.cls || me.props.model} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

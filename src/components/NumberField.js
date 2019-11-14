@@ -2,6 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
+import {i18n} from "./../i18n";
 
 class NumberField extends Component {
 	constructor (props) {
@@ -31,7 +32,7 @@ class NumberField extends Component {
 		
 		return (
 			<div className="form-group">
-				<label htmlFor={id}>{me.props.label}</label>
+				<label htmlFor={id}>{i18n (me.props.label)}</label>
 				<input type="number" className={`form-control ${addCls} numberfield`} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

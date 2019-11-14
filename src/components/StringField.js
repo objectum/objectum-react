@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {loadCSS, loadJS} from "./helper";
+import {i18n} from "./../i18n";
 
 class StringField extends Component {
 	constructor (props) {
@@ -70,7 +71,7 @@ class StringField extends Component {
 		}
 		return (
 			<div className="form-group">
-				<label htmlFor={id}>{me.props.label}</label>
+				<label htmlFor={id}>{i18n (me.props.label)}</label>
 				{cmp}
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

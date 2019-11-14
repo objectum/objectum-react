@@ -6,6 +6,7 @@ import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
 import Cell from "./Cell";
 import Filters from "./Filters";
 import _ from "lodash";
+import {i18n} from "./../i18n";
 
 class Grid extends Component {
 	constructor (props) {
@@ -196,7 +197,7 @@ class Grid extends Component {
 			
 			me.state.recs = result.recs;
 			state.cols = _.sortBy (result.cols, ["order", "name"]);
-			me.length = result.length;
+			state.length = result.length;
 			
 			let hash = getHash (me);
 			
@@ -208,9 +209,9 @@ class Grid extends Component {
 					state.pageRecs = Number (hash [me.props.id].pageRecs);
 				}
 			}
-			state.pageNum = me.length / state.pageRecs | 0;
+			state.pageNum = state.length / state.pageRecs | 0;
 			
-			if (me.length % state.pageRecs) {
+			if (state.length % state.pageRecs) {
 				state.pageNum ++;
 			}
 			for (let i = 0; i < state.cols.length; i ++) {
@@ -236,13 +237,13 @@ class Grid extends Component {
 		let pos = (me.state.page - 1) * me.state.pageRecs + 1;
 		let pos2 = pos + Number (me.state.pageRecs) - 1;
 		
-		if (pos2 > me.length) {
-			pos2 = me.length;
+		if (pos2 > me.state.length) {
+			pos2 = me.state.length;
 		}
-		let s = `${pos}-${pos2} of ${me.length} records (${me.state.pageNum} pages)`;
+		let s = `${pos}-${pos2} ${i18n ("of")} ${me.state.length} ${i18n ("records")} (${me.state.pageNum} ${i18n ("pages")})`;
 		
 		if (!pos2) {
-			s = "empty";
+			s = i18n ("empty");
 		}
 		return s;
 	}
@@ -340,7 +341,7 @@ class Grid extends Component {
 							}
 							return (
 								<th key={i} scope="col" className={cls}>
-									{col.name}<button type="button" className="btn btn-link" onClick={() => me.onOrder (col.code)}><i className={orderIcon}></i></button>
+									{i18n (col.name)}<button type="button" className="btn btn-link" onClick={() => me.onOrder (col.code)}><i className={orderIcon}></i></button>
 								</th>
 							);
 						})}

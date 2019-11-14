@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {getDateString} from "./helper";
 import _ from "lodash";
+import {i18n} from "../i18n";
 
 class Filter extends Component {
 	constructor (props) {
@@ -46,9 +47,9 @@ class Filter extends Component {
 				}, {
 					code: "<>", name: "<>"
 				}, {
-					code: "is null", name: "null"
+					code: "is null", name: i18n ("null")
 				}, {
-					code: "is not null", name: "not null"
+					code: "is not null", name: i18n ("not null")
 				}];
 			} else {
 				t = 2;
@@ -60,13 +61,13 @@ class Filter extends Component {
 			}, {
 				code: "<>", name: "<>"
 			}, {
-				code: "like", name: "like"
+				code: "like", name: i18n ("like")
 			}, {
-				code: "not like", name: "not like"
+				code: "not like", name: i18n ("not like")
 			}, {
-				code: "is null", name: "null"
+				code: "is null", name: i18n ("null")
 			}, {
-				code: "is not null", name: "not null"
+				code: "is not null", name: i18n ("not null")
 			}];
 		}
 		if (t == 2 || t == 3) {
@@ -83,20 +84,20 @@ class Filter extends Component {
 			}, {
 				code: "<>", name: "<>"
 			}, {
-				code: "is null", name: "null"
+				code: "is null", name: i18n ("null")
 			}, {
-				code: "is not null", name: "not null"
+				code: "is not null", name: i18n ("not null")
 			}];
 		}
 		if (t == 4) {
 			operatorRecs = [{
-				code: "1", name: "Yes"
+				code: "1", name: i18n ("Yes")
 			}, {
-				code: "0", name: "No"
+				code: "0", name: i18n ("No")
 			}, {
-				code: "is null", name: "null"
+				code: "is null", name: i18n ("null")
 			}, {
-				code: "is not null", name: "not null"
+				code: "is not null", name: i18n ("not null")
 			}];
 		}
 		return operatorRecs;
@@ -133,7 +134,7 @@ class Filter extends Component {
 			if (me.col.recs) {
 				return (
 					<select id="value" className="filter-select mt-1" value={me.state.value} onChange={me.onChange}>
-						{[{id: "", name: "Choose value"}, ...me.col.recs].map ((rec, i) => {
+						{[{id: "", name: i18n ("Choose value")}, ...me.col.recs].map ((rec, i) => {
 							return (
 								<option value={rec.id} key={"value-" + i}>{rec.name}</option>
 							);
@@ -146,17 +147,17 @@ class Filter extends Component {
 		}
 		if (t == 1 || t == 5) {
 			return (
-				<input id="value" type="text" className="filter-select mt-1" value={me.state.value} onChange={me.onChange} placeholder="Enter value" />
+				<input id="value" type="text" className="filter-select mt-1" value={me.state.value} onChange={me.onChange} placeholder={i18n ("Enter value")} />
 			);
 		}
 		if (t == 2) {
 			return (
-				<input id="value" type="number" className="filter-select mt-1" value={me.state.value} onChange={me.onChange} placeholder="Enter value" />
+				<input id="value" type="number" className="filter-select mt-1" value={me.state.value} onChange={me.onChange} placeholder={i18n ("Enter value")} />
 			);
 		}
 		if (t == 3) {
 			return (
-				<input id="value" type="date" className="filter-select mt-1" value={getDateString (me.state.value)} onChange={me.onChange} placeholder="Enter value" />
+				<input id="value" type="date" className="filter-select mt-1" value={getDateString (me.state.value)} onChange={me.onChange} placeholder={i18n ("Enter value")} />
 			);
 		}
 		if (t == 4) {
@@ -181,9 +182,9 @@ class Filter extends Component {
 		}
 		return (
 			<div className="border p-1 bg-white shadow-sm mb-2 text-center filter-block">
-				<button type="button" className="btn btn-danger btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2"></i>Remove</button>
+				<button type="button" className="btn btn-danger btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</button>
 				<select id="column" className="filter-select" value={me.state.column} onChange={me.onChange}>
-					{[{code: "", name: "Choose column"}, ...me.props.cols].map ((rec, i) => {
+					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
 						return (
 							<option value={rec.code} key={"column-" + i}>{rec.name}</option>
 						);
@@ -191,7 +192,7 @@ class Filter extends Component {
 				</select>
 				<br />
 				{me.state.column && <select id="operator" className="filter-select mt-1" value={me.state.operator} onChange={me.onChange} disabled={!me.state.column}>
-					{[{code: "", name: "Choose operator"}, ...me.state.operatorRecs].map ((rec, i) => {
+					{[{code: "", name: i18n ("Choose operator")}, ...me.state.operatorRecs].map ((rec, i) => {
 						return (
 							<option value={rec.code} key={"operator-" + i}>{rec.name}</option>
 						);
@@ -308,7 +309,7 @@ class Filters extends Component {
 				})}
 				<div className="col-sm-2">
 					<div className="border p-1 bg-light shadow-sm mb-2 filter-block text-center">
-						<button type="button" className="btn btn-success btn-sm" onClick={me.onAdd}><i className="fas fa-plus mr-2"></i>Add filter</button>
+						<button type="button" className="btn btn-success btn-sm" onClick={me.onAdd}><i className="fas fa-plus mr-2"></i>{i18n ("Add filter")}</button>
 					</div>
 				</div>
 			</div>

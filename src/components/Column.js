@@ -11,6 +11,7 @@ import Tabs from "./Tabs";
 import ChooseField from "./ChooseField";
 import Queries from "./Queries";
 import {getHash} from "./helper";
+import {i18n} from "./../i18n";
 
 class Column extends Component {
 	constructor (props) {
@@ -36,12 +37,12 @@ class Column extends Component {
 	render () {
 		let me = this;
 		let areaRecs = [
-			{id: 0, name: "Hidden"},
-			{id: 1, name: "Visible"}
+			{id: 0, name: i18n ("Hidden")},
+			{id: 1, name: i18n ("Visible")}
 		];
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i> Back</button>
+				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
 				<Tabs key="tabs" id="tabs" title={"Column: " + me.state.label}>
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="column" rid={me.state.rid}>

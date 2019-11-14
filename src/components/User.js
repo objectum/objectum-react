@@ -7,6 +7,7 @@ import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
 import {getHash} from "./helper";
+import {i18n} from "./../i18n";
 
 class User extends Component {
 	constructor (props) {
@@ -27,7 +28,7 @@ class User extends Component {
 		
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>Back</button>
+				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
 				<Tabs key="tabs" id="tabs">
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.user">

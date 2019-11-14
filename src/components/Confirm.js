@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import Modal from "react-modal";
+import {i18n} from "./../i18n";
 
 class Confirm extends Component {
 	componentDidMount () {
@@ -29,8 +30,8 @@ class Confirm extends Component {
 				<h5>{me.props.title}</h5>
 				<div className="btn-toolbar" role="toolbar">
 					<div className="btn-group mr-1" role="group">
-						<button type="button" className="btn btn-danger mr-1" onClick={() => me.props.onClick (true)}><i className="fas fa-check mr-2"></i>Yes</button>
-						<button type="button" className="btn btn-success" onClick={() => me.props.onClick (false)}><i className="fas fa-times mr-2"></i>No</button>
+						<button type="button" className="btn btn-danger mr-1" onClick={() => me.props.onClick (true)}><i className="fas fa-check mr-2"></i>{i18n ("Yes")}</button>
+						<button type="button" className="btn btn-success" onClick={() => me.props.onClick (false)}><i className="fas fa-times mr-2"></i>{i18n ("No")}</button>
 					</div>
 				</div>
 			</Modal>

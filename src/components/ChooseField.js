@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import Modal from "react-modal";
+import {i18n} from "./../i18n";
 
 function objectField (ComponentClass) {
 	return class extends Component {
@@ -145,7 +146,7 @@ class ChooseField extends Component {
 		};
 		return (
 			<div className="form-group">
-				<label htmlFor={id}>{me.props.label}</label>
+				<label htmlFor={id}>{i18n (me.props.label)}</label>
 				<ObjectField {...props} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

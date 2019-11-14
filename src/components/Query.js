@@ -10,7 +10,7 @@ import Columns from "./Columns";
 import ChooseField from "./ChooseField";
 import Queries from "./Queries";
 import {getHash} from "./helper";
-
+import {i18n} from "./../i18n";
 
 class Query extends Component {
 	constructor (props) {
@@ -38,7 +38,7 @@ class Query extends Component {
 		
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i> Back</button>
+				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
 				<Tabs key="tabs" id="tabs" title={"Query: " + me.state.label}>
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid}>

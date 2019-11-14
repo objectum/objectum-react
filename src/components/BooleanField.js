@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {i18n} from "./../i18n";
 
 class BooleanField extends Component {
 	constructor (props) {
@@ -33,7 +34,7 @@ class BooleanField extends Component {
 			<div className="form-check mb-2">
 				<input type="checkbox" className={`form-check-input ${addCls}`} id={id} checked={me.state.value} onChange={me.onChange} disabled={disabled} />
 				<label className="form-check-label booleanfield" htmlFor={id}>
-					{me.props.label}
+					{i18n (me.props.label)}
 				</label>
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

@@ -16,7 +16,7 @@ import Menu from "./Menu";
 import MenuItem from "./MenuItem";
 import Logout from "./Logout";
 
-import i18n from "./../i18n";
+import {lang, i18n} from "./../i18n";
 
 import "../css/objectum.css";
 import "../css/bootstrap.css";
@@ -36,7 +36,7 @@ class ObjectumApp extends Component {
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
 		
-		i18n.lang (me.props.locale || "en");
+		lang (me.props.locale || "en");
 	}
 	
 	async componentDidMount () {
@@ -94,24 +94,24 @@ class ObjectumApp extends Component {
 						<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">Objectum</a>
 						<ul className="collapse list-unstyled" id="homeSubmenu">
 							<li>
-								<Link className="nav-link" to="/models">Models</Link>
+								<Link className="nav-link" to="/models">{i18n ("Models")}</Link>
 							</li>
 							<li>
-								<Link className="nav-link" to="/queries">Queries</Link>
+								<Link className="nav-link" to="/queries">{i18n ("Queries")}</Link>
 							</li>
 							<li>
-								<Link className="nav-link" to="/menus">Menus</Link>
+								<Link className="nav-link" to="/menus">{i18n ("Menus")}</Link>
 							</li>
 							<li>
-								<Link className="nav-link" to="/roles">Roles</Link>
+								<Link className="nav-link" to="/roles">{i18n ("Roles")}</Link>
 							</li>
 							<li>
-								<Link className="nav-link" to="/users">Users</Link>
+								<Link className="nav-link" to="/users">{i18n ("Users")}</Link>
 							</li>
 						</ul>
 					</li>
 					<li className="mt-3">
-						<Link className="nav-link" to="/logout">Logout</Link>
+						<Link className="nav-link" to="/logout">{i18n ("Logout")}</Link>
 					</li>
 				</ul>
 			);
@@ -132,7 +132,7 @@ class ObjectumApp extends Component {
 				if (childRecs.length) {
 					return (
 						<li className="active" key={`active-${parent}-${i}`}>
-							<a key={`a-${parent}-${i}`} href={`#submenu-${parent}-${i}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{renderIcon (rec.icon)}{rec.name}</a>
+							<a key={`a-${parent}-${i}`} href={`#submenu-${parent}-${i}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{renderIcon (rec.icon)}{i18n (rec.name)}</a>
 							<ul key={`ul-${parent}-${i}`} className="collapse list-unstyled" id={`submenu-${parent}-${i}`}>
 								{renderItems (rec.id)}
 							</ul>
@@ -141,7 +141,7 @@ class ObjectumApp extends Component {
 				} else {
 					return (
 						<li key={`${parent}-${i}`}>
-							<Link className="nav-link" to={rec.path}>{renderIcon (rec.icon)}{rec.name}</Link>
+							<Link className="nav-link" to={rec.path}>{renderIcon (rec.icon)}{i18n (rec.name)}</Link>
 						</li>
 					);
 				}
@@ -151,7 +151,7 @@ class ObjectumApp extends Component {
 			<ul className="list-unstyled components">
 				{renderItems (null)}
 				<li className="mt-3">
-					<Link className="nav-link" to="/logout"><i className="fas fa-sign-out-alt mr-2" />Logout</Link>
+					<Link className="nav-link" to="/logout"><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</Link>
 				</li>
 			</ul>
 		);

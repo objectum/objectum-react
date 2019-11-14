@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
 import Cell from "./Cell";
+import {i18n} from "../i18n";
 
 class TreeGrid extends Component {
 	constructor (props) {
@@ -168,7 +169,7 @@ class TreeGrid extends Component {
 			
 			me.recs = result.recs;
 			me.cols = result.cols;
-			me.length = result.length;
+			state.length = result.length;
 			me.childMap = {};
 			
 			result.childs.forEach (rec => {
@@ -187,9 +188,9 @@ class TreeGrid extends Component {
 					state.pageRecs = Number (hash [me.props.id].pageRecs);
 				}
 			}
-			state.pageNum = me.length / state.pageRecs | 0;
+			state.pageNum = state.length / state.pageRecs | 0;
 			
-			if (me.length % state.pageRecs) {
+			if (state.length % state.pageRecs) {
 				state.pageNum ++;
 			}
 			let parent = me.state.parent;
@@ -218,13 +219,13 @@ class TreeGrid extends Component {
 		let pos = (me.state.page - 1) * me.state.pageRecs + 1;
 		let pos2 = pos + Number (me.state.pageRecs) - 1;
 		
-		if (pos2 > me.length) {
-			pos2 = me.length;
+		if (pos2 > me.state.length) {
+			pos2 = me.state.length;
 		}
-		let s = `${pos}-${pos2} of ${me.length} records (${me.state.pageNum} pages)`;
+		let s = `${pos}-${pos2} ${i18n ("of")} ${me.state.length} ${i18n ("records")} (${me.state.pageNum} ${i18n ("pages")})`;
 		
 		if (!pos2) {
-			s = "empty";
+			s = i18n ("empty");
 		}
 		return s;
 	}
@@ -336,7 +337,7 @@ class TreeGrid extends Component {
 						<th><button type="button" className="btn btn-primary btn-sm" disabled={true}><i className="fas fa-folder-open"></i></button></th>
 						{me.cols.map ((col, i) => {
 							return (
-								<th key={i} scope="col">{col.name}</th>
+								<th key={i} scope="col">{i18n (col.name)}</th>
 							);
 						})}
 					</tr>

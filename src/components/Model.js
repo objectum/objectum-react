@@ -10,6 +10,7 @@ import Tab from "./Tab";
 import Tabs from "./Tabs";
 import Properties from "./Properties";
 import {getHash} from "./helper";
+import {i18n} from "./../i18n";
 
 class Model extends Component {
 	constructor (props) {
@@ -39,8 +40,8 @@ class Model extends Component {
 		
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i> Back</button>
-				<Tabs key="tabs" id="tabs" title={"Model: " + me.state.label}>
+				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
+				<Tabs key="tabs" id="tabs" title={i18n ("Model") + ": " + me.state.label}>
 					<Tab key="Tab1" title="Information">
 						<Form key="form1" store={me.props.store} rsc="model" rid={me.state.rid}>
 							<div className="form-row">

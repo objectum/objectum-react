@@ -1,5 +1,6 @@
 import {getDateString} from "./helper";
 import React, {Component} from "react";
+import {i18n} from "./../i18n";
 
 class DateField extends Component {
 	constructor (props) {
@@ -29,7 +30,7 @@ class DateField extends Component {
 		
 		return (
 			<div className="form-group objectum-date">
-				<label htmlFor={id}>{me.props.label}</label>
+				<label htmlFor={id}>{i18n (me.props.label)}</label>
 				<input type="date" className={`form-control ${addCls} datefield`} id={id} value={getDateString (me.state.value)} onChange={me.onChange} disabled={disabled} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

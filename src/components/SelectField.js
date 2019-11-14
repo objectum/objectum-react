@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {i18n} from "./../i18n";
 
 class SelectField extends Component {
 	constructor (props) {
@@ -28,7 +29,7 @@ class SelectField extends Component {
 		
 		return (
 			<div className="form-group">
-				<label htmlFor={id}>{me.props.label}</label>
+				<label htmlFor={id}>{i18n (me.props.label)}</label>
 				<select className={"form-control custom-select" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled}>
 					{[{id: "", name: "-"}, ...me.props.recs].map ((rec, i) => {
 						return (

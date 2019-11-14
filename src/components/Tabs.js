@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
+import {i18n} from "./../i18n";
 
 class Tabs extends Component {
 	constructor (props) {
@@ -72,7 +73,7 @@ class Tabs extends Component {
 		}
 		return (
 			<div>
-				{me.props.title && <h5>{me.props.title}</h5>}
+				{me.props.title && <h5>{i18n (me.props.title)}</h5>}
 				<ul className="nav nav-tabs">
 					{me.tabs.map ((item, i) => {
 						let active = "";
@@ -82,7 +83,7 @@ class Tabs extends Component {
 						}
 						return (
 							<li className="nav-item" key={i}>
-								<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{item.props.title}</button>
+								<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.title)}</button>
 							</li>
 						);
 					})}

@@ -31,6 +31,7 @@ import Query from "./components/Query";
 import Column from "./components/Column";
 import Columns from "./components/Columns";
 import Queries from "./components/Queries";
+import i18n from "./i18n";
 import {
 	getHash,
 	setHash,
@@ -81,7 +82,8 @@ export {
 	removeHashListener,
 	loadCSS,
 	loadJS,
-	getDateString
+	getDateString,
+	i18n
 };
 
 export default {
@@ -124,5 +126,6 @@ export default {
 	removeHashListener,
 	loadCSS,
 	loadJS,
-	getDateString
+	getDateString,
+	i18n
 };
