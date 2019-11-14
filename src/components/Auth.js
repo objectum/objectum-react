@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {i18n} from "./../i18n";
 
 class Auth extends Component {
 	constructor (props) {
@@ -55,7 +56,7 @@ class Auth extends Component {
 		}
 		return (
 			<div className="auth shadow p-3 mb-5 bg-white">
-				<h5>Sign in</h5>
+				<h5>{i18n ("Sign in")}</h5>
 				<div className="form-group row">
 					<div className="col-sm">
 						<input type="text" className="form-control" id="username" placeholder="Username" onChange={me.fieldChange} ref={input => me.usernameInput = input} />

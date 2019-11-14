@@ -16,6 +16,8 @@ import Menu from "./Menu";
 import MenuItem from "./MenuItem";
 import Logout from "./Logout";
 
+import i18n from "./../i18n";
+
 import "../css/objectum.css";
 import "../css/bootstrap.css";
 import "../css/sidebar.css";
@@ -33,6 +35,8 @@ class ObjectumApp extends Component {
 		me.state = {};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
+		
+		i18n.lang (me.props.locale || "en");
 	}
 	
 	async componentDidMount () {
