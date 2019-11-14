@@ -33,8 +33,12 @@ class Auth extends Component {
 			if (me.props.onConnect) {
 				me.props.onConnect (sid);
 			}
-		} catch (err) {
-			me.setState ({error: i18n ("Invalid username or password")});
+		} catch (error) {
+			if (error.message == "401 Unauthenticated") {
+				me.setState ({error: i18n ("Invalid username or password")});
+			} else {
+				me.setState ({error: error.message});
+			}
 		}
 	}
 	
