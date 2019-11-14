@@ -74,7 +74,7 @@ class Auth extends Component {
 						<input type="password" className="form-control" id="password" placeholder={i18n ("Password")} onChange={me.fieldChange} onKeyDown={me.onKeyDown} />
 					</div>
 				</div>
-				<button type="button" className="btn btn-primary" onClick={me.buttonClick} disabled={disabledButton}><i className="fas fa-sign-in-alt mr-2" />{i18n ("Login")}</button>
+				<button type="button" className="btn btn-primary" onClick={me.buttonClick} disabled={disabledButton}><i className="fas fa-sign-in-alt mr-2" />{i18n ("Log in")}</button>
 				{me.state.error && (
 					<div className="alert alert-danger mt-3" role="alert">
 						{me.state.error}

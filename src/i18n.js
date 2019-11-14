@@ -26,6 +26,8 @@ function i18n (s) {
 };
 
 module.exports = {
+	locales,
+	map,
 	lang,
 	i18n
 };
