@@ -107,7 +107,7 @@ class Form extends Component {
 		formData.append ("name", name);
 		formData.append ("file", file);
 		
-		await fetch ("/api/projects/tests/upload?sessionId=" + sessionId, {
+		await fetch (`${this.props.store.getUrl ()}upload?sessionId=${sessionId}`, {
 			method: "POST",
 			body: formData
 		});
