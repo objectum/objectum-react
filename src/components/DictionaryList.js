@@ -17,7 +17,7 @@ class DictionaryList extends Component {
 		me.onRemove = me.onRemove.bind (me);
 		me.state = {
 			rid,
-			modelPath: model.getPath (),
+			modelPath: me.model.getPath (),
 			removeConfirm: false,
 			refresh: false
 		};
