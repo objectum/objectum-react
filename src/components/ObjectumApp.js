@@ -16,9 +16,11 @@ import Menu from "./Menu";
 import MenuItem from "./MenuItem";
 import DictionaryList from "./DictionaryList";
 import DictionaryRecord from "./DictionaryRecord";
+import ModelList from "./ModelList";
+import ModelRecord from "./ModelRecord";
 import Logout from "./Logout";
-
 import {lang, i18n} from "./../i18n";
+import _ from "lodash";
 
 import "../css/objectum.css";
 import "../css/bootstrap.css";
@@ -177,19 +179,27 @@ class ObjectumApp extends Component {
 			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={me.store} />} />,
 			<Route key="objectum-14" path="/dictionary_list/:rid" render={props => <DictionaryList {...props} store={me.store} />} />,
 			<Route key="objectum-15" path="/dictionary_record/:rid" render={props => <DictionaryRecord {...props} store={me.store} />} />,
+			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={me.store} />} />,
 			<Route key="objectum-logout" path="/logout" render={props => <Logout {...props} store={me.store} onLogout={() => me.setState ({sid: null})} />} />
 		];
 		React.Children.forEach (me.props.children, (child, i) => {
 			if (child.type && child.type.displayName == "ObjectumRoute") {
-/*
-				let props = {...child.props};
-				
-				props.key = i;
-				
-				items.push (React.cloneElement (child, props));
-*/
 				items.push (<Route key={i} {...child.props} />);
 			}
+		});
+		let model = {}, parent = {};
+		
+		_.each (me.store.map ["model"], m => {
+			model [m.getPath ()] = true;
+			parent [m.get ("parent")] = true;
+		});
+		_.each (_.keys (model), path => {
+			let m = me.store.getModel (path);
+			
+			if (parent [m.get ("id")]) {
+				return;
+			}
+			items.push (<Route key={`model-${path}`} path={`/model_list/${path.split (".").join ("/")}`} render={props => <ModelList {...props} store={me.store} model={path} />} />);
 		});
 		return items;
 	}
@@ -204,34 +214,6 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Router>
-{/*
-						<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-							<a className="navbar-brand" href="#">{me.props.name || "Objectum"}</a>
-							<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-								<span className="navbar-toggler-icon"></span>
-							</button>
-							<div className="collapse navbar-collapse" id="navbarNav">
-								<ul className="navbar-nav">
-									<li className="nav-item">
-										<Link className="nav-link" to="/classes">Classes</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" to="/views">Views</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" to="/menus">Menus</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" to="/roles">Roles</Link>
-									</li>
-									<li className="nav-item">
-										<Link className="nav-link" to="/users">Users</Link>
-									</li>
-								</ul>
-							</div>
-							<Link className="nav-link" to="/logout">Logout</Link>
-						</nav>
-*/}
 						<div className="wrapper">
 							<nav id="sidebar">
 								<div className="sidebar-header">

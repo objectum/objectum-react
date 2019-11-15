@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import StringField from "./StringField";
+import NumberField from "./NumberField";
 import BooleanField from "./BooleanField";
 import SelectField from "./SelectField";
 import ChooseField from "./ChooseField";
@@ -75,6 +76,7 @@ class Property extends Component {
 									<StringField property="code" label="Code" disabled={!!me.state.rid} notNull={true} />
 								</div>
 								<div className="form-group col-md-6">
+									<NumberField property="order" label="Order" />
 								</div>
 							</div>
 							<div className="form-row">
