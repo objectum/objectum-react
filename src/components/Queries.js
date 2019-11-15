@@ -79,5 +79,6 @@ class Queries extends Component {
 		
 	}
 };
+Queries.displayName = "Queries";
 
 export default Queries;

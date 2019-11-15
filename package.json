@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.26",
+	"version": "1.1.27",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -31,7 +31,9 @@
 		"nwb": "0.23.x",
 		"objectum-client": "^1.1.7",
 		"react": "^16.9.0",
-		"react-dom": "^16.9.0"
+		"react-dom": "^16.9.0",
+		"express": "^4.17.1",
+		"express-http-proxy": "^1.6.0"
 	},
 	"author": "Dmitriy Samortsev",
 	"homepage": "",

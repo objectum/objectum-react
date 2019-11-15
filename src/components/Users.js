@@ -72,5 +72,6 @@ class Users extends Component {
 		
 	}
 };
+Users.displayName = "Users";
 
 export default Users;

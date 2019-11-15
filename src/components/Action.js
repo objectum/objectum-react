@@ -32,5 +32,6 @@ class Action extends Component {
 		);
 	}
 };
+Action.displayName = "Action";
 
 export default Action;

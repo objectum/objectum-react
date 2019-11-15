@@ -22,5 +22,6 @@ class Tab extends Component {
 		);
 	}
 };
+Tab.displayName = "Tab";
 
 export default Tab;

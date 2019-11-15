@@ -15,5 +15,6 @@ class ObjectumRoute extends Component {
 		);
 	}
 };
+ObjectumRoute.displayName = "ObjectumRoute";
 
 export default ObjectumRoute;

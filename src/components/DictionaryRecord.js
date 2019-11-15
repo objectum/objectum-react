@@ -43,5 +43,6 @@ class DictionaryRecord extends Component {
 		);
 	}
 };
+DictionaryRecord.displayName = "DictionaryRecord";
 
 export default DictionaryRecord;

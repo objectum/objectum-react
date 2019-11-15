@@ -41,5 +41,6 @@ class BooleanField extends Component {
 		);
 	}
 };
+BooleanField.displayName = "BooleanField";
 
 export default BooleanField;

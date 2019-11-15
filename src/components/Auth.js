@@ -84,5 +84,6 @@ class Auth extends Component {
 		);
 	}
 }
+Auth.displayName = "Auth";
 
 export default Auth;

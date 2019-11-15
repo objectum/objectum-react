@@ -357,5 +357,6 @@ class Form extends Component {
 		);
 	}
 }
+Form.displayName = "Form";
 
 export default Form;

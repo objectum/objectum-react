@@ -77,5 +77,6 @@ class Properties extends Component {
 		
 	}
 };
+Properties.displayName = "Properties";
 
 export default Properties;

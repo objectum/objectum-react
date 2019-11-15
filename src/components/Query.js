@@ -82,5 +82,6 @@ class Query extends Component {
 		);
 	}
 };
+Query.displayName = "Query";
 
 export default Query;

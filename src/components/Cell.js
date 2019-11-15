@@ -48,5 +48,6 @@ class Cell extends Component {
 		}
 	}
 };
+Cell.displayName = "Cell";
 
 export default Cell;

@@ -91,5 +91,6 @@ class DictionaryList extends Component {
 		
 	}
 };
+DictionaryList.displayName = "DictionaryList";
 
 export default DictionaryList;

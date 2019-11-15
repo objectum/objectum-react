@@ -153,5 +153,6 @@ class ChooseField extends Component {
 		);
 	}
 };
+ChooseField.displayName = "ChooseField";
 
 export default ChooseField;

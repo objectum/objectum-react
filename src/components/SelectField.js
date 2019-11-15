@@ -42,5 +42,6 @@ class SelectField extends Component {
 		);
 	}
 };
+SelectField.displayName = "SelectField";
 
 export default SelectField;

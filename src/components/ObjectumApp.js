@@ -180,7 +180,7 @@ class ObjectumApp extends Component {
 			<Route key="objectum-logout" path="/logout" render={props => <Logout {...props} store={me.store} onLogout={() => me.setState ({sid: null})} />} />
 		];
 		React.Children.forEach (me.props.children, (child, i) => {
-			if (child.type && (child.type.name == "ObjectumRoute" || child.type.name == "Route")) {
+			if (child.type && child.type.displayName == "ObjectumRoute") {
 /*
 				let props = {...child.props};
 				
@@ -259,5 +259,6 @@ class ObjectumApp extends Component {
 		}
 	}
 };
+ObjectumApp.displayName = "ObjectumApp";
 
 export default ObjectumApp;

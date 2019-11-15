@@ -82,5 +82,6 @@ class FileField extends Component {
 		);
 	}
 };
+FileField.displayName = "FileField";
 
 export default FileField;

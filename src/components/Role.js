@@ -61,5 +61,6 @@ class Role extends Component {
 		);
 	}
 };
+Role.displayName = "Role";
 
 export default Role;

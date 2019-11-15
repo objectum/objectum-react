@@ -65,5 +65,6 @@ class Menu extends Component {
 		);
 	}
 };
+Menu.displayName = "Menu";
 
 export default Menu;

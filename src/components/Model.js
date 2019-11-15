@@ -45,7 +45,7 @@ class Model extends Component {
 	
 	render () {
 		let me = this;
-		
+
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
@@ -85,5 +85,6 @@ class Model extends Component {
 		);
 	}
 };
+Model.displayName = "Model";
 
 export default Model;

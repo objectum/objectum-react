@@ -92,5 +92,6 @@ class Column extends Component {
 		);
 	}
 };
+Column.displayName = "Column";
 
 export default Column;

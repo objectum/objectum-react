@@ -40,5 +40,6 @@ class Field extends Component {
 		return (<div>unsupported type</div>);
 	}
 };
+Field.displayName = "Field";
 
 export default Field;

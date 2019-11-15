@@ -393,5 +393,6 @@ class TreeGrid extends Component {
 		);
 	}
 };
+TreeGrid.displayName = "TreeGrid";
 
 export default TreeGrid;

@@ -408,5 +408,6 @@ class Grid extends Component {
 		);
 	}
 };
+Grid.displayName = "Grid";
 
 export default Grid;

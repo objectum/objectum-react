@@ -74,5 +74,6 @@ class Models extends Component {
 		
 	}
 };
+Models.displayName = "Models";
 
 export default Models;

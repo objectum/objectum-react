@@ -58,7 +58,7 @@ class Tabs extends Component {
 		
 		//if (!me.tabs.length) {
 			React.Children.forEach (me.props.children, child => {
-				if (child && child.type && child.type.name == "Tab") {
+				if (child && child.type && child.type.displayName == "Tab") {
 					me.tabs.push (child);
 				}
 			});
@@ -93,5 +93,6 @@ class Tabs extends Component {
 		);
 	}
 }
+Tabs.displayName = "Tabs";
 
 export default Tabs;

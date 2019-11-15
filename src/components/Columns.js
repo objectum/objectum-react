@@ -74,5 +74,6 @@ class Columns extends Component {
 		
 	}
 };
+Columns.displayName = "Columns";
 
 export default Columns;

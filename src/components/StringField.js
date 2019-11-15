@@ -78,5 +78,6 @@ class StringField extends Component {
 		);
 	}
 };
+StringField.displayName = "StringField";
 
 export default StringField;

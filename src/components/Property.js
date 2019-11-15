@@ -108,5 +108,6 @@ class Property extends Component {
 		);
 	}
 };
+Property.displayName = "Property";
 
 export default Property;

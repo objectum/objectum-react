@@ -26,5 +26,6 @@ class Types extends Component {
 		
 	}
 };
+Types.displayName = "Types";
 
 export default Types;

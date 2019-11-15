@@ -37,5 +37,6 @@ class DateField extends Component {
 		);
 	}
 };
+DateField.displayName = "DateField";
 
 export default DateField;

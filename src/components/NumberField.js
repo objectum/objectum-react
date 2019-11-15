@@ -39,5 +39,6 @@ class NumberField extends Component {
 		);
 	}
 };
+NumberField.displayName = "NumberField";
 
 export default NumberField;

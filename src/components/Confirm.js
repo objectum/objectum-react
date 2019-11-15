@@ -38,5 +38,6 @@ class Confirm extends Component {
 		);
 	}
 };
+Confirm.displayName = "Confirm";
 
 export default Confirm;

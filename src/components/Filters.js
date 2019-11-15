@@ -316,5 +316,6 @@ class Filters extends Component {
 		);
 	}
 };
+Filters.displayName = "Filters";
 
 export default Filters;

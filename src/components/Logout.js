@@ -15,5 +15,6 @@ class Logout extends Component {
 		return null;
 	}
 };
+Logout.displayName = "Logout";
 
 export default Logout
