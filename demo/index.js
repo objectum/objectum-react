@@ -28,18 +28,19 @@ start ().catch (err => {
 */
 // package.json -> start dev server
 
+const code = "catalog";
 const path = require ("path");
 
 const express = require ("express");
 const proxy = require ("express-http-proxy");
 const app = express ();
 
-app.use (`/api/projects/catalog/`, proxy (`http://127.0.0.1:8200`, {
+app.use (`/api`, proxy (`http://127.0.0.1:8200`, {
 	proxyReqPathResolver: function (req) {
 		let parts = req.url.split ('?');
 		let queryString = parts [1];
 		
-		return `/projects/catalog/${queryString ? "?" + queryString : ""}`;
+		return `/projects/${code}${parts [0]}${queryString ? "?" + queryString : ""}`;
 	}
 }));
 app.use ("/public/*", proxy (`http://127.0.0.1:8200`, {
