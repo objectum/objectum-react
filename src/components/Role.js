@@ -6,6 +6,7 @@ import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
+import Back from "./Back";
 import {getHash} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -17,7 +18,6 @@ class Role extends Component {
 		let rid = me.props.match.params.rid.split ("#")[0];
 		let hash = getHash ();
 		
-		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			label: ""
@@ -47,7 +47,7 @@ class Role extends Component {
 		
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
+				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Role") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.role" onCreate={me.onCreate}>

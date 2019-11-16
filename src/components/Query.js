@@ -9,6 +9,7 @@ import Tabs from "./Tabs";
 import Columns from "./Columns";
 import ChooseField from "./ChooseField";
 import Queries from "./Queries";
+import Back from "./Back";
 import {getHash} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -20,12 +21,13 @@ class Query extends Component {
 		let rid = me.props.match.params.rid.split ("#")[0];
 		let hash = getHash ();
 		
-		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
-			label: "",
-			parent: hash.opts.parent
+			label: ""
 		};
+		if (hash.opts && hash.opts.parent) {
+			me.state.parent = hash.opts.parent;
+		}
 		if (me.state.rid) {
 			let o = me.props.store.getQuery (me.state.rid);
 			
@@ -46,7 +48,7 @@ class Query extends Component {
 		
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
+				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Query") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid} onCreate={me.onCreate}>

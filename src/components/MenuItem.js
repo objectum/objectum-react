@@ -10,6 +10,7 @@ import {getHash} from "./helper";
 import Menus from "./Menus";
 import MenuItems from "./MenuItems";
 import ChooseField from "./ChooseField";
+import Back from "./Back";
 import {i18n} from "./../i18n";
 
 class MenuItem extends Component {
@@ -20,7 +21,6 @@ class MenuItem extends Component {
 		let rid = me.props.match.params.rid.split ("#")[0];
 		let hash = getHash ();
 		
-		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			label: "",
@@ -57,7 +57,7 @@ class MenuItem extends Component {
 		
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
+				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Menu item") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>

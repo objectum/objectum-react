@@ -9,6 +9,7 @@ import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
 import Properties from "./Properties";
+import Back from "./Back";
 import {getHash} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -20,7 +21,6 @@ class Model extends Component {
 		let rid = me.props.match.params.rid.split ("#")[0];
 		let hash = getHash ();
 		
-		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			label: "",
@@ -48,7 +48,7 @@ class Model extends Component {
 
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
+				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Model") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>

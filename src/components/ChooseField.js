@@ -155,7 +155,10 @@ class ChooseField extends Component {
 		if (me.props.disabled) {
 			if (me.state.name) {
 				return (
-					<input type="text" className={"form-control" + addCls} id={id} value={me.state.name} disabled={true}/>
+					<div className="form-group">
+						<label htmlFor={id}>{i18n (me.props.label)}</label>
+						<input type="text" className={"form-control" + addCls} id={id} value={me.state.name} disabled={true}/>
+					</div>
 				)
 			} else {
 				return (<div />);

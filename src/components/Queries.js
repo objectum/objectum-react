@@ -3,6 +3,7 @@ import TreeGrid from "./TreeGrid";
 import Action from "./Action";
 import Confirm from "./Confirm";
 import {i18n} from "./../i18n";
+import {pushLocation} from "./helper";
 
 class Queries extends Component {
 	constructor (props) {
@@ -23,11 +24,12 @@ class Queries extends Component {
 	
 	onCreate () {
 		let me = this;
+
+		pushLocation ();
 		
 		me.props.history.push ({
 			pathname: "/query/new#" + JSON.stringify ({
 				opts: {
-					from: unescape (window.location.pathname + window.location.hash),
 					parent: me.parent
 				}
 			})
@@ -36,13 +38,11 @@ class Queries extends Component {
 	
 	onEdit (id) {
 		let me = this;
+
+		pushLocation ();
 		
 		me.props.history.push ({
-			pathname: "/query/" + id + "#" + JSON.stringify ({
-				opts: {
-					from: unescape (window.location.pathname + window.location.hash)
-				}
-			})
+			pathname: "/query/" + id
 		});
 	}
 	

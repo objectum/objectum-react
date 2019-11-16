@@ -3,6 +3,7 @@ import Action from "./Action";
 import Confirm from "./Confirm";
 import Grid from "./Grid";
 import {i18n} from "./../i18n";
+import {pushLocation} from "./helper";
 
 class Users extends Component {
 	constructor (props) {
@@ -22,24 +23,20 @@ class Users extends Component {
 	onCreate () {
 		let me = this;
 		
+		pushLocation ();
+		
 		me.props.history.push ({
-			pathname: "/user/new#" + JSON.stringify ({
-				opts: {
-					from: unescape (window.location.pathname + window.location.hash)
-				}
-			})
+			pathname: "/user/new"
 		});
 	}
 	
 	onEdit (id) {
 		let me = this;
 		
+		pushLocation ();
+		
 		me.props.history.push ({
-			pathname: "/user/" + id + "#" + JSON.stringify ({
-				opts: {
-					from: unescape (window.location.pathname + window.location.hash)
-				}
-			})
+			pathname: "/user/" + id
 		});
 	}
 	
