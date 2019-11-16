@@ -48,11 +48,16 @@ class ModelRecord extends Component {
 	renderProperty (p, key) {
 		let me = this;
 		let dict = false;
+		let chooseModel;
 		
 		if (p.get ("type") >= 1000) {
 			let m = me.props.store.getModel (p.get ("type"));
 			
 			dict = m.isDictionary ();
+			
+			if (!dict) {
+				chooseModel = m.getPath ();
+			}
 		}
 		let value;
 		let disabled = false;
@@ -67,7 +72,7 @@ class ModelRecord extends Component {
 			}
 		}
 		return (
-			<Field key={key} property={p.get ("code")} dict={dict} disabled={disabled} value={value} />
+			<Field key={key} property={p.get ("code")} dict={dict} chooseModel={chooseModel} disabled={disabled} value={value} />
 		);
 	}
 	

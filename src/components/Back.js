@@ -12,9 +12,9 @@ class Back extends Component {
 	
 	render () {
 		let me = this;
-		let from = sessionStorage.getItem ("_from");
+		let location = sessionStorage.getItem ("_location");
 		
-		if (from) {
+		if (location) {
 			return (
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (popLocation ())}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
 			);

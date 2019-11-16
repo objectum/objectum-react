@@ -7,6 +7,9 @@
 .treegrid-button {
     width: 60px;
 }
+.menu {
+    width: 250px;
+}
 .menu-icon {
     width: 25px;
     text-align: center;
@@ -26,4 +29,3 @@
 .filter-block {
     height: 115px;
 }
-

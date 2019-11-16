@@ -15,6 +15,7 @@ class Field extends Component {
 		let props = this.props;
 		let type = props.type;
 		
+		console.log (props.chooseModel);
 		if (type == 1) {
 			return (<StringField {...props} />);
 		}

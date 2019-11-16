@@ -60,7 +60,7 @@ function objectField (ComponentClass) {
 			let value = "";
 			
 			if (selected !== null) {
-				value = cmp.recs [selected].id;
+				value = (cmp.recs || cmp.state.recs) [selected].id;
 			}
 			me.setState ({value, visible: false});
 			me.props.onChange ({

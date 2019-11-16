@@ -19,6 +19,7 @@ import DictionaryRecord from "./DictionaryRecord";
 import ModelList from "./ModelList";
 import ModelRecord from "./ModelRecord";
 import Logout from "./Logout";
+import Sidebar from "react-sidebar";
 import {lang, i18n} from "./../i18n";
 import _ from "lodash";
 
@@ -36,11 +37,18 @@ class ObjectumApp extends Component {
 		
 		let me = this;
 		
-		me.state = {};
+		me.state = {
+			sidebarOpen: true
+		};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
+		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
 		
 		lang (me.props.locale || "en");
+	}
+	
+	onSetSidebarOpen(open) {
+		this.setState({ sidebarOpen: open });
 	}
 	
 	async componentDidMount () {
@@ -152,7 +160,7 @@ class ObjectumApp extends Component {
 			});
 		};
 		return (
-			<ul className="list-unstyled components">
+			<ul className="list-unstyled components menu">
 				{renderItems (null)}
 				<li className="mt-3">
 					<Link className="nav-link" to="/logout"><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</Link>
@@ -215,6 +223,18 @@ class ObjectumApp extends Component {
 				<div>
 					<Router>
 						<div className="wrapper">
+{/*
+							<Sidebar
+								sidebar={me.renderMenu ()}
+								open={this.state.sidebarOpen}
+								onSetOpen={this.onSetSidebarOpen}
+								styles={{ sidebar: { background: "white" } }}
+							>
+								<button onClick={() => this.onSetSidebarOpen(true)}>
+									Open sidebar
+								</button>
+							</Sidebar>
+*/}
 							<nav id="sidebar">
 								<div className="sidebar-header">
 									<h3>{me.props.name || "Objectum"}</h3>

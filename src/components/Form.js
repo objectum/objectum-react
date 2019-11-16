@@ -10,6 +10,7 @@ import SelectField from "./SelectField";
 import ChooseField from "./ChooseField";
 import FileField from "./FileField";
 import {i18n} from "./../i18n";
+import ModelList from "./ModelList";
 
 class Form extends Component {
 	constructor (props) {
@@ -317,6 +318,9 @@ class Form extends Component {
 					if (type >= 1000) {
 						if (child.props.dict) {
 							return (<SelectField {...props2} />);
+						} else
+						if (child.props.chooseModel) {
+							return (<ChooseField {...props2} choose={ModelList} chooseRef={`list-${child.props.chooseModel}`} model={child.props.chooseModel} />);
 						} else {
 							return (<ChooseField {...props2} />);
 						}
