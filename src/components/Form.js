@@ -256,7 +256,7 @@ class Form extends Component {
 			}
 		}
 		if (!valid) {
-			me.setState ({error: "Form contains errors"});
+			me.setState ({error: i18n ("Form contains errors")});
 		}
 		return valid;
 	}

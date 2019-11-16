@@ -69,5 +69,6 @@
 	"cancel": "отмена",
 	"list": "список",
 	"options": "параметры",
-	"option": "параметр"
+	"option": "параметр",
+	"form contains errors": "форма содержит ошибки"
 }
