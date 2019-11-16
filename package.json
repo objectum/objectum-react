@@ -28,8 +28,6 @@
 	"devDependencies": {
 		"express": "^4.17.1",
 		"express-http-proxy": "^1.6.0",
-		"fastify": "^2.8.0",
-		"fastify-http-proxy": "^2.2.0",
 		"nwb": "0.23.x",
 		"objectum-client": "^1.1.10",
 		"react": "^16.9.0",
