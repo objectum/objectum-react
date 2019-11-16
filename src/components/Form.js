@@ -39,7 +39,7 @@ class Form extends Component {
 				me.object = await me.props.store.getRsc (me.props.rsc, me.props.rid);
 				
 				if (me.props.rsc == "record") {
-					me.cls = me.props.store.getModel (me.object.get ("model"));
+					me.cls = me.props.store.getModel (me.object.get ("_model"));
 				}
 			}
 			if (!me.cls && me.props.rsc == "record" && me.props.mid) {
@@ -155,7 +155,7 @@ class Form extends Component {
 
 			for (let attr in me.map) {
 				if (me.fileMap [attr]) {
-					let cls = me.props.store.getModel (me.object.get ("model"));
+					let cls = me.props.store.getModel (me.object.get ("_model"));
 					
 					await me.upload ({
 						sessionId: me.props.store.getSessionId (),
@@ -192,7 +192,7 @@ class Form extends Component {
 			let attrs = {};
 			
 			if (me.props.rsc == "record") {
-				attrs ["model"] = me.props.mid;
+				attrs ["_model"] = me.props.mid;
 			}
 			for (let attr in me.map) {
 				let ma = me.map [attr];
