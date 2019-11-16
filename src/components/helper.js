@@ -122,6 +122,22 @@ function loadJS (file) {
 	});
 };
 
+function pushLocation () {
+	let location = JSON.parse (sessionStorage.getItem ("_location") || "[]");
+	
+	location.push (unescape (window.location.pathname + window.location.hash));
+	sessionStorage.setItem ("_location", JSON.stringify (location));
+};
+
+function popLocation () {
+	let location = JSON.parse (sessionStorage.getItem ("_location") || "[]");
+	let result = location.pop ();
+	
+	sessionStorage.setItem ("_location", JSON.stringify (location));
+	
+	return result;
+};
+
 module.exports = {
 	getHash,
 	setHash,
@@ -129,5 +145,7 @@ module.exports = {
 	removeHashListener,
 	loadCSS,
 	loadJS,
-	getDateString
+	getDateString,
+	pushLocation,
+	popLocation
 };

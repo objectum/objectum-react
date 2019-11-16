@@ -199,7 +199,7 @@ class ObjectumApp extends Component {
 			if (parent [m.get ("id")]) {
 				return;
 			}
-			items.push (<Route key={`model-${path}`} path={`/model_list/${path.split (".").join ("/")}`} render={props => <ModelList {...props} store={me.store} model={path} />} />);
+			items.push (<Route key={`model-${path}`} path={`/model_list/${path.split (".").join ("_")}`} render={props => <ModelList {...props} store={me.store} model={path} />} />);
 		});
 		return items;
 	}

@@ -33,7 +33,7 @@ class DictionaryRecord extends Component {
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
 				<Tabs key="tabs" id="tabs">
-					<Tab key="Tab1" title="Information">
+					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.model.getPath ()}>
 							<Field property="name" />
 						</Form>

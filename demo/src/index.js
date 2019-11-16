@@ -70,7 +70,7 @@ class Items extends Component {
 					<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>Create</Action>
 					<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>Edit</Action>
 					<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>Remove</Action>
-					<Grid {...me.props} id="items" ref="items" title="Items" store={me.props.store} query="item.list" refresh={me.state.refresh} />
+					<Grid {...me.props} id="items" ref="items" label="Items" store={me.props.store} query="item.list" refresh={me.state.refresh} />
 				</div>
 			</div>
 		);
@@ -102,7 +102,7 @@ class Item extends Component {
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>Back</button>
 				<Tabs key="tabs" id="tabs">
-					<Tab key="Tab1" title="Information">
+					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="item">
 							<Field property="creationDate" value={me.state ["creationDate"]} />
 							<Field property="name" />

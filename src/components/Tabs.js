@@ -51,6 +51,16 @@ class Tabs extends Component {
 		setHash (this, {[this.props.id]: {tab: i}});
 	}
 	
+/*
+	componentDidUpdate () {
+		let me = this;
+		
+		if (me.props.hasOwnProperty ("tab") && me.props.tab != me.state.tab) {
+			me.setState ({tab: me.props.tab});
+		}
+	}
+*/
+	
 	render () {
 		let me = this;
 		
@@ -73,7 +83,7 @@ class Tabs extends Component {
 		}
 		return (
 			<div>
-				{me.props.title && <h5>{i18n (me.props.title)}</h5>}
+				{me.props.label && <h5>{i18n (me.props.label)}</h5>}
 				<ul className="nav nav-tabs">
 					{me.tabs.map ((item, i) => {
 						let active = "";
@@ -83,7 +93,7 @@ class Tabs extends Component {
 						}
 						return (
 							<li className="nav-item" key={i}>
-								<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.title)}</button>
+								<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</button>
 							</li>
 						);
 					})}

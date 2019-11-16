@@ -19,7 +19,7 @@ class Types extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<TreeGrid {...me.props} id="types" ref="types" title="Types" store={me.props.store} query="objectum.type" pageRecs={10} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} />
+					<TreeGrid {...me.props} id="types" ref="types" label="Types" store={me.props.store} query="objectum.type" pageRecs={10} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} />
 				</div>
 			</div>
 		);

@@ -6,6 +6,8 @@ import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
+import ModelList from "./ModelList";
+import Back from "./Back";
 import {getHash} from "./helper";
 import {i18n} from "./../i18n";
 import _ from "lodash";
@@ -18,7 +20,6 @@ class ModelRecord extends Component {
 		let rid = me.props.match.params.rid.split ("#")[0];
 		let hash = getHash ();
 		
-		me.from = hash.opts.from;
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			model: hash.opts.model,
@@ -44,31 +45,132 @@ class ModelRecord extends Component {
 		me.setState ({rid, label: o.getLabel ()});
 	}
 	
+	renderProperty (p, key) {
+		let me = this;
+		let dict = false;
+		
+		if (p.get ("type") >= 1000) {
+			let m = me.props.store.getModel (p.get ("type"));
+			
+			dict = m.isDictionary ();
+		}
+		let value;
+		let disabled = false;
+		let hash = getHash ();
+		
+		if (hash.opts && hash.opts.parentModel) {
+			let pm = me.props.store.getModel (hash.opts.parentModel);
+			
+			if (pm.get ("code") == p.get ("code")) {
+				disabled = true;
+				value = hash.opts.parentId;
+			}
+		}
+		return (
+			<Field key={key} property={p.get ("code")} dict={dict} disabled={disabled} value={value} />
+		);
+	}
+	
+	getTables () {
+		let me = this;
+		let m = me.props.store.getModel (me.state.model);
+		
+		if (m.isTable ()) {
+			return [];
+		}
+		try {
+			let t = me.props.store.getModel (`t.${m.getPath ()}`);
+			let tables = [], has = {};
+
+			_.each (me.props.store.map ["model"], m => {
+				if (m.get ("parent") == t.get ("id") && !has [m.getPath ()]) {
+					tables.push (m);
+					has [m.getPath ()] = true;
+				}
+			});
+			return tables;
+		} catch (err) {
+			return [];
+		}
+	}
+	
+	async componentDidUpdate () {
+		let me = this;
+		let rid = me.props.match.params.rid.split ("#")[0];
+		
+		rid = rid == "new" ? null : rid;
+		
+		if (me.state.rid != rid) {
+			let hash = getHash ();
+			let label = "";
+			
+			if (rid) {
+				let o = await me.props.store.getRecord (rid);
+				
+				label = o.getLabel ();
+			}
+			me.setState ({
+				rid,
+				model: hash.opts.model,
+				label
+			});
+		}
+	}
+	
 	render () {
 		let me = this;
 		let m = me.props.store.getModel (me.state.model);
 		let properties = _.sortBy (_.values (m.properties), ["order", "name"]);
+		let label = i18n ("Record");
+		let columns = 1;
+		let opts = m.getOpts ();
+		
+		if (opts.form) {
+			if (opts.form.label) {
+				label = opts.form.label;
+			}
+			if (opts.form.columns) {
+				columns = opts.form.columns;
+			}
+		}
+		properties = _.chunk (properties, columns);
+		
+		let colWidth = 12 / columns | 0;
 		
 		return (
 			<div>
-				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs" title={i18n ("User") + ": " + me.state.label}>
-					<Tab key="Tab1" title="Information">
+				<Back {...me.props} />
+				<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
+					<Tab key={`tab1-${me.state.model}`} label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
-							{properties.map ((p, i) => {
-								let dict = false;
-								
-								if (p.get ("type") >= 1000) {
-									let m = me.props.store.getModel (p.get ("type"));
-									
-									dict = m.isDictionary ();
-								}
+							{properties.map ((properties2, i) => {
 								return (
-									<Field key={i} property={p.get ("code")} dict={dict} />
+									<div key={`row-${i}`} className="row">
+										{properties2.map ((p, j) => {
+											return (
+												<div key={`col-${i}-${j}`}className={`col-sm-${colWidth}`}>
+													{me.renderProperty (p, `field-${i}-${j}`)}
+												</div>
+											);
+										})}
+									</div>
 								);
 							})}
 						</Form>
 					</Tab>
+					{me.state.rid && me.getTables ().map ((t, i) => {
+						let label = t.get ("name");
+						let opts = t.getOpts ();
+						
+						if (opts.grid && opts.grid.label) {
+							label = opts.grid.label;
+						}
+						return (
+							<Tab key={`table-${me.state.model}-${i}`} label={label}>
+								<ModelList {...me.props} id={`list-${i}`} ref={`list-${i}`} label="" store={me.props.store} model={t.getPath ()} parentModel={m.getPath ()} parentId={me.state.rid} />
+							</Tab>
+						);
+					})}
 				</Tabs>
 			</div>
 		);

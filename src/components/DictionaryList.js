@@ -79,13 +79,13 @@ class DictionaryList extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<Grid {...me.props} id="dictionary-list" ref="dictionary-list" title={i18n ("Dictionary") + ": " + me.model.getLabel ()} store={me.props.store} model={me.state.modelPath} refresh={me.state.refresh}>
+					<Grid {...me.props} id="dictionary-list" ref="dictionary-list" label={i18n ("Dictionary") + ": " + me.model.getLabel ()} store={me.props.store} model={me.state.modelPath} refresh={me.state.refresh}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
 					</Grid>
 				</div>
-				<Confirm title={i18n ("Are you sure?")} visible={me.state.removeConfirm} onClick={me.onRemove} />
+				<Confirm label={i18n ("Are you sure?")} visible={me.state.removeConfirm} onClick={me.onRemove} />
 			</div>
 		);
 		

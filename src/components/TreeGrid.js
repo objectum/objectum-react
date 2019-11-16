@@ -325,7 +325,7 @@ class TreeGrid extends Component {
 		
 		return (
 			<div>
-				{me.props.title && <h5>{i18n (me.props.title)}</h5>}
+				{me.props.label && <h5>{i18n (me.props.label)}</h5>}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
 				<div>
 					{gridChildren}

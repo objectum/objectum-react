@@ -60,13 +60,13 @@ class Users extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<Grid {...me.props} id="users" ref="users" title="Users" store={me.props.store} query="objectum.user" refresh={me.state.refresh}>
+					<Grid {...me.props} id="users" ref="users" label="Users" store={me.props.store} query="objectum.user" refresh={me.state.refresh}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
 					</Grid>
 				</div>
-				<Confirm title="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
+				<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
 			</div>
 		);
 		

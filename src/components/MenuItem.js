@@ -58,8 +58,8 @@ class MenuItem extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs" title={i18n ("Menu item") + ": " + me.state.label}>
-					<Tab key="Tab1" title="Information">
+				<Tabs key="tabs" id="tabs" label={i18n ("Menu item") + ": " + me.state.label}>
+					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>
 							<ChooseField property="menu" label="Menu" disabled={true} rsc="record" value={me.state.menu} choose={Menus} chooseRef="menus" />
 							<ChooseField property="parent" label="Parent" rsc="record" value={me.state.parent} choose={MenuItems} chooseRef="menuItems" menu={me.state.menu} />

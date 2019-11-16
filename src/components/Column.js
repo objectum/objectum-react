@@ -51,8 +51,8 @@ class Column extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs" title={i18n ("Column") + ": " + me.state.label}>
-					<Tab key="Tab1" title="Information">
+				<Tabs key="tabs" id="tabs" label={i18n ("Column") + ": " + me.state.label}>
+					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="column" rid={me.state.rid} onCreate={me.onCreate}>
 							<div className="form-row">
 								<div className="form-group col-md-6">

@@ -68,7 +68,7 @@ class Columns extends Component {
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
 					</Grid>
 				</div>
-				<Confirm title={i18n ("Are you sure?")} visible={me.state.removeConfirm} onClick={me.onRemove} />
+				<Confirm label={i18n ("Are you sure?")} visible={me.state.removeConfirm} onClick={me.onRemove} />
 			</div>
 		);
 		

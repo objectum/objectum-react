@@ -60,8 +60,8 @@ class Property extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs" title={i18n ("Property") + ": " + me.state.label}>
-					<Tab key="Tab1" title="Information">
+				<Tabs key="tabs" id="tabs" label={i18n ("Property") + ": " + me.state.label}>
+					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} onCreate={me.onCreate}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
@@ -90,17 +90,18 @@ class Property extends Component {
 							<div className="form-row">
 								<div className="form-group col-md-6">
 									<BooleanField property="notNull" label="Not null" />
-								</div>
-								<div className="form-group col-md-6">
 									<BooleanField property="unique" label="Unique" />
-								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
 									<BooleanField property="secure" label="Secure" />
 								</div>
 								<div className="form-group col-md-6">
 									{me.state.type >= 1000 && <SelectField property="removeRule" label="Remove rule" recs={removeRuleRecs} />}
+								</div>
+							</div>
+							<div className="form-row">
+								<div className="form-group col-md-6">
+									<StringField property="opts" label="Options" codemirror={true} />
+								</div>
+								<div className="form-group col-md-6">
 								</div>
 							</div>
 						</Form>

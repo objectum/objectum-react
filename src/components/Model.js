@@ -49,8 +49,8 @@ class Model extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)} disabled={!me.from}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs" title={i18n ("Model") + ": " + me.state.label}>
-					<Tab key="Tab1" title="Information">
+				<Tabs key="tabs" id="tabs" label={i18n ("Model") + ": " + me.state.label}>
+					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
@@ -69,14 +69,17 @@ class Model extends Component {
 								</div>
 							</div>
 							<div className="form-row">
-								<div className="form-group col-md-12">
+								<div className="form-group col-md-6">
+									<StringField property="opts" label="Options" codemirror={true} />
+								</div>
+								<div className="form-group col-md-6">
 									<StringField property="formatFunc" label="Format function" codemirror={true} />
 								</div>
 							</div>
 						</Form>
 					</Tab>
 					{me.state.rid &&
-					<Tab key="Tab2" title="Properties">
+					<Tab key="Tab2" label="Properties">
 						<Properties {...me.props} model={me.state.rid} />
 					</Tab>
 					}

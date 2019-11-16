@@ -48,8 +48,8 @@ class User extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs" title={i18n ("User") + ": " + me.state.label}>
-					<Tab key="Tab1" title="Information">
+				<Tabs key="tabs" id="tabs" label={i18n ("User") + ": " + me.state.label}>
+					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.user" onCreate={me.onCreate}>
 							<Field property="name" />
 							<Field property="login" />

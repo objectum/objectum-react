@@ -321,7 +321,7 @@ class Grid extends Component {
 		
 		return (
 			<div>
-				{me.props.title && <h5>{i18n (me.props.title)}</h5>}
+				{me.props.label && <h5>{i18n (me.props.label)}</h5>}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
 				<div>
 					{gridChildren}
@@ -330,6 +330,9 @@ class Grid extends Component {
 					<thead>
 					<tr>
 						{me.state.cols.map ((col, i) => {
+							if (col.area === 0) {
+								return;
+							}
 							let cls = "";
 							let f = me.state.filters.find (f => {
 								if (f [0] == col.code) {
@@ -361,6 +364,9 @@ class Grid extends Component {
 							return (
 								<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
 									{me.state.cols.map ((col, j) => {
+										if (col.area === 0) {
+											return;
+										}
 										return (
 											<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} /></td>
 										);

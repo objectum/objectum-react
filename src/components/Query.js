@@ -47,8 +47,8 @@ class Query extends Component {
 		return (
 			<div>
 				<button type="button" className="btn btn-primary mb-2" onClick={() => me.props.history.push (me.from)}><i className="fas fa-arrow-left mr-2"></i>{i18n ("Back")}</button>
-				<Tabs key="tabs" id="tabs" title={i18n ("Query") + ": " + me.state.label}>
-					<Tab key="Tab1" title="Information">
+				<Tabs key="tabs" id="tabs" label={i18n ("Query") + ": " + me.state.label}>
+					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid} onCreate={me.onCreate}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
@@ -67,14 +67,17 @@ class Query extends Component {
 								</div>
 							</div>
 							<div className="row">
-								<div className="col-md-12">
+								<div className="col-md-6">
 									<StringField property="query" label="Query" codemirror={true} />
+								</div>
+								<div className="col-md-6">
+									<StringField property="opts" label="Options" codemirror={true} />
 								</div>
 							</div>
 						</Form>
 					</Tab>
 					{me.state.rid &&
-					<Tab key="Tab2" title="Columns">
+					<Tab key="Tab2" label="Columns">
 						<Columns {...me.props} query={me.state.rid} />
 					</Tab>}
 				</Tabs>

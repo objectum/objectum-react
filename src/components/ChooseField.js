@@ -131,6 +131,18 @@ class ChooseField extends Component {
 		me.props.onChange (val);
 	}
 	
+	async componentDidMount () {
+		let me = this;
+		let name = "";
+		
+		if (me.props.disabled && me.state.value) {
+			let o = await me.props.store.getRsc (me.props.rsc, me.state.value);
+			
+			name = o.getLabel ();
+		}
+		me.setState ({name});
+	}
+	
 	render () {
 		let me = this;
 		let id = me.props.attr || me.props.property || me.props.prop;
@@ -139,6 +151,15 @@ class ChooseField extends Component {
 		
 		if (!disabled && (!me.props.choose || !me.props.chooseRef)) {
 			return (<div className="alert alert-danger">choose or chooseRef not exist</div>);
+		}
+		if (me.props.disabled) {
+			if (me.state.name) {
+				return (
+					<input type="text" className={"form-control" + addCls} id={id} value={me.state.name} disabled={true}/>
+				)
+			} else {
+				return (<div />);
+			}
 		}
 		let ObjectField = objectField (me.props.choose);
 		let props = {
