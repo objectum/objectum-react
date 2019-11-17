@@ -323,7 +323,7 @@ class Grid extends Component {
 			<div>
 				{me.props.label && <h5>{i18n (me.props.label)}</h5>}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-				<div>
+				<div className="actions border p-1 bg-white shadow-sm">
 					{gridChildren}
 				</div>
 				<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-1 objectum-table">

@@ -327,7 +327,7 @@ class TreeGrid extends Component {
 			<div>
 				{me.props.label && <h5>{i18n (me.props.label)}</h5>}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-				<div>
+				<div className="actions border p-1 bg-white shadow-sm">
 					{gridChildren}
 				</div>
 				{me.renderPosition ()}
