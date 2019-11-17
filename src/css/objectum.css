@@ -15,6 +15,10 @@
     height: 32px;
     padding-left: 90px;
     padding-top: 2px;
+    font-weight: bold;
+    font-style: italic;
+    color: #b8d7f1;
+    text-shadow: -1px -1px 1px #073255, 1px -1px 1px #073255, -1px 1px 1px #073255, 1px 1px 1px #073255;
 }
 .auth {
     border: 1px solid #efece4;

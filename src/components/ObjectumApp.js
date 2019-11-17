@@ -34,7 +34,7 @@ class ObjectumApp extends Component {
 		let me = this;
 		
 		me.state = {
-			sidebarOpen: true
+			sidebarOpen: false
 		};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
@@ -252,7 +252,7 @@ class ObjectumApp extends Component {
 							<h3>{me.props.name || "Objectum"}</h3>
 						</div>
 						<div className="fixed-top">
-							<button className="btn btn-dark" onClick={() => this.onSetSidebarOpen (true)}>
+							<button className="btn btn-dark" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
 								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
 							</button>
 						</div>
