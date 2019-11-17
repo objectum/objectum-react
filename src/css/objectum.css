@@ -57,3 +57,33 @@
     display: block;
     table-layout: auto;
 }
+.sort {
+    cursor: pointer;
+}
+.sort:before {
+    font-family: "Font Awesome 5 Free";
+    top: 0;
+    left: 10px;
+    margin-right: 5px;
+    content: "\F0DC";
+}
+.sort-up {
+    cursor: pointer;
+}
+.sort-up:before {
+    font-family: "Font Awesome 5 Free";
+    top: 0;
+    left: 10px;
+    margin-right: 5px;
+    content: "\F0DE";
+}
+.sort-down {
+    cursor: pointer;
+}
+.sort-down:before {
+    font-family: "Font Awesome 5 Free";
+    top: 0;
+    left: 10px;
+    margin-right: 5px;
+    content: "\F0DD";
+}

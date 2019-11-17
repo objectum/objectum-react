@@ -1,6 +1,7 @@
 # objectum-react
 
-Simple react components for objectum UI.
+Simple react components for objectum UI. Based on [Bootstrap](https://getbootstrap.com), [Font Awesome](https://fontawesome.com).
+
 
 Install:
 ```bash

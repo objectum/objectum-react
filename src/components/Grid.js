@@ -342,18 +342,18 @@ class Grid extends Component {
 							if (f) {
 								cls = "text-success";
 							}
-							let orderIcon = "fas fa-sort";
+							let orderClass = "sort";
 							
 							if (col.code === me.state.order [0]) {
 								if (me.state.order [1] == "asc") {
-									orderIcon = "fas fa-sort-up";
+									orderClass = "sort-up";
 								} else {
-									orderIcon = "fas fa-sort-down";
+									orderClass = "sort-down";
 								}
 							}
 							return (
 								<th key={i} scope="col" className={cls}>
-									{i18n (col.name)}<button type="button" className="btn btn-link" onClick={() => me.onOrder (col.code)}><i className={orderIcon}></i></button>
+									<div className={orderClass} onClick={() => me.onOrder (col.code)}>{i18n (col.name)}</div>
 								</th>
 							);
 						})}
