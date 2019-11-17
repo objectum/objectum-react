@@ -331,10 +331,10 @@ class TreeGrid extends Component {
 					{gridChildren}
 				</div>
 				{me.renderPosition ()}
-				<table className="table table-hover border bg-white shadow-sm">
-					<thead>
+				<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-1 objectum-table">
+					<thead className="thead-dark">
 					<tr>
-						<th><button type="button" className="btn btn-primary btn-sm" disabled={true}><i className="fas fa-folder-open"></i></button></th>
+						<th><i className="far fa-folder-open ml-2"></i></th>
 						{me.cols.map ((col, i) => {
 							return (
 								<th key={i} scope="col">{i18n (col.name)}</th>

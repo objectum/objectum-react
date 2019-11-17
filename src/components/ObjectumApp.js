@@ -45,7 +45,6 @@ class ObjectumApp extends Component {
 	}
 	
 	onSetSidebarOpen (open) {
-		console.log (open);
 		this.setState({ sidebarOpen: open });
 	}
 	
@@ -101,63 +100,6 @@ class ObjectumApp extends Component {
 	
 	renderMenu () {
 		let me = this;
-		/*
-				let recs = me.menuItemRecs;
-				
-				if (!recs) {
-					return (
-						<ul className="list-unstyled components">
-							<li className="active">
-								<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">Objectum</a>
-								<ul className="collapse list-unstyled" id="homeSubmenu">
-									<li>
-										<Link className="nav-link" to="/models">{i18n ("Models")}</Link>
-									</li>
-									<li>
-										<Link className="nav-link" to="/queries">{i18n ("Queries")}</Link>
-									</li>
-									<li>
-										<Link className="nav-link" to="/menus">{i18n ("Menus")}</Link>
-									</li>
-									<li>
-										<Link className="nav-link" to="/roles">{i18n ("Roles")}</Link>
-									</li>
-									<li>
-										<Link className="nav-link" to="/users">{i18n ("Users")}</Link>
-									</li>
-								</ul>
-							</li>
-							<li className="mt-3">
-								<Link className="nav-link" to="/logout">{i18n ("Logout")}</Link>
-							</li>
-						</ul>
-					);
-				}
-				function renderItems (parent) {
-					let recs = me.menuItemRecs.filter (rec => rec.parent == parent);
-		
-					return recs.map ((rec, i) => {
-						let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
-						
-						if (childRecs.length) {
-							return (
-								<li className="active" key={`active-${parent}-${i}`}>
-									<a key={`a-${parent}-${i}`} href={`#submenu-${parent}-${i}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{renderIcon (rec.icon)}{i18n (rec.name)}</a>
-									<ul key={`ul-${parent}-${i}`} className="collapse list-unstyled" id={`submenu-${parent}-${i}`}>
-										{renderItems (rec.id)}
-									</ul>
-								</li>
-							);
-						} else {
-							return (
-								<li key={`${parent}-${i}`}>
-									<Link className="nav-link" to={rec.path}>{renderIcon (rec.icon)}{i18n (rec.name)}</Link>
-								</li>
-							);
-						}
-					});
-				};
-		*/
 		function renderIcon (icon, key) {
 			if (icon) {
 				return (<i key={key} className={`${icon} menu-icon`} />);
@@ -172,12 +114,14 @@ class ObjectumApp extends Component {
 				let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
 				
 				if (childRecs.length) {
+					let opened = me.state [`open-${parent}-${i}`];
+					
 					return (
 						<div key={`menuDiv-${parent}-${i}`}>
 							<button key={`menu-${parent}-${i}`} className={`btn btn-link text-dark pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
-								{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}<i key={`open-${parent}-${i}`} className={`far fa-folder menu-icon`} />
+								{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}<i key={`open-${parent}-${i}`} className={`far ${opened ? "fa-folder-open" : "fa-folder"} menu-icon`} />
 							</button>
-							{me.state [`open-${parent}-${i}`] && renderItems (rec.id, level + 1)}
+							{opened && renderItems (rec.id, level + 1)}
 						</div>
 					);
 				} else {

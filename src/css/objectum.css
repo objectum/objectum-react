@@ -7,8 +7,8 @@
     width: 100%;
     min-height: 100vh;
     transition: all 0.3s;
-    margin-top: 30px;
-    padding: 10px;
+    margin-top: 20px;
+    padding: 20px;
 }
 #header {
     width: 100%;
@@ -51,4 +51,9 @@
 }
 .filter-block {
     height: 115px;
+}
+.objectum-table {
+    overflow: auto;
+    display: block;
+    table-layout: auto;
 }

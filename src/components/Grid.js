@@ -326,8 +326,8 @@ class Grid extends Component {
 				<div>
 					{gridChildren}
 				</div>
-				<table className="table table-hover border bg-white shadow-sm mt-1">
-					<thead>
+				<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-1 objectum-table">
+					<thead className="thead-dark">
 					<tr>
 						{me.state.cols.map ((col, i) => {
 							if (col.area === 0) {
