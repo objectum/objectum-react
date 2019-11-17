@@ -129,7 +129,7 @@ class Demo extends Component {
 	render () {
 		return (
 			<div>
-				<ObjectumApp locale="ru" store={store} _username="admin" _password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()} name="objectum-react">
+				<ObjectumApp locale="ru" store={store} username="admin" password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()} name="objectum-react">
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 					<ObjectumRoute path="/items" render={props => <Items {...props} store={store} />} />
 					<ObjectumRoute path="/item/:rid" render={props => <Item {...props} store={store} />} />

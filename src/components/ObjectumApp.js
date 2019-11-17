@@ -25,11 +25,7 @@ import _ from "lodash";
 
 import "../css/objectum.css";
 import "../css/bootstrap.css";
-import "../css/sidebar.css";
 import "../fontawesome/css/all.css";
-import "../js/jquery.js";
-import "../js/popper.js";
-import "../js/bootstrap.js";
 
 class ObjectumApp extends Component {
 	constructor (props) {
@@ -47,7 +43,8 @@ class ObjectumApp extends Component {
 		lang (me.props.locale || "en");
 	}
 	
-	onSetSidebarOpen(open) {
+	onSetSidebarOpen (open) {
+		console.log (open);
 		this.setState({ sidebarOpen: open });
 	}
 	
@@ -97,75 +94,95 @@ class ObjectumApp extends Component {
 	
 	renderMenu () {
 		let me = this;
-		let recs = me.menuItemRecs;
-		
-		if (!recs) {
-			return (
-				<ul className="list-unstyled components">
-					<li className="active">
-						<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">Objectum</a>
-						<ul className="collapse list-unstyled" id="homeSubmenu">
-							<li>
-								<Link className="nav-link" to="/models">{i18n ("Models")}</Link>
+		/*
+				let recs = me.menuItemRecs;
+				
+				if (!recs) {
+					return (
+						<ul className="list-unstyled components">
+							<li className="active">
+								<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">Objectum</a>
+								<ul className="collapse list-unstyled" id="homeSubmenu">
+									<li>
+										<Link className="nav-link" to="/models">{i18n ("Models")}</Link>
+									</li>
+									<li>
+										<Link className="nav-link" to="/queries">{i18n ("Queries")}</Link>
+									</li>
+									<li>
+										<Link className="nav-link" to="/menus">{i18n ("Menus")}</Link>
+									</li>
+									<li>
+										<Link className="nav-link" to="/roles">{i18n ("Roles")}</Link>
+									</li>
+									<li>
+										<Link className="nav-link" to="/users">{i18n ("Users")}</Link>
+									</li>
+								</ul>
 							</li>
-							<li>
-								<Link className="nav-link" to="/queries">{i18n ("Queries")}</Link>
-							</li>
-							<li>
-								<Link className="nav-link" to="/menus">{i18n ("Menus")}</Link>
-							</li>
-							<li>
-								<Link className="nav-link" to="/roles">{i18n ("Roles")}</Link>
-							</li>
-							<li>
-								<Link className="nav-link" to="/users">{i18n ("Users")}</Link>
+							<li className="mt-3">
+								<Link className="nav-link" to="/logout">{i18n ("Logout")}</Link>
 							</li>
 						</ul>
-					</li>
-					<li className="mt-3">
-						<Link className="nav-link" to="/logout">{i18n ("Logout")}</Link>
-					</li>
-				</ul>
-			);
-		}
-		function renderIcon (icon) {
+					);
+				}
+				function renderItems (parent) {
+					let recs = me.menuItemRecs.filter (rec => rec.parent == parent);
+		
+					return recs.map ((rec, i) => {
+						let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
+						
+						if (childRecs.length) {
+							return (
+								<li className="active" key={`active-${parent}-${i}`}>
+									<a key={`a-${parent}-${i}`} href={`#submenu-${parent}-${i}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{renderIcon (rec.icon)}{i18n (rec.name)}</a>
+									<ul key={`ul-${parent}-${i}`} className="collapse list-unstyled" id={`submenu-${parent}-${i}`}>
+										{renderItems (rec.id)}
+									</ul>
+								</li>
+							);
+						} else {
+							return (
+								<li key={`${parent}-${i}`}>
+									<Link className="nav-link" to={rec.path}>{renderIcon (rec.icon)}{i18n (rec.name)}</Link>
+								</li>
+							);
+						}
+					});
+				};
+		*/
+		function renderIcon (icon, key) {
 			if (icon) {
-				return (<i className={`${icon} menu-icon`} />);
+				return (<i key={key} className={`${icon} menu-icon`} />);
 			} else {
-				return (<span />);
+				return (<span key={key} />);
 			}
 		};
-		function renderItems (parent) {
+		function renderItems (parent, level) {
 			let recs = me.menuItemRecs.filter (rec => rec.parent == parent);
-
+			
 			return recs.map ((rec, i) => {
 				let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
 				
 				if (childRecs.length) {
 					return (
-						<li className="active" key={`active-${parent}-${i}`}>
-							<a key={`a-${parent}-${i}`} href={`#submenu-${parent}-${i}`} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{renderIcon (rec.icon)}{i18n (rec.name)}</a>
-							<ul key={`ul-${parent}-${i}`} className="collapse list-unstyled" id={`submenu-${parent}-${i}`}>
-								{renderItems (rec.id)}
-							</ul>
-						</li>
+						<div key={`menuDiv-${parent}-${i}`}>
+							<div key={`menu-${parent}-${i}`} className={`ml-3 mb-2 ml-${level * 2}`}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</div>
+							{renderItems (rec.id, level + 1)}
+						</div>
 					);
 				} else {
 					return (
-						<li key={`${parent}-${i}`}>
-							<Link className="nav-link" to={rec.path}>{renderIcon (rec.icon)}{i18n (rec.name)}</Link>
-						</li>
+						<Link key={`menu-${parent}-${i}`} className={`nav-link text-dark ml-${level * 2}`} to={rec.path}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</Link>
 					);
 				}
 			});
 		};
 		return (
-			<ul className="list-unstyled components menu">
-				{renderItems (null)}
-				<li className="mt-3">
-					<Link className="nav-link" to="/logout"><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</Link>
-				</li>
-			</ul>
+			<div className="menu">
+				{renderItems (null, 0)}
+				<Link key="menu-logout" className="nav-link text-dark" to="/logout"><i key="icon-logout" className="fas fa-sign-out-alt mr-2 ml-2" />{i18n ("Logout")}</Link>
+			</div>
 		);
 	}
 	
@@ -192,7 +209,7 @@ class ObjectumApp extends Component {
 		];
 		React.Children.forEach (me.props.children, (child, i) => {
 			if (child.type && child.type.displayName == "ObjectumRoute") {
-				items.push (<Route key={i} {...child.props} />);
+				items.push (<Route key={`route-${i}`} {...child.props} />);
 			}
 		});
 		let model = {}, parent = {};
@@ -222,28 +239,33 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Router>
-						<div className="wrapper">
-{/*
+						<div id="header" className="fixed-top text-light bg-secondary">
+							<h3>{me.props.name || "Objectum"}</h3>
+						</div>
+						<div className="fixed-top">
+							<button className="btn btn-dark" onClick={() => this.onSetSidebarOpen (true)}>
+								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
+							</button>
+						</div>
+						<div className="container-fluid">
 							<Sidebar
 								sidebar={me.renderMenu ()}
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
 								styles={{ sidebar: { background: "white" } }}
 							>
-								<button onClick={() => this.onSetSidebarOpen(true)}>
-									Open sidebar
-								</button>
+								<div id="content">
+									{me.renderRoutes ()}
+								</div>
 							</Sidebar>
-*/}
+{/*
 							<nav id="sidebar">
 								<div className="sidebar-header">
 									<h3>{me.props.name || "Objectum"}</h3>
 								</div>
 								{me.renderMenu ()}
 							</nav>
-							<div id="content">
-								{me.renderRoutes ()}
-							</div>
+*/}
 						</div>
 					</Router>
 				</div>
