@@ -38,7 +38,8 @@ class ObjectumApp extends Component {
 		};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
-		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+		me.onSetSidebarOpen = me.onSetSidebarOpen.bind (me);
+		me.onClickMenu = me.onClickMenu.bind (me);
 		
 		lang (me.props.locale || "en");
 	}
@@ -90,6 +91,12 @@ class ObjectumApp extends Component {
 			me.menuItemRecs = result.recs;
 		}
 		me.setState ({sid: opts.sessionId});
+	}
+	
+	onClickMenu (key) {
+		let me = this;
+		
+		me.setState ({[key]: !me.state [key]});
 	}
 	
 	renderMenu () {
@@ -167,8 +174,10 @@ class ObjectumApp extends Component {
 				if (childRecs.length) {
 					return (
 						<div key={`menuDiv-${parent}-${i}`}>
-							<div key={`menu-${parent}-${i}`} className={`ml-3 mb-2 ml-${level * 2}`}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</div>
-							{renderItems (rec.id, level + 1)}
+							<button key={`menu-${parent}-${i}`} className={`btn btn-link text-dark pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
+								{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}<i key={`open-${parent}-${i}`} className={`far fa-folder menu-icon`} />
+							</button>
+							{me.state [`open-${parent}-${i}`] && renderItems (rec.id, level + 1)}
 						</div>
 					);
 				} else {
@@ -181,7 +190,7 @@ class ObjectumApp extends Component {
 		return (
 			<div className="menu">
 				{renderItems (null, 0)}
-				<Link key="menu-logout" className="nav-link text-dark" to="/logout"><i key="icon-logout" className="fas fa-sign-out-alt mr-2 ml-2" />{i18n ("Logout")}</Link>
+				<Link key="menu-logout" className="nav-link text-dark mt-4" to="/logout"><i key="icon-logout" className="fas fa-sign-out-alt mr-2 ml-2" />{i18n ("Logout")}</Link>
 			</div>
 		);
 	}
