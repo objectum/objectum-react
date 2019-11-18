@@ -19,6 +19,7 @@ class Grid extends Component {
 		let showFilters = false;
 		let filters = [];
 		let order = [];
+		let parent = null;
 		let hash = getHash (me);
 		
 		if (hash [me.props.id]) {
@@ -40,6 +41,13 @@ class Grid extends Component {
 			if (hash [me.props.id].hasOwnProperty ("order")) {
 				order = hash [me.props.id].order;
 			}
+			if (hash [me.props.id].parent) {
+				parent = Number (hash [me.props.id].parent);
+				
+				if (me.props.onSelectParent) {
+					me.props.onSelectParent (parent);
+				}
+			}
 		}
 		me.state = {
 			ready: false,
@@ -51,9 +59,15 @@ class Grid extends Component {
 			selected,
 			showFilters,
 			filters,
-			order
+			order,
+			parent
 		};
+		me.position = [];
+		me.childMap = {};
+		me.nodeMap = {};
+		
 		me.onRowClick = me.onRowClick.bind (me);
+		me.onFolderClick = me.onFolderClick.bind (me);
 		me.onChange = me.onChange.bind (me);
 		me.onFirst = me.onFirst.bind (me);
 		me.onPrev = me.onPrev.bind (me);
@@ -73,6 +87,7 @@ class Grid extends Component {
 		let showFilters = me.state.showFilters;
 		let filters = me.state.filters;
 		let order = me.state.order;
+		let parent = me.state.parent;
 		let hash = getHash (me);
 		let ready = true;
 		
@@ -99,11 +114,22 @@ class Grid extends Component {
 			if (hash [me.props.id].hasOwnProperty ("showFilters") && hash [me.props.id].showFilters != me.state.showFilters) {
 				showFilters = hash [me.props.id].showFilters;
 			}
+			if ((hash [me.props.id].parent && hash [me.props.id].parent != me.state.parent) || (!hash [me.props.id].parent && me.state.parent)) {
+				parent = hash [me.props.id].parent || null;
+				
+				if (parent == "null") {
+					parent = null;
+				}
+				ready = false;
+			}
+		}
+		if (parent != me.state.parent && me.props.onSelectParent) {
+			me.props.onSelectParent (parent);
 		}
 		if (selected != me.state.selected && me.props.onSelect) {
 			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
 		}
-		me.setState ({page, pageRecs, selected, showFilters, filters, order, ready});
+		me.setState ({page, pageRecs, selected, showFilters, filters, order, parent, ready});
 	}
 	
 	componentDidMount () {
@@ -116,6 +142,10 @@ class Grid extends Component {
 	
 	onRowClick (row) {
 		setHash (this, {[this.props.id]: {selected: row}});
+	}
+	
+	onFolderClick (id) {
+		setHash (this, {[this.props.id]: {parent: id, selected: null}});
 	}
 	
 	onChange (val) {
@@ -186,6 +216,9 @@ class Grid extends Component {
 				limit: me.state.pageRecs,
 				filters: me.state.filters
 			};
+			if (me.props.tree) {
+				opts.parent = me.state.parent;
+			}
 			if (me.props.query) {
 				opts.query = me.props.query;
 			}
@@ -202,8 +235,19 @@ class Grid extends Component {
 			
 			me.state.recs = result.recs;
 			state.cols = _.sortBy (result.cols, ["order", "name"]);
+			me.position = result.position;
 			state.length = result.length;
 			
+			me.childMap = {};
+			
+			if (me.props.tree) {
+				result.childs.forEach (rec => {
+					me.childMap [rec.parent] = rec.num;
+				});
+				result.recs.forEach (rec => {
+					me.nodeMap [rec.id] = rec;
+				});
+			}
 			let hash = getHash (me);
 			
 			if (me.props.id && hash [me.props.id]) {
@@ -294,6 +338,32 @@ class Grid extends Component {
 		}
 	}
 	
+	renderPosition () {
+		let me = this;
+		let active = !!me.position.length || me.state.parent;
+		
+		return (
+			<div className="mt-1 mb-1 border shadow-sm">
+				<nav aria-label="breadcrumb">
+					<ol className="breadcrumb">
+						<li className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
+							<button type="button" className="btn btn-link btn-sm" onClick={() => me.onFolderClick (null)} disabled={!active}><i className="fas fa-home"></i></button>
+						</li>
+						{me.position.map ((rec, i) => {
+							active = i < me.position.length - 1;
+							
+							return (
+								<li key={i} className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
+									<button type="button" className="btn btn-link btn-sm" onClick={() => me.onFolderClick (rec.id)} disabled={!active}>{rec.name || "-"}</button>
+								</li>
+							);
+						})}
+					</ol>
+				</nav>
+			</div>
+		);
+	}
+	
 	init () {
 		let me = this;
 		
@@ -303,7 +373,11 @@ class Grid extends Component {
 		me.initialized = true;
 		
 		let selected = me.state.selected;
+		let parent = me.state.parent;
 		
+		if (parent !== null && me.props.onSelectParent) {
+			me.props.onSelectParent (parent);
+		}
 		if (selected !== null && me.props.onSelect) {
 			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
 		}
@@ -326,9 +400,11 @@ class Grid extends Component {
 				<div className="actions border p-1 bg-white shadow-sm">
 					{gridChildren}
 				</div>
+				{me.props.tree && me.renderPosition ()}
 				<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-1 objectum-table">
 					<thead className="thead-dark">
 					<tr>
+						{me.props.tree && <th><i className="far fa-folder-open ml-2"></i></th>}
 						{me.state.cols.map ((col, i) => {
 							if (col.area === 0) {
 								return;
@@ -353,7 +429,10 @@ class Grid extends Component {
 							}
 							return (
 								<th key={i} scope="col" className={cls}>
-									<div className={orderClass} onClick={() => me.onOrder (col.code)}>{i18n (col.name)}</div>
+									{me.props.system ?
+										<div>{i18n (col.name)}</div> :
+										<div className={orderClass} onClick={() => me.onOrder (col.code)}>{i18n (col.name)}</div>
+									}
 								</th>
 							);
 						})}
@@ -361,8 +440,11 @@ class Grid extends Component {
 					</thead>
 					<tbody>
 						{me.state.recs.map ((rec, i) => {
+							let child = me.childMap [rec.id];
+
 							return (
 								<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
+									{me.props.tree && <td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder"></i> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 									{me.state.cols.map ((col, j) => {
 										if (col.area === 0) {
 											return;
@@ -404,7 +486,7 @@ class Grid extends Component {
 						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}><i className="fas fa-angle-right"></i></button>
 						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right"></i></button>
 						<button type="button" className="btn btn-link" onClick={() => me.setState ({ready: false})}><i className="fas fa-sync"></i></button>
-						<button type="button" className="btn btn-link" onClick={me.onShowFilters}><i className="fas fa-filter"></i></button>
+						{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}><i className="fas fa-filter"></i></button>}
 					</div>
 				</div>
 				<small className="text-muted ml-3">
