@@ -23,7 +23,6 @@ import SelectField from "./components/SelectField";
 import StringField from "./components/StringField";
 import Tab from "./components/Tab";
 import Tabs from "./components/Tabs";
-import TreeGrid from "./components/TreeGrid";
 import Types from "./components/Types";
 import User from "./components/User";
 import Users from "./components/Users";
@@ -68,7 +67,6 @@ export {
 	StringField,
 	Tab,
 	Tabs,
-	TreeGrid,
 	Types,
 	User,
 	Users,
@@ -112,7 +110,6 @@ export default {
 	StringField,
 	Tab,
 	Tabs,
-	TreeGrid,
 	Types,
 	User,
 	Users,
