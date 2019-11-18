@@ -27,7 +27,8 @@ class Property extends Component {
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			label: "",
-			model: hash.opts.model
+			model: hash.opts.model,
+			removeRule: "set null"
 		};
 		if (me.state.rid) {
 			let o = me.props.store.getProperty (me.state.rid);
@@ -53,9 +54,9 @@ class Property extends Component {
 	render () {
 		let me = this;
 		let removeRuleRecs = [
-			{id: "no action", name: "No action"},
 			{id: "set null", name: "Set null"},
-			{id: "cascade", name: "Cascade"}
+			{id: "cascade", name: "Cascade"},
+			{id: "no action", name: "No action"}
 		];
 		return (
 			<div>

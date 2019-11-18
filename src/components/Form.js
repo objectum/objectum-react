@@ -358,7 +358,9 @@ class Form extends Component {
 				{me.state.ready && <div className="mb-1 actions border p-1 bg-white shadow-sm">
 					{!me.state.rid && <button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={createDisabled}><i className="fas fa-plus-circle mr-2"></i> {i18n (me.state.creating ? "Creating" : "Create")}</button>}
 					{me.state.rid && <button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={saveDisabled}><i className="fas fa-save mr-2"></i> {i18n (me.state.saving ? "Saving" : "Save")}</button>}
+{/*
 					<button type="button" className="btn btn-primary" onClick={me.onRefresh}><i className="fas fa-sync mr-2"></i>{i18n ("Refresh")}</button>
+*/}
 				</div>}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
 				{me.state.ready && <div className="actions border p-1 bg-white shadow-sm">

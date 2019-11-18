@@ -72,9 +72,11 @@ class Model extends Component {
 								<div className="form-group col-md-6">
 									<StringField property="opts" label="Options" codemirror={true} />
 								</div>
+{/*
 								<div className="form-group col-md-6">
 									<StringField property="formatFunc" label="Format function" codemirror={true} />
 								</div>
+*/}
 							</div>
 						</Form>
 					</Tab>

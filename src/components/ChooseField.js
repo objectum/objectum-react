@@ -153,16 +153,12 @@ class ChooseField extends Component {
 			return (<div className="alert alert-danger">choose or chooseRef not exist</div>);
 		}
 		if (me.props.disabled) {
-			if (me.state.name) {
-				return (
-					<div className="form-group">
-						<label htmlFor={id}>{i18n (me.props.label)}</label>
-						<input type="text" className={"form-control" + addCls} id={id} value={me.state.name} disabled={true}/>
-					</div>
-				)
-			} else {
-				return (<div />);
-			}
+			return (
+				<div className="form-group">
+					<label htmlFor={id}>{i18n (me.props.label)}</label>
+					<input type="text" className={"form-control" + addCls} id={id} value={me.state.name || ""} disabled={true}/>
+				</div>
+			)
 		}
 		let ObjectField = objectField (me.props.choose);
 		let props = {
