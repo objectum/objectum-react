@@ -169,6 +169,7 @@ class TreeGrid extends Component {
 			
 			me.recs = result.recs;
 			me.cols = result.cols;
+			me.position = result.position;
 			state.length = result.length;
 			me.childMap = {};
 			
@@ -193,6 +194,7 @@ class TreeGrid extends Component {
 			if (state.length % state.pageRecs) {
 				state.pageNum ++;
 			}
+/*
 			let parent = me.state.parent;
 			me.position = [];
 
@@ -206,6 +208,7 @@ class TreeGrid extends Component {
 				}
 				parent = rec.parent;
 			}
+*/
 			state.ready = true;
 			
 		} catch (err) {
