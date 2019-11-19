@@ -415,8 +415,10 @@ class Grid extends Component {
 									return true;
 								}
 							});
+							let name = i18n (col.name);
+							
 							if (f) {
-								cls = "text-success";
+								cls = "font-italic";
 							}
 							let orderClass = "sort";
 							
@@ -430,8 +432,8 @@ class Grid extends Component {
 							return (
 								<th key={i} scope="col" className={cls}>
 									{me.props.system ?
-										<div>{i18n (col.name)}</div> :
-										<div className={orderClass} onClick={() => me.onOrder (col.code)}>{i18n (col.name)}</div>
+										<div>{name}</div> :
+										<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
 									}
 								</th>
 							);

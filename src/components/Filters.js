@@ -186,7 +186,7 @@ class Filter extends Component {
 				<select id="column" className="filter-select" value={me.state.column} onChange={me.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
 						return (
-							<option value={rec.code} key={"column-" + i}>{rec.name}</option>
+							<option value={rec.code} key={"column-" + i}>{i18n (rec.name)}</option>
 						);
 					})}
 				</select>
