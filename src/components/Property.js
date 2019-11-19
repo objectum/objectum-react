@@ -95,7 +95,7 @@ class Property extends Component {
 									<BooleanField property="secure" label="Secure" />
 								</div>
 								<div className="form-group col-md-6">
-									{me.state.type >= 1000 && <SelectField property="removeRule" label="Remove rule" recs={removeRuleRecs} />}
+									{me.state.type >= 1000 && <SelectField property="removeRule" label="Remove rule" recs={removeRuleRecs} value="set null" />}
 								</div>
 							</div>
 							<div className="form-row">

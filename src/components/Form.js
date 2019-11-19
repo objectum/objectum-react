@@ -134,8 +134,10 @@ class Form extends Component {
 			for (let attr in me.map) {
 				let ma = me.map [attr];
 				
-				if (me.state.hasOwnProperty (attr) && me.state [attr] !== me.map [attr].value) {
-					let v = me.state [attr];
+//				if (me.state.hasOwnProperty (attr) && me.state [attr] !== me.map [attr].value) {
+//					let v = me.state [attr];
+				if (me.refs [attr].state.hasOwnProperty ("value")) {
+					let v = me.refs [attr].state.value;
 					
 					if (v && (ma.type == 2 || ma.type >= 1000)) {
 						v = Number (v);
@@ -197,8 +199,10 @@ class Form extends Component {
 			for (let attr in me.map) {
 				let ma = me.map [attr];
 				
-				if (me.state.hasOwnProperty (attr)) {
-					let v = me.state [attr];
+//				if (me.state.hasOwnProperty (attr)) {
+//					let v = me.state [attr];
+				if (me.refs [attr].state.hasOwnProperty ("value")) {
+					let v = me.refs [attr].state.value;
 					
 					if (v && (ma.type == 2 || ma.type >= 1000)) {
 						v = Number (v);
@@ -298,7 +302,8 @@ class Form extends Component {
 					value,
 					object: me.object,
 					cls: me.cls,
-					store: me.props.store
+					store: me.props.store,
+					ref: attr
 				};
 				props2.rsc = props2.rsc || me.props.rsc;
 				
