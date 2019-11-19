@@ -70,5 +70,6 @@
 	"list": "список",
 	"options": "параметры",
 	"option": "параметр",
-	"form contains errors": "форма содержит ошибки"
+	"form contains errors": "форма содержит ошибки",
+	"please enter value": "пожалуйста введите значение"
 }

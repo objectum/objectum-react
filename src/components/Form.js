@@ -254,7 +254,7 @@ class Form extends Component {
 			let ma = me.map [attr];
 			
 			if (ma.notNull && me.state [attr] === "") {
-				ma.error = "Please enter value";
+				ma.error = i18n ("Please enter value");
 				valid = false;
 			} else {
 				ma.error = "";
