@@ -62,7 +62,7 @@ class Columns extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<Grid id="Columns" store={me.props.store} query="objectum.column" pageRecs={10} refresh={me.state.refresh} params={{queryId: me.query}}>
+					<Grid id="Columns" store={me.props.store} query="objectum.column" system={true} refresh={me.state.refresh} params={{queryId: me.query}}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
