@@ -71,7 +71,7 @@ class StringField extends Component {
 		}
 		return (
 			<div className="form-group">
-				<label htmlFor={id}>{i18n (me.props.label)}</label>
+				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
 				{cmp}
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

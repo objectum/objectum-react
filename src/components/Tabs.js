@@ -48,7 +48,13 @@ class Tabs extends Component {
 	}
 	
 	changeTab (i) {
-		setHash (this, {[this.props.id]: {tab: i}});
+		let me = this;
+		
+		setHash (me, {[me.props.id]: {tab: i}});
+		
+		if (me.props.onSelect) {
+			me.props.onSelect (i);
+		}
 	}
 	
 /*

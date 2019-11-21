@@ -10,6 +10,7 @@ import Tab from "./Tab";
 import Tabs from "./Tabs";
 import Properties from "./Properties";
 import Back from "./Back";
+import JsonEditor from "./JsonEditor";
 import {getHash} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -50,8 +51,8 @@ class Model extends Component {
 			<div>
 				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Model") + ": " + me.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
+					<Tab key="tab1" label="Information">
+						<Form key="form1" ref="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
 									<StringField property="name" label="Name" />
@@ -69,8 +70,8 @@ class Model extends Component {
 								</div>
 							</div>
 							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="opts" label="Options" codemirror={true} />
+								<div className="form-group col-md-12">
+									<JsonEditor property="opts" label="Options" />
 								</div>
 {/*
 								<div className="form-group col-md-6">

@@ -90,3 +90,6 @@
 .actions {
     width: 100%
 }
+.jsoneditor-codemirror {
+    height: 300px;
+}
