@@ -303,12 +303,14 @@ class Form extends Component {
 					object: me.object,
 					cls: me.cls,
 					store: me.props.store,
-					label: child.props.label,
 					disabled: child.props.disabled,
 					ref: attr
 				};
 				props2.rsc = props2.rsc || me.props.rsc;
 				
+				if (child.props.hasOwnProperty ("label")) {
+					props2.label = child.props.label;
+				}
 				if (child.type.name == "Field") {
 					if (type == 1) {
 						return (<StringField {...props2} />);
