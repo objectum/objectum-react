@@ -2,7 +2,6 @@
 
 Simple react components for objectum UI. Based on [Bootstrap](https://getbootstrap.com), [Font Awesome](https://fontawesome.com).
 
-
 Install:
 ```bash
 npm install objectum-react
@@ -24,6 +23,7 @@ npm install objectum-react
     * [ChooseField](#choose_field)  
     * [FileField](#file_field)  
     * [SelectField](#select_field)
+    * [JsonEditor](#json_editor)
 * [Confirm](#confirm)
 
 <a name="objectum_app" />
@@ -33,8 +33,6 @@ npm install objectum-react
 import React, {Component} from "react";
 import store from "objectum-client";
 import {ObjectumApp} from "objectum-react";
-import "objectum-react/lib/css/bootstrap.css";
-import "objectum-react/lib/fontawesome/css/all.css";
 
 class App extends Component {
     constructor (props) {
@@ -45,7 +43,7 @@ class App extends Component {
     
     render () {
         return (
-            <ObjectumApp store={store} />
+            <ObjectumApp store={store} name="Catalog" />
         );
     }
 };
@@ -55,6 +53,10 @@ export default App;
 Quick login:
 ```html
 <ObjectumApp store={store} username="admin" password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()} />
+```
+Locale:
+```html
+<ObjectumApp store={store} locale="ru" />
 ```
 
 <a name="auth" />
@@ -72,13 +74,13 @@ props:
 * **store**: - objectum store
 * **id**: - used in url hash navigation
 * **ref**: - used in ChooseField.chooseRef
-* **title**: - title of grid
+* **label**: - label of grid
 * **query**: - query
 * **pageRecs**: default 10 - recs on page
 * **refresh**: *boolean* - change for refresh grid 
 
 ```html
-<Grid id="roles" ref="roles" title="Roles" store={this.props.store} query="objectum.role" pageRecs={10} refresh={this.state.refresh} />
+<Grid id="roles" ref="roles" label="Roles" store={this.props.store} query="objectum.role" refresh={this.state.refresh} />
 ```
 Query "objectum.role":
 ```sql
@@ -96,6 +98,11 @@ select
 
 from
     {"model": "objectum.role", "alias": "a"}
+
+{"where": "empty"}
+
+{"order": "empty"}    
+    
 limit {"param": "limit"}
 offset {"param": "offset"}
 ```
@@ -107,7 +114,7 @@ props:
 * **onSelectParent**: *function* - event listener 
 
 ```html
-<TreeGrid id="menuItems" ref="menuItems" title="Menu items" store={this.props.store} query="objectum.class" pageRecs={10} refresh={this.state.refresh} onSelectParent={parent => this.parent = parent}>
+<TreeGrid id="menuItems" ref="menuItems" label="Menu items" store={this.props.store} query="objectum.class" refresh={this.state.refresh} onSelectParent={parent => this.parent = parent}>
 ```
 ```sql
 {"data": "begin"}
@@ -192,10 +199,10 @@ class User extends Component {
 ### Tabs
 ```html
 <Tabs key="tabs" id="tabs">
-    <Tab key="tab1" title="Main info">
+    <Tab key="tab1" label="Main info">
         <Form />
     </Tab>
-    <Tab key="tab2" title="Additional">
+    <Tab key="tab2" label="Additional">
         <Form />
     </Tab>
 </Tabs>
@@ -270,6 +277,14 @@ let recs = [{id: 1, name: "Item 1"}, {id: 2, name: "Item 2"}];
 <SelectField property="type" label="Type" recs={recs} />
 ```
 
+<a name="json_editor" />
+
+### JsonEditor
+Codemirror textarea. You can select tag from JSON for multiline editing.
+```html
+<JsonEditor property="opts" label="Options" />
+```
+
 <a name="confirm" />
 
 ### Confirm
@@ -295,7 +310,7 @@ class Items extends Component {
             <div>
                 ...
                 
-                <Confirm title="Are you sure?" visible={this.state.removeConfirm} onClick={this.onRemove} />
+                <Confirm label="Are you sure?" visible={this.state.removeConfirm} onClick={this.onRemove} />
             </div>
         );
     }

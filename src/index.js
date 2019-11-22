@@ -30,6 +30,7 @@ import Query from "./components/Query";
 import Column from "./components/Column";
 import Columns from "./components/Columns";
 import Queries from "./components/Queries";
+import JsonEditor from "./components/JsonEditor";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -81,6 +82,7 @@ export {
 	loadCSS,
 	loadJS,
 	getDateString,
+	JsonEditor,
 	i18n
 };
 
@@ -124,5 +126,6 @@ export default {
 	loadCSS,
 	loadJS,
 	getDateString,
+	JsonEditor,
 	i18n
 };

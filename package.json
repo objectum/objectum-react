@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.50",
+	"version": "1.1.51",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -29,7 +29,7 @@
 		"express": "^4.17.1",
 		"express-http-proxy": "^1.6.0",
 		"nwb": "0.23.x",
-		"objectum-client": "^1.1.20",
+		"objectum-client": "^1.1.21",
 		"react": "^16.9.0",
 		"react-dom": "^16.9.0"
 	},
