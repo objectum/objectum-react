@@ -143,6 +143,8 @@ class JsonEditor extends Component {
 		
 		me.id = me.props.attr || me.props.property || me.props.prop;
 		
+		let cls = me.state.tag ? "visible" : "invisible";
+		
 		return (
 			<div className="form-group border p-1">
 				<label htmlFor={me.id}><h6>{i18n (me.props.label)}</h6></label>
@@ -160,7 +162,7 @@ class JsonEditor extends Component {
 								);
 							})}
 						</select>
-						<div className="border mt-1">
+						<div className={"border mt-1 " + cls}>
 							<textarea ref="codemirrorTag" value={me.state.tagValue} onChange={() => {}} />
 						</div>
 					</div>

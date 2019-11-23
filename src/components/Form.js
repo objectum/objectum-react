@@ -11,6 +11,7 @@ import ChooseField from "./ChooseField";
 import FileField from "./FileField";
 import {i18n} from "./../i18n";
 import ModelList from "./ModelList";
+import Log from "./Log";
 
 class Form extends Component {
 	constructor (props) {
@@ -20,7 +21,8 @@ class Form extends Component {
 		
 		me.state = {
 			ready: false,
-			rid: me.props.rid
+			rid: me.props.rid,
+			showLog: false
 		};
 		me.fileMap = {};
 		me.onChange = me.onChange.bind (me);
@@ -93,7 +95,7 @@ class Form extends Component {
 		if (file) {
 			me.fileMap [id] = file;
 		}
-		me.setState ({[id]: v});
+		me.setState ({[id]: v, currentField: id});
 		
 		if (me.props.onChange) {
 			me.props.onChange (id, v);
@@ -364,16 +366,17 @@ class Form extends Component {
 		return (
 			<div className="bg-white">
 				{me.props.label && <h5>{me.props.label}</h5>}
-				{me.state.ready && <div className="mb-1 actions border p-1 bg-white shadow-sm">
-					{!me.state.rid && <button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={createDisabled}><i className="fas fa-plus-circle mr-2"></i> {i18n (me.state.creating ? "Creating" : "Create")}</button>}
-					{me.state.rid && <button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={saveDisabled}><i className="fas fa-save mr-2"></i> {i18n (me.state.saving ? "Saving" : "Save")}</button>}
-{/*
-					<button type="button" className="btn btn-primary" onClick={me.onRefresh}><i className="fas fa-sync mr-2"></i>{i18n ("Refresh")}</button>
-*/}
+				{me.state.ready && me.state.rid && <div className="mb-1 actions border p-1 bg-white shadow-sm">
+					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={saveDisabled}><i className="fas fa-save mr-2"></i> {i18n (me.state.saving ? "Saving" : "Save")}</button>
+					{me.props.rsc == "record" && <button type="button" className="btn btn-primary" onClick={() => me.setState ({showLog: !me.state.showLog})}><i className="fas fa-history mr-2"></i>{i18n ("Log")}</button>}
 				</div>}
+				{me.state.showLog && <Log form={me} />}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
 				{me.state.ready && <div className="actions border p-1 bg-white shadow-sm">
 					{formChildren}
+				</div>}
+				{me.state.ready && !me.state.rid && <div className="mt-1 actions border p-1 bg-white shadow-sm">
+					<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={createDisabled}><i className="fas fa-plus-circle mr-2"></i> {i18n (me.state.creating ? "Creating" : "Create")}</button>
 				</div>}
 			</div>
 		);
