@@ -14,9 +14,8 @@ import User from "./User";
 import Menus from "./Menus";
 import Menu from "./Menu";
 import MenuItem from "./MenuItem";
-import DictionaryList from "./DictionaryList";
-import DictionaryRecord from "./DictionaryRecord";
 import ModelList from "./ModelList";
+import ModelTree from "./ModelTree";
 import ModelRecord from "./ModelRecord";
 import Logout from "./Logout";
 import Sidebar from "react-sidebar";
@@ -155,8 +154,6 @@ class ObjectumApp extends Component {
 			<Route key="objectum-11" path="/menus" render={props => <Menus {...props} store={me.store} />} />,
 			<Route key="objectum-12" path="/menu/:rid" render={props => <Menu {...props} store={me.store} />} />,
 			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={me.store} />} />,
-			<Route key="objectum-14" path="/dictionary_list/:rid" render={props => <DictionaryList {...props} store={me.store} />} />,
-			<Route key="objectum-15" path="/dictionary_record/:rid" render={props => <DictionaryRecord {...props} store={me.store} />} />,
 			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={me.store} />} />,
 			<Route key="objectum-logout" path="/logout" render={props => <Logout {...props} store={me.store} onLogout={() => me.setState ({sid: null})} />} />
 		];
@@ -177,7 +174,8 @@ class ObjectumApp extends Component {
 			if (parent [m.get ("id")]) {
 				return;
 			}
-			items.push (<Route key={`model-${path}`} path={`/model_list/${path.split (".").join ("_")}`} render={props => <ModelList {...props} store={me.store} model={path} />} />);
+			items.push (<Route key={`model-list-${path}`} path={`/model_list/${path.split (".").join ("_")}`} render={props => <ModelList {...props} store={me.store} model={path} />} />);
+			items.push (<Route key={`model-tree-${path}`} path={`/model_tree/${path.split (".").join ("_")}`} render={props => <ModelTree {...props} store={me.store} model={path} />} />);
 		});
 		return items;
 	}
