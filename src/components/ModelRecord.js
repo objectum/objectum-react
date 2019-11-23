@@ -8,7 +8,7 @@ import Tab from "./Tab";
 import Tabs from "./Tabs";
 import ModelList from "./ModelList";
 import Back from "./Back";
-import {getHash} from "./helper";
+import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 import _ from "lodash";
 
@@ -43,6 +43,7 @@ class ModelRecord extends Component {
 		let o = await me.props.store.getRecord (rid);
 		
 		me.setState ({rid, label: o.getLabel ()});
+		goRidLocation (me.props, rid);
 	}
 	
 	renderProperty (p, key) {
