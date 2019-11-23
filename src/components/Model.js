@@ -11,7 +11,7 @@ import Tabs from "./Tabs";
 import Properties from "./Properties";
 import Back from "./Back";
 import JsonEditor from "./JsonEditor";
-import {getHash} from "./helper";
+import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
 class Model extends Component {
@@ -42,6 +42,7 @@ class Model extends Component {
 		let o = me.props.store.getModel (rid);
 		
 		me.setState ({rid, label: o.getLabel ()});
+		goRidLocation (me.props, rid);
 	}
 	
 	render () {
@@ -50,7 +51,7 @@ class Model extends Component {
 		return (
 			<div>
 				<Back {...me.props} />
-				<Tabs key="tabs" id="tabs" label={i18n ("Model") + ": " + me.state.label}>
+				<Tabs key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + me.state.label}>
 					<Tab key="tab1" label="Information">
 						<Form key="form1" ref="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
 							<div className="form-row">

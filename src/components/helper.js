@@ -138,6 +138,14 @@ function popLocation () {
 	return result;
 };
 
+function goRidLocation (props, rid) {
+	let location = unescape (window.location.pathname + window.location.hash);
+	let tokens = location.split ("/new");
+	
+	location = tokens.join (`/${rid}`);
+	props.history.push (location)
+};
+
 module.exports = {
 	getHash,
 	setHash,
@@ -147,5 +155,6 @@ module.exports = {
 	loadJS,
 	getDateString,
 	pushLocation,
-	popLocation
+	popLocation,
+	goRidLocation
 };

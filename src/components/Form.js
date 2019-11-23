@@ -227,9 +227,9 @@ class Form extends Component {
 				me.props.onCreate (state.rid);
 			}
 		} catch (err) {
+			console.error (err, err.stack);
 			await me.props.store.rollbackTransaction ();
 			state.error = err.message;
-			console.log (err.stack);
 		}
 		me.setState (state);
 	}

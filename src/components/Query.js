@@ -10,7 +10,7 @@ import Columns from "./Columns";
 import ChooseField from "./ChooseField";
 import Queries from "./Queries";
 import Back from "./Back";
-import {getHash} from "./helper";
+import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
 class Query extends Component {
@@ -41,6 +41,7 @@ class Query extends Component {
 		let o = me.props.store.getQuery (rid);
 		
 		me.setState ({rid, label: o.getLabel ()});
+		goRidLocation (me.props, rid);
 	}
 	
 	render () {

@@ -6,7 +6,7 @@ import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
-import {getHash} from "./helper";
+import {getHash, goRidLocation} from "./helper";
 import Menus from "./Menus";
 import MenuItems from "./MenuItems";
 import ChooseField from "./ChooseField";
@@ -50,6 +50,7 @@ class MenuItem extends Component {
 		let o = await me.props.store.getRecord (rid);
 		
 		me.setState ({rid, label: o.getLabel ()});
+		goRidLocation (me.props, rid);
 	}
 	
 	render () {

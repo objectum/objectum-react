@@ -28,7 +28,7 @@ start ().catch (err => {
 */
 // package.json -> start dev server
 
-const code = "catalog";
+const code = "shop";
 const path = require ("path");
 
 const express = require ("express");

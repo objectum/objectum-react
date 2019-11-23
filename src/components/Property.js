@@ -13,7 +13,7 @@ import Tab from "./Tab";
 import Tabs from "./Tabs";
 import Models from "./Models";
 import Back from "./Back";
-import {getHash} from "./helper";
+import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
 class Property extends Component {
@@ -49,6 +49,7 @@ class Property extends Component {
 		let o = me.props.store.getProperty (rid);
 		
 		me.setState ({rid, label: o.getLabel ()});
+		goRidLocation (me.props, rid);
 	}
 	
 	render () {
@@ -61,7 +62,7 @@ class Property extends Component {
 		return (
 			<div>
 				<Back {...me.props} />
-				<Tabs key="tabs" id="tabs" label={i18n ("Property") + ": " + me.state.label}>
+				<Tabs key="propertyTabs" id="propertyTabs" label={i18n ("Property") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} onCreate={me.onCreate}>
 							<div className="form-row">

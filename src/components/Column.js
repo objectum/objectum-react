@@ -11,7 +11,7 @@ import Tabs from "./Tabs";
 import ChooseField from "./ChooseField";
 import Queries from "./Queries";
 import Back from "./Back";
-import {getHash} from "./helper";
+import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
 class Column extends Component {
@@ -25,6 +25,7 @@ class Column extends Component {
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			label: "",
+			area: "1"
 		};
 		if (hash.opts && hash.opts.query) {
 			me.state.query = hash.opts.query;
@@ -42,13 +43,14 @@ class Column extends Component {
 		let o = me.props.store.getColumn (rid);
 		
 		me.setState ({rid, label: o.getLabel ()});
+		goRidLocation (me.props, rid);
 	}
 	
 	render () {
 		let me = this;
 		let areaRecs = [
-			{id: 0, name: i18n ("Hidden")},
-			{id: 1, name: i18n ("Visible")}
+			{id: "0", name: i18n ("Hidden")},
+			{id: "1", name: i18n ("Visible")}
 		];
 		return (
 			<div>
@@ -74,7 +76,7 @@ class Column extends Component {
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<SelectField property="area" label="Area" recs={areaRecs} />
+									<SelectField property="area" label="Area" recs={areaRecs} value={me.state.area} />
 								</div>
 								<div className="form-group col-md-6">
 									<NumberField property="columnWidth" label="Column width" />

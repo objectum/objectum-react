@@ -8,7 +8,7 @@ import Tab from "./Tab";
 import Tabs from "./Tabs";
 import MenuItems from "./MenuItems";
 import Back from "./Back";
-import {getHash} from "./helper";
+import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
 class Menu extends Component {
@@ -41,6 +41,7 @@ class Menu extends Component {
 		let o = await me.props.store.getRecord (rid);
 		
 		me.setState ({rid, label: o.getLabel ()});
+		goRidLocation (me.props, rid);
 	}
 	
 	render () {
