@@ -30,8 +30,8 @@ class StringField extends Component {
 		
 		if (me.props.codemirror) {
 			if (!window.CodeMirror) {
-				await loadCSS ("/public/codemirror/codemirror.css");
-				await loadJS ("/public/codemirror/codemirror.js");
+				await loadCSS (`${me.props.store.getUrl ()}/public/codemirror/codemirror.css`);
+				await loadJS (`${me.props.store.getUrl ()}/public/codemirror/codemirror.js`);
 			}
 			if (window.CodeMirror) {
 				me.codemirror = window.CodeMirror.fromTextArea (me.refs.codemirror, {

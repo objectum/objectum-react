@@ -2,6 +2,12 @@
 
 Simple react components for objectum UI. Based on [Bootstrap](https://getbootstrap.com), [Font Awesome](https://fontawesome.com).
 
+Objectum ecosystem:
+* Javascript platform https://github.com/objectum/objectum  
+* Isomorhic javascript client https://github.com/objectum/objectum-client  
+* Command-line interface (CLI) https://github.com/objectum/objectum-cli  
+* Objectum project example https://github.com/objectum/catalog 
+
 Install:
 ```bash
 npm install objectum-react

@@ -21,7 +21,7 @@ function File (props) {
 		let caId = props.cls.attrs [props.id].get ("id");
 		
 		file = (
-			<div><a target="_blank" rel="noopener noreferrer" href={props.store.getUrl () + "files/" + props.object.get ("id") + "-" + caId + "-" + props.value}>{props.value}</a></div>
+			<div><a target="_blank" rel="noopener noreferrer" href={props.store.getUrl () + "/files/" + props.object.get ("id") + "-" + caId + "-" + props.value}>{props.value}</a></div>
 		);
 	}
 	return (
