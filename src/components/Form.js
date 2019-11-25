@@ -331,6 +331,7 @@ class Form extends Component {
 							return (<SelectField {...props2} />);
 						} else
 						if (child.props.chooseModel) {
+							console.log (`list-${child.props.chooseModel}`, child.props.chooseModel);
 							return (<ChooseField {...props2} choose={ModelList} chooseRef={`list-${child.props.chooseModel}`} model={child.props.chooseModel} />);
 						} else {
 							return (<ChooseField {...props2} />);

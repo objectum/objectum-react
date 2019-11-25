@@ -148,6 +148,7 @@ class ChooseField extends Component {
 		let id = me.props.attr || me.props.property || me.props.prop;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
+		console.log ("props", me.props);
 		
 		if (!disabled && (!me.props.choose || !me.props.chooseRef)) {
 			return (

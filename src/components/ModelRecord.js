@@ -57,7 +57,6 @@ class ModelRecord extends Component {
 			dict = m.isDictionary ();
 			
 			if (!dict) {
-				console.log ("renderProperty", m, m.getPath ());
 				chooseModel = m.getPath ();
 			}
 		}
