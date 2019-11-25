@@ -72,9 +72,15 @@ class ModelRecord extends Component {
 				value = hash.opts.parentId;
 			}
 		}
-		return (
-			<Field key={key} property={p.get ("code")} dict={dict} chooseModel={chooseModel} disabled={disabled} value={value} />
-		);
+		if (chooseModel) {
+			return (
+				<Field key={key} property={p.get ("code")} dict={dict} choose={ModelList} chooseRef={`list-${chooseModel}`} model={chooseModel} disabled={disabled} value={value}/>
+			);
+		} else {
+			return (
+				<Field key={key} property={p.get ("code")} dict={dict} chooseModel={chooseModel} disabled={disabled} value={value}/>
+			);
+		}
 	}
 	
 	getTables () {
