@@ -150,7 +150,12 @@ class ChooseField extends Component {
 		let addCls = me.props.error ? " is-invalid" : "";
 		
 		if (!disabled && (!me.props.choose || !me.props.chooseRef)) {
-			return (<div className="alert alert-danger">choose or chooseRef not exist</div>);
+			return (
+				<div className="form-group">
+					<label htmlFor={id}>{i18n (me.props.label)}</label>
+					<div className="alert alert-danger">choose or chooseRef not exist</div>
+				</div>
+			);
 		}
 		if (me.props.disabled) {
 			return (
