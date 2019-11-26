@@ -26,8 +26,11 @@
     color: #b8d7f1;
     text-shadow: -1px -1px 1px #073255, 1px -1px 1px #073255, -1px 1px 1px #073255, 1px 1px 1px #073255;
 }
+.grid-label {
+    color: white;
+    text-shadow: -1px -1px 1px #073255, 1px -1px 1px #073255, -1px 1px 1px #073255, 1px 1px 1px #073255;
+}
 .auth {
-    border: 1px solid #efece4;
     margin: 5px;
     min-width: 250px;
 }
