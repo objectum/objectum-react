@@ -27,19 +27,8 @@ class Test extends Component {
 	
 	render () {
 		let me = this;
-		let card = {
-			image: "photo",
-			title: "name",
-			onEdit: me.onEdit,
-			text: [
-				"weight", "costPlan",
-				"size", "size2",
-				"costGram", "costIn",
-				"costOut"
-			]
-		};
 		return (
-			<Grid {...me.props} id="test" ref="test" label="Test" store={me.props.store} model="product" card={card} />
+			<Grid {...me.props} id="test" ref="test" label="Test" store={me.props.store} model="product" />
 		);
 	}
 };

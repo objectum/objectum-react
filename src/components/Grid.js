@@ -20,6 +20,7 @@ class Grid extends Component {
 		let filters = [];
 		let order = [];
 		let parent = null;
+		let mode = me.props.mode || "table";
 		let hash = getHash (me);
 		
 		if (hash [me.props.id]) {
@@ -37,6 +38,9 @@ class Grid extends Component {
 			}
 			if (hash [me.props.id].filters) {
 				filters = hash [me.props.id].filters;
+			}
+			if (hash [me.props.id].mode) {
+				mode = hash [me.props.id].mode;
 			}
 			if (hash [me.props.id].hasOwnProperty ("order")) {
 				order = hash [me.props.id].order;
@@ -57,6 +61,7 @@ class Grid extends Component {
 			page,
 			pageNum: 1,
 			pageRecs,
+			mode,
 			selected,
 			showFilters,
 			filters,
@@ -75,6 +80,7 @@ class Grid extends Component {
 		me.onNext = me.onNext.bind (me);
 		me.onLast = me.onLast.bind (me);
 		me.onShowFilters = me.onShowFilters.bind (me);
+		me.onImageMode = me.onImageMode.bind (me);
 		me.hashChange = me.hashChange.bind (me);
 		me.onFilter = me.onFilter.bind (me);
 		me.onOrder = me.onOrder.bind (me);
@@ -84,6 +90,7 @@ class Grid extends Component {
 		let me = this;
 		let page = me.state.page;
 		let pageRecs = me.state.pageRecs;
+		let mode = me.state.mode;
 		let selected = me.state.selected;
 		let showFilters = me.state.showFilters;
 		let filters = me.state.filters;
@@ -99,6 +106,10 @@ class Grid extends Component {
 			}
 			if (hash [me.props.id].pageRecs && hash [me.props.id].pageRecs != me.state.pageRecs) {
 				pageRecs = hash [me.props.id].pageRecs;
+				ready = false;
+			}
+			if (hash [me.props.id].mode && hash [me.props.id].mode != me.state.mode) {
+				mode = hash [me.props.id].mode;
 				ready = false;
 			}
 			if (hash [me.props.id].filters && JSON.stringify (hash [me.props.id].filters) != JSON.stringify (me.state.filters)) {
@@ -130,7 +141,7 @@ class Grid extends Component {
 		if (selected != me.state.selected && me.props.onSelect) {
 			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
 		}
-		me.setState ({page, pageRecs, selected, showFilters, filters, order, parent, ready});
+		me.setState ({page, pageRecs, mode, selected, showFilters, filters, order, parent, ready});
 	}
 	
 	componentDidMount () {
@@ -183,6 +194,10 @@ class Grid extends Component {
 	
 	onShowFilters () {
 		setHash (this, {[this.props.id]: {showFilters: !this.state.showFilters}});
+	}
+	
+	onImageMode () {
+		setHash (this, {[this.props.id]: {mode: this.state.mode == "images" ? "table" : "images"}});
 	}
 	
 	onFilter (filters) {
@@ -261,7 +276,7 @@ class Grid extends Component {
 					model: imageModel.getPath (),
 					offset: 0,
 					limit: me.state.pageRecs * 3,
-					filters: [["width", "in", [240,320]], [model.get ("code"), "in", _.map (state.recs, "id")]]
+					filters: [[model.get ("code"), "in", _.map (state.recs, "id")]]
 				});
 				state.imageRecs = result.recs;
 			}
@@ -480,8 +495,19 @@ class Grid extends Component {
 		return (
 			<div className="row">
 				{me.state.recs.map ((rec, i) => {
-					let imageRec = _.find (me.state.imageRecs, {[model.get ("code")]: rec.id});
-					let src = `${me.props.store.getUrl ()}/files/${imageRec.id}-${imageModel.properties ["photo"].get ("id")}-${imageRec ["photo"]}`;
+					let imageRecs = _.filter (me.state.imageRecs, {[model.get ("code")]: rec.id});
+					let smallImageRec = null, bigImageRec = null;
+					
+					imageRecs.forEach (rec => {
+						if (!smallImageRec || rec.width < smallImageRec.width) {
+							smallImageRec = rec;
+						}
+						if (!bigImageRec || rec.width > bigImageRec.width) {
+							bigImageRec = rec;
+						}
+					});
+					let smallImage = `${me.props.store.getUrl ()}/files/${smallImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${smallImageRec ["photo"]}`;
+					let bigImage = `${me.props.store.getUrl ()}/files/${bigImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${bigImageRec ["photo"]}`;
 					let text = [];
 					
 					card.text.forEach (code => {
@@ -494,11 +520,12 @@ class Grid extends Component {
 					return (
 						<div key={i} className="col">
 							<div key={i} className="card mb-2 bg-white shadow-sm" style={{width: "18rem"}}>
-								<img src={src} className="card-img-top" alt="..." />
+								<img src={smallImage} className="card-img-top" alt="..." />
 								<div className="card-body">
 									<h5 className="card-title">{rec [card.title]}</h5>
 									<p className="card-text">{text}</p>
-									<button className="btn btn-primary" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</button>
+									<button className="btn btn-primary" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</button>
+									<a target="_blank" rel="noopener noreferrer" href={bigImage} className="ml-4">{i18n ("Image")}</a>
 								</div>
 							</div>
 						</div>
@@ -528,7 +555,7 @@ class Grid extends Component {
 
 				{me.props.tree && me.renderPosition ()}
 
-				{me.props.card ? me.renderCardView () : me.renderTableView ()}
+				{me.state.mode == "images" ? me.renderCardView () : me.renderTableView ()}
 				
 				{me.state.showFilters && <Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
 				
@@ -558,6 +585,7 @@ class Grid extends Component {
 						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right"></i></button>
 						<button type="button" className="btn btn-link" onClick={() => me.setState ({ready: false})}><i className="fas fa-sync"></i></button>
 						{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}><i className="fas fa-filter"></i></button>}
+						{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode}><i className="fas fa-camera"></i></button>}
 					</div>
 				</div>
 				<small className="text-muted ml-3">

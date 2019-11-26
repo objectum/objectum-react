@@ -88,10 +88,16 @@ class ModelList extends Component {
 			
 			params [pm.get ("code")] = me.props.parentId;
 		}
+		let card;
+
+		if (opts.grid && opts.grid.card) {
+			card = JSON.parse (opts.grid.card);
+			card.onEdit = me.onEdit;
+		}
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<Grid {...me.props} id={`list-${me.model}`} ref={`list-${me.model}`} label={label} store={me.props.store} model={me.model} refresh={me.state.refresh} params={params}>
+					<Grid {...me.props} id={`list-${me.model}`} ref={`list-${me.model}`} label={label} store={me.props.store} model={me.model} refresh={me.state.refresh} params={params} card={card}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
