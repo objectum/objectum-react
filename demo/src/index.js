@@ -2,11 +2,45 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import store from "objectum-client";
-import {ObjectumApp, ObjectumRoute} from '../../src'
+import {ObjectumApp, ObjectumRoute, Grid} from '../../src'
+import {i18n} from "../../src/i18n";
+import {pushLocation} from "../../src/components/helper";
 
 class Test extends Component {
+	constructor (props) {
+		super (props);
+		
+		let me = this;
+		
+		me.onEdit = me.onEdit.bind (me);
+	}
+	
+	onEdit (id) {
+		let me = this;
+		
+		pushLocation ();
+		
+		me.props.history.push ({
+			pathname: "/model_record/" + id + "#" + JSON.stringify ({opts: {model: "product"}})
+		});
+	}
+	
 	render () {
-		return (<div>Test</div>);
+		let me = this;
+		let card = {
+			image: "photo",
+			title: "name",
+			onEdit: me.onEdit,
+			text: [
+				"weight", "costPlan",
+				"size", "size2",
+				"costGram", "costIn",
+				"costOut"
+			]
+		};
+		return (
+			<Grid {...me.props} id="test" ref="test" label="Test" store={me.props.store} model="product" card={card} />
+		);
 	}
 };
 

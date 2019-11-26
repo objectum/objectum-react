@@ -53,6 +53,7 @@ class Grid extends Component {
 			ready: false,
 			cols: [],
 			recs: [],
+			imageRecs: [],
 			page,
 			pageNum: 1,
 			pageRecs,
@@ -233,7 +234,7 @@ class Grid extends Component {
 			}
 			let result = await me.props.store.getData (opts);
 			
-			me.state.recs = result.recs;
+			state.recs = result.recs;
 			state.cols = _.sortBy (result.cols, ["order", "name"]);
 			me.position = result.position;
 			state.length = result.length;
@@ -247,6 +248,22 @@ class Grid extends Component {
 				result.recs.forEach (rec => {
 					me.nodeMap [rec.id] = rec;
 				});
+			}
+			me.colMap = {};
+			
+			state.cols.forEach (col => me.colMap [col.code] = col);
+			
+			if (me.props.card) {
+				let imageProperty = me.props.store.getProperty (me.colMap [me.props.card.image].property);
+				let imageModel = me.props.store.getModel (imageProperty.get ("type"));
+				let model = me.props.store.getModel (imageProperty.get ("model"));
+				let result = await me.props.store.getData ({
+					model: imageModel.getPath (),
+					offset: 0,
+					limit: me.state.pageRecs * 3,
+					filters: [["width", "in", [240,320]], [model.get ("code"), "in", _.map (state.recs, "id")]]
+				});
+				state.imageRecs = result.recs;
 			}
 			let hash = getHash (me);
 			
@@ -383,6 +400,114 @@ class Grid extends Component {
 		}
 	}
 	
+	renderTableView () {
+		let me = this;
+		
+		return (
+			<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-1 objectum-table">
+				<thead className="thead-dark">
+				<tr>
+					{me.props.tree && <th><i className="far fa-folder-open ml-2"></i></th>}
+					{me.state.cols.map ((col, i) => {
+						if (col.area === 0) {
+							return;
+						}
+						let cls = "";
+						let f = me.state.filters.find (f => {
+							if (f [0] == col.code) {
+								return true;
+							}
+						});
+						let name = i18n (col.name);
+						
+						if (f) {
+							cls = "font-italic";
+						}
+						let orderClass = "sort";
+						
+						if (col.code === me.state.order [0]) {
+							if (me.state.order [1] == "asc") {
+								orderClass = "sort-up";
+							} else {
+								orderClass = "sort-down";
+							}
+						}
+						return (
+							<th key={i} scope="col" className={cls}>
+								{me.props.system ?
+									<div>{name}</div> :
+									<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
+								}
+							</th>
+						);
+					})}
+				</tr>
+				</thead>
+				<tbody>
+				{me.state.recs.map ((rec, i) => {
+					let child = me.childMap [rec.id];
+					
+					return (
+						<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
+							{me.props.tree && <td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder"></i> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
+							{me.state.cols.map ((col, j) => {
+								if (col.area === 0) {
+									return;
+								}
+								return (
+									<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} /></td>
+								);
+							})}
+						</tr>
+					);
+				})}
+				</tbody>
+			</table>
+		);
+	}
+	
+	renderCardView () {
+		let me = this;
+		
+		if (!me.state.ready) {
+			return (<div />);
+		}
+		let card = me.props.card;
+		let imageProperty = me.props.store.getProperty (me.colMap [card.image].property);
+		let imageModel = me.props.store.getModel (imageProperty.get ("type"));
+		let model = me.props.store.getModel (imageProperty.get ("model"));
+
+		return (
+			<div className="row">
+				{me.state.recs.map ((rec, i) => {
+					let imageRec = _.find (me.state.imageRecs, {[model.get ("code")]: rec.id});
+					let src = `${me.props.store.getUrl ()}/files/${imageRec.id}-${imageModel.properties ["photo"].get ("id")}-${imageRec ["photo"]}`;
+					let text = [];
+					
+					card.text.forEach (code => {
+						if (rec [code] !== null) {
+							text.push (`${me.colMap [code].name}: ${rec [code]}`);
+						}
+					});
+					text = text.join (", ");
+					
+					return (
+						<div key={i} className="col">
+							<div key={i} className="card mb-2 bg-white shadow-sm" style={{width: "18rem"}}>
+								<img src={src} className="card-img-top" alt="..." />
+								<div className="card-body">
+									<h5 className="card-title">{rec [card.title]}</h5>
+									<p className="card-text">{text}</p>
+									<button className="btn btn-primary" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</button>
+								</div>
+							</div>
+						</div>
+					);
+				})}
+			</div>
+		);
+	}
+	
 	render () {
 		let me = this;
 		
@@ -400,66 +525,10 @@ class Grid extends Component {
 				{gridChildren && <div className="actions border p-1 bg-white shadow-sm">
 					{gridChildren}
 				</div>}
-				{me.props.tree && me.renderPosition ()}
-				<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-1 objectum-table">
-					<thead className="thead-dark">
-					<tr>
-						{me.props.tree && <th><i className="far fa-folder-open ml-2"></i></th>}
-						{me.state.cols.map ((col, i) => {
-							if (col.area === 0) {
-								return;
-							}
-							let cls = "";
-							let f = me.state.filters.find (f => {
-								if (f [0] == col.code) {
-									return true;
-								}
-							});
-							let name = i18n (col.name);
-							
-							if (f) {
-								cls = "font-italic";
-							}
-							let orderClass = "sort";
-							
-							if (col.code === me.state.order [0]) {
-								if (me.state.order [1] == "asc") {
-									orderClass = "sort-up";
-								} else {
-									orderClass = "sort-down";
-								}
-							}
-							return (
-								<th key={i} scope="col" className={cls}>
-									{me.props.system ?
-										<div>{name}</div> :
-										<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
-									}
-								</th>
-							);
-						})}
-					</tr>
-					</thead>
-					<tbody>
-						{me.state.recs.map ((rec, i) => {
-							let child = me.childMap [rec.id];
 
-							return (
-								<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-									{me.props.tree && <td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder"></i> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
-									{me.state.cols.map ((col, j) => {
-										if (col.area === 0) {
-											return;
-										}
-										return (
-											<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} /></td>
-										);
-									})}
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
+				{me.props.tree && me.renderPosition ()}
+
+				{me.props.card ? me.renderCardView () : me.renderTableView ()}
 				
 				{me.state.showFilters && <Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
 				
