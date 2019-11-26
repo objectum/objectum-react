@@ -226,7 +226,7 @@ class ObjectumApp extends Component {
 				<div className="container">
 					<div className="row">
 						<div className="col-sm-4 offset-sm-4 col-md-2 offset-md-5 col-lg-2 offset-lg-5">
-							<Auth store={me.store} />
+							<Auth store={me.store} name={me.props.name} />
 						</div>
 					</div>
 				</div>

@@ -20,11 +20,16 @@
     color: #b8d7f1;
     text-shadow: -1px -1px 1px #073255, 1px -1px 1px #073255, -1px 1px 1px #073255, 1px 1px 1px #073255;
 }
+.cute-text {
+    font-weight: bold;
+    font-style: italic;
+    color: #b8d7f1;
+    text-shadow: -1px -1px 1px #073255, 1px -1px 1px #073255, -1px 1px 1px #073255, 1px 1px 1px #073255;
+}
 .auth {
     border: 1px solid #efece4;
-    padding: 10px;
     margin: 5px;
-    width: 200px;
+    min-width: 250px;
 }
 .treegrid-button {
     width: 60px;

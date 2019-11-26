@@ -15,6 +15,10 @@ app.use (`/${code}`, proxy (`http://127.0.0.1:8200`, {
 		} else {
 			return `/projects/${code}${parts [0]}${queryString ? "?" + queryString : ""}`;
 		}
+	},
+	proxyErrorHandler: function (err, res) {
+		console.error (err.message);
+		res.send ({error: err.message});
 	}
 }));
 app.use (express.static (path.join (__dirname, "dist")));
