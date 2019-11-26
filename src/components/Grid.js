@@ -519,7 +519,7 @@ class Grid extends Component {
 					
 					return (
 						<div key={i} className="col">
-							<div key={i} className="card mb-2 bg-white shadow-sm" style={{width: "18rem"}}>
+							<div key={i} className="card my-1 bg-white shadow-sm" style={{width: "18rem"}}>
 								<img src={smallImage} className="card-img-top" alt="..." />
 								<div className="card-body">
 									<h5 className="card-title">{rec [card.title]}</h5>
