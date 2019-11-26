@@ -395,7 +395,9 @@ class Grid extends Component {
 		
 		return (
 			<div>
-				{me.props.label && <h5>{i18n (me.props.label)}</h5>}
+				{me.props.label && <div className="bg-white shadow-sm pl-1 pt-1 border mb-1">
+					<h5>{i18n (me.props.label)}</h5>
+				</div>}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
 				{gridChildren && <div className="actions border p-1 bg-white shadow-sm">
 					{gridChildren}
