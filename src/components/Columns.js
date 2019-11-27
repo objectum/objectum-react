@@ -15,6 +15,7 @@ class Columns extends Component {
 		me.onCreate = me.onCreate.bind (me);
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
+		me.onSynchronize = me.onSynchronize.bind (me);
 		me.state = {
 			removeConfirm: false,
 			refresh: false
@@ -56,6 +57,81 @@ class Columns extends Component {
 		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
 	}
 	
+	async onSynchronize () {
+		let me = this;
+		
+		try {
+			me.setState ({synchronizing: true});
+			
+			await me.props.store.startTransaction ("Synchronize columns");
+			
+			let query = me.props.store.getQuery (me.query);
+			
+			if (!query.get ("query")) {
+				return;
+			}
+			// remove duplicates
+			let columnResult = await me.props.store.getData ({
+				query: "objectum.column",
+				queryId: me.query,
+				offset: 0, limit: 1000
+			});
+			let columnRecs = columnResult.recs;
+			let columnMap = {};
+			
+			for (let i = 0; i < columnRecs.length; i ++) {
+				let rec = columnRecs [i];
+				
+				if (columnMap [rec.code]) {
+					await me.props.store.removeColumn (rec.id);
+				}
+				columnMap [rec.code] = me.props.store.getColumn (rec.id);
+			}
+			// create columns
+			let queryResult = await me.props.store.getData ({
+				query: query.getPath (),
+				offset: 0, limit: 1
+			});
+			let queryCols = queryResult.cols;
+			let colMap = {};
+			
+			for (let i = 0; i < queryCols.length; i ++) {
+				let col = queryCols [i];
+				let column = columnMap [col.code];
+				
+				colMap [col.code] = col;
+				
+				if (column) {
+					column.set ("order", i + 1);
+					await column.sync ();
+				} else {
+					column = await me.props.store.createColumn ({
+						query: query.getPath (),
+						name: col.name,
+						code: col.code,
+						order: i + 1,
+						area: 1
+					});
+					columnMap [col.code] = column;
+				}
+			}
+			// remove columns
+			for (let code in columnMap) {
+				let column = columnMap [code];
+				let col = colMap [column.get ("code")];
+				
+				if (!col) {
+					await me.props.store.removeColumn (column.get ("id"));
+				}
+			}
+			await me.props.store.commitTransaction ();
+		} catch (err) {
+			console.error (err);
+			await me.props.store.rollbackTransaction ();
+		}
+		me.setState ({synchronizing: false, refresh: !me.state.refresh});
+	}
+	
 	render () {
 		let me = this;
 		
@@ -66,6 +142,9 @@ class Columns extends Component {
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
+						<Action onClick={me.onSynchronize} disabled={me.state.synchronizing}>
+							<i className="fas fa-wrench mr-2" />{me.state.synchronizing ? i18n ("Synchronizing") : i18n ("Synchronize")}
+						</Action>
 					</Grid>
 				</div>
 				<Confirm label={i18n ("Are you sure?")} visible={me.state.removeConfirm} onClick={me.onRemove} />

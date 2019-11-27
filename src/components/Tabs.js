@@ -89,7 +89,7 @@ class Tabs extends Component {
 		}
 		return (
 			<div>
-				{me.props.label && <h5>{i18n (me.props.label)}</h5>}
+				{me.props.label && <h5 className="objectum-title ml-3">{i18n (me.props.label)}</h5>}
 				<ul className="nav nav-tabs">
 					{me.tabs.map ((item, i) => {
 						let active = "";

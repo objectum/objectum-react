@@ -79,7 +79,9 @@ class Column extends Component {
 									<SelectField property="area" label="Area" recs={areaRecs} value={me.state.area} />
 								</div>
 								<div className="form-group col-md-6">
+{/*
 									<NumberField property="columnWidth" label="Column width" />
+*/}
 								</div>
 							</div>
 							<div className="form-row">
