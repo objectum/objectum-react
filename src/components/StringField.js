@@ -11,10 +11,10 @@ class StringField extends Component {
 		
 		let me = this;
 		
-		me.onChange = me.onChange.bind (me);
 		me.state = {
 			value: me.props.value
 		};
+		me.onChange = me.onChange.bind (me);
 	}
 	
 	onChange (val) {

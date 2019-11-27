@@ -19,17 +19,39 @@ class Form extends Component {
 		
 		let me = this;
 		
+		me.fileMap = {};
+		me.map = {};
+		
+		me.onChange = me.onChange.bind (me);
+		me.onSave = me.onSave.bind (me);
+		me.onCreate = me.onCreate.bind (me);
+		me.onRefresh = me.onRefresh.bind (me);
+
 		me.state = {
 			ready: false,
 			rid: me.props.rid,
 			showLog: false
 		};
-		me.fileMap = {};
-		me.onChange = me.onChange.bind (me);
-		me.onSave = me.onSave.bind (me);
-		me.onCreate = me.onCreate.bind (me);
-		me.onRefresh = me.onRefresh.bind (me);
-		me.map = {};
+	}
+	
+	getValues (children) {
+		let me = this;
+		let values = {};
+
+		React.Children.forEach (children, (child, i) => {
+			if (!child.props) {
+				return;
+			}
+			let attr = child.props.attr || child.props.property || child.props.prop;
+			
+			if (attr) {
+				values [attr] = me.state [attr] || child.props.value || "";
+			} else
+			if (child.props.children) {
+				Object.assign (values, me.getValues (child.props.children));
+			}
+		});
+		return values;
 	}
 	
 	async componentDidMount () {
@@ -131,15 +153,17 @@ class Form extends Component {
 		await me.props.store.startTransaction (`Saving rsc: ${me.props.rsc}, rid: ${me.state.rid}`);
 		
 		let state = {saving: false};
+		let values = me.getValues (me.props.children);
 		
 		try {
 			for (let attr in me.map) {
 				let ma = me.map [attr];
 				
 //				if (me.state.hasOwnProperty (attr) && me.state [attr] !== me.map [attr].value) {
-//					let v = me.state [attr];
-				if (me.refs [attr].state.hasOwnProperty ("value")) {
-					let v = me.refs [attr].state.value;
+				if (values.hasOwnProperty (attr)) {
+					let v = values [attr];
+//				if (me.refs [attr].state.hasOwnProperty ("value")) {
+//					let v = me.refs [attr].state.value;
 					
 					if (v && (ma.type == 2 || ma.type >= 1000)) {
 						v = Number (v);
@@ -191,6 +215,7 @@ class Form extends Component {
 		await me.props.store.startTransaction (`Creating rsc: ${me.props.rsc}${me.props.mid ? `, mid: ${me.props.mid}` : ""}`);
 		
 		let state = {creating: false};
+		let values = me.getValues (me.props.children);
 		
 		try {
 			let attrs = {};
@@ -201,10 +226,10 @@ class Form extends Component {
 			for (let attr in me.map) {
 				let ma = me.map [attr];
 				
-//				if (me.state.hasOwnProperty (attr)) {
-//					let v = me.state [attr];
-				if (me.refs [attr].state.hasOwnProperty ("value")) {
-					let v = me.refs [attr].state.value;
+				if (values.hasOwnProperty (attr)) {
+					let v = values [attr];
+//				if (me.refs [attr].state.hasOwnProperty ("value")) {
+//					let v = me.refs [attr].state.value;
 					
 					if (v && (ma.type == 2 || ma.type >= 1000)) {
 						v = Number (v);
@@ -280,13 +305,14 @@ class Form extends Component {
 		return changed;
 	}
 	
-	renderChildren (children) {
+	renderChildren (children, parent = "") {
 		let me = this;
 		
-		return React.Children.map (children, child => {
+		return React.Children.map (children, (child, i) => {
 			if (!child.props) {
 				return child;
 			}
+			let key = `${parent}-${i}`;
 			let attr = child.props.attr || child.props.property || child.props.prop;
 			
 			if (attr) {
@@ -296,7 +322,7 @@ class Form extends Component {
 				me.map [attr] = me.map [attr] || {...child.props};
 				
 				if (child.type.name == "Field" && !type) {
-					return (<div />);
+					return (<div key={key} />);
 				}
 				let props2 = {
 					...me.map [attr],
@@ -306,7 +332,8 @@ class Form extends Component {
 					cls: me.cls,
 					store: me.props.store,
 					disabled: child.props.disabled,
-					ref: attr
+					ref: attr,
+					key
 				};
 				props2.rsc = props2.rsc || me.props.rsc;
 				
@@ -339,15 +366,15 @@ class Form extends Component {
 					if (type == 5) {
 						return (<FileField {...props2} />);
 					}
-					return (<div>unsupported type</div>);
+					return (<div key={key}>unsupported type</div>);
 				}
-				return React.cloneElement (child, props2);
+				return (React.cloneElement (child, props2));
 			}
 			if (child.props.children) {
 				let o = {};
 				
 				o.children = me.renderChildren (child.props.children);
-				return React.cloneElement (child, o);
+				return (React.cloneElement (child, o));
 			} else {
 				return child;
 			}
