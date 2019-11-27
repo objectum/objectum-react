@@ -558,39 +558,43 @@ class Grid extends Component {
 				{me.state.mode == "images" ? me.renderCardView () : me.renderTableView ()}
 				
 				{me.state.showFilters && <Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
-				
-				<div className="btn-toolbar bg-white border shadow-sm p-1" role="toolbar">
-					<div className="objectum-5em">
-						<div className="input-group">
-							<select className="custom-select" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange}>
-								<option value="10">10</option>
-								<option value="20">20</option>
-								<option value="30">30</option>
-								<option value="40">40</option>
-								<option value="50">50</option>
-							</select>
+
+				<div className="bg-white border shadow-sm p-1">
+					<div className="btn-toolbar" role="toolbar">
+						<div className="objectum-5em">
+							<div className="input-group">
+								<select className="custom-select" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange}>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+								</select>
+							</div>
+						</div>
+						<div className="btn-group mr-1" role="group">
+							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst}><i className="fas fa-angle-double-left"></i></button>
+							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev}><i className="fas fa-angle-left"></i></button>
+						</div>
+						<div className="objectum-5em">
+							<div className="input-group mr-1">
+								<input type="number" className="form-control" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} />
+							</div>
+						</div>
+						<div className="btn-group mr-1" role="group">
+							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}><i className="fas fa-angle-right"></i></button>
+							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right"></i></button>
+							<button type="button" className="btn btn-link" onClick={() => me.setState ({ready: false})}><i className="fas fa-sync"></i></button>
+							{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}><i className="fas fa-filter"></i></button>}
+							{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode}><i className="fas fa-camera"></i></button>}
 						</div>
 					</div>
-					<div className="btn-group mr-1" role="group">
-						<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst}><i className="fas fa-angle-double-left"></i></button>
-						<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev}><i className="fas fa-angle-left"></i></button>
-					</div>
-					<div className="objectum-5em">
-						<div className="input-group mr-1">
-							<input type="number" className="form-control" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} />
-						</div>
-					</div>
-					<div className="btn-group mr-1" role="group">
-						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}><i className="fas fa-angle-right"></i></button>
-						<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right"></i></button>
-						<button type="button" className="btn btn-link" onClick={() => me.setState ({ready: false})}><i className="fas fa-sync"></i></button>
-						{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}><i className="fas fa-filter"></i></button>}
-						{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode}><i className="fas fa-camera"></i></button>}
+					<div>
+						<small className="text-muted ml-3">
+							{me.getInfo ()}
+						</small>
 					</div>
 				</div>
-				<small className="text-muted ml-3">
-					{me.getInfo ()}
-				</small>
 			</div>
 		);
 	}
