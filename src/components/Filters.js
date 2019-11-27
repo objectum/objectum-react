@@ -299,7 +299,7 @@ class Filters extends Component {
 		let me = this;
 		
 		return (
-			<div className="border mb-1">
+			<div className="border bg-white mb-1">
 				<div className="mt-1 ml-3"><h5>{i18n ("Filters")}</h5></div>
 				<div className="px-1 pb-1">
 					<div className="row no-gutters">
