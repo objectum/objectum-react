@@ -181,7 +181,7 @@ class Filter extends Component {
 			showValue = false;
 		}
 		return (
-			<div className="border p-1 bg-white shadow-sm mb-2 text-center filter-block">
+			<div className="border p-1 bg-white shadow-sm mt-1 text-center filter-block">
 				<button type="button" className="btn btn-primary btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</button>
 				<select id="column" className="filter-select" value={me.state.column} onChange={me.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
@@ -299,17 +299,22 @@ class Filters extends Component {
 		let me = this;
 		
 		return (
-			<div className="row no-gutters">
-				{me.state.filters.map ((rec) => {
-					return (
-						<div className="col-sm-2 mr-1" key={"div-filter-" + rec.id}>
-							<Filter id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
+			<div className="border mb-1">
+				<div className="mt-1 ml-3"><h5>{i18n ("Filters")}</h5></div>
+				<div className="px-1 pb-1">
+					<div className="row no-gutters">
+						{me.state.filters.map ((rec) => {
+							return (
+								<div className="col-sm-2 mr-1" key={"div-filter-" + rec.id}>
+									<Filter id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
+								</div>
+							);
+						})}
+						<div className="col-sm-2">
+							<div className="border p-1 mt-1 bg-light shadow-sm filter-block text-center">
+								<button type="button" className="btn btn-primary btn-sm" onClick={me.onAdd}><i className="fas fa-plus mr-2"></i>{i18n ("Add filter")}</button>
+							</div>
 						</div>
-					);
-				})}
-				<div className="col-sm-2">
-					<div className="border p-1 bg-light shadow-sm mb-2 filter-block text-center">
-						<button type="button" className="btn btn-primary btn-sm" onClick={me.onAdd}><i className="fas fa-plus mr-2"></i>{i18n ("Add filter")}</button>
 					</div>
 				</div>
 			</div>
