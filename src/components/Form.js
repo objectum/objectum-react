@@ -12,6 +12,8 @@ import FileField from "./FileField";
 import {i18n} from "./../i18n";
 import ModelList from "./ModelList";
 import Log from "./Log";
+import Loading from "./Loading";
+import {timeout} from "./helper";
 
 class Form extends Component {
 	constructor (props) {
@@ -59,6 +61,8 @@ class Form extends Component {
 		let state = {};
 
 		try {
+			await timeout (100);
+			
 			if (me.props.rsc && me.props.rid) {
 				me.object = await me.props.store.getRsc (me.props.rsc, me.props.rid);
 				
@@ -389,6 +393,13 @@ class Form extends Component {
 		
 		if (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.mid && me.props.rsc == "record")) {
 			return (<div className="alert alert-danger" role="alert">need props: store, rsc, rid or mid (record)</div>);
+		}
+		if (!me.state.ready) {
+			return (
+				<div className="alert alert-light text-primary" role="alert">
+					<Loading />
+				</div>
+			);
 		}
 		return (
 			<div className="bg-white">

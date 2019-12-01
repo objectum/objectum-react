@@ -1,5 +1,11 @@
+"use strict";
+
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
+
+function timeout (ms = 500) {
+	return new Promise (resolve => setTimeout (() => resolve (), ms));
+};
 
 function getDateString (d) {
 	function pad (number) {
@@ -156,5 +162,6 @@ module.exports = {
 	getDateString,
 	pushLocation,
 	popLocation,
-	goRidLocation
+	goRidLocation,
+	timeout
 };

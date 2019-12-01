@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
+import {getHash, setHash, addHashListener, removeHashListener, timeout} from "./helper";
 import Cell from "./Cell";
 import Filters from "./Filters";
 import _ from "lodash";
@@ -13,64 +13,35 @@ class Grid extends Component {
 		super (props);
 		
 		let me = this;
-		let page = 1;
-		let pageRecs = me.props.pageRecs || 10;
-		let selected = null;
-		let showFilters = false;
-		let filters = [];
-		let order = [];
-		let parent = null;
-		let mode = me.props.mode || "table";
-		let hash = getHash (me);
+		let hash = getHash (me) [me.props.id];
 		
-		if (hash [me.props.id]) {
-			if (hash [me.props.id].page) {
-				page = Number (hash [me.props.id].page);
-			}
-			if (hash [me.props.id].pageRecs) {
-				pageRecs = Number (hash [me.props.id].pageRecs);
-			}
-			if (hash [me.props.id].hasOwnProperty ("selected")) {
-				selected = Number (hash [me.props.id].selected);
-			}
-			if (hash [me.props.id].hasOwnProperty ("showFilters")) {
-				showFilters = hash [me.props.id].showFilters;
-			}
-			if (hash [me.props.id].filters) {
-				filters = hash [me.props.id].filters;
-			}
-			if (hash [me.props.id].mode) {
-				mode = hash [me.props.id].mode;
-			}
-			if (hash [me.props.id].hasOwnProperty ("order")) {
-				order = hash [me.props.id].order;
-			}
-			if (hash [me.props.id].parent) {
-				parent = Number (hash [me.props.id].parent);
-				
-				if (me.props.onSelectParent) {
-					me.props.onSelectParent (parent);
-				}
-			}
-		}
 		me.state = {
-			ready: false,
+			loading: false,
+			refresh: false,
+			page: 1,
+			pageRecs: me.props.pageRecs || 10,
+			selected: null,
+			showFilters: false,
+			filters: [],
+			order: [],
+			parent: null,
+			mode: me.props.mode || "table",
 			cols: [],
 			recs: [],
 			imageRecs: [],
-			page,
-			pageNum: 1,
-			pageRecs,
-			mode,
-			selected,
-			showFilters,
-			filters,
-			order,
-			parent
+			pageNum: 1
 		};
+		if (hash) {
+			["page", "pageRecs", "selected", "parent", "showFilters", "filters", "mode", "order"].forEach (a => {
+				if (hash.hasOwnProperty (a)) {
+					me.state [a] = hash [a];
+				}
+			});
+		}
 		me.position = [];
 		me.childMap = {};
 		me.nodeMap = {};
+		me.colMap = {};
 		
 		me.onRowClick = me.onRowClick.bind (me);
 		me.onFolderClick = me.onFolderClick.bind (me);
@@ -88,64 +59,63 @@ class Grid extends Component {
 	
 	hashChange () {
 		let me = this;
-		let page = me.state.page;
-		let pageRecs = me.state.pageRecs;
-		let mode = me.state.mode;
-		let selected = me.state.selected;
-		let showFilters = me.state.showFilters;
-		let filters = me.state.filters;
-		let order = me.state.order;
-		let parent = me.state.parent;
-		let hash = getHash (me);
-		let ready = true;
+		let hash = getHash (me) [me.props.id];
+		let state = {};
 		
-		if (hash [me.props.id]) {
-			if (hash [me.props.id].page && hash [me.props.id].page != me.state.page) {
-				page = hash [me.props.id].page;
-				ready = false;
+		if (hash) {
+			if (!hash.hasOwnProperty ("parent")) {
+				hash.parent = null;
 			}
-			if (hash [me.props.id].pageRecs && hash [me.props.id].pageRecs != me.state.pageRecs) {
-				pageRecs = hash [me.props.id].pageRecs;
-				ready = false;
-			}
-			if (hash [me.props.id].mode && hash [me.props.id].mode != me.state.mode) {
-				mode = hash [me.props.id].mode;
-				ready = false;
-			}
-			if (hash [me.props.id].filters && JSON.stringify (hash [me.props.id].filters) != JSON.stringify (me.state.filters)) {
-				filters = hash [me.props.id].filters;
-				ready = false;
-			}
-			if (hash [me.props.id].hasOwnProperty ("order") && JSON.stringify (hash [me.props.id].order) !== JSON.stringify (me.state.order)) {
-				order = hash [me.props.id].order;
-				ready = false;
-			}
-			if (hash [me.props.id].hasOwnProperty ("selected") && hash [me.props.id].selected != me.state.selected) {
-				selected = hash [me.props.id].selected;
-			}
-			if (hash [me.props.id].hasOwnProperty ("showFilters") && hash [me.props.id].showFilters != me.state.showFilters) {
-				showFilters = hash [me.props.id].showFilters;
-			}
-			if ((hash [me.props.id].parent && hash [me.props.id].parent != me.state.parent) || (!hash [me.props.id].parent && me.state.parent)) {
-				parent = hash [me.props.id].parent || null;
-				
-				if (parent == "null") {
-					parent = null;
+			["page", "pageRecs", "selected", "parent", "showFilters", "filters", "mode", "order"].forEach (a => {
+				if (hash.hasOwnProperty (a) && JSON.stringify (hash [a]) !== JSON.stringify (me.state [a])) {
+					state [a] = hash [a];
 				}
-				ready = false;
-			}
+			});
 		}
-		if (parent != me.state.parent && me.props.onSelectParent) {
-			me.props.onSelectParent (parent);
-		}
-		if (selected != me.state.selected && me.props.onSelect) {
-			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
-		}
-		me.setState ({page, pageRecs, mode, selected, showFilters, filters, order, parent, ready});
+		me.setState (state);
 	}
 	
-	componentDidMount () {
-		addHashListener (this, this.hashChange);
+	async componentDidMount () {
+		let me = this;
+		
+		addHashListener (me, me.hashChange);
+
+		await me.load ();
+		
+		let selected = me.state.selected;
+		let parent = me.state.parent;
+		
+		if (parent !== null && me.props.onSelectParent) {
+			me.props.onSelectParent (parent);
+		}
+		if (selected !== null && me.props.onSelect) {
+			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
+		}
+	}
+	
+	async componentDidUpdate (prevProps, prevState) {
+		let me = this;
+		let needRefresh = false;
+		
+		["refresh", "params", "query", "model"].forEach (a => {
+			if (JSON.stringify (prevProps [a]) !== JSON.stringify (me.props [a])) {
+				needRefresh = true;
+			}
+		});
+		["refresh", "page", "pageRecs", "filters", "order", "parent", "mode"].forEach (a => {
+			if (JSON.stringify (prevState [a]) !== JSON.stringify (me.state [a])) {
+				needRefresh = true;
+			}
+		});
+		if (needRefresh) {
+			await me.load ();
+		}
+		if (prevState.parent !== me.state.parent && me.props.onSelectParent) {
+			me.props.onSelectParent (me.state.parent);
+		}
+		if (prevState.selected !== me.state.selected && me.props.onSelect) {
+			me.props.onSelect (me.state.recs [state.selected] && me.state.recs [me.state.selected].id);
+		}
 	}
 	
 	componentWillUnmount () {
@@ -225,8 +195,11 @@ class Grid extends Component {
 		let state = {
 			pageRecs: me.state.pageRecs
 		};
-		
 		try {
+			me.setState ({loading: true});
+		
+			await timeout (100);
+			
 			let opts = {
 				offset: (me.state.page - 1) * me.state.pageRecs,
 				limit: me.state.pageRecs,
@@ -280,16 +253,6 @@ class Grid extends Component {
 				});
 				state.imageRecs = result.recs;
 			}
-			let hash = getHash (me);
-			
-			if (me.props.id && hash [me.props.id]) {
-				if (hash [me.props.id].page) {
-					state.page = Number (hash [me.props.id].page);
-				}
-				if (hash [me.props.id].pageRecs) {
-					state.pageRecs = Number (hash [me.props.id].pageRecs);
-				}
-			}
 			state.pageNum = state.length / state.pageRecs | 0;
 			
 			if (state.length % state.pageRecs) {
@@ -299,17 +262,18 @@ class Grid extends Component {
 				let c = state.cols [i];
 				
 				if (c.type >= 1000) {
-					let m = await me.props.store.getModel (c.type);
+					let m = me.props.store.getModel (c.type);
 					
 					if (m.isDictionary ()) {
 						c.recs = await me.props.store.getDict (c.type);
 					}
 				}
 			}
-			state.ready = true;
 		} catch (err) {
 			state.error = err.message;
 		}
+		state.loading = false;
+		
 		me.setState (state);
 	}
 
@@ -347,7 +311,7 @@ class Grid extends Component {
 				}
 			}
 			if (child.type && child.type.name == "Action") {
-				if (!me.state.ready || (child.props.onClickSelected && me.state.selected === null)) {
+				if (child.props.onClickSelected && me.state.selected === null) {
 					o.disabled = true;
 				}
 			}
@@ -356,18 +320,6 @@ class Grid extends Component {
 			}
 			return React.cloneElement (child, o);
 		});
-	}
-	
-	componentDidUpdate (prevProps) {
-		let me = this;
-		
-		if (prevProps.refresh !== me.props.refresh ||
-			JSON.stringify (prevProps.params) != JSON.stringify (me.props.params) ||
-			prevProps.query != me.props.query ||
-			prevProps.model != me.props.model
-		) {
-			me.setState ({ready: false});
-		}
 	}
 	
 	renderPosition () {
@@ -379,7 +331,7 @@ class Grid extends Component {
 				<nav aria-label="breadcrumb">
 					<ol className="breadcrumb">
 						<li className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
-							<button type="button" className="btn btn-link btn-sm" onClick={() => me.onFolderClick (null)} disabled={!active}><i className="fas fa-home"></i></button>
+							<button type="button" className="btn btn-link btn-sm" onClick={() => me.onFolderClick (null)} disabled={!active}><i className="fas fa-home" /></button>
 						</li>
 						{me.position.map ((rec, i) => {
 							active = i < me.position.length - 1;
@@ -396,33 +348,17 @@ class Grid extends Component {
 		);
 	}
 	
-	init () {
-		let me = this;
-		
-		if (!me.state.ready || me.initialized) {
-			return;
-		}
-		me.initialized = true;
-		
-		let selected = me.state.selected;
-		let parent = me.state.parent;
-		
-		if (parent !== null && me.props.onSelectParent) {
-			me.props.onSelectParent (parent);
-		}
-		if (selected !== null && me.props.onSelect) {
-			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
-		}
-	}
-	
 	renderTableView () {
 		let me = this;
 		
+		if (!me.state.cols.length) {
+			return (<div />);
+		}
 		return (
-			<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-1 objectum-table">
+			<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-0 objectum-table">
 				<thead className="thead-dark">
 				<tr>
-					{me.props.tree && <th><i className="far fa-folder-open ml-2"></i></th>}
+					{me.props.tree && <th><i className="far fa-folder-open ml-2" /></th>}
 					{me.state.cols.map ((col, i) => {
 						if (col.area === 0) {
 							return;
@@ -464,7 +400,7 @@ class Grid extends Component {
 					
 					return (
 						<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-							{me.props.tree && <td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder"></i> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
+							{me.props.tree && <td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 							{me.state.cols.map ((col, j) => {
 								if (col.area === 0) {
 									return;
@@ -483,11 +419,11 @@ class Grid extends Component {
 	
 	renderCardView () {
 		let me = this;
+		let card = me.props.card;
 		
-		if (!me.state.ready) {
+		if (!me.colMap [card.image]) {
 			return (<div />);
 		}
-		let card = me.props.card;
 		let imageProperty = me.props.store.getProperty (me.colMap [card.image].property);
 		let imageModel = me.props.store.getModel (imageProperty.get ("type"));
 		let model = me.props.store.getModel (imageProperty.get ("model"));
@@ -537,13 +473,7 @@ class Grid extends Component {
 	
 	render () {
 		let me = this;
-		
-		if (!me.state.ready && !me.state.error) {
-			me.load ();
-		}
-		me.init ();
-		
-		const gridChildren = me.renderChildren (me.props.children);
+		let gridChildren = me.renderChildren (me.props.children);
 		
 		return (
 			<div>
@@ -554,12 +484,12 @@ class Grid extends Component {
 				</div>}
 
 				{me.props.tree && me.renderPosition ()}
-
+				
 				{me.state.mode == "images" ? me.renderCardView () : me.renderTableView ()}
 				
 				{me.state.showFilters && <Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
 
-				<div className="bg-white border shadow-sm p-1">
+				<div className="bg-white border shadow-sm p-1 mt-1">
 					<div className="btn-toolbar" role="toolbar">
 						<div className="objectum-5em">
 							<div className="input-group">
@@ -573,8 +503,8 @@ class Grid extends Component {
 							</div>
 						</div>
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst}><i className="fas fa-angle-double-left"></i></button>
-							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev}><i className="fas fa-angle-left"></i></button>
+							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst}><i className="fas fa-angle-double-left"/></button>
+							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev}><i className="fas fa-angle-left"/>></button>
 						</div>
 						<div className="objectum-5em">
 							<div className="input-group mr-1">
@@ -582,11 +512,18 @@ class Grid extends Component {
 							</div>
 						</div>
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}><i className="fas fa-angle-right"></i></button>
-							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right"></i></button>
-							<button type="button" className="btn btn-link" onClick={() => me.setState ({ready: false})}><i className="fas fa-sync"></i></button>
-							{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}><i className="fas fa-filter"></i></button>}
-							{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode}><i className="fas fa-camera"></i></button>}
+							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}><i className="fas fa-angle-right"/></button>
+							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right" /></button>
+							{me.state.loading ?
+								<span className="spinner-border spinner-border-sm text-primary refresh-btn-loading" role="status" aria-hidden="true"/> :
+								<button type="button" className="btn btn-link" onClick={() => me.setState ({refresh: ! me.state.refresh})}><i className="fas fa-sync" /></button>
+							}
+							{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}>
+								<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} />
+							</button>}
+							{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode}>
+								<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`} />
+							</button>}
 						</div>
 					</div>
 					<div>

@@ -168,7 +168,7 @@ class Filter extends Component {
 	componentDidUpdate (prevProps) {
 		let me = this;
 		
-		if (!prevProps.cols.length) {
+		if (prevProps.cols.length != me.props.cols.length) {
 			me.setState ({operatorRecs: me.getOperatorRecs (me.state.column)});
 		}
 	}
@@ -299,7 +299,7 @@ class Filters extends Component {
 		let me = this;
 		
 		return (
-			<div className="border bg-white mb-1">
+			<div className="border bg-white my-1">
 				<div className="mt-1 ml-3"><h5>{i18n ("Filters")}</h5></div>
 				<div className="px-1 pb-1">
 					<div className="row no-gutters">

@@ -84,5 +84,6 @@
 	"image": "изображение",
 	"synchronize": "синхронизировать",
 	"synchronizing": "синхронизация",
-	"filters": "фильтры"
+	"filters": "фильтры",
+	"loading": "загрузка"
 }

@@ -101,3 +101,8 @@
 .jsoneditor-codemirror {
     height: 300px;
 }
+.refresh-btn-loading {
+    margin-top: 8px;
+    margin-left: 11px;
+    margin-right: 10px;
+}
