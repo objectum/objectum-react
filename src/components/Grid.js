@@ -19,7 +19,7 @@ class Grid extends Component {
 			loading: false,
 			refresh: false,
 			page: 1,
-			pageRecs: me.props.pageRecs || 10,
+			pageRecs: me.props.pageRecs || 20,
 			selected: null,
 			showFilters: false,
 			filters: [],
@@ -355,7 +355,7 @@ class Grid extends Component {
 			return (<div />);
 		}
 		return (
-			<table className="table table-hover table-bordered p-1 bg-white shadow-sm mt-1 mb-0 objectum-table">
+			<table className="table table-hover table-striped table-bordered p-1 bg-white shadow-sm mt-1 mb-0 objectum-table">
 				<thead className="thead-dark">
 				<tr>
 					{me.props.tree && <th><i className="far fa-folder-open ml-2" /></th>}
@@ -406,7 +406,7 @@ class Grid extends Component {
 									return;
 								}
 								return (
-									<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} /></td>
+									<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} /></td>
 								);
 							})}
 						</tr>

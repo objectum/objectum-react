@@ -7,19 +7,27 @@ function timeout (ms = 500) {
 	return new Promise (resolve => setTimeout (() => resolve (), ms));
 };
 
+function pad (number) {
+	let r = String (number);
+	
+	if (r.length === 1) {
+		r = "0" + r;
+	}
+	return r;
+};
+
 function getDateString (d) {
-	function pad (number) {
-		let r = String (number);
-		
-		if (r.length === 1) {
-			r = "0" + r;
-		}
-		return r;
-	};
 	if (!d || typeof d == "string") {
 		return d;
 	}
 	return d.getFullYear () + "-" + pad (d.getMonth () + 1) + "-" + pad (d.getDate ());
+};
+
+function getTimestampString (d) {
+	if (!d || typeof d == "string") {
+		return d;
+	}
+	return `${d.getFullYear ()}-${pad (d.getMonth () + 1)}-${pad (d.getDate ())} ${pad (d.getHours ())}:${pad (d.getMinutes ())}:${pad (d.getSeconds ())}`;
 };
 
 let localHash = {};
@@ -160,6 +168,7 @@ module.exports = {
 	loadCSS,
 	loadJS,
 	getDateString,
+	getTimestampString,
 	pushLocation,
 	popLocation,
 	goRidLocation,

@@ -22,6 +22,14 @@ class DateField extends Component {
 		me.props.onChange (val);
 	}
 	
+	async componentDidUpdate (prevProps) {
+		let me = this;
+		
+		if (prevProps.value !== me.props.value) {
+			me.setState ({value: me.props.value});
+		}
+	}
+	
 	render () {
 		let me = this;
 		let id = me.props.attr || me.props.property || me.props.prop;

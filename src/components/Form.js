@@ -30,7 +30,9 @@ class Form extends Component {
 		me.onRefresh = me.onRefresh.bind (me);
 
 		me.state = {
-			ready: false,
+			loading: false,
+			saving: false,
+			creating: false,
 			rid: me.props.rid,
 			showLog: false
 		};
@@ -58,9 +60,11 @@ class Form extends Component {
 	
 	async componentDidMount () {
 		let me = this;
-		let state = {};
+		let state = {loading: false};
 
 		try {
+			me.setState ({loading: true});
+			
 			await timeout (100);
 			
 			if (me.props.rsc && me.props.rid) {
@@ -102,7 +106,7 @@ class Form extends Component {
 				}
 				me.map [attr].value = value;
 			}
-			state.ready = true;
+			//state.ready = true;
 		} catch (err) {
 			state.error = err.message;
 			console.log (err.stack);
@@ -154,6 +158,8 @@ class Form extends Component {
 			return;
 		}
 		me.setState ({saving: true});
+
+		await timeout (100);
 		await me.props.store.startTransaction (`Saving rsc: ${me.props.rsc}, rid: ${me.state.rid}`);
 		
 		let state = {saving: false};
@@ -184,7 +190,7 @@ class Form extends Component {
 				}
 			}
 			await me.object.sync ();
-
+			
 			for (let attr in me.map) {
 				if (me.fileMap [attr]) {
 					let cls = me.props.store.getModel (me.object.get ("_model"));
@@ -199,6 +205,10 @@ class Form extends Component {
 				}
 			}
 			await me.props.store.commitTransaction ();
+
+			for (let attr in me.map) {
+				state [attr] = me.object.get (attr);
+			}
 			state.error = "";
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
@@ -216,6 +226,7 @@ class Form extends Component {
 		}
 		me.setState ({creating: true});
 		
+		await timeout (100);
 		await me.props.store.startTransaction (`Creating rsc: ${me.props.rsc}${me.props.mid ? `, mid: ${me.props.mid}` : ""}`);
 		
 		let state = {creating: false};
@@ -254,6 +265,9 @@ class Form extends Component {
 			state.error = "";
 			await me.props.store.commitTransaction ();
 			
+			for (let attr in me.map) {
+				state [attr] = me.object.get (attr);
+			}
 			if (me.props.onCreate) {
 				me.props.onCreate (state.rid);
 			}
@@ -388,13 +402,11 @@ class Form extends Component {
 	render () {
 		let me = this;
 		let formChildren = me.renderChildren (me.props.children);
-		let createDisabled = me.state.creating;
-		let saveDisabled = !me.isChanged () || me.state.saving;
 		
 		if (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.mid && me.props.rsc == "record")) {
 			return (<div className="alert alert-danger" role="alert">need props: store, rsc, rid or mid (record)</div>);
 		}
-		if (!me.state.ready) {
+		if (me.state.loading && !me.object) {
 			return (
 				<div className="alert alert-light text-primary" role="alert">
 					<Loading />
@@ -404,17 +416,27 @@ class Form extends Component {
 		return (
 			<div className="bg-white">
 				{me.props.label && <h5 className="objectum-title ml-3">{me.props.label}</h5>}
-				{me.state.ready && me.state.rid && <div className="mb-1 actions border p-1 bg-white shadow-sm">
-					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={saveDisabled}><i className="fas fa-save mr-2"></i> {i18n (me.state.saving ? "Saving" : "Save")}</button>
+				{me.state.rid && <div className="mb-1 actions border p-1 bg-white shadow-sm">
+					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving}>
+						{me.state.saving ?
+							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
+							<span><i className="fas fa-save mr-2"/>{i18n ("Save")}</span>
+						}
+					</button>
 					{me.props.rsc == "record" && <button type="button" className="btn btn-primary" onClick={() => me.setState ({showLog: !me.state.showLog})}><i className="fas fa-history mr-2"></i>{i18n ("Log")}</button>}
 				</div>}
 				{me.state.showLog && <Log form={me} />}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-				{me.state.ready && <div className="actions border p-1 bg-white shadow-sm">
+				<div className="actions border p-1 bg-white shadow-sm">
 					{formChildren}
-				</div>}
-				{me.state.ready && !me.state.rid && <div className="mt-1 actions border p-1 bg-white shadow-sm">
-					<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={createDisabled}><i className="fas fa-plus-circle mr-2"></i> {i18n (me.state.creating ? "Creating" : "Create")}</button>
+				</div>
+				{!me.state.rid && <div className="mt-1 actions border p-1 bg-white shadow-sm">
+					<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state.creating}>
+						{me.state.creating ?
+							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
+							<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>
+						}
+					</button>
 				</div>}
 			</div>
 		);

@@ -4,7 +4,7 @@
 import React, {Component} from "react";
 import {i18n} from "../i18n";
 import _ from "lodash";
-import {getDateString} from "./helper";
+import {getTimestampString} from "./helper";
 
 class Log extends Component {
 	constructor (props) {
@@ -63,16 +63,18 @@ class Log extends Component {
 							<th>{i18n ("Value")}</th>
 							<th>{i18n ("Comment")}</th>
 							<th>{i18n ("IP-address")}</th>
+							<th>{i18n ("User")}</th>
 						</tr>
 					</thead>
 					<tbody>
 					{me.state.recs.map ((rec, i) => {
 						return (
 							<tr key={i}>
-								<td key={"date-" + i}>{getDateString (rec.date)}</td>
+								<td key={"date-" + i}>{getTimestampString (rec.date)}</td>
 								<td key={"value-" + i}>{rec.value || ""}</td>
 								<td key={"description-" + i}>{rec.description || ""}</td>
 								<td key={"remote_addr-" + i}>{rec.remote_addr || ""}</td>
+								<td key={"user-" + i}>{`${rec.login || "admin"}${rec.user_id ? ` (${rec.user_id})`: ""}`}</td>
 							</tr>
 						);
 					})}

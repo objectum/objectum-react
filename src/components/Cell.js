@@ -25,6 +25,16 @@ class Cell extends Component {
 				// Boolean
 				return (<input type="checkbox" checked={value} disabled />);
 			} else
+			if (col.type == 5) {
+				// File
+				return (
+					<span>
+						<a target="_blank" rel="noopener noreferrer"
+						   href={`${me.props.store.getUrl ()}/files/${me.props.rec.id}-${me.props.col.property}-${value}`}>{value}
+						</a>
+					</span>
+				);
+			} else
 			if (col.type == 6) {
 				// Class
 				let cls = me.props.store.getModel (value);

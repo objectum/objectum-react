@@ -51,6 +51,14 @@ class StringField extends Component {
 			}
 		}
 	}
+
+	async componentDidUpdate (prevProps) {
+		let me = this;
+		
+		if (prevProps.value !== me.props.value) {
+			me.setState ({value: me.props.value});
+		}
+	}
 	
 	render () {
 		let me = this;
