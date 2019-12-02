@@ -190,14 +190,33 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Router>
-						<div id="header" className="fixed-top text-light bg-secondary">
+						<div className="fixed-top text-light bg-dark">
+							<button className="btn btn-primary" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
+								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
+							</button>
+							<span className="ml-3 text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
+						</div>
+{/*
+						<div id="header" className="fixed-top text-light bg-dark">
 							<h3>{me.props.name || "Objectum"}</h3>
 						</div>
-						<div className="fixed-top">
+*/}
+{/*
+						<nav className="navbar navbar-dark bg-primary">
 							<button className="btn btn-dark" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
 								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
 							</button>
+							<div className="navbar-brand text-white header">{me.props.name || "Objectum"}</div>
+							<div />
+						</nav>
+*/}
+{/*
+						<div className="fixed-top">
+							<button className="btn btn-primary" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
+								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
+							</button>
 						</div>
+*/}
 						<div className="container-fluid">
 							<Sidebar
 								sidebar={me.renderMenu ()}
@@ -224,8 +243,8 @@ class ObjectumApp extends Component {
 		} else {
 			return (
 				<div>
-					<div id="header" className="fixed-top text-light bg-secondary">
-						<h3>{me.props.name || "Objectum"}</h3>
+					<div id="header" className="fixed-top text-light bg-dark">
+						<span className="text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
 					</div>
 					<div className="container">
 						<div className="row">
