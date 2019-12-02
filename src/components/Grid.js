@@ -7,6 +7,8 @@ import Cell from "./Cell";
 import Filters from "./Filters";
 import _ from "lodash";
 import {i18n} from "./../i18n";
+import ReactTooltip from "react-tooltip";
+import GridColumns from "./GridColumns";
 
 class Grid extends Component {
 	constructor (props) {
@@ -29,10 +31,12 @@ class Grid extends Component {
 			cols: [],
 			recs: [],
 			imageRecs: [],
+			showCols: false,
+			hideCols: [],
 			pageNum: 1
 		};
 		if (hash) {
-			["page", "pageRecs", "selected", "parent", "showFilters", "filters", "mode", "order"].forEach (a => {
+			["page", "pageRecs", "selected", "parent", "showFilters", "filters", "mode", "order", "showCols", "hideCols"].forEach (a => {
 				if (hash.hasOwnProperty (a)) {
 					me.state [a] = hash [a];
 				}
@@ -51,10 +55,12 @@ class Grid extends Component {
 		me.onNext = me.onNext.bind (me);
 		me.onLast = me.onLast.bind (me);
 		me.onShowFilters = me.onShowFilters.bind (me);
+		me.onShowCols = me.onShowCols.bind (me);
 		me.onImageMode = me.onImageMode.bind (me);
 		me.hashChange = me.hashChange.bind (me);
 		me.onFilter = me.onFilter.bind (me);
 		me.onOrder = me.onOrder.bind (me);
+		me.onHideCols = me.onHideCols.bind (me);
 	}
 	
 	hashChange () {
@@ -66,7 +72,7 @@ class Grid extends Component {
 			if (!hash.hasOwnProperty ("parent")) {
 				hash.parent = null;
 			}
-			["page", "pageRecs", "selected", "parent", "showFilters", "filters", "mode", "order"].forEach (a => {
+			["page", "pageRecs", "selected", "parent", "showFilters", "filters", "mode", "order", "showCols", "hideCols"].forEach (a => {
 				if (hash.hasOwnProperty (a) && JSON.stringify (hash [a]) !== JSON.stringify (me.state [a])) {
 					state [a] = hash [a];
 				}
@@ -166,12 +172,20 @@ class Grid extends Component {
 		setHash (this, {[this.props.id]: {showFilters: !this.state.showFilters}});
 	}
 	
+	onShowCols () {
+		setHash (this, {[this.props.id]: {showCols: !this.state.showCols}});
+	}
+	
 	onImageMode () {
 		setHash (this, {[this.props.id]: {mode: this.state.mode == "images" ? "table" : "images"}});
 	}
 	
 	onFilter (filters) {
 		setHash (this, {[this.props.id]: {filters}});
+	}
+	
+	onHideCols (hideCols) {
+		setHash (this, {[this.props.id]: {hideCols}});
 	}
 	
 	onOrder (colCode) {
@@ -241,6 +255,13 @@ class Grid extends Component {
 			
 			state.cols.forEach (col => me.colMap [col.code] = col);
 			
+			if (!me.state.hideCols.length) {
+				state.cols.forEach (col => {
+					if (col.area === 0) {
+						me.state.hideCols.push (col.code);
+					}
+				});
+			}
 			if (me.props.card) {
 				let imageProperty = me.props.store.getProperty (me.colMap [me.props.card.image].property);
 				let imageModel = me.props.store.getModel (imageProperty.get ("type"));
@@ -360,7 +381,8 @@ class Grid extends Component {
 				<tr>
 					{me.props.tree && <th><i className="far fa-folder-open ml-2" /></th>}
 					{me.state.cols.map ((col, i) => {
-						if (col.area === 0) {
+						//if (col.area === 0) {
+						if (me.state.hideCols.indexOf (col.code) > -1) {
 							return;
 						}
 						let cls = "";
@@ -402,7 +424,8 @@ class Grid extends Component {
 						<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
 							{me.props.tree && <td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 							{me.state.cols.map ((col, j) => {
-								if (col.area === 0) {
+								//if (col.area === 0) {
+								if (me.state.hideCols.indexOf (col.code) > -1) {
 									return;
 								}
 								return (
@@ -470,7 +493,7 @@ class Grid extends Component {
 			</div>
 		);
 	}
-	
+
 	render () {
 		let me = this;
 		let gridChildren = me.renderChildren (me.props.children);
@@ -489,11 +512,13 @@ class Grid extends Component {
 				
 				{me.state.showFilters && <Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
 
+				{me.state.showCols && <GridColumns cols={me.state.cols} store={me.props.store} onHideCols={me.onHideCols} hideCols={me.state.hideCols} />}
+
 				<div className="bg-white border shadow-sm p-1 mt-1">
 					<div className="btn-toolbar" role="toolbar">
 						<div className="objectum-5em">
 							<div className="input-group">
-								<select className="custom-select" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange}>
+								<select className="custom-select" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange} data-tip={i18n ("Records on page")}>
 									<option value="10">10</option>
 									<option value="20">20</option>
 									<option value="30">30</option>
@@ -503,25 +528,40 @@ class Grid extends Component {
 							</div>
 						</div>
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst}><i className="fas fa-angle-double-left"/></button>
-							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev}><i className="fas fa-angle-left"/>></button>
+							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst} data-tip={i18n ("First page")}>
+								<i className="fas fa-angle-double-left"/>
+							</button>
+							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev} data-tip={i18n ("Previous page")}>
+								<i className="fas fa-angle-left"/>
+							</button>
 						</div>
 						<div className="objectum-5em">
 							<div className="input-group mr-1">
-								<input type="number" className="form-control" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} />
+								<input type="number" className="form-control" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} data-tip={i18n ("Page")} />
 							</div>
 						</div>
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}><i className="fas fa-angle-right"/></button>
-							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}><i className="fas fa-angle-double-right" /></button>
-							{me.state.loading ?
-								<span className="spinner-border spinner-border-sm text-primary refresh-btn-loading" role="status" aria-hidden="true"/> :
-								<button type="button" className="btn btn-link" onClick={() => me.setState ({refresh: ! me.state.refresh})}><i className="fas fa-sync" /></button>
-							}
+							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext} data-tip={i18n ("Next page")}>
+								<i className="fas fa-angle-right"/>
+							</button>
+							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast} data-tip={i18n ("Last page")}>
+								<i className="fas fa-angle-double-right" />
+							</button>
+							<span data-tip={i18n ("Refresh")}>
+								{me.state.loading ?
+									<span className="spinner-border spinner-border-sm text-primary refresh-btn-loading" role="status" aria-hidden="true"/> :
+									<button type="button" className="btn btn-link" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
+										<i className="fas fa-sync" />
+									</button>
+								}
+							</span>
 							{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}>
-								<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} />
+								<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} data-tip={i18n ("Filters")} />
 							</button>}
-							{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode}>
+							{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowCols} data-tip={i18n ("Columns")}>
+								<i className={`fas fa-eye ${me.state.showCols ? "border-bottom border-primary" : ""}`} />
+							</button>}
+							{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
 								<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`} />
 							</button>}
 						</div>
@@ -532,6 +572,7 @@ class Grid extends Component {
 						</small>
 					</div>
 				</div>
+				<ReactTooltip />
 			</div>
 		);
 	}
