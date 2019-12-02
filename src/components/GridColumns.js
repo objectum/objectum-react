@@ -44,9 +44,9 @@ class GridColumns extends Component {
 		let me = this;
 		
 		return (
-			<div className="border bg-white my-1 p-1">
+			<div className="border bg-white my-1">
 				<div className="mt-1 ml-3"><h5>{i18n ("Columns")}</h5></div>
-				<table className="table table-bordered p-1 bg-white shadow-sm objectum-table mb-0">
+				<table className="table table-bordered p-1 m-1 bg-white shadow-sm objectum-table mb-0">
 					<thead className="thead-dark">
 						<tr>
 							{me.props.cols.map ((col, i) => {

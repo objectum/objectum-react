@@ -241,6 +241,11 @@ class Grid extends Component {
 			me.position = result.position;
 			state.length = result.length;
 			
+/*
+			if (me.state.selected > state.recs.length - 1) {
+				state.selected = null;
+			}
+*/
 			me.childMap = {};
 			
 			if (me.props.tree) {
