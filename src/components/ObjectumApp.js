@@ -205,7 +205,7 @@ class ObjectumApp extends Component {
 								onSetOpen={this.onSetSidebarOpen}
 								styles={{ sidebar: { background: "white" } }}
 							>
-								<div id="content">
+								<div className="container content">
 									{me.renderRoutes ()}
 								</div>
 							</Sidebar>
@@ -223,10 +223,15 @@ class ObjectumApp extends Component {
 			);
 		} else {
 			return (
-				<div className="container">
-					<div className="row">
-						<div className="col-sm-4 offset-sm-4 col-md-2 offset-md-5 col-lg-2 offset-lg-5">
-							<Auth store={me.store} name={me.props.name} />
+				<div>
+					<div id="header" className="fixed-top text-light bg-secondary">
+						<h3>{me.props.name || "Objectum"}</h3>
+					</div>
+					<div className="container">
+						<div className="row">
+							<div className="col-sm-4 offset-sm-4 col-md-2 offset-md-5 col-lg-2 offset-lg-5">
+								<Auth store={me.store} />
+							</div>
 						</div>
 					</div>
 				</div>

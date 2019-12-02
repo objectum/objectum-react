@@ -3,7 +3,6 @@ import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import store from "objectum-client";
 import {ObjectumApp, ObjectumRoute, Grid} from '../../src'
-import {i18n} from "../../src/i18n";
 import {pushLocation} from "../../src/components/helper";
 
 class Test extends Component {

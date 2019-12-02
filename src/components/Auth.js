@@ -70,9 +70,6 @@ class Auth extends Component {
 		}
 		return (
 			<div className="auth shadow bg-white mb-5">
-				<div className="text-light bg-secondary cute-text pl-3 pb-1 pt-2">
-					<h3>{me.props.name || "Objectum"}</h3>
-				</div>
 				<div className="p-3">
 					<h5><i className="fas fa-user mr-2 mb-2" />{i18n ("Sign in")}</h5>
 					<div className="form-group row">
