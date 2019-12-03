@@ -9,7 +9,6 @@ import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
 import Properties from "./Properties";
-import Back from "./Back";
 import JsonEditor from "./JsonEditor";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
@@ -50,7 +49,6 @@ class Model extends Component {
 
 		return (
 			<div>
-				<Back {...me.props} />
 				<Tabs key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + me.state.label}>
 					<Tab key="tab1" label="Information">
 						<Form key="form1" ref="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>

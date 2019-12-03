@@ -7,7 +7,6 @@ import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
 import MenuItems from "./MenuItems";
-import Back from "./Back";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -49,7 +48,6 @@ class Menu extends Component {
 		
 		return (
 			<div>
-				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Menu") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu" onCreate={me.onCreate}>

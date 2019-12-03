@@ -9,7 +9,6 @@ import Tabs from "./Tabs";
 import Columns from "./Columns";
 import ChooseField from "./ChooseField";
 import Queries from "./Queries";
-import Back from "./Back";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -49,7 +48,6 @@ class Query extends Component {
 		
 		return (
 			<div>
-				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Query") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid} onCreate={me.onCreate}>

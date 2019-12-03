@@ -3,7 +3,6 @@ import Action from "./Action";
 import Confirm from "./Confirm";
 import Grid from "./Grid";
 import {i18n} from "./../i18n";
-import {pushLocation} from "./helper";
 
 class Menus extends Component {
 	constructor (props) {
@@ -23,8 +22,6 @@ class Menus extends Component {
 	onCreate () {
 		let me = this;
 		
-		pushLocation ();
-		
 		me.props.history.push ({
 			pathname: "/menu/new"
 		});
@@ -32,8 +29,6 @@ class Menus extends Component {
 	
 	onEdit (id) {
 		let me = this;
-		
-		pushLocation ();
 		
 		me.props.history.push ({
 			pathname: "/menu/" + id

@@ -6,7 +6,6 @@ import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
-import Back from "./Back";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -48,7 +47,6 @@ class Role extends Component {
 		
 		return (
 			<div>
-				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Role") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.role" onCreate={me.onCreate}>

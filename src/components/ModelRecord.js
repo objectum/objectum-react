@@ -7,7 +7,6 @@ import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
 import ModelList from "./ModelList";
-import Back from "./Back";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 import _ from "lodash";
@@ -151,7 +150,6 @@ class ModelRecord extends Component {
 		
 		return (
 			<div>
-				<Back {...me.props} />
 				<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 					<Tab key={`tab1-${me.state.model}`} label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>

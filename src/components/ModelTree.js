@@ -3,7 +3,6 @@ import Action from "./Action";
 import Confirm from "./Confirm";
 import Grid from "./Grid";
 import {i18n} from "./../i18n";
-import {pushLocation} from "./helper";
 
 class ModelTree extends Component {
 	constructor (props) {
@@ -31,8 +30,6 @@ class ModelTree extends Component {
 			opts.parentModel = me.props.parentModel;
 			opts.parentId = me.props.parentId;
 		}
-		pushLocation ();
-		
 		me.props.history.push ({
 			pathname: "/model_record/new#" + JSON.stringify ({opts})
 		});
@@ -47,8 +44,6 @@ class ModelTree extends Component {
 			opts.parentModel = me.props.parentModel;
 			opts.parentId = me.props.parentId;
 		}
-		pushLocation ();
-		
 		me.props.history.push ({
 			pathname: "/model_record/" + id + "#" + JSON.stringify ({opts})
 		});

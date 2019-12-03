@@ -10,7 +10,6 @@ import {getHash, goRidLocation} from "./helper";
 import Menus from "./Menus";
 import MenuItems from "./MenuItems";
 import ChooseField from "./ChooseField";
-import Back from "./Back";
 import {i18n} from "./../i18n";
 
 class MenuItem extends Component {
@@ -58,7 +57,6 @@ class MenuItem extends Component {
 		
 		return (
 			<div>
-				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Menu item") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, useHistory, useLocation} from "react-router-dom";
 import Auth from "./Auth";
 import Models from "./Models";
 import Model from "./Model";
@@ -26,6 +26,53 @@ import "../css/objectum.css";
 import "../css/bootstrap.css";
 import "../fontawesome/css/all.css";
 
+function usePageViews (pushLocation, popLocation, locations) {
+	let location = useLocation ();
+	
+	React.useEffect (() => {
+		let pathname = window.location.pathname;
+		let hash = window.location.hash;
+		
+		if (locations.length && locations [locations.length - 1].pathname == pathname) {
+			locations [locations.length - 1].hash = hash;
+			return;
+		}
+		if (pathname != "/") {
+			if (locations.length) {
+				let tokens = locations [locations.length - 1].pathname.split ("/");
+				
+				if (tokens [tokens.length - 1] == "new") {
+					popLocation ();
+				}
+			}
+			pushLocation (pathname, hash);
+		}
+	}, [location]);
+};
+
+function PageViews ({pushLocation, popLocation, locations}) {
+	usePageViews (pushLocation, popLocation, locations);
+	return null;
+};
+
+function BackButton ({popLocation, locations}) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		let {pathname, hash} = locations [locations.length - 2];
+		
+		popLocation ();
+		
+		history.push (unescape (pathname + hash));
+	}
+	
+	return (
+		<button className="btn btn-primary ml-1" disabled={locations.length < 2} onClick={handleClick}>
+			<i className="fas fa-arrow-left mr-2" />{i18n ("Back")}
+		</button>
+	);
+};
+
 class ObjectumApp extends Component {
 	constructor (props) {
 		super (props);
@@ -33,12 +80,15 @@ class ObjectumApp extends Component {
 		let me = this;
 		
 		me.state = {
-			sidebarOpen: false
+			sidebarOpen: false,
+			locations: []
 		};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
 		me.onSetSidebarOpen = me.onSetSidebarOpen.bind (me);
 		me.onClickMenu = me.onClickMenu.bind (me);
+		me.pushLocation = me.pushLocation.bind (me);
+		me.popLocation = me.popLocation.bind (me);
 		
 		lang (me.props.locale || "en");
 	}
@@ -180,6 +230,21 @@ class ObjectumApp extends Component {
 		return items;
 	}
 	
+	pushLocation (pathname, hash) {
+		let me = this;
+		
+		me.setState ({locations: [...me.state.locations, {pathname, hash}]});
+	}
+	
+	popLocation () {
+		let me = this;
+		let locations = [...me.state.locations];
+		let l = locations.splice (locations.length - 1, 1);
+		
+		me.setState ({locations});
+		return l;
+	}
+	
 	render () {
 		let me = this;
 		
@@ -190,52 +255,29 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Router>
+						<PageViews pushLocation={me.pushLocation} popLocation={me.popLocation} locations={me.state.locations} />
+						
 						<div className="fixed-top text-light bg-dark">
 							<button className="btn btn-primary" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
 								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
 							</button>
+
+							<BackButton popLocation={me.popLocation} locations={me.state.locations} />
+
 							<span className="ml-3 text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
 						</div>
-{/*
-						<div id="header" className="fixed-top text-light bg-dark">
-							<h3>{me.props.name || "Objectum"}</h3>
-						</div>
-*/}
-{/*
-						<nav className="navbar navbar-dark bg-primary">
-							<button className="btn btn-dark" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
-								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
-							</button>
-							<div className="navbar-brand text-white header">{me.props.name || "Objectum"}</div>
-							<div />
-						</nav>
-*/}
-{/*
-						<div className="fixed-top">
-							<button className="btn btn-primary" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
-								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
-							</button>
-						</div>
-*/}
+
 						<div className="container-fluid">
 							<Sidebar
 								sidebar={me.renderMenu ()}
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
-								styles={{ sidebar: { background: "white" } }}
+								sidebarClassName="bg-white"
 							>
 								<div className="container content">
 									{me.renderRoutes ()}
 								</div>
 							</Sidebar>
-{/*
-							<nav id="sidebar">
-								<div className="sidebar-header">
-									<h3>{me.props.name || "Objectum"}</h3>
-								</div>
-								{me.renderMenu ()}
-							</nav>
-*/}
 						</div>
 					</Router>
 				</div>

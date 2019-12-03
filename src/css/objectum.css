@@ -19,12 +19,11 @@
 #header {
     width: 100%;
     height: 32px;
-    padding-left: 90px;
+    padding-left: 10px;
     padding-top: 7px;
 }
 .header {
     padding-left: 80px;
-    font-weight: bold;
 }
 .cute-text {
     font-weight: bold;

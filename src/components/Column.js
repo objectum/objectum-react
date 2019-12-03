@@ -10,7 +10,6 @@ import Tab from "./Tab";
 import Tabs from "./Tabs";
 import ChooseField from "./ChooseField";
 import Queries from "./Queries";
-import Back from "./Back";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -54,7 +53,6 @@ class Column extends Component {
 		];
 		return (
 			<div>
-				<Back {...me.props} />
 				<Tabs key="tabs" id="tabs" label={i18n ("Column") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="column" rid={me.state.rid} onCreate={me.onCreate}>

@@ -46,31 +46,33 @@ class GridColumns extends Component {
 		return (
 			<div className="border bg-white my-1">
 				<div className="mt-1 ml-3"><h5>{i18n ("Columns")}</h5></div>
-				<table className="table table-bordered p-1 m-1 bg-white shadow-sm objectum-table mb-0">
-					<thead className="thead-dark">
-						<tr>
-							{me.props.cols.map ((col, i) => {
-								return (
-									<th key={i}>{col.name}</th>
-								);
-							})}
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							{me.props.cols.map ((col, i) => {
-								let checked = true;
-								
-								if (me.state.hideCols.indexOf (col.code) > -1) {
-									checked = false;
-								}
-								return (
-									<td key={i}><input type="checkbox" id={col.code} checked={checked} onChange={me.onChange} /></td>
-								);
-							})}
-						</tr>
-					</tbody>
-				</table>
+				<div className="p-1">
+					<table className="table table-bordered p-1 bg-white shadow-sm objectum-table mb-0">
+						<thead className="thead-dark">
+							<tr>
+								{me.props.cols.map ((col, i) => {
+									return (
+										<th key={i}>{col.name}</th>
+									);
+								})}
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								{me.props.cols.map ((col, i) => {
+									let checked = true;
+									
+									if (me.state.hideCols.indexOf (col.code) > -1) {
+										checked = false;
+									}
+									return (
+										<td key={i}><input type="checkbox" id={col.code} checked={checked} onChange={me.onChange} /></td>
+									);
+								})}
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		);
 	}

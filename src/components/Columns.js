@@ -3,7 +3,6 @@ import Grid from "./Grid";
 import Action from "./Action";
 import Confirm from "./Confirm";
 import {i18n} from "./../i18n";
-import {pushLocation} from "./helper";
 
 class Columns extends Component {
 	constructor (props) {
@@ -25,8 +24,6 @@ class Columns extends Component {
 	onCreate () {
 		let me = this;
 
-		pushLocation ();
-		
 		me.props.history.push ({
 			pathname: "/column/new#" + JSON.stringify ({
 				opts: {
@@ -38,8 +35,6 @@ class Columns extends Component {
 	
 	onEdit (id) {
 		let me = this;
-		
-		pushLocation ();
 		
 		me.props.history.push ({
 			pathname: "/column/" + id

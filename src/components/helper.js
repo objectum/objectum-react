@@ -136,22 +136,6 @@ function loadJS (file) {
 	});
 };
 
-function pushLocation () {
-	let location = JSON.parse (sessionStorage.getItem ("_location") || "[]");
-	
-	location.push (unescape (window.location.pathname + window.location.hash));
-	sessionStorage.setItem ("_location", JSON.stringify (location));
-};
-
-function popLocation () {
-	let location = JSON.parse (sessionStorage.getItem ("_location") || "[]");
-	let result = location.pop ();
-	
-	sessionStorage.setItem ("_location", JSON.stringify (location));
-	
-	return result;
-};
-
 function goRidLocation (props, rid) {
 	let location = unescape (window.location.pathname + window.location.hash);
 	let tokens = location.split ("/new");
@@ -169,8 +153,6 @@ module.exports = {
 	loadJS,
 	getDateString,
 	getTimestampString,
-	pushLocation,
-	popLocation,
 	goRidLocation,
 	timeout
 };

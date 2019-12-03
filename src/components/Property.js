@@ -12,7 +12,6 @@ import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
 import Models from "./Models";
-import Back from "./Back";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -61,7 +60,6 @@ class Property extends Component {
 		];
 		return (
 			<div>
-				<Back {...me.props} />
 				<Tabs key="propertyTabs" id="propertyTabs" label={i18n ("Property") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} onCreate={me.onCreate}>
