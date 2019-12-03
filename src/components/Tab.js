@@ -2,6 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
+import Fade from "react-reveal/Fade";
 
 class Tab extends Component {
 	constructor (props) {
@@ -16,9 +17,11 @@ class Tab extends Component {
 		let me = this;
 		
 		return (
-			<div className="border border-top-0 p-1 bg-white shadow-sm">
-				{me.props.children}
-			</div>
+			<Fade>
+				<div className="border border-top-0 p-1 bg-white shadow-sm">
+					{me.props.children}
+				</div>
+			</Fade>
 		);
 	}
 };

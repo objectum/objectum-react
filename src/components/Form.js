@@ -14,6 +14,7 @@ import ModelList from "./ModelList";
 import Log from "./Log";
 import Loading from "./Loading";
 import {timeout} from "./helper";
+import Fade from "react-reveal/Fade";
 
 class Form extends Component {
 	constructor (props) {
@@ -414,31 +415,33 @@ class Form extends Component {
 			);
 		}
 		return (
-			<div className="bg-white">
-				{me.props.label && <h5 className="objectum-title ml-3">{me.props.label}</h5>}
-				{me.state.rid && <div className="mb-1 actions border p-1 bg-white shadow-sm">
-					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving}>
-						{me.state.saving ?
-							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
-							<span><i className="fas fa-save mr-2"/>{i18n ("Save")}</span>
-						}
-					</button>
-					{me.props.rsc == "record" && <button type="button" className="btn btn-primary" onClick={() => me.setState ({showLog: !me.state.showLog})}><i className="fas fa-history mr-2"></i>{i18n ("Log")}</button>}
-				</div>}
-				{me.state.showLog && <Log form={me} />}
-				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-				<div className="actions border p-1 bg-white shadow-sm">
-					{formChildren}
+			<Fade>
+				<div className="bg-white">
+					{me.props.label && <h5 className="objectum-title ml-3">{me.props.label}</h5>}
+					{me.state.rid && <div className="mb-1 actions border p-1 bg-white shadow-sm">
+						<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving}>
+							{me.state.saving ?
+								<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
+								<span><i className="fas fa-save mr-2"/>{i18n ("Save")}</span>
+							}
+						</button>
+						{me.props.rsc == "record" && <button type="button" className="btn btn-primary" onClick={() => me.setState ({showLog: !me.state.showLog})}><i className="fas fa-history mr-2"></i>{i18n ("Log")}</button>}
+					</div>}
+					{me.state.showLog && <Fade><Log form={me} /></Fade>}
+					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
+					<div className="actions border p-1 bg-white shadow-sm">
+						{formChildren}
+					</div>
+					{!me.state.rid && <div className="mt-1 actions border p-1 bg-white shadow-sm">
+						<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state.creating}>
+							{me.state.creating ?
+								<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
+								<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>
+							}
+						</button>
+					</div>}
 				</div>
-				{!me.state.rid && <div className="mt-1 actions border p-1 bg-white shadow-sm">
-					<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state.creating}>
-						{me.state.creating ?
-							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
-							<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>
-						}
-					</button>
-				</div>}
-			</div>
+			</Fade>
 		);
 	}
 }

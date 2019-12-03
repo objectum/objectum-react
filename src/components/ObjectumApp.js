@@ -21,6 +21,7 @@ import Logout from "./Logout";
 import Sidebar from "react-sidebar";
 import {lang, i18n} from "./../i18n";
 import _ from "lodash";
+import Fade from "react-reveal/Fade";
 
 import "../css/objectum.css";
 import "../css/bootstrap.css";
@@ -285,16 +286,20 @@ class ObjectumApp extends Component {
 		} else {
 			return (
 				<div>
-					<div id="header" className="fixed-top text-light bg-dark">
-						<span className="text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
-					</div>
-					<div className="container">
-						<div className="row">
-							<div className="col-sm-4 offset-sm-4 col-md-2 offset-md-5 col-lg-2 offset-lg-5">
-								<Auth store={me.store} />
+					<Fade>
+						<div id="header" className="fixed-top text-light bg-dark">
+							<span className="text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
+						</div>
+					</Fade>
+					<Fade top>
+						<div className="container">
+							<div className="row">
+								<div className="col-sm-4 offset-sm-4 col-md-2 offset-md-5 col-lg-2 offset-lg-5">
+									<Auth store={me.store} />
+								</div>
 							</div>
 						</div>
-					</div>
+					</Fade>
 				</div>
 			);
 		}

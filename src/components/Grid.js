@@ -9,6 +9,7 @@ import _ from "lodash";
 import {i18n} from "./../i18n";
 import ReactTooltip from "react-tooltip";
 import GridColumns from "./GridColumns";
+import Fade from "react-reveal/Fade";
 
 class Grid extends Component {
 	constructor (props) {
@@ -381,67 +382,69 @@ class Grid extends Component {
 			return (<div />);
 		}
 		return (
-			<table className="table table-hover table-striped table-bordered p-1 bg-white shadow-sm mt-1 mb-0 objectum-table">
-				<thead className="thead-dark">
-				<tr>
-					{me.props.tree && <th><i className="far fa-folder-open ml-2" /></th>}
-					{me.state.cols.map ((col, i) => {
-						//if (col.area === 0) {
-						if (me.state.hideCols.indexOf (col.code) > -1) {
-							return;
-						}
-						let cls = "";
-						let f = me.state.filters.find (f => {
-							if (f [0] == col.code) {
-								return true;
+			<Fade>
+				<table className="table table-hover table-striped table-bordered p-1 bg-white shadow-sm mt-1 mb-0 objectum-table">
+					<thead className="thead-dark">
+					<tr>
+						{me.props.tree && <th><i className="far fa-folder-open ml-2" /></th>}
+						{me.state.cols.map ((col, i) => {
+							//if (col.area === 0) {
+							if (me.state.hideCols.indexOf (col.code) > -1) {
+								return;
 							}
-						});
-						let name = i18n (col.name);
-						
-						if (f) {
-							cls = "font-italic";
-						}
-						let orderClass = "sort";
-						
-						if (col.code === me.state.order [0]) {
-							if (me.state.order [1] == "asc") {
-								orderClass = "sort-up";
-							} else {
-								orderClass = "sort-down";
-							}
-						}
-						return (
-							<th key={i} scope="col" className={cls}>
-								{me.props.system ?
-									<div>{name}</div> :
-									<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
+							let cls = "";
+							let f = me.state.filters.find (f => {
+								if (f [0] == col.code) {
+									return true;
 								}
-							</th>
+							});
+							let name = i18n (col.name);
+							
+							if (f) {
+								cls = "font-italic";
+							}
+							let orderClass = "sort";
+							
+							if (col.code === me.state.order [0]) {
+								if (me.state.order [1] == "asc") {
+									orderClass = "sort-up";
+								} else {
+									orderClass = "sort-down";
+								}
+							}
+							return (
+								<th key={i} scope="col" className={cls}>
+									{me.props.system ?
+										<div>{name}</div> :
+										<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
+									}
+								</th>
+							);
+						})}
+					</tr>
+					</thead>
+					<tbody>
+					{me.state.recs.map ((rec, i) => {
+						let child = me.childMap [rec.id];
+						
+						return (
+							<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
+								{me.props.tree && <td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
+								{me.state.cols.map ((col, j) => {
+									//if (col.area === 0) {
+									if (me.state.hideCols.indexOf (col.code) > -1) {
+										return;
+									}
+									return (
+										<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} /></td>
+									);
+								})}
+							</tr>
 						);
 					})}
-				</tr>
-				</thead>
-				<tbody>
-				{me.state.recs.map ((rec, i) => {
-					let child = me.childMap [rec.id];
-					
-					return (
-						<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-							{me.props.tree && <td key={i + "-tree"}><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
-							{me.state.cols.map ((col, j) => {
-								//if (col.area === 0) {
-								if (me.state.hideCols.indexOf (col.code) > -1) {
-									return;
-								}
-								return (
-									<td key={i + "_" + j}><Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} /></td>
-								);
-							})}
-						</tr>
-					);
-				})}
-				</tbody>
-			</table>
+					</tbody>
+				</table>
+			</Fade>
 		);
 	}
 	
@@ -457,45 +460,47 @@ class Grid extends Component {
 		let model = me.props.store.getModel (imageProperty.get ("model"));
 
 		return (
-			<div className="row">
-				{me.state.recs.map ((rec, i) => {
-					let imageRecs = _.filter (me.state.imageRecs, {[model.get ("code")]: rec.id});
-					let smallImageRec = null, bigImageRec = null;
-					
-					imageRecs.forEach (rec => {
-						if (!smallImageRec || rec.width < smallImageRec.width) {
-							smallImageRec = rec;
-						}
-						if (!bigImageRec || rec.width > bigImageRec.width) {
-							bigImageRec = rec;
-						}
-					});
-					let smallImage = `${me.props.store.getUrl ()}/files/${smallImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${smallImageRec ["photo"]}`;
-					let bigImage = `${me.props.store.getUrl ()}/files/${bigImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${bigImageRec ["photo"]}`;
-					let text = [];
-					
-					card.text.forEach (code => {
-						if (rec [code] !== null) {
-							text.push (`${me.colMap [code].name}: ${rec [code]}`);
-						}
-					});
-					text = text.join (", ");
-					
-					return (
-						<div key={i} className="col">
-							<div key={i} className="card my-1 bg-white shadow-sm" style={{width: "18rem"}}>
-								<img src={smallImage} className="card-img-top" alt="..." />
-								<div className="card-body">
-									<h5 className="card-title">{rec [card.title]}</h5>
-									<p className="card-text">{text}</p>
-									<button className="btn btn-primary" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</button>
-									<a target="_blank" rel="noopener noreferrer" href={bigImage} className="ml-4">{i18n ("Image")}</a>
+			<Fade>
+				<div className="row">
+					{me.state.recs.map ((rec, i) => {
+						let imageRecs = _.filter (me.state.imageRecs, {[model.get ("code")]: rec.id});
+						let smallImageRec = null, bigImageRec = null;
+						
+						imageRecs.forEach (rec => {
+							if (!smallImageRec || rec.width < smallImageRec.width) {
+								smallImageRec = rec;
+							}
+							if (!bigImageRec || rec.width > bigImageRec.width) {
+								bigImageRec = rec;
+							}
+						});
+						let smallImage = `${me.props.store.getUrl ()}/files/${smallImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${smallImageRec ["photo"]}`;
+						let bigImage = `${me.props.store.getUrl ()}/files/${bigImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${bigImageRec ["photo"]}`;
+						let text = [];
+						
+						card.text.forEach (code => {
+							if (rec [code] !== null) {
+								text.push (`${me.colMap [code].name}: ${rec [code]}`);
+							}
+						});
+						text = text.join (", ");
+						
+						return (
+							<div key={i} className="col">
+								<div key={i} className="card my-1 bg-white shadow-sm" style={{width: "18rem"}}>
+									<img src={smallImage} className="card-img-top" alt="..." />
+									<div className="card-body">
+										<h5 className="card-title">{rec [card.title]}</h5>
+										<p className="card-text">{text}</p>
+										<button className="btn btn-primary" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</button>
+										<a target="_blank" rel="noopener noreferrer" href={bigImage} className="ml-4">{i18n ("Image")}</a>
+									</div>
 								</div>
 							</div>
-						</div>
-					);
-				})}
-			</div>
+						);
+					})}
+				</div>
+			</Fade>
 		);
 	}
 
@@ -504,6 +509,7 @@ class Grid extends Component {
 		let gridChildren = me.renderChildren (me.props.children);
 		
 		return (
+			<Fade>
 			<div>
 				{me.props.label && <h5 className="objectum-title ml-3">{i18n (me.props.label)}</h5>}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
@@ -515,9 +521,9 @@ class Grid extends Component {
 				
 				{me.state.mode == "images" ? me.renderCardView () : me.renderTableView ()}
 				
-				{me.state.showFilters && <Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} />}
-
-				{me.state.showCols && <GridColumns cols={me.state.cols} store={me.props.store} onHideCols={me.onHideCols} hideCols={me.state.hideCols} />}
+				{me.state.showFilters && <Fade><Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} /></Fade>}
+				
+				{me.state.showCols && <Fade><GridColumns cols={me.state.cols} store={me.props.store} onHideCols={me.onHideCols} hideCols={me.state.hideCols} /></Fade>}
 
 				<div className="bg-white border shadow-sm p-1 mt-1">
 					<div className="btn-toolbar" role="toolbar">
@@ -579,6 +585,7 @@ class Grid extends Component {
 				</div>
 				<ReactTooltip />
 			</div>
+			</Fade>
 		);
 	}
 };

@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.79",
+	"version": "1.1.80",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -44,9 +44,9 @@
 		"objectum-client": "^1.1.33",
 		"react-dropzone": "^10.1.10",
 		"react-modal": "^3.11.1",
+		"react-reveal": "^1.2.2",
 		"react-router-dom": "^5.1.2",
 		"react-sidebar": "^3.0.2",
-		"react-tooltip": "^3.11.1",
-		"react-treebeard": "^3.2.4"
+		"react-tooltip": "^3.11.1"
 	}
 }
