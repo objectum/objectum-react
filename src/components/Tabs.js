@@ -96,6 +96,8 @@ class Tabs extends Component {
 						
 						if (i == me.state.tab) {
 							active = " active";
+						} else {
+							active = " bg-light";
 						}
 						return (
 							<li className="nav-item" key={i}>
