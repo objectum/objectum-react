@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import Action from "./Action";
-import Confirm from "./Confirm";
 import Grid from "./Grid";
 import {i18n} from "./../i18n";
+import {timeout} from "./helper";
 
 class ModelList extends Component {
 	constructor (props) {
@@ -18,7 +18,7 @@ class ModelList extends Component {
 		me.state = {
 			removeConfirm: false,
 			refresh: false,
-			processing: false
+			removing: false
 		};
 	}
 	
@@ -50,18 +50,22 @@ class ModelList extends Component {
 		});
 	}
 	
-	async onRemove (confirmed) {
+	async onRemove () {
 		let me = this;
-		let state = {removeConfirm: false};
+		let state = {refresh: !me.state.refresh, removing: false, removeConfirm: false};
 		
-		if (confirmed) {
-			me.setState ({processing: true});
-			
+		me.setState ({removing: true});
+
+		try {
+			await timeout (100);
+
 			await me.props.store.startTransaction ("Removing record: " + me.state.removeId);
 			await me.props.store.removeRecord (me.state.removeId);
 			await me.props.store.commitTransaction ();
-
-			state = {...state, refresh: !me.state.refresh, processing: false};
+		} catch (err) {
+			await me.props.store.rollbackTransaction ();
+			
+			state.error = err.message;
 		}
 		me.setState (state);
 	}
@@ -99,12 +103,24 @@ class ModelList extends Component {
 			<div className="row">
 				<div className="col-sm-12">
 					<Grid {...me.props} id={`list-${me.model}`} ref={`list-${me.model}`} label={label} store={me.props.store} model={me.model} refresh={me.state.refresh} params={params} card={card}>
-						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
-						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
-						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
+						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+						{me.state.removing ?
+							<span className="text-danger  ml-3 mt-1">
+								<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true" />
+								{i18n ("Removing") + " ..."}
+							</span> :
+							me.state.removeConfirm ?
+								<span className="text-danger ml-1 p-1">
+									{i18n ("Are you sure?")}
+									<button type="button" className="btn btn-danger btn-sm ml-2 mb-1" onClick={me.onRemove}><i className="fas fa-check mr-2" />{i18n ("Remove")}</button>
+									<button type="button" className="btn btn-success btn-sm ml-2 mb-1" onClick={() => this.setState ({removeConfirm: false})}><i className="fas fa-times mr-2" />{i18n ("Cancel")}</button>
+								</span> :
+								<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"/>{i18n ("Remove")}</Action>
+						}
+						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 					</Grid>
 				</div>
-				<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} processing={me.state.processing} />
 			</div>
 		);
 	}

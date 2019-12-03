@@ -324,7 +324,7 @@ class Grid extends Component {
 		let me = this;
 		
 		return React.Children.map (children, child => {
-			if (!child.props) {
+			if (!child || !child.props) {
 				return child;
 			}
 			let o = {};

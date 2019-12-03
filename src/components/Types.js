@@ -19,7 +19,7 @@ class Types extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<Grid {...me.props} id="types" ref="types" label="Types" store={me.props.store} query="objectum.type" tree={true} system={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} />
+					<Grid {...me.props} id="types" ref="types" label="Data types" store={me.props.store} query="objectum.type" tree={true} system={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} />
 				</div>
 			</div>
 		);
