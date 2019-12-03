@@ -27,7 +27,7 @@ import "../css/objectum.css";
 import "../css/bootstrap.css";
 import "../fontawesome/css/all.css";
 
-function usePageViews (pushLocation, popLocation, locations) {
+function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
 	
 	React.useEffect (() => {
@@ -39,20 +39,22 @@ function usePageViews (pushLocation, popLocation, locations) {
 			return;
 		}
 		if (pathname != "/") {
+			let needPop = false;
+			
 			if (locations.length) {
 				let tokens = locations [locations.length - 1].pathname.split ("/");
 				
 				if (tokens [tokens.length - 1] == "new") {
-					popLocation ();
+					needPop = true;
 				}
 			}
-			pushLocation (pathname, hash);
+			pushLocation (pathname, hash, needPop);
 		}
 	}, [location]);
 };
 
-function PageViews ({pushLocation, popLocation, locations}) {
-	usePageViews (pushLocation, popLocation, locations);
+function PageViews ({pushLocation, locations}) {
+	usePageViews (pushLocation, locations);
 	return null;
 };
 
@@ -233,10 +235,14 @@ class ObjectumApp extends Component {
 		return items;
 	}
 	
-	pushLocation (pathname, hash) {
+	pushLocation (pathname, hash, needPop) {
 		let me = this;
+		let locations = [...me.state.locations];
 		
-		me.setState ({locations: [...me.state.locations, {pathname, hash}]});
+		if (needPop) {
+			locations.splice (locations.length - 1, 1);
+		}
+		me.setState ({locations: [...locations, {pathname, hash}]});
 	}
 	
 	popLocation () {
@@ -258,7 +264,7 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Router>
-						<PageViews pushLocation={me.pushLocation} popLocation={me.popLocation} locations={me.state.locations} />
+						<PageViews pushLocation={me.pushLocation} locations={me.state.locations} />
 						
 						<Fade>
 							<div className="fixed-top text-light bg-dark">

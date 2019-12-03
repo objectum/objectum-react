@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import Modal from "react-modal";
 import {i18n} from "./../i18n";
+import Loading from "./Loading";
 import Fade from "react-reveal/Fade";
 
 class Confirm extends Component {
@@ -13,6 +14,7 @@ class Confirm extends Component {
 	
 	render () {
 		let me = this;
+		let disabled = me.props.processing;
 
 		return (
 			<Modal
@@ -32,10 +34,15 @@ class Confirm extends Component {
 					<h5>{i18n (me.props.label)}</h5>
 					<div className="btn-toolbar" role="toolbar">
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-danger mr-1" onClick={() => me.props.onClick (true)}><i className="fas fa-check mr-2"></i>{i18n ("Yes")}</button>
-							<button type="button" className="btn btn-success" onClick={() => me.props.onClick (false)}><i className="fas fa-times mr-2"></i>{i18n ("No")}</button>
+							<button type="button" className="btn btn-danger mr-1" onClick={() => me.props.onClick (true)} disabled={disabled}>
+								<i className="fas fa-check mr-2" />{i18n ("Yes")}
+							</button>
+							<button type="button" className="btn btn-success" onClick={() => me.props.onClick (false)} disabled={disabled}>
+								<i className="fas fa-times mr-2" />{i18n ("No")}
+							</button>
 						</div>
 					</div>
+					{me.props.processing ? <div className="text-primary mt-3 text-center"><Loading /></div> : <div />}
 				</Fade>
 			</Modal>
 		);

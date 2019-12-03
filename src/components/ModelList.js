@@ -17,7 +17,8 @@ class ModelList extends Component {
 		me.onRemove = me.onRemove.bind (me);
 		me.state = {
 			removeConfirm: false,
-			refresh: false
+			refresh: false,
+			processing: false
 		};
 	}
 	
@@ -51,13 +52,18 @@ class ModelList extends Component {
 	
 	async onRemove (confirmed) {
 		let me = this;
+		let state = {removeConfirm: false};
 		
 		if (confirmed) {
+			me.setState ({processing: true});
+			
 			await me.props.store.startTransaction ("Removing record: " + me.state.removeId);
 			await me.props.store.removeRecord (me.state.removeId);
 			await me.props.store.commitTransaction ();
+
+			state = {...state, refresh: !me.state.refresh, processing: false};
 		}
-		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
+		me.setState (state);
 	}
 	
 	componentDidUpdate () {
@@ -98,7 +104,7 @@ class ModelList extends Component {
 						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
 					</Grid>
 				</div>
-				<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
+				<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} processing={me.state.processing} />
 			</div>
 		);
 	}
