@@ -258,15 +258,17 @@ class ObjectumApp extends Component {
 					<Router>
 						<PageViews pushLocation={me.pushLocation} popLocation={me.popLocation} locations={me.state.locations} />
 						
-						<div className="fixed-top text-light bg-dark">
-							<button className="btn btn-primary" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
-								<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
-							</button>
-
-							<BackButton popLocation={me.popLocation} locations={me.state.locations} />
-
-							<span className="ml-3 text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
-						</div>
+						<Fade>
+							<div className="fixed-top text-light bg-dark">
+								<button className="btn btn-primary" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
+									<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
+								</button>
+	
+								<BackButton popLocation={me.popLocation} locations={me.state.locations} />
+	
+								<span className="ml-3 text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
+							</div>
+						</Fade>
 
 						<div className="container-fluid">
 							<Sidebar
