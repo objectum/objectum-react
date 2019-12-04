@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Grid from "./Grid";
 import Action from "./Action";
 import Confirm from "./Confirm";
+import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
 
 class Models extends Component {
@@ -15,7 +16,6 @@ class Models extends Component {
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
 		me.state = {
-			removeConfirm: false,
 			refresh: false
 		};
 	}
@@ -44,15 +44,20 @@ class Models extends Component {
 		});
 	}
 	
-	async onRemove (confirmed) {
+	async onRemove (id) {
 		let me = this;
+		let state = {refresh: !me.state.refresh};
 		
-		if (confirmed) {
-			await me.props.store.startTransaction ("Removing model: " + me.state.removeId);
-			await me.props.store.removeModel (me.state.removeId);
+		try {
+			await me.props.store.startTransaction ("Removing model: " + id);
+			await me.props.store.removeModel (id);
 			await me.props.store.commitTransaction ();
+		} catch (err) {
+			await me.props.store.rollbackTransaction ();
+			
+			state.error = err.message;
 		}
-		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
+		me.setState (state);
 	}
 	
 	render () {
@@ -64,7 +69,8 @@ class Models extends Component {
 					<Grid {...me.props} id="models" ref="models" label="Models" store={me.props.store} query="objectum.model" tree={true} system={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
-						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
+						<RemoveAction onRemove={me.onRemove} />
+						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 					</Grid>
 				</div>
 				<Confirm label={i18n ("Are you sure?")} visible={me.state.removeConfirm} onClick={me.onRemove} />

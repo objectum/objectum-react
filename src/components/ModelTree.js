@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Action from "./Action";
 import Confirm from "./Confirm";
 import Grid from "./Grid";
+import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
 
 class ModelTree extends Component {
@@ -16,7 +17,6 @@ class ModelTree extends Component {
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
 		me.state = {
-			removeConfirm: false,
 			refresh: false
 		};
 	}
@@ -49,17 +49,22 @@ class ModelTree extends Component {
 		});
 	}
 	
-	async onRemove (confirmed) {
+	async onRemove (id) {
 		let me = this;
+		let state = {refresh: !me.state.refresh};
 		
-		if (confirmed) {
-			await me.props.store.startTransaction ("Removing record: " + me.state.removeId);
-			await me.props.store.removeRecord (me.state.removeId);
+		try {
+			await me.props.store.startTransaction ("Removing record: " + id);
+			await me.props.store.removeRecord (id);
 			await me.props.store.commitTransaction ();
+		} catch (err) {
+			await me.props.store.rollbackTransaction ();
+			
+			state.error = err.message;
 		}
-		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
+		me.setState (state);
 	}
-	
+
 	componentDidUpdate () {
 		this.model = this.props.model || this.props.match.params.model.split ("#")[0];
 	}
@@ -89,7 +94,8 @@ class ModelTree extends Component {
 					<Grid {...me.props} id={`list-${me.model}`} ref={`list-${me.model}`} label={label} store={me.props.store} model={me.model} tree={true} refresh={me.state.refresh} params={params}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
-						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
+						<RemoveAction onRemove={me.onRemove} />
+						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 					</Grid>
 				</div>
 				<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />

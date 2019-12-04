@@ -25,7 +25,6 @@ class Model extends Component {
 			rid: rid == "new" ? null : rid,
 			label: "",
 			parent: hash.opts.parent,
-			removeConfirm: false,
 			refresh: false
 		};
 		if (me.state.rid) {

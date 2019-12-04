@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Grid from "./Grid";
 import Action from "./Action";
 import Confirm from "./Confirm";
+import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
 
 class Columns extends Component {
@@ -41,17 +42,22 @@ class Columns extends Component {
 		});
 	}
 	
-	async onRemove (confirmed) {
+	async onRemove (id) {
 		let me = this;
+		let state = {refresh: !me.state.refresh};
 		
-		if (confirmed) {
-			await me.props.store.startTransaction ("Removing column: " + me.state.removeId);
-			await me.props.store.removeColumn (me.state.removeId);
+		try {
+			await me.props.store.startTransaction ("Removing column: " + id);
+			await me.props.store.removeColumn (id);
 			await me.props.store.commitTransaction ();
+		} catch (err) {
+			await me.props.store.rollbackTransaction ();
+			
+			state.error = err.message;
 		}
-		me.setState ({removeConfirm: false, refresh: !me.state.refresh});
+		me.setState (state);
 	}
-	
+
 	async onSynchronize () {
 		let me = this;
 		
@@ -136,10 +142,11 @@ class Columns extends Component {
 					<Grid id="Columns" store={me.props.store} query="objectum.column" system={true} refresh={me.state.refresh} params={{queryId: me.query}}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
-						<Action onClickSelected={(id) => this.setState ({removeConfirm: true, removeId: id})}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</Action>
+						<RemoveAction onRemove={me.onRemove} />
 						<Action onClick={me.onSynchronize} disabled={me.state.synchronizing}>
 							<i className="fas fa-wrench mr-2" />{me.state.synchronizing ? i18n ("Synchronizing") : i18n ("Synchronize")}
 						</Action>
+						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 					</Grid>
 				</div>
 				<Confirm label={i18n ("Are you sure?")} visible={me.state.removeConfirm} onClick={me.onRemove} />

@@ -317,7 +317,20 @@ class Form extends Component {
 		let changed = false;
 		
 		for (let attr in me.map) {
-			if (me.state.hasOwnProperty (attr) && me.state [attr] != me.map [attr].value) {
+			let stateValue = me.state [attr];
+			let mapValue = me.map [attr].value;
+			
+			if (stateValue === "" || stateValue === undefined) {
+				stateValue = null;
+			}
+			if (mapValue === "" || mapValue === undefined) {
+				mapValue = null;
+			}
+			if (_.isNumber (stateValue) || _.isNumber (mapValue)) {
+				stateValue = Number (stateValue);
+				mapValue = Number (mapValue);
+			}
+			if (me.state.hasOwnProperty (attr) && stateValue !== mapValue) {
 				changed = true;
 			}
 		}

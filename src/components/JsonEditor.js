@@ -31,7 +31,7 @@ class JsonEditor extends Component {
 			await loadCSS (`${me.props.store.getUrl ()}/public/codemirror/codemirror.css`);
 			await loadJS (`${me.props.store.getUrl ()}/public/codemirror/codemirror.js`);
 		}
-		if (window.CodeMirror) {
+		if (window.CodeMirror && me.refs.codemirror) {
 			me.codemirror = window.CodeMirror.fromTextArea (me.refs.codemirror, {
 				lineNumbers: true,
 				indentUnit: 4,
@@ -49,11 +49,6 @@ class JsonEditor extends Component {
 				mode: "javascript"
 			});
 			me.codemirrorTag.setSize ("100%", 262);
-/*
-			me.codemirrorTag.on ("change", function () {
-				me.onChangeTagValue (me.codemirrorTag.getValue ());
-			});
-*/
 			me.codemirrorTag.on ("change", me.onChangeTagValue);
 		}
 		me.updateTags ();
@@ -90,9 +85,12 @@ class JsonEditor extends Component {
 		if (!l.length) {
 			state.tag = "";
 			state.tagValue = "";
-			me.codemirrorTag.setValue ("");
+			
+			if (me.codemirrorTag) {
+				me.codemirrorTag.setValue ("");
+			}
 		}
-		me.setState (state)
+		me.setState (state);
 	}
 
 	onChange (s) {
