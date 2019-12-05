@@ -62,7 +62,7 @@ class JsonEditor extends Component {
 			for (let a in opts) {
 				let o = opts [a];
 				
-				if (typeof (o) == "object") {
+				if (typeof (o) == "object" && !_.isArray (o)) {
 					process (o, prefix ? (prefix + "." + a) : a);
 				}
 				if (typeof (o) == "string") {
@@ -154,7 +154,7 @@ class JsonEditor extends Component {
 					</div>
 					<div className="col-sm-6 pl-1">
 						<select className={"form-control custom-select"} value={me.state.tag} onChange={me.onChangeTag}>
-							{[{id: "", name: i18n ("Select tag to edit")}, ...me.state.tags].map ((rec, i) => {
+							{[{id: "", name: i18n ("Select text tag to edit")}, ...me.state.tags].map ((rec, i) => {
 								return (
 									<option value={rec.id} key={i}>{rec.name}</option>
 								);

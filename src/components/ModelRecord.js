@@ -31,21 +31,23 @@ class ModelRecord extends Component {
 		let me = this;
 		
 		if (me.state.rid) {
-			let o = await me.props.store.getRecord (me.state.rid);
+			me.record = await me.props.store.getRecord (me.state.rid);
 			
-			me.setState ({label: o.getLabel ()});
+			me.setState ({label: me.record.getLabel ()});
 		}
 	}
 	
 	async onCreate (rid) {
 		let me = this;
-		let o = await me.props.store.getRecord (rid);
 		
-		me.setState ({rid, label: o.getLabel ()});
+		me.record = await me.props.store.getRecord (rid);
+		
+		me.setState ({rid, label: me.record.getLabel ()});
+		
 		goRidLocation (me.props, rid);
 	}
 	
-	renderProperty (p, key) {
+	renderProperty (p, key, props = {}) {
 		let me = this;
 		let dict = false;
 		let chooseModel;
@@ -73,11 +75,11 @@ class ModelRecord extends Component {
 		}
 		if (chooseModel) {
 			return (
-				<Field key={key} property={p.get ("code")} dict={dict} choose={ModelList} chooseRef={`list-${chooseModel}`} model={chooseModel} disabled={disabled} value={value}/>
+				<Field {...props} key={key} property={p.get ("code")} dict={dict} choose={ModelList} chooseRef={`list-${chooseModel}`} model={chooseModel} disabled={disabled} value={value}/>
 			);
 		} else {
 			return (
-				<Field key={key} property={p.get ("code")} dict={dict} chooseModel={chooseModel} disabled={disabled} value={value}/>
+				<Field {...props} key={key} property={p.get ("code")} dict={dict} chooseModel={chooseModel} disabled={disabled} value={value}/>
 			);
 		}
 	}
@@ -128,13 +130,131 @@ class ModelRecord extends Component {
 		}
 	}
 	
+	renderCol (o, key, property, model) {
+		let me = this;
+		let item;
+		
+		if (typeof (o) == "string" && o.substr (0, 2) == "t.") {
+			try {
+				let tableModel = me.props.store.getModel (o);
+				let opts = tableModel.getOpts ();
+				let label = tableModel.getLabel ();
+				
+				if (opts.grid && opts.grid.label) {
+					label = opts.grid.label;
+				}
+				item = (
+					<div>
+						<h5>{i18n (label)}</h5>
+						<ModelList
+							{...me.props}
+							id={key}
+							label=""
+							store={me.props.store}
+							model={tableModel.getPath ()}
+							parentModel={model.getPath ()}
+							parentId={me.state.rid}
+						/>
+					</div>
+				);
+			} catch (err) {
+				item = o;
+			}
+		} else {
+			if (! property && typeof (o) == "string") {
+				return o;
+			}
+			item = o.label;
+			
+			if (property || o.property) {
+				item = me.renderProperty (property || model.properties [o.property], key, o.props);
+			}
+		}
+		if (o.tag) {
+			if (! _.isArray (o.tag)) {
+				o.tag = [o.tag];
+			}
+			_.each (o.tag, Tag => {
+				item = <Tag>{item}</Tag>;
+			});
+		}
+		return item;
+	}
+	
+	renderLayout (layout, model, level = 0) {
+		let me = this;
+		let items = [];
+		let gen = 0;
+		
+		if (_.isArray (layout)) {
+			if (!layout.length || typeof (layout [0]) != "string") {
+				return (<div />);
+			}
+			let formItems = [];
+			let rid;
+			
+			for (let i = 0; i < layout.length; i ++) {
+				let row = layout [i];
+				
+				if (typeof (row) == "string" && me.record [row]) {
+					rid = me.record [row];
+				}
+				if (_.isArray (row) && rid) {
+					formItems.push (
+						<div className="row no-gutters" key={`row-${i}`}>
+							{row.map ((code, j) => {
+								let property = model.properties [code];
+								let cls = "";
+								
+								if (_.isObject (code) && code ["class"]) {
+									if (_.isArray (code ["class"])) {
+										cls = code ["class"].join (" ");
+									} else {
+										cls = code ["class"];
+									}
+								}
+								if (j) {
+									cls += " ml-1";
+								}
+								return (
+									<div className={"col " + cls} key={`col-${j}`}>
+										{me.renderCol (code, `field-${j}`, property, model)}
+									</div>
+								);
+							})}
+						</div>
+					);
+				}
+			}
+			items.push (
+				<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
+					{formItems}
+				</Form>
+			);
+		} else
+		if (_.isObject (layout)) {
+			items.push (
+				<Tabs key={`tabs-${level}-${gen}`} id={`tabs-${level}-${gen}`}>
+					{Object.keys (layout).map ((tabName, i) => {
+						return (
+							<Tab key={`tab-${level}-${gen ++}`} label={tabName}>
+								{me.renderLayout (layout [tabName], model, level + 1)}
+							</Tab>
+						);
+					})}
+				</Tabs>
+			);
+		}
+		return items;
+	}
+	
 	render () {
 		let me = this;
 		let m = me.props.store.getModel (me.state.model);
+		let opts = m.getOpts ();
 		let properties = _.sortBy (_.values (m.properties), ["order", "name"]);
 		let label = i18n ("Record");
 		let columns = 1;
-		let opts = m.getOpts ();
 		
 		if (opts.form) {
 			if (opts.form.label) {
@@ -143,6 +263,14 @@ class ModelRecord extends Component {
 			if (opts.form.columns) {
 				columns = opts.form.columns;
 			}
+		}
+		if (opts.layout) {
+			return (
+				<div>
+					<h5 className="objectum-title ml-3">{label + ": " + me.state.label}</h5>
+					{!me.record ? <div /> : me.renderLayout (opts.layout, m)}
+				</div>
+			);
 		}
 		properties = _.chunk (properties, columns);
 		

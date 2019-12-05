@@ -77,7 +77,7 @@
 	"form contains errors": "форма содержит ошибки",
 	"please enter value": "пожалуйста введите значение",
 	"editor": "редактор",
-	"select tag to edit": "выберите тег для редактирования",
+	"select text tag to edit": "выберите тег для редактирования",
 	"log": "журнал",
 	"select field": "выберите поле",
 	"value": "значение",
