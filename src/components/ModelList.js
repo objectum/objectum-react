@@ -103,6 +103,9 @@ class ModelList extends Component {
 			gridOpts.card = JSON.parse (opts.grid.card);
 			gridOpts.card.onEdit = me.onEdit;
 		}
+		if (m.isDictionary () || (opts.grid && opts.grid.editable)) {
+			gridOpts.editable = true;
+		}
 		return (
 			<div className="row">
 				<div className="col-sm-12">

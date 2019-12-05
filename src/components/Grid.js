@@ -9,6 +9,7 @@ import _ from "lodash";
 import {i18n} from "./../i18n";
 import ReactTooltip from "react-tooltip";
 import GridColumns from "./GridColumns";
+import TableForm from "./TableForm";
 import Fade from "react-reveal/Fade";
 
 class Grid extends Component {
@@ -58,6 +59,7 @@ class Grid extends Component {
 		me.onShowFilters = me.onShowFilters.bind (me);
 		me.onShowCols = me.onShowCols.bind (me);
 		me.onImageMode = me.onImageMode.bind (me);
+		me.onEditMode = me.onEditMode.bind (me);
 		me.hashChange = me.hashChange.bind (me);
 		me.onFilter = me.onFilter.bind (me);
 		me.onOrder = me.onOrder.bind (me);
@@ -179,6 +181,10 @@ class Grid extends Component {
 	
 	onImageMode () {
 		setHash (this, {[this.props.id]: {mode: this.state.mode == "images" ? "table" : "images"}});
+	}
+	
+	onEditMode () {
+		setHash (this, {[this.props.id]: {mode: this.state.mode == "edit" ? "table" : "edit"}});
 	}
 	
 	onFilter (filters) {
@@ -508,7 +514,112 @@ class Grid extends Component {
 			</Fade>
 		);
 	}
+	
+	renderEditView () {
+		let me = this;
+		
+		if (!me.colMap ["id"]) {
+			return (<div />);
+		}
+		let model = me.props.store.getModel (me.colMap ["id"].model);
+		let properties = [];
+		
+		me.state.cols.forEach (col => {
+			if (model.properties [col.code]) {
+				properties.push (col.code);
+			}
+		});
+		return (
+			<TableForm store={me.props.store} model={model.getPath ()} properties={properties} records={_.map (me.state.recs, "id")} colMap={me.colMap} />
+		);
+	}
 
+	renderToolbar () {
+		let me = this;
+		
+		if (me.state.mode == "edit") {
+			return (
+				<Fade>
+					<div className="bg-white border shadow-sm p-1 mt-1">
+						<div className="btn-toolbar" role="toolbar">
+							<div className="btn-group mr-1" role="group">
+								{! me.props.system && <button type="button" className="btn btn-link" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
+									{i18n ("Return")}
+								</button>}
+							</div>
+						</div>
+					</div>
+				</Fade>
+			);
+		} else {
+			return (
+				<Fade>
+					<div className="bg-white border shadow-sm p-1 mt-1">
+						<div className="btn-toolbar" role="toolbar">
+							<div className="objectum-5em">
+								<div className="input-group">
+									<select className="custom-select" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange} data-tip={i18n ("Records on page")}>
+										<option value="10">10</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+									</select>
+								</div>
+							</div>
+							<div className="btn-group mr-1" role="group">
+								<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst} data-tip={i18n ("First page")}>
+									<i className="fas fa-angle-double-left"/>
+								</button>
+								<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev} data-tip={i18n ("Previous page")}>
+									<i className="fas fa-angle-left"/>
+								</button>
+							</div>
+							<div className="objectum-5em">
+								<div className="input-group mr-1">
+									<input type="number" className="form-control" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} data-tip={i18n ("Page")}/>
+								</div>
+							</div>
+							<div className="btn-group mr-1" role="group">
+								<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext} data-tip={i18n ("Next page")}>
+									<i className="fas fa-angle-right"/>
+								</button>
+								<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast} data-tip={i18n ("Last page")}>
+									<i className="fas fa-angle-double-right"/>
+								</button>
+								<span data-tip={i18n ("Refresh")}>
+										{me.state.loading ?
+											<span className="spinner-border spinner-border-sm text-primary refresh-btn-loading" role="status" aria-hidden="true"/> :
+											<button type="button" className="btn btn-link" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
+												<i className="fas fa-sync"/>
+											</button>
+										}
+									</span>
+								{! me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}>
+									<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} data-tip={i18n ("Filters")}/>
+								</button>}
+								{! me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowCols} data-tip={i18n ("Columns")}>
+									<i className={`fas fa-eye ${me.state.showCols ? "border-bottom border-primary" : ""}`}/>
+								</button>}
+								{! me.props.system && me.props.editable && <button type="button" className="btn btn-link" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
+									<i className={`fas fa-edit ${me.state.mode == "edit" ? "border-bottom border-primary" : ""}`}/>
+								</button>}
+								{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
+									<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`}/>
+								</button>}
+							</div>
+						</div>
+						<div>
+							<small className="text-muted ml-3">
+								{me.getInfo ()}
+							</small>
+						</div>
+					</div>
+				</Fade>
+			);
+		}
+	}
+	
 	render () {
 		let me = this;
 		let gridChildren = me.renderChildren (me.props.children);
@@ -518,77 +629,23 @@ class Grid extends Component {
 			<div>
 				{me.props.label && <h5 className="objectum-title ml-3">{i18n (me.props.label)}</h5>}
 				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-				{me.state.mode != "images" && gridChildren && <div className="actions border p-1 bg-white shadow-sm">
+				{me.state.mode == "table" && gridChildren && <div className="actions border p-1 bg-white shadow-sm">
 					{gridChildren}
 				</div>}
 
 				{me.props.tree && me.renderPosition ()}
 				
-				{me.state.mode == "images" ? me.renderCardView () : me.renderTableView ()}
+				{me.state.mode == "images" ? me.renderCardView () : (me.state.mode == "edit" ? me.renderEditView () : me.renderTableView ())}
 				
-				{me.state.showFilters && <Fade><Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} /></Fade>}
+				{me.state.showFilters && me.state.mode != "edit" && <Fade><Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} /></Fade>}
 				
-				{me.state.showCols && <Fade><GridColumns cols={me.state.cols} store={me.props.store} onHideCols={me.onHideCols} hideCols={me.state.hideCols} /></Fade>}
+				{me.state.showCols && me.state.mode != "edit" && <Fade><GridColumns cols={me.state.cols} store={me.props.store} onHideCols={me.onHideCols} hideCols={me.state.hideCols} /></Fade>}
 
-				<div className="bg-white border shadow-sm p-1 mt-1">
-					<div className="btn-toolbar" role="toolbar">
-						<div className="objectum-5em">
-							<div className="input-group">
-								<select className="custom-select" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange} data-tip={i18n ("Records on page")}>
-									<option value="10">10</option>
-									<option value="20">20</option>
-									<option value="30">30</option>
-									<option value="40">40</option>
-									<option value="50">50</option>
-								</select>
-							</div>
-						</div>
-						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst} data-tip={i18n ("First page")}>
-								<i className="fas fa-angle-double-left"/>
-							</button>
-							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev} data-tip={i18n ("Previous page")}>
-								<i className="fas fa-angle-left"/>
-							</button>
-						</div>
-						<div className="objectum-5em">
-							<div className="input-group mr-1">
-								<input type="number" className="form-control" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} data-tip={i18n ("Page")} />
-							</div>
-						</div>
-						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext} data-tip={i18n ("Next page")}>
-								<i className="fas fa-angle-right"/>
-							</button>
-							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast} data-tip={i18n ("Last page")}>
-								<i className="fas fa-angle-double-right" />
-							</button>
-							<span data-tip={i18n ("Refresh")}>
-								{me.state.loading ?
-									<span className="spinner-border spinner-border-sm text-primary refresh-btn-loading" role="status" aria-hidden="true"/> :
-									<button type="button" className="btn btn-link" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
-										<i className="fas fa-sync" />
-									</button>
-								}
-							</span>
-							{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}>
-								<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} data-tip={i18n ("Filters")} />
-							</button>}
-							{!me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowCols} data-tip={i18n ("Columns")}>
-								<i className={`fas fa-eye ${me.state.showCols ? "border-bottom border-primary" : ""}`} />
-							</button>}
-							{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
-								<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`} />
-							</button>}
-						</div>
-					</div>
-					<div>
-						<small className="text-muted ml-3">
-							{me.getInfo ()}
-						</small>
-					</div>
-				</div>
+				{me.renderToolbar ()}
+
+{/*
 				<ReactTooltip />
+*/}
 			</div>
 			</Fade>
 		);

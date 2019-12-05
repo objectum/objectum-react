@@ -435,7 +435,7 @@ class Form extends Component {
 						<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving}>
 							{me.state.saving ?
 								<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
-								<span><i className="fas fa-save mr-2"/>{i18n ("Save")}</span>
+								<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
 							}
 						</button>
 						{me.props.rsc == "record" && <button type="button" className="btn btn-primary" onClick={() => me.setState ({showLog: !me.state.showLog})}><i className="fas fa-history mr-2"></i>{i18n ("Log")}</button>}

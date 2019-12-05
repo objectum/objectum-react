@@ -62,7 +62,7 @@ class StringField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.attr || me.props.property || me.props.prop;
+		let id = me.props.id || me.props.attr || me.props.property || me.props.prop;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
 		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;

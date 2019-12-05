@@ -16,7 +16,6 @@ class Menu extends Component {
 		
 		let me = this;
 		let rid = me.props.match.params.rid.split ("#")[0];
-		let hash = getHash ();
 		
 		me.state = {
 			rid: rid == "new" ? null : rid,
@@ -49,7 +48,7 @@ class Menu extends Component {
 		return (
 			<div>
 				<Tabs key="tabs" id="tabs" label={i18n ("Menu") + ": " + me.state.label}>
-					<Tab key="Tab1" label="Information">
+					<Tab key="tab-1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu" onCreate={me.onCreate}>
 							<Field property="name" />
 							<Field property="code" />
