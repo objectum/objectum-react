@@ -12,7 +12,7 @@ class NumberField extends Component {
 		
 		me.onChange = me.onChange.bind (me);
 		me.state = {
-			value: me.props.value
+			value: me.props.value === null ? "" : me.props.value
 		};
 	}
 	

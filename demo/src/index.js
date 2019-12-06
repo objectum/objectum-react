@@ -36,7 +36,7 @@ class Demo extends Component {
 	constructor (props) {
 		super (props);
 		
-		store.setUrl ("/rmp");
+		store.setUrl ("/shop");
 		window.store = store;
 	}
 	

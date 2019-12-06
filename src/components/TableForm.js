@@ -150,7 +150,9 @@ class TableForm extends Component {
 			dict: false,
 			onChange: me.onChange,
 			error: me.state [`error-${key}`],
-			recs: me.state [`dictRecs-${p.get ("type")}`] || []
+			recs: me.state [`dictRecs-${p.get ("type")}`] || [],
+			rsc: "record",
+			store: me.props.store
 		};
 		if (p.get ("type") >= 1000) {
 			let m = me.props.store.getModel (p.get ("type"));
@@ -194,16 +196,16 @@ class TableForm extends Component {
 					<table className="table table-bordered bg-white shadow-sm objectum-table p-1 mb-0 mt-1">
 						<thead className="thead-dark">
 						<tr>
-							<th>id</th>
+							<th className="align-top">id</th>
 							{me.props.properties.map ((code, i) => {
 								return (
-									<th key={i}>{me.props.colMap [code] ? me.props.colMap [code].name : ""}</th>
+									<th key={i} className="align-top">{me.props.colMap [code] ? me.props.colMap [code].name : ""}</th>
 								);
 							})}
 						</tr>
 						</thead>
 						<tbody>
-						{me.state.recs.length != me.props.records.length ? <tr><td colSpan={me.props.properties.length}><Loading /></td></tr> :
+						{me.state.recs.length != me.props.records.length ? <tr><td colSpan={me.props.properties.length} className="text-primary"><Loading /></td></tr> :
 							me.props.records.map ((id, i) => {
 								let rec = me.recMap [id];
 								let object = me.props.store.factory ({
@@ -217,7 +219,7 @@ class TableForm extends Component {
 								
 								return (
 									<tr key={i}>
-										<td key={`id-${i}`} className="align-top">{id}</td>
+										<td key={`id-${i}`} className="align-middle">{id}</td>
 										{me.props.properties.map ((code, i) => {
 											return (
 												<td key={i} className="align-middle pt-1 pb-0">

@@ -66,7 +66,7 @@ function BackButton ({popLocation, locations}) {
 		
 		popLocation ();
 		
-		history.push (unescape (pathname + hash));
+		history.push (decodeURI (pathname + hash));
 	}
 	
 	return (
@@ -285,14 +285,14 @@ class ObjectumApp extends Component {
 							</div>
 						</Fade>
 
-						<div className="container-fluid">
+						<div className="container">
 							<Sidebar
 								sidebar={me.renderMenu ()}
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
 								sidebarClassName="bg-white"
 							>
-								<div className="container content">
+								<div className="container" id="contentContainer" style={{marginTop: "40px"}}>
 									{me.renderRoutes ()}
 								</div>
 							</Sidebar>

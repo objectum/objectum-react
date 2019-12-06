@@ -144,7 +144,7 @@ class ModelRecord extends Component {
 					label = opts.grid.label;
 				}
 				item = (
-					<div>
+					<div className="mb-2">
 						<h5>{i18n (label)}</h5>
 						<ModelList
 							{...me.props}

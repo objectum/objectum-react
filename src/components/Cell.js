@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getDateString} from "./helper";
+import {getTimestampString} from "./helper";
 
 class Cell extends Component {
 	constructor (props) {
@@ -19,7 +19,7 @@ class Cell extends Component {
 		} else {
 			if (col.type == 3) {
 				// Date
-				return (<span>{getDateString (value)}</span>);
+				return (<span>{getTimestampString (value)}</span>);
 			} else
 			if (col.type == 4) {
 				// Boolean

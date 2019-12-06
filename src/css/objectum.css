@@ -1,15 +1,3 @@
-#wrapper {
-    display: flex;
-    width: 100%;
-    align-items: stretch;
-}
-#content {
-    width: 100%;
-    min-height: 100vh;
-    transition: all 0.3s;
-    margin-top: 20px;
-    padding: 20px;
-}
 .content {
     min-height: 100vh;
     transition: all 0.3s;
@@ -21,9 +9,6 @@
     height: 32px;
     padding-left: 10px;
     padding-top: 7px;
-}
-.header {
-    padding-left: 80px;
 }
 .cute-text {
     font-weight: bold;
@@ -50,10 +35,17 @@
     text-align: center;
 }
 .numberfield {
-    max-width: 200px !important;
+    max-width: 150px !important;
+    min-width: 70px !important;
 }
 .datefield {
-    max-width: 200px !important;
+    max-width: 150px !important;
+}
+.choosefield {
+    min-width: 120px !important;
+}
+.stringfield {
+    min-width: 100px !important;
 }
 .booleanfield {
     margin-top: 2px;

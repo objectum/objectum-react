@@ -257,7 +257,7 @@ class Filters extends Component {
 	onChangeState (id, state) {
 		let me = this;
 		let filters = [...me.state.filters];
-
+		
 		for (let i = 0; i < filters.length; i ++) {
 			if (filters [i].id == id) {
 				filters [i] = state;

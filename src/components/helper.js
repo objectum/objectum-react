@@ -27,7 +27,12 @@ function getTimestampString (d) {
 	if (!d || typeof d == "string") {
 		return d;
 	}
-	return `${d.getFullYear ()}-${pad (d.getMonth () + 1)}-${pad (d.getDate ())} ${pad (d.getHours ())}:${pad (d.getMinutes ())}:${pad (d.getSeconds ())}`;
+	let s = `${d.getFullYear ()}-${pad (d.getMonth () + 1)}-${pad (d.getDate ())}`;
+	
+	if (d.getHours () || d.getMinutes () || d.getSeconds ()) {
+		s += ` ${pad (d.getHours ())}:${pad (d.getMinutes ())}:${pad (d.getSeconds ())}`;
+	}
+	return s;
 };
 
 let localHash = {};
@@ -38,8 +43,7 @@ function getHash (cmp) {
 		return localHash;
 	}
 	try {
-		let s = unescape (window.location.hash.substr (1) || "{}");
-		
+		let s = decodeURI (window.location.hash.substr (1) || "{}");
 		return JSON.parse (s);
 	} catch (err) {
 		console.log (err);
@@ -137,7 +141,7 @@ function loadJS (file) {
 };
 
 function goRidLocation (props, rid) {
-	let location = unescape (window.location.pathname + window.location.hash);
+	let location = decodeURI (window.location.pathname + window.location.hash);
 	let tokens = location.split ("/new");
 	
 	location = tokens.join (`/${rid}`);

@@ -6,7 +6,7 @@ module.exports = {
 	},
 	devServer: {
 		proxy: {
-			"/rmp": "http://localhost:3100/"
+			"/shop": "http://localhost:3100/"
 		}
 	}
 };

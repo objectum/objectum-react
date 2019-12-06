@@ -22,6 +22,7 @@ class User extends Component {
 			label: ""
 		};
 		me.onCreate = me.onCreate.bind (me);
+		me.onClick = me.onClick.bind (me);
 	}
 	
 	async componentDidMount () {
@@ -32,6 +33,22 @@ class User extends Component {
 			
 			me.setState ({label: o.getLabel ()});
 		}
+	}
+
+	onClick () {
+		let me = this;
+		let div1 = me.refs.div1;
+		let div2 = me.refs.div2;
+		let rect = div1.getBoundingClientRect ();
+		let scrollY = document.getElementById ("contentContainer").getBoundingClientRect ().top;
+		
+		div2.innerHTML = "innerHTML";
+		div2.style.position = "absolute";
+		div2.style.top = rect.top - scrollY + 40 + "px";
+		div2.style.left = rect.left + "px";
+		div2.style.width = rect.width;
+		div2.style.height = rect.height;
+		console.log (rect, div1.scrollTop);
 	}
 	
 	async onCreate (rid) {

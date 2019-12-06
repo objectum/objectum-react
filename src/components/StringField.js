@@ -12,7 +12,7 @@ class StringField extends Component {
 		let me = this;
 		
 		me.state = {
-			value: me.props.value
+			value: me.props.value === null ? "" : me.props.value
 		};
 		me.onChange = me.onChange.bind (me);
 	}
@@ -78,8 +78,8 @@ class StringField extends Component {
 			);
 		}
 		return (
-			<div className="form-group">
-				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
+			<div className="form-group stringfield">
+				<label htmlFor={id}>{i18n (me.props.label)}</label>
 				{cmp}
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>
