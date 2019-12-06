@@ -640,9 +640,9 @@ class Grid extends Component {
 
 				{me.props.tree && me.renderPosition ()}
 				
-				{me.state.mode == "images" ? me.renderCardView () : (me.state.mode == "edit" ? me.renderEditView () : me.renderTableView ())}
-				
 				{me.state.showFilters && me.state.mode != "edit" && <Fade><Filters cols={me.state.cols} store={me.props.store} onFilter={me.onFilter} filters={me.state.filters} /></Fade>}
+				
+				{me.state.mode == "images" ? me.renderCardView () : (me.state.mode == "edit" ? me.renderEditView () : me.renderTableView ())}
 				
 				{me.state.showCols && me.state.mode != "edit" && <Fade><GridColumns cols={me.state.cols} store={me.props.store} onHideCols={me.onHideCols} hideCols={me.state.hideCols} /></Fade>}
 

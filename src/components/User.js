@@ -6,6 +6,7 @@ import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
+import DictField from "./DictField";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -74,6 +75,7 @@ class User extends Component {
 						</Form>
 					</Tab>
 				</Tabs>
+				<DictField />
 			</div>
 		);
 	}

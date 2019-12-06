@@ -290,7 +290,7 @@ class ObjectumApp extends Component {
 								onSetOpen={this.onSetSidebarOpen}
 								sidebarClassName="bg-white"
 							>
-								<div className="container" id="contentContainer" style={{marginTop: "40px"}}>
+								<div className="container" id="contentContainer" style={{marginTop: "40px", marginBottom: "20px"}}>
 									{me.renderRoutes ()}
 								</div>
 							</Sidebar>
