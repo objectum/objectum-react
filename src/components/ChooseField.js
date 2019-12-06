@@ -179,7 +179,7 @@ class ChooseField extends Component {
 		};
 		return (
 			<div className="form-group choosefield">
-				<label htmlFor={id}>{i18n (me.props.label)}</label>
+				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
 				<ObjectField {...props} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

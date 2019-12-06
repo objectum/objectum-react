@@ -90,6 +90,10 @@ class ModelList extends Component {
 				delete gridOpts.model;
 				gridOpts.query = opts.grid.query;
 			}
+			if ((m.isDictionary () || m.isTable ()) && me.props.store.map ["query"][m.getPath ()]) {
+				delete gridOpts.model;
+				gridOpts.query = m.getPath ();
+			}
 		}
 		if (me.props.hasOwnProperty ("label")) {
 			gridOpts.label = me.props.label;

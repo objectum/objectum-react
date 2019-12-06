@@ -323,7 +323,7 @@ class Grid extends Component {
 		if (pos2 > me.state.length) {
 			pos2 = me.state.length;
 		}
-		let s = `${pos}-${pos2} ${i18n ("of")} ${me.state.length} ${i18n ("records")} (${me.state.pageNum} ${i18n ("pages")})`;
+		let s = `${i18n ("Records")}: ${pos}-${pos2} ${i18n ("of")} ${me.state.length} (${i18n ("Pages")}: ${me.state.pageNum})`;
 		
 		if (!pos2) {
 			s = i18n ("empty");
@@ -530,7 +530,7 @@ class Grid extends Component {
 		let properties = [];
 		
 		me.state.cols.forEach (col => {
-			if (model.properties [col.code]) {
+			if (model.properties [col.code] && col.area == 1 && me.state.hideCols.indexOf (col.code) == -1) {
 				properties.push (col.code);
 			}
 		});

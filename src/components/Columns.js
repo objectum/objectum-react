@@ -91,7 +91,7 @@ class Columns extends Component {
 			// create columns
 			let queryResult = await me.props.store.getData ({
 				query: query.getPath (),
-				offset: 0, limit: 1
+				getColumns: true
 			});
 			let queryCols = queryResult.cols;
 			let colMap = {};

@@ -173,9 +173,7 @@ class ObjectumApp extends Component {
 							<button key={`menu-${parent}-${i}`} className={`btn btn-link text-dark pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
 								{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}<i key={`open-${parent}-${i}`} className={`far ${opened ? "fa-folder-open" : "fa-folder"} menu-icon`} />
 							</button>
-							<Fade>
-								{opened && renderItems (rec.id, level + 1)}
-							</Fade>
+							{opened && renderItems (rec.id, level + 1)}
 						</div>
 				);
 				} else {

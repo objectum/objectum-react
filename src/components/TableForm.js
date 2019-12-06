@@ -219,10 +219,10 @@ class TableForm extends Component {
 								
 								return (
 									<tr key={i}>
-										<td key={`id-${i}`} className="align-middle">{id}</td>
+										<td key={`id-${i}`} className="align-top">{id}</td>
 										{me.props.properties.map ((code, i) => {
 											return (
-												<td key={i} className="align-middle pt-1 pb-0">
+												<td key={i} className="align-top pt-1 pb-0">
 													{me.renderProperty (me.model.properties [code], rec [code], object, me.model, `${code}-${id}`)}
 												</td>
 											);
