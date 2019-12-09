@@ -20,6 +20,7 @@ import ObjectumRoute from "./components/ObjectumRoute";
 import Role from "./components/Role";
 import Roles from "./components/Roles";
 import SelectField from "./components/SelectField";
+import DictField from "./components/DictField";
 import StringField from "./components/StringField";
 import Tab from "./components/Tab";
 import Tabs from "./components/Tabs";
@@ -65,6 +66,7 @@ export {
 	Role,
 	Roles,
 	SelectField,
+	DictField,
 	StringField,
 	Tab,
 	Tabs,
@@ -109,6 +111,7 @@ export default {
 	Role,
 	Roles,
 	SelectField,
+	DictField,
 	StringField,
 	Tab,
 	Tabs,

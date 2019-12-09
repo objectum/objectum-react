@@ -7,6 +7,7 @@ import NumberField from "./NumberField";
 import DateField from "./DateField";
 import BooleanField from "./BooleanField";
 import SelectField from "./SelectField";
+import DictField from "./DictField";
 import ChooseField from "./ChooseField";
 import FileField from "./FileField";
 
@@ -29,7 +30,7 @@ class Field extends Component {
 		}
 		if (type >= 1000) {
 			if (props.dict) {
-				return (<SelectField {...props} />);
+				return (<DictField {...props} />);
 			} else {
 				return (<ChooseField {...props} />);
 			}

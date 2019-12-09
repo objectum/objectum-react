@@ -70,7 +70,7 @@ function BackButton ({popLocation, locations}) {
 	}
 	
 	return (
-		<button className="btn btn-primary ml-1" disabled={locations.length < 2} onClick={handleClick}>
+		<button className="btn btn-link text-light ml-1 border-left border-right" disabled={locations.length < 2} onClick={handleClick}>
 			<i className="fas fa-arrow-left mr-2" />{i18n ("Back")}
 		</button>
 	);
@@ -273,7 +273,7 @@ class ObjectumApp extends Component {
 						
 						<Fade>
 							<div className="fixed-top text-light bg-dark">
-								<button className="btn btn-primary" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
+								<button className="btn btn-link text-light" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
 									<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
 								</button>
 	

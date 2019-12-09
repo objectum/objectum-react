@@ -80,6 +80,9 @@
 	"select text tag to edit": "выберите тег для редактирования",
 	"log": "журнал",
 	"select field": "выберите поле",
+	"select parameter": "выберите параметр",
+	"select group": "выберите группу",
+	"select": "выберите",
 	"value": "значение",
 	"date": "дата",
 	"comment": "комментарий",
@@ -89,6 +92,8 @@
 	"synchronize": "синхронизировать",
 	"synchronizing": "синхронизация",
 	"filters": "фильтры",
+	"filters on top": "фильтры сверху",
+	"filters on bottom": "фильтры снизу",
 	"loading": "загрузка",
 	"images mode": "режим изображений",
 	"edit mode": "режим редактирования",
@@ -99,5 +104,6 @@
 	"records on page": "записей на странице",
 	"basic": "основной",
 	"table": "таблица",
-	"return": "вернуться"
+	"return": "вернуться",
+	"amount": "количество"
 }

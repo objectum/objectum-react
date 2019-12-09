@@ -89,7 +89,9 @@ class Tabs extends Component {
 		}
 		return (
 			<div>
-				{me.props.label && <h5 className="objectum-title ml-3">{i18n (me.props.label)}</h5>}
+				{me.props.label && <div>
+					<h5 className="border bg-white shadow-sm pl-3 py-2 mb-1">{i18n (me.props.label)}</h5>
+				</div>}
 				<ul className="nav nav-tabs">
 					{me.tabs.map ((item, i) => {
 						let active = "";

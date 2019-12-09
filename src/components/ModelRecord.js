@@ -267,7 +267,7 @@ class ModelRecord extends Component {
 		if (opts.layout) {
 			return (
 				<div>
-					<h5 className="objectum-title ml-3">{label + ": " + me.state.label}</h5>
+					<h5 className="border bg-white shadow-sm pl-3 py-2 mb-1">{label + ": " + me.state.label}</h5>
 					{!me.record ? <div /> : me.renderLayout (opts.layout, m)}
 				</div>
 			);

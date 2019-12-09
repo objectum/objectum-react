@@ -91,9 +91,6 @@
     margin-right: 5px;
     content: "\F0DD";
 }
-.actions {
-    width: 100%
-}
 .jsoneditor-codemirror {
     height: 300px;
 }
@@ -101,4 +98,31 @@
     margin-top: 8px;
     margin-left: 11px;
     margin-right: 10px;
+}
+._dictfield-input {
+    min-width: 70px;
+    max-height: 30px;
+}
+._dictfield-dialog {
+    position: relative;
+    width: 400px;
+    float: left;
+}
+._dictfield-filter {
+    position: absolute;
+    left: -1px;
+    top: 2px;
+    width: 400px;
+    height: 65px;
+    z-index: 1000;
+}
+._dictfield-params {
+    position: absolute;
+    left: -1px;
+    top: 66px;
+    width: 400px;
+    min-height: 50px;
+    max-height: 300px;
+    z-index: 2147483647;
+    overflow: auto;
 }

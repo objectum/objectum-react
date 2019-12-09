@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import {getDateString} from "./helper";
 import _ from "lodash";
 import {i18n} from "../i18n";
+import DictField from "./DictField";
 
 class Filter extends Component {
 	constructor (props) {
@@ -107,6 +108,10 @@ class Filter extends Component {
 	onChange (val) {
 		let me = this;
 		let id = val.target.id;
+		
+		if (id != "column" && id != "operator") {
+			id = "value";
+		}
 		let v = val.target.value;
 		let state = {...me.state};
 		
@@ -132,6 +137,7 @@ class Filter extends Component {
 		
 		if (t >= 1000) {
 			if (me.col.recs) {
+/*
 				return (
 					<select id="value" className="filter-select mt-1" value={me.state.value} onChange={me.onChange}>
 						{[{id: "", name: i18n ("Choose value")}, ...me.col.recs].map ((rec, i) => {
@@ -141,6 +147,10 @@ class Filter extends Component {
 						})}
 					</select>
 				);
+*/
+				let property = me.props.store.getProperty (me.col.property);
+				
+				return <DictField id="value" value={me.state.value} onChange={me.onChange} store={me.props.store} model={me.col.model} property={property.get ("code")} />
 			} else {
 				t = 2;
 			}
@@ -199,7 +209,7 @@ class Filter extends Component {
 					})}
 				</select>}
 				<br />
-				{showValue && me.renderValue ()}
+				{showValue && <div className="mt-1">{me.renderValue ()}</div>}
 			</div>
 		);
 	}
@@ -214,6 +224,7 @@ class Filters extends Component {
 		me.onChangeState = me.onChangeState.bind (me);
 		me.onAdd = me.onAdd.bind (me);
 		me.onRemove = me.onRemove.bind (me);
+		me.onDock = me.onDock.bind (me);
 		
 		me.gen = 1;
 		
@@ -295,24 +306,32 @@ class Filters extends Component {
 		me.sendFilters (filters);
 	}
 	
+	onDock () {
+		this.props.onDockFilters (this.props.dockFilters == "bottom" ? "top" : "bottom");
+	}
+	
 	render () {
 		let me = this;
 		
 		return (
-			<div className="border bg-white my-1">
+			<div className="border bg-white shadow-sm my-1">
 				<div className="mt-1 ml-3"><h5>{i18n ("Filters")}</h5></div>
 				<div className="px-1 pb-1">
 					<div className="row no-gutters">
 						{me.state.filters.map ((rec) => {
 							return (
 								<div className="col-sm-2 mr-1" key={"div-filter-" + rec.id}>
-									<Filter id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
+									<Filter {...me.props} id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
 								</div>
 							);
 						})}
 						<div className="col-sm-2">
 							<div className="border p-1 mt-1 bg-light shadow-sm filter-block text-center">
-								<button type="button" className="btn btn-primary btn-sm" onClick={me.onAdd}><i className="fas fa-plus mr-2"></i>{i18n ("Add filter")}</button>
+								<button type="button" className="btn btn-primary btn-sm" onClick={me.onAdd}><i className="fas fa-plus mr-2" />{i18n ("Add filter")}</button>
+								<button type="button" className="btn btn-primary btn-sm mt-1" onClick={me.onDock}>
+									<i className={`fas ${me.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
+									{me.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}
+								</button>
 							</div>
 						</div>
 					</div>

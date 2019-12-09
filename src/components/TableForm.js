@@ -2,7 +2,6 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Fade from "react-reveal/Fade";
 import Loading from "./Loading";
 import {i18n} from "../i18n";
 import ModelList from "./ModelList";
@@ -146,6 +145,7 @@ class TableForm extends Component {
 			property: p.get ("code"),
 			object,
 			cls,
+			model: cls.getPath (),
 			value,
 			dict: false,
 			onChange: me.onChange,
@@ -180,7 +180,7 @@ class TableForm extends Component {
 		me.model = me.model || me.props.store.getModel (me.props.model);
 		
 		return (
-			<Fade>
+			<div>
 				<div className="actions border p-1 bg-white shadow-sm">
 					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving}>
 						{me.state.saving ?
@@ -234,7 +234,7 @@ class TableForm extends Component {
 						</tbody>
 					</table>
 				</div>
-			</Fade>
+			</div>
 		);
 	}
 };

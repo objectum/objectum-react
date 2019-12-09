@@ -6,9 +6,9 @@ import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
-import DictField from "./DictField";
-import {getHash, goRidLocation} from "./helper";
+import {goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
+import DictField from "./DictField";
 
 class User extends Component {
 	constructor (props) {
@@ -16,14 +16,12 @@ class User extends Component {
 		
 		let me = this;
 		let rid = me.props.match.params.rid.split ("#")[0];
-		let hash = getHash ();
 		
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			label: ""
 		};
 		me.onCreate = me.onCreate.bind (me);
-		me.onClick = me.onClick.bind (me);
 	}
 	
 	async componentDidMount () {
@@ -36,22 +34,6 @@ class User extends Component {
 		}
 	}
 
-	onClick () {
-		let me = this;
-		let div1 = me.refs.div1;
-		let div2 = me.refs.div2;
-		let rect = div1.getBoundingClientRect ();
-		let scrollY = document.getElementById ("contentContainer").getBoundingClientRect ().top;
-		
-		div2.innerHTML = "innerHTML";
-		div2.style.position = "absolute";
-		div2.style.top = rect.top - scrollY + 40 + "px";
-		div2.style.left = rect.left + "px";
-		div2.style.width = rect.width;
-		div2.style.height = rect.height;
-		console.log (rect, div1.scrollTop);
-	}
-	
 	async onCreate (rid) {
 		let me = this;
 		let o = await me.props.store.getRecord (rid);
@@ -75,7 +57,7 @@ class User extends Component {
 						</Form>
 					</Tab>
 				</Tabs>
-				<DictField />
+				<DictField store={me.props.store} model="d.product" />
 			</div>
 		);
 	}
