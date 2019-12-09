@@ -362,7 +362,7 @@ class Form extends Component {
 					value,
 					object: me.object,
 					cls: me.cls,
-					model: me.cls.getPath (),
+					model: me.cls && me.cls.getPath (),
 					store: me.props.store,
 					disabled: child.props.disabled,
 					ref: attr,

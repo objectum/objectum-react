@@ -10,6 +10,7 @@ import {i18n} from "./../i18n";
 import ReactTooltip from "react-tooltip";
 import GridColumns from "./GridColumns";
 import TableForm from "./TableForm";
+import Fade from "react-reveal/Fade";
 
 class Grid extends Component {
 	constructor (props) {
@@ -637,36 +638,38 @@ class Grid extends Component {
 		;
 		
 		return (
-			<div>
-				{me.props.label && <div>
-					<h5 className="border bg-white shadow-sm pl-3 py-2 mb-1">{i18n (me.props.label)}</h5>
-				</div>}
-				{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-				{me.state.mode == "table" && gridChildren && <div className="border p-1 bg-white shadow-sm">
-					{gridChildren}
-				</div>}
-
-				{me.props.tree && me.renderPosition ()}
-				
-				{me.state.showFilters && me.state.dockFilters == "top" && me.state.mode != "edit" && filters}
-				
-				{me.state.mode == "images" ? me.renderCardView () : (me.state.mode == "edit" ? me.renderEditView () : me.renderTableView ())}
-				
-				{me.state.showFilters && me.state.dockFilters == "bottom" && me.state.mode != "edit" && filters}
-				
-				{me.state.showCols && me.state.mode != "edit" && <GridColumns
-					cols={me.state.cols}
-					store={me.props.store}
-					onHideCols={me.onHideCols}
-					hideCols={me.state.hideCols}
-				/>}
-
-				{me.renderToolbar ()}
-
-{/*
-				<ReactTooltip />
-*/}
-			</div>
+			<Fade>
+				<div>
+					{me.props.label && <div>
+						<h5 className="border bg-white shadow-sm pl-3 py-2 mb-1">{i18n (me.props.label)}</h5>
+					</div>}
+					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
+					{me.state.mode == "table" && gridChildren && <div className="border p-1 bg-white shadow-sm">
+						{gridChildren}
+					</div>}
+	
+					{me.props.tree && me.renderPosition ()}
+					
+					{me.state.showFilters && me.state.dockFilters == "top" && me.state.mode != "edit" && filters}
+					
+					{me.state.mode == "images" ? me.renderCardView () : (me.state.mode == "edit" ? me.renderEditView () : me.renderTableView ())}
+					
+					{me.state.showFilters && me.state.dockFilters == "bottom" && me.state.mode != "edit" && filters}
+					
+					{me.state.showCols && me.state.mode != "edit" && <GridColumns
+						cols={me.state.cols}
+						store={me.props.store}
+						onHideCols={me.onHideCols}
+						hideCols={me.state.hideCols}
+					/>}
+	
+					{me.renderToolbar ()}
+	
+	{/*
+					<ReactTooltip />
+	*/}
+				</div>
+			</Fade>
 		);
 	}
 };
