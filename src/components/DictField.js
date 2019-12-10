@@ -176,7 +176,7 @@ class DictField extends Component {
 				<div className="_dictfield-params border p-1 bg-white">
 					<ul className="list-group">
 						{recs.map (rec => {
-							let num = _.filter (me.state.recs, {group: rec.id}).length;
+							let num = _.filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
 							
 							return (
 								<li className="list-group-item" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{`${rec.name} (${i18n ("Amount")}: ${num})`}</li>
