@@ -193,7 +193,7 @@ class TableForm extends Component {
 					</div>
 				</div>
 				<div>
-					<table className="table table-bordered bg-white shadow-sm objectum-table p-1 mb-0 mt-1">
+					<table className="table table-bordered bg-white shadow-sm objectum-table px-1 pt-1 pb-5 mb-0 mt-1">
 						<thead className="thead-dark">
 						<tr>
 							<th className="align-top">id</th>

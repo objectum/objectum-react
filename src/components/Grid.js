@@ -7,7 +7,6 @@ import Cell from "./Cell";
 import Filters from "./Filters";
 import _ from "lodash";
 import {i18n} from "./../i18n";
-import ReactTooltip from "react-tooltip";
 import GridColumns from "./GridColumns";
 import TableForm from "./TableForm";
 import Fade from "react-reveal/Fade";
@@ -664,10 +663,6 @@ class Grid extends Component {
 					/>}
 	
 					{me.renderToolbar ()}
-	
-	{/*
-					<ReactTooltip />
-	*/}
 				</div>
 			</Fade>
 		);

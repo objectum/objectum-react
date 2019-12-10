@@ -57,7 +57,6 @@ class User extends Component {
 						</Form>
 					</Tab>
 				</Tabs>
-				<DictField store={me.props.store} model="d.product" />
 			</div>
 		);
 	}

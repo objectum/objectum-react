@@ -4,6 +4,31 @@
 import React, {Component} from "react";
 import {i18n} from "../i18n";
 import _ from "lodash";
+import Select from "react-select";
+
+const groupStyles = {
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "space-between"
+};
+const groupBadgeStyles = {
+	backgroundColor: "#EBECF0",
+	borderRadius: "2em",
+	color: "#172B4D",
+	display: "inline-block",
+	fontSize: 12,
+	fontWeight: "normal",
+	lineHeight: "1",
+	minWidth: 1,
+	padding: "0.16666666666667em 0.5em",
+	textAlign: "center"
+};
+const formatGroupLabel = data => (
+	<div style={groupStyles}>
+		<span>{data.label}</span>
+		<span style={groupBadgeStyles}>{data.options.length}</span>
+	</div>
+);
 
 class DictField extends Component {
 	constructor (props) {
@@ -14,20 +39,13 @@ class DictField extends Component {
 		me.state = {
 			value: me.props.value === null ? "" : me.props.value,
 			label: "",
-			showDialog: false,
 			recs: [],
-			groupRecs: null,
-			group: null,
-			filter: ""
+			groupRecs: null
 		};
 		me.model = me.props.store.getModel (me.props.model);
 		me.property = me.model.properties [me.props.attr || me.props.property || me.props.prop || me.props.id];
 		
-		me.onFilter = me.onFilter.bind (me);
-		me.onClick = me.onClick.bind (me);
-		me.onGroupClick = me.onGroupClick.bind (me);
-		me.onDocumentClick = me.onDocumentClick.bind (me);
-		me.onShowDialog = me.onShowDialog.bind (me);
+		me.onChange = me.onChange.bind (me);
 	}
 	
 	async componentDidMount () {
@@ -56,163 +74,74 @@ class DictField extends Component {
 				}
 			}
 		}
-		document.addEventListener ("mousedown", me.onDocumentClick)
 		me.setState (state);
 	}
 	
-	componentWillUnmount () {
-		document.removeEventListener ("mousedown", this.onDocumentClick);
-	}
-	
-	onDocumentClick (event) {
+	onChange (option) {
 		let me = this;
+		let value = option ? option.value : null;
 		
-		if (me.refs.dialog && !me.refs.dialog.contains (event.target) && me.refs.button && !me.refs.button.contains (event.target)) {
-			me.setState ({
-				showDialog: false,
-				filter: "",
-				group: null
-			});
-		}
-	}
-	
-	onFilter (val) {
-		let me = this;
-		let v = val.target.value;
-		
-		me.setState ({filter: v});
-	}
-	
-	onShowDialog () {
-		let me = this;
-		
-		if (me.state.showDialog) {
-			return me.setState ({
-				showDialog: false,
-				filter: "",
-				group: null
-			});
-		}
-		me.setState ({showDialog: true});
-	}
-	
-	async onClick (val) {
-		let me = this;
-		let state = {
-			showDialog: false,
-			value: val.target.id,
-			filter: "",
-			group: null
-		};
-		let record = await me.props.store.getRecord (state.value);
-		
-		state.label = record.getLabel ();
-		me.setState (state);
+		me.setState ({value});
 		
 		if (me.props.onChange) {
 			me.props.onChange ({
 				target: {
 					id: me.property.get ("code"),
-					value: state.value
+					value
 				}
 			});
 		}
-	}
-	
-	onGroupClick (val) {
-		let me = this;
-		me.setState ({group: val.target.id});
-	}
-	
-	filter (inRecs) {
-		let me = this;
-		let recs = [];
-		
-		inRecs.forEach (rec => {
-			if (me.state.filter && (rec.name.toLowerCase () || "").indexOf (me.state.filter.toLowerCase ()) == -1) {
-				return;
-			}
-			recs.push (rec);
-		});
-		return recs;
-	}
-
-	renderParameters () {
-		let me = this;
-		let recs = me.filter (me.state.recs);
-		
-		if (me.state.group) {
-			recs = recs.filter (rec => rec [me.groupProperty.code] == me.state.group);
-		}
-		return (
-			<div className="_dictfield-dialog text-left" ref="dialog">
-				<div className="_dictfield-filter border p-1 bg-white">
-					<h6 className="ml-2">{i18n ("Select parameter")}</h6>
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
-				</div>
-				<div className="_dictfield-params border p-1 bg-white">
-					<ul className="list-group">
-						{recs.map (rec => {
-							return (
-								<li className="list-group-item" id={rec.id} key={rec.id} onClick={me.onClick}>{`${rec.name} (id: ${rec.id})`}</li>
-							);
-						})}
-					</ul>
-				</div>
-			</div>
-		);
-	}
-	
-	renderGroup () {
-		let me = this;
-		let recs = me.filter (me.state.groupRecs);
-		
-		return (
-			<div className="_dictfield-dialog text-left" ref="dialog">
-				<div className="_dictfield-filter border p-1 bg-white">
-					<h6>{`${i18n ("Select")}: ${me.groupProperty.get ("name")}`}</h6>
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
-				</div>
-				<div className="_dictfield-params border p-1 bg-white">
-					<ul className="list-group">
-						{recs.map (rec => {
-							let num = _.filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
-							
-							return (
-								<li className="list-group-item" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{`${rec.name} (${i18n ("Amount")}: ${num})`}</li>
-							);
-						})}
-					</ul>
-				</div>
-			</div>
-		);
 	}
 	
 	render () {
 		let me = this;
 		let id = me.property.get ("code");
 		let addCls = me.props.error ? " is-invalid" : "";
-		
+		let options = _.map (me.state.recs, rec => {
+			return {
+				value: rec.id, label: `${rec.name} (id: ${rec.id})`
+			};
+		});
+		let value = _.find (options, {value: me.state.value});
+		const customStyles = {
+			control: base => ({
+				...base,
+				height: 32,
+				minHeight: 32
+			})
+		};
+		let opts = {
+			placeholder: i18n ("Select") + " ...",
+			options,
+			className: "w-100",
+			value,
+			onChange: me.onChange,
+			isClearable: true,
+			disabled: me.props.disabled,
+			styles: customStyles
+		};
+		if (me.groupProperty) {
+			opts.formatGroupLabel = formatGroupLabel;
+			opts.options = _.map (me.state.groupRecs, groupRec => {
+				options = _.map (me.state.recs.filter (rec => rec [me.groupProperty.code] == groupRec.id), rec => {
+					return {
+						value: rec.id, label: `${rec.name} (id: ${rec.id})`
+					};
+				});
+				return {
+					label: groupRec.name,
+					options
+				};
+			});
+		}
 		return (
 			<div>
 				<div className="form-group">
 					{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
 					<div className="input-group">
-						{!me.props.disabled && <div className="input-group-prepend">
-							<button type="button" className="btn btn-primary btn-sm" onClick={me.onShowDialog}><i className="fas fa-edit" ref="button" /></button>
-						</div>}
-						<input
-							type="text"
-							className={`form-control ${addCls} _dictfield-input`}
-							id={id}
-							value={me.state.label}
-							onChange={() => {}}
-							disabled={true}
-						/>
+						<Select {...opts} />
 					</div>
 					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
-
-					{me.state.showDialog ? ((me.state.groupRecs && !me.state.group) ? me.renderGroup () : me.renderParameters ()) : <div />}
 				</div>
 			</div>
 		);
