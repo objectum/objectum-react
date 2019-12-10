@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import store from "objectum-client";
 import {ObjectumApp, ObjectumRoute, Grid} from '../../src'
-import {pushLocation} from "../../src/components/helper";
+import {pushLocation, timeout} from "../../src/components/helper";
 
 class Test extends Component {
 	constructor (props) {
@@ -32,11 +32,26 @@ class Test extends Component {
 	}
 };
 
+class TableOrgProductModel extends store.Record {
+	constructor (opts) { // store
+		super (opts);
+	}
+	
+	static async syncProductsAction (opts) {
+		await timeout (1000);
+		console.log (opts);
+	}
+};
+
+
 class Demo extends Component {
 	constructor (props) {
 		super (props);
 		
 		store.setUrl ("/rmp");
+		
+		store.register ("t.org.product", TableOrgProductModel);
+		
 		window.store = store;
 	}
 	

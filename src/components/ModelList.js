@@ -3,6 +3,8 @@ import Action from "./Action";
 import Grid from "./Grid";
 import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
+import Loading from "./Loading";
+import _ from "lodash";
 
 class ModelList extends Component {
 	constructor (props) {
@@ -16,8 +18,15 @@ class ModelList extends Component {
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
 		me.state = {
-			refresh: false
+			refresh: false,
+			actions: []
 		};
+		let m = me.props.store.getModel (me.model);
+		let opts = m.getOpts ();
+		
+		if (opts.grid && opts.grid.actions) {
+			me.state.actions = opts.grid.actions;
+		}
 	}
 	
 	onCreate () {
@@ -68,6 +77,106 @@ class ModelList extends Component {
 		this.model = this.props.model || this.props.match.params.model.split ("#")[0];
 	}
 	
+	renderActions () {
+		let me = this;
+		let items = [];
+		
+		function updateActionState (i, action) {
+			let actions = _.cloneDeep (me.state.actions);
+			
+			actions [i] = _.clone (action);
+			
+			me.setState ({actions});
+		};
+		async function actionHandler ({action, i, Model, method, id, grid}) {
+			updateActionState (i, _.extend (action, {processing: true}));
+			
+			let state = {processing: false};
+			
+			try {
+				let fn;
+				
+				if (id) {
+					let record = await me.props.store.getRecord (id);
+					
+					if (typeof (record [method]) != "function") {
+						throw new Error (`Unknown method ${method}`);
+					}
+					fn = record [method];
+				} else {
+					if (typeof (Model [method]) != "function") {
+						throw new Error (`Unknown static method ${method}`);
+					}
+					fn = Model [method];
+				}
+				let promise = fn ({
+					store: me.props.store,
+					id,
+					grid,
+					parentModel: me.props.parentModel,
+					parentId: me.props.parentId
+				});
+				if (promise && promise.then) {
+					promise.then (() => {
+						updateActionState (i, _.extend (action, state));
+						grid.setState ({refresh: !grid.state.refresh});
+					}).catch (err => {
+						state.error = err.message;
+						updateActionState (i, _.extend (action, state));
+					});
+				} else {
+					updateActionState (i, _.extend (action, state));
+					grid.setState ({refresh: !grid.state.refresh});
+				}
+			} catch (err) {
+				state.error = err.message;
+				updateActionState (i, _.extend (action, state));
+			}
+		};
+		for (let i = 0; i < me.state.actions.length; i ++) {
+			try {
+				let action = me.state.actions [i];
+				let fn = action.onClick || action.onClickSelected;
+				
+				if (!fn) {
+					throw new Error (`onClick, onClickSelected not exist`);
+				}
+				let tokens = fn.split (".");
+				let method = tokens.splice (tokens.length - 1, 1)[0];
+				let path = tokens.join (".");
+				let Model = me.props.store.registered [path];
+				
+				if (!Model) {
+					throw new Error (`Model "${path}" not registered`);
+				}
+				let actionOpts = {};
+			
+				if (action.onClick) {
+					actionOpts.onClick = (grid) => {
+						actionHandler ({action, i, Model, method, grid});
+					};
+				} else {
+					actionOpts.onClickSelected = (id, grid) => {
+						actionHandler ({action, i, Model, method, id, grid});
+					};
+				}
+				items.push (
+					action.processing ?
+						<span className="text-primary ml-2" key={i}><Loading /></span> :
+						<span key={i}>
+							<Action {...actionOpts}>{action.icon ? <i className={action.icon + " mr-2"}/> : <span/>}{action.label}</Action>
+							{action.error && <span className="text-danger ml-1">{action.error}</span>}
+						</span>
+				);
+			} catch (err) {
+				items.push (
+					<span className="text-danger ml-1" key={i}>{err.message}</span>
+				);
+			}
+		}
+		return items;
+	}
+	
 	render () {
 		let me = this;
 		let m = me.props.store.getModel (me.model);
@@ -110,6 +219,8 @@ class ModelList extends Component {
 		if (m.isDictionary () || (opts.grid && opts.grid.editable)) {
 			gridOpts.editable = true;
 		}
+		let actions = me.renderActions ();
+		
 		return (
 			<div className="row">
 				<div className="col-sm-12">
@@ -117,6 +228,7 @@ class ModelList extends Component {
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
 						<RemoveAction onRemove={me.onRemove} />
+						{actions}
 						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 					</Grid>
 				</div>
