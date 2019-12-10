@@ -1,8 +1,5 @@
 module.exports = {
 	type: "react-component",
-	babel: {
-		presets: "es2015"
-	},
 	npm: {
 		esModules: true,
 		umd: false

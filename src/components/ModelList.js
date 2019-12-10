@@ -94,7 +94,7 @@ class ModelList extends Component {
 			let state = {processing: false};
 			
 			try {
-				let fn;
+				let fn, self = grid;
 				
 				if (id) {
 					let record = await me.props.store.getRecord (id);
@@ -103,13 +103,14 @@ class ModelList extends Component {
 						throw new Error (`Unknown method ${method}`);
 					}
 					fn = record [method];
+					self = record;
 				} else {
 					if (typeof (Model [method]) != "function") {
 						throw new Error (`Unknown static method ${method}`);
 					}
 					fn = Model [method];
 				}
-				let promise = fn ({
+				let promise = fn.call (self, {
 					store: me.props.store,
 					id,
 					grid,
