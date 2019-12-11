@@ -119,7 +119,12 @@ class Filter extends Component {
 		
 		if (id == "column") {
 			state.operatorRecs = me.getOperatorRecs (v);
-			state.operator = "";
+			
+			if (_.find (state.operatorRecs, {code: "="})) {
+				state.operator = "=";
+			} else {
+				state.operator = "";
+			}
 			state.value = "";
 		}
 		me.setState (state);

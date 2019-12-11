@@ -169,7 +169,7 @@ class ModelList extends Component {
 				}
 				items.push (
 					action.processing ?
-						<span className="text-primary ml-2" key={i}>
+						<span className="text-primary ml-2 mr-2" key={i}>
 							<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true" />{text}
 						</span> :
 						<span key={i}>

@@ -40,7 +40,8 @@ import {
 	removeHashListener,
 	loadCSS,
 	loadJS,
-	getDateString
+	getDateString,
+	timeout
 } from "./components/helper";
 
 export {
@@ -85,7 +86,8 @@ export {
 	loadJS,
 	getDateString,
 	JsonEditor,
-	i18n
+	i18n,
+	timeout
 };
 
 export default {
@@ -130,5 +132,6 @@ export default {
 	loadJS,
 	getDateString,
 	JsonEditor,
-	i18n
+	i18n,
+	timeout
 };

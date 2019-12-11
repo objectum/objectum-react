@@ -198,8 +198,15 @@ class TableForm extends Component {
 						<tr>
 							<th className="align-top">id</th>
 							{me.props.properties.map ((code, i) => {
+								let opts = {
+									key: i,
+									className: "align-top"
+								};
+								if (me.props.colMap [code].type >= 1000) {
+									opts.style = {width: "250px"};
+								}
 								return (
-									<th key={i} className="align-top">{me.props.colMap [code] ? me.props.colMap [code].name : ""}</th>
+									<th {...opts}>{me.props.colMap [code] ? me.props.colMap [code].name : ""}</th>
 								);
 							})}
 						</tr>
