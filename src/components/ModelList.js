@@ -115,7 +115,8 @@ class ModelList extends Component {
 					id,
 					grid,
 					parentModel: me.props.parentModel,
-					parentId: me.props.parentId
+					parentId: me.props.parentId,
+					progressCallback: (progressValue, progressMax) => updateActionState (i, _.extend (action, {progressValue, progressMax}))
 				});
 				if (promise && promise.then) {
 					promise.then (() => {
@@ -161,9 +162,16 @@ class ModelList extends Component {
 						actionHandler ({action, i, Model, method, id, grid});
 					};
 				}
+				let text = i18n ("Processing") + " ...";
+				
+				if (action.progressMax) {
+					text = `${i18n ("Processing")}: ${action.progressValue} / ${action.progressMax}`;
+				}
 				items.push (
 					action.processing ?
-						<span className="text-primary ml-2" key={i}><Loading /></span> :
+						<span className="text-primary ml-2" key={i}>
+							<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true" />{text}
+						</span> :
 						<span key={i}>
 							<Action {...actionOpts}>{action.icon ? <i className={action.icon + " mr-2"}/> : <span/>}{action.label}</Action>
 							{action.error && <span className="text-danger ml-1">{action.error}</span>}
@@ -171,7 +179,7 @@ class ModelList extends Component {
 				);
 			} catch (err) {
 				items.push (
-					<span className="text-danger ml-1" key={i}>{err.message}</span>
+					<span className="border p-1 text-danger ml-1" key={i}>{err.message}</span>
 				);
 			}
 		}
