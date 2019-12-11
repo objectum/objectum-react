@@ -226,7 +226,7 @@ class ModelList extends Component {
 			gridOpts.card.onEdit = me.onEdit;
 		}
 		if (m.isDictionary () || (opts.grid && opts.grid.editable)) {
-			gridOpts.editable = true;
+			gridOpts.editable = opts.grid.editable;
 		}
 		let actions = me.renderActions ();
 		

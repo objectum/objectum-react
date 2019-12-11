@@ -48,7 +48,7 @@ class Cell extends Component {
 					}
 				});
 				if (rec) {
-					return (<span>{`${rec.name} (${value})`}</span>);
+					return (<span>{`${rec.name} (id: ${value})`}</span>);
 				} else {
 					return (<span>{`${value}`}</span>);
 				}

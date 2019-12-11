@@ -7,6 +7,8 @@ import {i18n} from "../i18n";
 import ModelList from "./ModelList";
 import Field from "./Field";
 import {timeout} from "./helper";
+import _ from "lodash";
+import Cell from "./Cell";
 
 class TableForm extends Component {
 	constructor (props) {
@@ -228,9 +230,17 @@ class TableForm extends Component {
 									<tr key={i}>
 										<td key={`id-${i}`} className="align-top">{id}</td>
 										{me.props.properties.map ((code, i) => {
+											let editable = true;
+											
+											if (_.isArray (me.props.editable) && me.props.editable.indexOf (code) == -1) {
+												editable = false;
+											}
 											return (
 												<td key={i} className="align-top pt-1 pb-0">
-													{me.renderProperty (me.model.properties [code], rec [code], object, me.model, `${code}-${id}`)}
+													{editable ?
+														me.renderProperty (me.model.properties [code], rec [code], object, me.model, `${code}-${id}`) :
+														<Cell store={me.props.store} value={rec [code]} col={me.props.colMap [code]} rec={rec} />
+													}
 												</td>
 											);
 										})}

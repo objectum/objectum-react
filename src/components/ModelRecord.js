@@ -140,7 +140,7 @@ class ModelRecord extends Component {
 				let opts = tableModel.getOpts ();
 				let label = tableModel.getLabel ();
 				
-				if (opts.grid && opts.grid.label) {
+				if (opts.grid && opts.grid.hasOwnProperty ("label")) {
 					label = opts.grid.label;
 				}
 				item = (
@@ -187,7 +187,8 @@ class ModelRecord extends Component {
 		let gen = 0;
 		
 		if (_.isArray (layout)) {
-			if (!layout.length || typeof (layout [0]) != "string") {
+			//if (!layout.length || typeof (layout [0]) != "string") {
+			if (!layout.length) {
 				return (<div />);
 			}
 			let formItems = [];
@@ -199,7 +200,7 @@ class ModelRecord extends Component {
 				if (typeof (row) == "string" && me.record [row]) {
 					rid = me.record [row];
 				}
-				if (_.isArray (row) && rid) {
+				if (_.isArray (row)) {
 					formItems.push (
 						<div className="row no-gutters" key={`row-${i}`}>
 							{row.map ((code, j) => {
@@ -226,11 +227,19 @@ class ModelRecord extends Component {
 					);
 				}
 			}
-			items.push (
-				<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
-					{formItems}
-				</Form>
-			);
+			if (rid) {
+				items.push (
+					<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
+						{formItems}
+					</Form>
+				);
+			} else {
+				items.push (
+					<div>
+						{formItems}
+					</div>
+				);
+			}
 		} else
 		if (_.isObject (layout)) {
 			items.push (
