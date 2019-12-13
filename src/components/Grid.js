@@ -137,7 +137,7 @@ class Grid extends Component {
 	}
 	
 	onFolderClick (id) {
-		setHash (this, {[this.props.id]: {parent: id, selected: null}});
+		setHash (this, {[this.props.id]: {parent: id, selected: null, page: 1}});
 	}
 	
 	onChange (val) {

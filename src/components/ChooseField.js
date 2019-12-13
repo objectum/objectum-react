@@ -73,15 +73,18 @@ function objectField (ComponentClass) {
 		
 		render () {
 			let me = this;
+			console.log (me.props);
 			
 			return (
 				<div className="row">
 					<div className="col-md">
 						<div className="input-group input-group-md">
-					    	<span className="input-group-btn">
-								{!me.props.disabled && <button type="button" className="btn btn-primary" onClick={me.onVisible}><i className="fas fa-edit" /></button>}
-						    </span>
-							<input type="text" className={"form-control" + me.props.addCls} id={me.props.id} value={me.state.name} disabled={true} />
+							<div className="input-group">
+								{!me.props.disabled && <div>
+									<button type="button" className="btn btn-primary btn-sm" onClick={me.onVisible} style={{height: "100%"}}><i className="fas fa-edit" /></button>
+								</div>}
+								<input type="text" className={"form-control" + me.props.addCls} id={me.props.id} value={me.state.name} disabled={true} />
+						    </div>
 							<Modal
 								isOpen={me.state.visible}
 								style={{
