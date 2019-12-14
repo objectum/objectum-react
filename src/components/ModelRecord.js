@@ -47,6 +47,52 @@ class ModelRecord extends Component {
 		goRidLocation (me.props, rid);
 	}
 	
+	getTables () {
+		let me = this;
+		let m = me.props.store.getModel (me.state.model);
+		
+		if (m.isTable ()) {
+			return [];
+		}
+		try {
+			let t = me.props.store.getModel (`t.${m.getPath ()}`);
+			let tables = [], has = {};
+			
+			_.each (me.props.store.map ["model"], m => {
+				if (m.get ("parent") == t.get ("id") && !has [m.getPath ()]) {
+					tables.push (m);
+					has [m.getPath ()] = true;
+				}
+			});
+			return tables;
+		} catch (err) {
+			return [];
+		}
+	}
+	
+	async componentDidUpdate () {
+		let me = this;
+		let rid = me.props.match.params.rid.split ("#")[0];
+		
+		rid = rid == "new" ? null : rid;
+		
+		if (me.state.rid != rid) {
+			let hash = getHash ();
+			let label = "";
+			
+			if (rid) {
+				let o = await me.props.store.getRecord (rid);
+				
+				label = o.getLabel ();
+			}
+			me.setState ({
+				rid,
+				model: hash.opts.model,
+				label
+			});
+		}
+	}
+	
 	renderProperty (p, key, props = {}) {
 		let me = this;
 		let dict = false;
@@ -86,52 +132,6 @@ class ModelRecord extends Component {
 					{...props} key={key} property={p.get ("code")} dict={dict} disabled={disabled} value={value}
 				/>
 			);
-		}
-	}
-	
-	getTables () {
-		let me = this;
-		let m = me.props.store.getModel (me.state.model);
-		
-		if (m.isTable ()) {
-			return [];
-		}
-		try {
-			let t = me.props.store.getModel (`t.${m.getPath ()}`);
-			let tables = [], has = {};
-
-			_.each (me.props.store.map ["model"], m => {
-				if (m.get ("parent") == t.get ("id") && !has [m.getPath ()]) {
-					tables.push (m);
-					has [m.getPath ()] = true;
-				}
-			});
-			return tables;
-		} catch (err) {
-			return [];
-		}
-	}
-	
-	async componentDidUpdate () {
-		let me = this;
-		let rid = me.props.match.params.rid.split ("#")[0];
-		
-		rid = rid == "new" ? null : rid;
-		
-		if (me.state.rid != rid) {
-			let hash = getHash ();
-			let label = "";
-			
-			if (rid) {
-				let o = await me.props.store.getRecord (rid);
-				
-				label = o.getLabel ();
-			}
-			me.setState ({
-				rid,
-				model: hash.opts.model,
-				label
-			});
 		}
 	}
 	
@@ -240,7 +240,7 @@ class ModelRecord extends Component {
 				);
 			} else {
 				items.push (
-					<div>
+					<div key={`div-${level}-${gen ++}`}>
 						{formItems}
 					</div>
 				);

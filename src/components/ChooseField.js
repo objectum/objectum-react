@@ -5,140 +5,83 @@ import React, {Component} from "react";
 import Modal from "react-modal";
 import {i18n} from "./../i18n";
 
-function objectField (ComponentClass) {
-	return class extends Component {
-		constructor (props) {
-			super (props);
-			
-			let me = this;
-			
-			me.onChoose = me.onChoose.bind (me);
-			me.onVisible = me.onVisible.bind (me);
-			me.state = {
-				visible: false,
-				value: props.value,
-				name: ""
-			};
-		}
-		
-		async updateName () {
-			let me = this;
-			let name = "";
-			
-			if (me.state.value) {
-				let o = await me.props.store.getRsc (me.props.rsc, me.state.value);
-				
-				name = o.getLabel ();
-			}
-			me.setState ({name});
-		}
-		
-		componentDidMount () {
-			let me = this;
-			
-			Modal.setAppElement ("body");
-			
-			if (me.state.value) {
-				me.updateName ();
-			}
-		}
-		
-		onVisible () {
-			let me = this;
-			
-			me.setState ({visible: !me.state.visible});
-		}
-		
-		onChoose () {
-			let me = this;
-			let cmp = me.refs ["component"].refs [me.props.choose.ref];
-			
-			if (!cmp) {
-				throw new Error (`not found choose.ref: ${me.props.choose.ref}`);
-			}
-			let selected = cmp.state.selected;
-			let value = "";
-			
-			if (selected !== null) {
-				value = (cmp.recs || cmp.state.recs) [selected].id;
-			}
-			me.setState ({value, visible: false});
-			me.props.onChange ({
-				target: {
-					id: me.props.id, value
-				}
-			});
-			me.updateName ();
-		}
-		
-		render () {
-			let me = this;
-			
-			return (
-				<div className="row">
-					<div className="col-md">
-						<div className="input-group input-group-md">
-							<div className="input-group">
-								{!me.props.disabled && <div>
-									<button type="button" className="btn btn-primary btn-sm" onClick={me.onVisible} style={{height: "100%"}}><i className="fas fa-edit" /></button>
-								</div>}
-								<input type="text" className={"form-control" + me.props.addCls} id={me.props.id} value={me.state.name} disabled={true} />
-						    </div>
-							<Modal
-								isOpen={me.state.visible}
-								style={{
-									content: {
-										top: "50%",
-										left: "50%",
-										right: "auto",
-										bottom: "auto",
-										marginTop: "50px",
-										marginRight: "-50%",
-										transform: "translate(-50%, -50%)"
-									}
-								}}
-							>
-								<div className="row">
-									<div className="col-md mb-1">
-										<button type="button" className="btn btn-primary mr-1" onClick={me.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
-										<button type="button" className="btn btn-primary" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
-									</div>
-								</div>
-								<ComponentClass {...me.props} {...me.props.choose} ref="component" disableActions={true} />
-							</Modal>
-						</div>
-					</div>
-				</div>
-			);
-		}
-	};
-};
-
 class ChooseField extends Component {
 	constructor (props) {
 		super (props);
 		
 		let me = this;
 		
-		me.onChange = me.onChange.bind (me);
+		me.onClear = me.onClear.bind (me);
+		me.onChoose = me.onChoose.bind (me);
+		me.onVisible = me.onVisible.bind (me);
 		me.state = {
-			value: me.props.value
+			value: me.props.value,
+			visible: false,
+			name: ""
 		};
 	}
 	
-	onChange (val) {
+	async updateName (value) {
 		let me = this;
-		let v = val.target.value;
+		let name = "";
 		
-		me.setState ({value: v});
-		me.props.onChange (val);
+		if (value) {
+			let o = await me.props.store.getRsc (me.props.rsc, value);
+			
+			name = o.getLabel ();
+		}
+		me.setState ({name});
+	}
+	
+	onVisible () {
+		let me = this;
+		
+		me.setState ({visible: !me.state.visible});
+	}
+	
+	onClear () {
+		let me = this;
+		let id = me.props.id || me.props.attr || me.props.property || me.props.prop;
+		
+		me.setState ({value: null, name: ""});
+
+		me.props.onChange ({
+			target: {
+				id, value: null
+			}
+		});
+	}
+	
+	onChoose () {
+		let me = this;
+		let cmp = me.refs ["component"].refs [me.props.choose.ref];
+		let id = me.props.id || me.props.attr || me.props.property || me.props.prop;
+		
+		if (!cmp) {
+			throw new Error (`not found choose.ref: ${me.props.choose.ref}`);
+		}
+		let selected = cmp.state.selected;
+		let value = "";
+		
+		if (selected !== null) {
+			value = (cmp.recs || cmp.state.recs) [selected].id;
+		}
+		me.setState ({value, visible: false});
+		me.props.onChange ({
+			target: {
+				id, value
+			}
+		});
+		me.updateName (value);
 	}
 	
 	async componentDidMount () {
 		let me = this;
 		let name = "";
 		
-		if (me.props.disabled && me.state.value) {
+		Modal.setAppElement ("body");
+		
+		if (me.state.value) {
 			let o = await me.props.store.getRsc (me.props.rsc, me.state.value);
 			
 			name = o.getLabel ();
@@ -151,6 +94,7 @@ class ChooseField extends Component {
 		
 		if (prevProps.value !== me.props.value) {
 			me.setState ({value: me.props.value});
+			me.updateName (me.props.value);
 		}
 	}
 	
@@ -176,15 +120,66 @@ class ChooseField extends Component {
 				</div>
 			)
 		}
-		let ObjectField = objectField (me.props.choose.cmp);
+		let ChooseComponent = me.props.choose.cmp;
 		let props = {
-			...me.props, addCls, onChange: me.onChange, disabled, value: me.state.value, id, localHash: true
+			...me.props, addCls, disabled, value: me.state.value, id, localHash: true
 		};
 		return (
-			<div className="form-group choosefield">
-				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
-				<ObjectField {...props} />
-				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
+			<div>
+				<div className="form-group">
+					{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
+					<div className="input-group">
+						{!me.props.disabled && <div>
+							<button
+								type="button"
+								className="btn btn-primary btn-sm"
+								onClick={me.onVisible}
+								style={{height: "100%", width: "27px"}}
+							>
+								<i className="fas fa-edit" />
+							</button>
+							<button
+								type="button"
+								className="btn btn-primary btn-sm border-left"
+								onClick={me.onClear}
+								style={{height: "100%", width: "27px"}}
+							>
+								<i className="fas fa-times" />
+							</button>
+						</div>}
+						<input
+							type="text"
+							className={"form-control" + addCls}
+							id={id}
+							value={me.state.name}
+							onChange={() => {}}
+							disabled={true}
+						/>
+					</div>
+					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
+				</div>
+				<Modal
+					isOpen={me.state.visible}
+					style={{
+						content: {
+							top: "50%",
+							left: "50%",
+							right: "auto",
+							bottom: "auto",
+							marginTop: "50px",
+							marginRight: "-50%",
+							transform: "translate(-50%, -50%)"
+						}
+					}}
+				>
+					<div className="row">
+						<div className="col-md mb-1">
+							<button type="button" className="btn btn-primary mr-1" onClick={me.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
+							<button type="button" className="btn btn-primary" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
+						</div>
+					</div>
+					<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true} />
+				</Modal>
 			</div>
 		);
 	}

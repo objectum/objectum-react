@@ -23,11 +23,27 @@ class DictField extends Component {
 		me.model = me.props.store.getModel (me.props.model);
 		me.property = me.model.properties [me.props.attr || me.props.property || me.props.prop || me.props.id];
 		
+		me.onClear = me.onClear.bind (me);
 		me.onFilter = me.onFilter.bind (me);
 		me.onClick = me.onClick.bind (me);
 		me.onGroupClick = me.onGroupClick.bind (me);
 		me.onDocumentClick = me.onDocumentClick.bind (me);
 		me.onShowDialog = me.onShowDialog.bind (me);
+	}
+	
+	onClear () {
+		let me = this;
+		
+		me.setState ({value: null, label: ""});
+
+		if (me.props.onChange) {
+			me.props.onChange ({
+				target: {
+					id: me.property.get ("code"),
+					value: null
+				}
+			});
+		}
 	}
 	
 	async componentDidMount () {
@@ -199,7 +215,22 @@ class DictField extends Component {
 					{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
 					<div className="input-group">
 						{!me.props.disabled && <div>
-							<button type="button" className="btn btn-primary btn-sm" onClick={me.onShowDialog} style={{height: "100%"}}><i className="fas fa-edit" ref="button" /></button>
+							<button
+								type="button"
+								className="btn btn-primary btn-sm"
+								onClick={me.onShowDialog}
+								style={{height: "100%", width: "27px"}}
+							>
+								<i className="fas fa-edit" ref="button" />
+							</button>
+							<button
+								type="button"
+								className="btn btn-primary btn-sm border-left"
+								onClick={me.onClear}
+								style={{height: "100%", width: "27px"}}
+							>
+								<i className="fas fa-times" />
+							</button>
 						</div>}
 						<input
 							type="text"
