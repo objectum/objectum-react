@@ -68,7 +68,10 @@ class Property extends Component {
 									<StringField property="name" label="Name" notNull={true} />
 								</div>
 								<div className="form-group col-md-6">
-									<ChooseField property="model" label="Model" disabled={true} rsc="model" value={me.state.model} choose={Models} chooseRef="models" />
+									<ChooseField
+										property="model" label="Model" disabled={true} rsc="model" value={me.state.model}
+										choose={{cmp: Models, ref: "models"}}
+									/>
 								</div>
 							</div>
 							<div className="form-row">
@@ -81,7 +84,10 @@ class Property extends Component {
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<ChooseField property="type" label="Type" disabled={!!me.state.rid} rsc="model" notNull={true} choose={Types} chooseRef="types" />
+									<ChooseField
+										property="type" label="Type" disabled={!!me.state.rid} rsc="model" notNull={true}
+										choose={{cmp: Types, ref: "types"}}
+									/>
 								</div>
 								<div className="form-group col-md-6">
 									<StringField property="description" label="Description" textarea={true} />

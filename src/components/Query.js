@@ -56,7 +56,10 @@ class Query extends Component {
 									<StringField property="name" label="Name" />
 								</div>
 								<div className="form-group col-md-6">
-									<ChooseField property="parent" label="Parent" disabled={!!me.state.rid} rsc="query" value={me.state.parent} choose={Queries} chooseRef="queries" />
+									<ChooseField
+										property="parent" label="Parent" disabled={!!me.state.rid} rsc="query" value={me.state.parent}
+										choose={{cmp: Queries, ref: "queries"}}
+									/>
 								</div>
 							</div>
 							<div className="form-row">

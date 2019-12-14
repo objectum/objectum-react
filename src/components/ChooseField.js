@@ -33,7 +33,7 @@ function objectField (ComponentClass) {
 			me.setState ({name});
 		}
 		
-		async componentDidMount () {
+		componentDidMount () {
 			let me = this;
 			
 			Modal.setAppElement ("body");
@@ -51,10 +51,10 @@ function objectField (ComponentClass) {
 		
 		onChoose () {
 			let me = this;
-			let cmp = me.refs ["component"].refs [me.props.chooseRef];
+			let cmp = me.refs ["component"].refs [me.props.choose.ref];
 			
 			if (!cmp) {
-				throw new Error (`not found chooseRef: ${me.props.chooseRef}`);
+				throw new Error (`not found choose.ref: ${me.props.choose.ref}`);
 			}
 			let selected = cmp.state.selected;
 			let value = "";
@@ -73,7 +73,6 @@ function objectField (ComponentClass) {
 		
 		render () {
 			let me = this;
-			console.log (me.props);
 			
 			return (
 				<div className="row">
@@ -93,6 +92,7 @@ function objectField (ComponentClass) {
 										left: "50%",
 										right: "auto",
 										bottom: "auto",
+										marginTop: "50px",
 										marginRight: "-50%",
 										transform: "translate(-50%, -50%)"
 									}
@@ -100,11 +100,11 @@ function objectField (ComponentClass) {
 							>
 								<div className="row">
 									<div className="col-md mb-1">
-										<button type="button" className="btn btn-primary mr-1" onClick={me.onChoose}><i className="fas fa-check mr-1"></i>{i18n ("Choose")}</button>
-										<button type="button" className="btn btn-primary" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1"></i>{i18n ("Cancel")}</button>
+										<button type="button" className="btn btn-primary mr-1" onClick={me.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
+										<button type="button" className="btn btn-primary" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
 									</div>
 								</div>
-								<ComponentClass {...me.props} ref="component" disableActions={true} />
+								<ComponentClass {...me.props} {...me.props.choose} ref="component" disableActions={true} />
 							</Modal>
 						</div>
 					</div>
@@ -160,11 +160,11 @@ class ChooseField extends Component {
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
 		
-		if (!disabled && (!me.props.choose || !me.props.chooseRef)) {
+		if (!disabled && (!me.props.choose || !me.props.choose.cmp || !me.props.choose.ref)) {
 			return (
 				<div className="form-group">
 					<label htmlFor={id}>{i18n (me.props.label)}</label>
-					<div className="alert alert-danger">choose or chooseRef not exist</div>
+					<div className="alert alert-danger">choose.cmp or choose.ref not exist</div>
 				</div>
 			);
 		}
@@ -176,7 +176,7 @@ class ChooseField extends Component {
 				</div>
 			)
 		}
-		let ObjectField = objectField (me.props.choose);
+		let ObjectField = objectField (me.props.choose.cmp);
 		let props = {
 			...me.props, addCls, onChange: me.onChange, disabled, value: me.state.value, id, localHash: true
 		};

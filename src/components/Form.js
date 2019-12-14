@@ -6,7 +6,6 @@ import StringField from "./StringField";
 import NumberField from "./NumberField";
 import DateField from "./DateField";
 import BooleanField from "./BooleanField";
-import SelectField from "./SelectField";
 import DictField from "./DictField";
 import ChooseField from "./ChooseField";
 import FileField from "./FileField";
@@ -362,7 +361,7 @@ class Form extends Component {
 					value,
 					object: me.object,
 					cls: me.cls,
-					//model: me.cls && me.cls.getPath (),
+					model: me.cls && me.cls.getPath (),
 					store: me.props.store,
 					disabled: child.props.disabled,
 					ref: attr,
@@ -391,7 +390,11 @@ class Form extends Component {
 							return (<DictField {...props2} />);
 						} else
 						if (child.props.chooseModel) {
-							return (<ChooseField {...props2} choose={ModelList} chooseRef={`list-${child.props.chooseModel}`} model={child.props.chooseModel} />);
+							return (
+								<ChooseField
+									{...props2}
+									choose={{cmp: ModelList, ref: `list-${child.props.chooseModel}`, model: child.props.chooseModel}}
+								/>);
 						} else {
 							return (<ChooseField {...props2} />);
 						}

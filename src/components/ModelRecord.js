@@ -75,11 +75,16 @@ class ModelRecord extends Component {
 		}
 		if (chooseModel) {
 			return (
-				<Field {...props} key={key} property={p.get ("code")} dict={dict} choose={ModelList} chooseRef={`list-${chooseModel}`} model={chooseModel} disabled={disabled} value={value}/>
+				<Field
+					{...props} key={key} property={p.get ("code")} disabled={disabled} value={value}
+					choose={{cmp: ModelList, ref: `list-${chooseModel}`, model: chooseModel}}
+				/>
 			);
 		} else {
 			return (
-				<Field {...props} key={key} property={p.get ("code")} dict={dict} chooseModel={chooseModel} disabled={disabled} value={value}/>
+				<Field
+					{...props} key={key} property={p.get ("code")} dict={dict} disabled={disabled} value={value}
+				/>
 			);
 		}
 	}

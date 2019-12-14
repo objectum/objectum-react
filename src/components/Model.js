@@ -56,7 +56,10 @@ class Model extends Component {
 									<StringField property="name" label="Name" />
 								</div>
 								<div className="form-group col-md-6">
-									<ChooseField property="parent" label="Parent" rsc="model" disabled={!!me.state.rid} value={me.state.parent} choose={Models} chooseRef="models" />
+									<ChooseField
+										property="parent" label="Parent" rsc="model" disabled={!!me.state.rid} value={me.state.parent}
+										choose={{cmp: Models, ref: "models"}}
+									/>
 								</div>
 							</div>
 							<div className="form-row">

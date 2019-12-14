@@ -60,8 +60,14 @@ class MenuItem extends Component {
 				<Tabs key="tabs" id="tabs" label={i18n ("Menu item") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>
-							<ChooseField property="menu" disabled={true} rsc="record" value={me.state.menu} choose={Menus} chooseRef="menus" />
-							<ChooseField property="parent" rsc="record" value={me.state.parent} choose={MenuItems} chooseRef="menuItems" menu={me.state.menu} />
+							<ChooseField
+								property="menu" disabled={true} rsc="record" value={me.state.menu}
+								choose={{cmd: Menus, ref: "menus"}}
+							/>
+							<ChooseField
+								property="parent" rsc="record" value={me.state.parent}
+								choose={{cmp: MenuItems, ref: "menuItems", menu: me.state.menu}}
+							/>
 							<Field property="name" />
 							<Field property="order" />
 							<Field property="path" />

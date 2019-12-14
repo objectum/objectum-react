@@ -160,12 +160,13 @@ class TableForm extends Component {
 			let m = me.props.store.getModel (p.get ("type"));
 			
 			opts.dict = m.isDictionary ();
-			opts.chooseModel = m.getPath ();
 			
 			if (!opts.dict) {
-				opts.choose = ModelList;
-				opts.chooseRef = `list-${m.getPath ()}`;
-				opts.model = m.getPath ();
+				opts.choose = {
+					cmp: ModelList,
+					ref: `list-${m.getPath ()}`,
+					model: m.getPath ()
+				};
 			}
 		}
 		return (
