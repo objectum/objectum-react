@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {i18n} from "./../i18n";
+import {newId} from "./helper";
 
 class SelectField extends Component {
 	constructor (props) {
@@ -9,16 +10,21 @@ class SelectField extends Component {
 		
 		me.onChange = me.onChange.bind (me);
 		me.state = {
+			code: me.props.property,
 			value: me.props.value
 		};
+		me.id = newId ();
 	}
 	
 	onChange (val) {
 		let me = this;
-		let v = val.target.value;
+		let value = val.target.value;
 		
-		me.setState ({value: v});
-		me.props.onChange (val);
+		me.setState ({value});
+
+		if (me.props.onChange) {
+			me.props.onChange (me.state.code, value);
+		}
 	}
 	
 	async componentDidUpdate (prevProps) {
@@ -31,14 +37,13 @@ class SelectField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.id || me.props.attr || me.props.property || me.props.prop;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
 
 		return (
 			<div className="form-group">
-				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
-				<select className={"form-control custom-select" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled}>
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
+				<select className={"form-control custom-select" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled}>
 					{[{id: "", name: "-"}, ...me.props.recs].map ((rec, i) => {
 						return (
 							<option value={rec.id} key={i}>{rec.name}</option>

@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {useDropzone} from "react-dropzone";
 import {i18n} from "./../i18n";
+import {newId} from "./helper";
 
 function File (props) {
 	const {acceptedFiles, getRootProps, getInputProps} = useDropzone ({
@@ -18,10 +19,10 @@ function File (props) {
 			props.onFile (props.id, acceptedFiles [0]);
 		}
 	} else if (props.value) {
-		let caId = props.cls.attrs [props.id].get ("id");
+		let propertyId = props.model.properties [props.id].get ("id");
 		
 		file = (
-			<div><a target="_blank" rel="noopener noreferrer" href={props.store.getUrl () + "/files/" + props.object.get ("id") + "-" + caId + "-" + props.value}>{props.value}</a></div>
+			<div><a target="_blank" rel="noopener noreferrer" href={props.store.getUrl () + "/files/" + props.record.get ("id") + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
 		);
 	}
 	return (
@@ -44,27 +45,31 @@ class FileField extends Component {
 		me.onChange = me.onChange.bind (me);
 		me.onFile = me.onFile.bind (me);
 		me.state = {
+			code: me.props.property,
 			value: me.props.value
 		};
+		me.id = newId ();
 	}
 	
 	onChange (val) {
 		let me = this;
-		let v = val.target.value;
+		let value = val.target.value;
 		
-		me.setState ({value: v});
-		me.props.onChange (val);
+		me.setState ({value});
+
+		if (me.props.onChange) {
+			me.props.onChange (me.state.code, value);
+		}
 	}
 	
 	onFile (id, file) {
 		let me = this;
 		
 		me.setState ({value: file.path});
-		me.props.onChange ({
-			target: {
-				id, value: file.path
-			}
-		}, file);
+
+		if (me.props.onChange) {
+			me.props.onChange (me.state.code, file.path, file);
+		}
 	}
 	
 	async componentDidUpdate (prevProps) {
@@ -77,14 +82,11 @@ class FileField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.id || me.props.attr || me.props.property || me.props.prop;
-		//let disabled = me.props.disabled;
-		//let addCls = me.props.error ? " is-invalid" : "";
 		
 		return (
 			<div className="form-group">
-				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
-				<File id={id} onFile={me.onFile} value={me.state.value} store={me.props.store} object={me.props.object || me.props.record} cls={me.props.cls || me.props.model} />
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
+				<File id={me.id} onFile={me.onFile} value={me.state.value} store={me.props.store} record={me.props.record} model={me.props.model} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>
 		);

@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {i18n} from "../i18n";
 import _ from "lodash";
+import {newId} from "./helper";
 
 class DictField extends Component {
 	constructor (props) {
@@ -11,7 +12,15 @@ class DictField extends Component {
 		
 		let me = this;
 		
+		me.onClear = me.onClear.bind (me);
+		me.onFilter = me.onFilter.bind (me);
+		me.onClick = me.onClick.bind (me);
+		me.onGroupClick = me.onGroupClick.bind (me);
+		me.onDocumentClick = me.onDocumentClick.bind (me);
+		me.onShowDialog = me.onShowDialog.bind (me);
+
 		me.state = {
+			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value,
 			label: "",
 			showDialog: false,
@@ -21,14 +30,8 @@ class DictField extends Component {
 			filter: ""
 		};
 		me.model = me.props.store.getModel (me.props.model);
-		me.property = me.model.properties [me.props.attr || me.props.property || me.props.prop || me.props.id];
-		
-		me.onClear = me.onClear.bind (me);
-		me.onFilter = me.onFilter.bind (me);
-		me.onClick = me.onClick.bind (me);
-		me.onGroupClick = me.onGroupClick.bind (me);
-		me.onDocumentClick = me.onDocumentClick.bind (me);
-		me.onShowDialog = me.onShowDialog.bind (me);
+		me.property = me.model.properties [me.props.property];
+		me.id = newId ();
 	}
 	
 	onClear () {
@@ -37,12 +40,7 @@ class DictField extends Component {
 		me.setState ({value: null, label: ""});
 
 		if (me.props.onChange) {
-			me.props.onChange ({
-				target: {
-					id: me.property.get ("code"),
-					value: null
-				}
-			});
+			me.props.onChange (me.state.code, null);
 		}
 	}
 	
@@ -126,12 +124,7 @@ class DictField extends Component {
 		me.setState (state);
 		
 		if (me.props.onChange) {
-			me.props.onChange ({
-				target: {
-					id: me.property.get ("code"),
-					value: state.value
-				}
-			});
+			me.props.onChange (me.state.code, state.value);
 		}
 	}
 	
@@ -206,13 +199,12 @@ class DictField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.property.get ("code");
 		let addCls = me.props.error ? " is-invalid" : "";
 		
 		return (
 			<div>
 				<div className="form-group">
-					{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
+					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
 					<div className="input-group">
 						{!me.props.disabled && <div>
 							<button
@@ -235,7 +227,7 @@ class DictField extends Component {
 						<input
 							type="text"
 							className={`form-control ${addCls} _dictfield-input`}
-							id={id}
+							id={me.id}
 							value={me.state.label}
 							onChange={() => {}}
 							disabled={true}

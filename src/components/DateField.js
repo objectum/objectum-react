@@ -1,6 +1,7 @@
 import {getDateString} from "./helper";
 import React, {Component} from "react";
 import {i18n} from "./../i18n";
+import {newId} from "./helper";
 
 class DateField extends Component {
 	constructor (props) {
@@ -10,16 +11,21 @@ class DateField extends Component {
 		
 		me.onChange = me.onChange.bind (me);
 		me.state = {
+			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value
 		};
+		me.id = newId ();
 	}
 	
 	onChange (val) {
 		let me = this;
-		let v = val.target.value;
+		let value = val.target.value;
 		
-		me.setState ({value: v});
-		me.props.onChange (val);
+		me.setState ({value});
+
+		if (me.props.onChange) {
+			me.props.onChange (me.state.code, value);
+		}
 	}
 	
 	async componentDidUpdate (prevProps) {
@@ -32,14 +38,13 @@ class DateField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.id || me.props.attr || me.props.property || me.props.prop;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? "is-invalid" : "";
 		
 		return (
 			<div className="form-group objectum-date">
-				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
-				<input type="date" className={`form-control ${addCls} datefield`} id={id} value={getDateString (me.state.value)} onChange={me.onChange} disabled={disabled} />
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
+				<input type="date" className={`form-control ${addCls} datefield`} id={me.id} value={getDateString (me.state.value)} onChange={me.onChange} disabled={disabled} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>
 		);

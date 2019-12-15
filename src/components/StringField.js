@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {loadCSS, loadJS} from "./helper";
 import {i18n} from "./../i18n";
+import {newId} from "./helper";
 
 class StringField extends Component {
 	constructor (props) {
@@ -11,18 +12,24 @@ class StringField extends Component {
 		
 		let me = this;
 		
+		me.onChange = me.onChange.bind (me);
+
 		me.state = {
+			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value
 		};
-		me.onChange = me.onChange.bind (me);
+		me.id = newId ();
 	}
 	
 	onChange (val) {
 		let me = this;
-		let v = val.target.value;
+		let value = val.target.value;
 		
-		me.setState ({value: v});
-		me.props.onChange (val);
+		me.setState ({value});
+
+		if (me.props.onChange) {
+			me.props.onChange (me.state.code, value);
+		}
 	}
 	
 	async componentDidMount () {
@@ -62,24 +69,23 @@ class StringField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.id || me.props.attr || me.props.property || me.props.prop;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
-		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;
+		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;
 		
 		if (me.props.textarea) {
-			cmp = <textarea className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} rows={me.props.rows || 5} />;
+			cmp = <textarea className={"form-control" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} rows={me.props.rows || 5} />;
 		}
 		if (me.props.codemirror) {
 			cmp = (
 				<div className="border">
-					<textarea ref="codemirror" className={"form-control" + addCls} id={id} value={me.state.value} onChange={me.onChange} />
+					<textarea ref="codemirror" className={"form-control" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} />
 				</div>
 			);
 		}
 		return (
 			<div className="form-group stringfield">
-				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
 				{cmp}
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

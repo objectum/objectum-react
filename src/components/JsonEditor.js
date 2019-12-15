@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import {loadCSS, loadJS} from "./helper";
 import {i18n} from "../i18n";
 import _ from "lodash";
+import {newId} from "./helper";
 
 class JsonEditor extends Component {
 	constructor (props) {
@@ -17,11 +18,13 @@ class JsonEditor extends Component {
 		me.onChangeTagValue = me.onChangeTagValue.bind (me);
 		
 		me.state = {
+			code: me.props.property,
 			value: me.props.value,
 			tags: [],
 			tag: "",
 			tagValue: ""
 		};
+		me.id = newId ();
 	}
 	
 	async componentDidMount () {
@@ -93,12 +96,15 @@ class JsonEditor extends Component {
 		me.setState (state);
 	}
 
-	onChange (s) {
+	onChange (value) {
 		let me = this;
 
-		me.updateTags (s);
-		me.setState ({value: s});
-		me.props.onChange ({target: {id: me.id, value: s}});
+		me.updateTags (value);
+		me.setState ({value});
+
+		if (me.props.onChange) {
+			me.props.onChange (me.state.code, value);
+		}
 	}
 	
 	onChangeTag (val) {
@@ -113,6 +119,7 @@ class JsonEditor extends Component {
 		me.codemirrorTag.off ("change", me.onChangeTagValue);
 		me.codemirrorTag.setValue (tagValue);
 		me.codemirrorTag.on ("change", me.onChangeTagValue);
+		
 		me.setState ({tag: v, tagValue});
 	}
 	
@@ -138,9 +145,6 @@ class JsonEditor extends Component {
 	
 	render () {
 		let me = this;
-		
-		me.id = me.props.attr || me.props.property || me.props.prop;
-		
 		let cls = me.state.tag ? "visible" : "invisible";
 		
 		return (

@@ -148,6 +148,13 @@ function goRidLocation (props, rid) {
 	props.history.push (location)
 };
 
+let lastId = 0;
+
+function newId (prefix = "id") {
+	lastId ++;
+	return `${prefix}-${lastId}`;
+};
+
 module.exports = {
 	getHash,
 	setHash,
@@ -158,5 +165,6 @@ module.exports = {
 	getDateString,
 	getTimestampString,
 	goRidLocation,
-	timeout
+	timeout,
+	newId
 };

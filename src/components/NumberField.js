@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {i18n} from "./../i18n";
+import {newId} from "./helper";
 
 class NumberField extends Component {
 	constructor (props) {
@@ -12,16 +13,21 @@ class NumberField extends Component {
 		
 		me.onChange = me.onChange.bind (me);
 		me.state = {
+			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value
 		};
+		me.id = newId ();
 	}
 	
 	onChange (val) {
 		let me = this;
-		let v = val.target.value;
+		let value = val.target.value;
 		
-		me.setState ({value: v});
-		me.props.onChange (val);
+		me.setState ({value});
+
+		if (me.props.onChange) {
+			me.props.onChange (me.state.code, value);
+		}
 	}
 	
 	async componentDidUpdate (prevProps) {
@@ -34,14 +40,13 @@ class NumberField extends Component {
 	
 	render () {
 		let me = this;
-		let id = me.props.id || me.props.attr || me.props.property || me.props.prop;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? "is-invalid" : "";
 		
 		return (
 			<div className="form-group">
-				{me.props.label && <label htmlFor={id}>{i18n (me.props.label)}</label>}
-				<input type="number" className={`form-control ${addCls} numberfield`} id={id} value={me.state.value} onChange={me.onChange} disabled={disabled} />
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
+				<input type="number" className={`form-control ${addCls} numberfield`} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>
 		);
