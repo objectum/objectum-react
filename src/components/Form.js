@@ -170,7 +170,7 @@ class Form extends Component {
 				if (value && property && (property.type == 2 || property.type >= 1000)) {
 					value = Number (value);
 				}
-				if (property.secure) {
+				if (property && property.secure) {
 					value = require ("crypto").createHash ("sha1").update (String (value)).digest ("hex").toUpperCase ();
 				}
 				if (value === "") {
