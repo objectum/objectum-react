@@ -124,7 +124,7 @@ class Grid extends Component {
 			me.props.onSelectParent (me.state.parent);
 		}
 		if (prevState.selected !== me.state.selected && me.props.onSelect) {
-			me.props.onSelect (me.state.recs [state.selected] && me.state.recs [me.state.selected].id);
+			me.props.onSelect (me.state.recs [me.state.selected] && me.state.recs [me.state.selected].id);
 		}
 	}
 	
