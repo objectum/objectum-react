@@ -44,6 +44,7 @@ import {
 	loadCSS,
 	loadJS,
 	getDateString,
+	goRidLocation,
 	timeout,
 	newId
 } from "./components/helper";
@@ -94,6 +95,7 @@ export {
 	ModelTree,
 	ModelRecord,
 	i18n,
+	goRidLocation,
 	timeout,
 	newId
 };
@@ -144,6 +146,7 @@ export default {
 	ModelTree,
 	ModelRecord,
 	i18n,
+	goRidLocation,
 	timeout,
 	newId
 };
