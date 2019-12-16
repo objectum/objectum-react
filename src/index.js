@@ -35,6 +35,7 @@ import JsonEditor from "./components/JsonEditor";
 import ModelList from "./components/ModelList";
 import ModelTree from "./components/ModelTree";
 import ModelRecord from "./components/ModelRecord";
+import RemoveAction from "./RemoveAction";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -94,6 +95,7 @@ export {
 	ModelList,
 	ModelTree,
 	ModelRecord,
+	RemoveAction,
 	i18n,
 	goRidLocation,
 	timeout,
@@ -145,6 +147,7 @@ export default {
 	ModelList,
 	ModelTree,
 	ModelRecord,
+	RemoveAction,
 	i18n,
 	goRidLocation,
 	timeout,
