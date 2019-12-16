@@ -191,8 +191,8 @@ class ModelList extends Component {
 		let m = me.props.store.getModel (me.model);
 		let gridOpts = {
 			...me.props,
-			id: `list-${me.model}`,
-			ref: `list-${me.model}`,
+			id: me.props.id || `list-${me.model}`,
+			ref: me.props.id || `list-${me.model}`,
 			store: me.props.store,
 			label: (m.isDictionary () ? i18n ("Dictionary") : i18n ("List")) + ": " + m.get ("name"),
 			refresh: me.state.refresh,
