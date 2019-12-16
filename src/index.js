@@ -32,6 +32,9 @@ import Column from "./components/Column";
 import Columns from "./components/Columns";
 import Queries from "./components/Queries";
 import JsonEditor from "./components/JsonEditor";
+import ModelList from "./components/ModelList";
+import ModelTree from "./components/ModelTree";
+import ModelRecord from "./components/ModelRecord";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -41,7 +44,8 @@ import {
 	loadCSS,
 	loadJS,
 	getDateString,
-	timeout
+	timeout,
+	newId
 } from "./components/helper";
 
 export {
@@ -86,8 +90,12 @@ export {
 	loadJS,
 	getDateString,
 	JsonEditor,
+	ModelList,
+	ModelTree,
+	ModelRecord,
 	i18n,
-	timeout
+	timeout,
+	newId
 };
 
 export default {
@@ -132,6 +140,10 @@ export default {
 	loadJS,
 	getDateString,
 	JsonEditor,
+	ModelList,
+	ModelTree,
+	ModelRecord,
 	i18n,
-	timeout
+	timeout,
+	newId
 };
