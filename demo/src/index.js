@@ -10,24 +10,41 @@ class Test extends Component {
 		super (props);
 		
 		let me = this;
-		
-		me.onEdit = me.onEdit.bind (me);
-	}
-	
-	onEdit (id) {
-		let me = this;
-		
-		pushLocation ();
-		
-		me.props.history.push ({
-			pathname: "/model_record/" + id + "#" + JSON.stringify ({opts: {model: "product"}})
-		});
+
+		me.state = {};
 	}
 	
 	render () {
 		let me = this;
+		
 		return (
-			<Grid {...me.props} id="test" ref="test" label="Test" store={me.props.store} model="product" />
+			<div className="row no-gutters">
+				<div className="col-6">
+					<Grid
+						id="tm-list"
+						ref="tm-list"
+						label="Типовые меню"
+						store={me.props.store}
+						query="menu.mtd" refresh={me.state.refresh}
+						onSelect={(menu) => me.setState ({menu})}
+					>
+					</Grid>
+				</div>
+				{me.state.menu && <div className="col ml-1">
+					<Grid
+						id="dish-list"
+						ref="dish-list"
+						label={`Типовое меню (id: ${me.state.menu})`}
+						store={me.props.store}
+						query="dish.mtd"
+						pageRecs={30}
+						refresh={me.state.refresh}
+						params={{menu: me.state.menu}}
+						groupCol="eating"
+					>
+					</Grid>
+				</div>}
+			</div>
 		);
 	}
 };
@@ -44,7 +61,12 @@ class Demo extends Component {
 	render () {
 		return (
 			<div>
-				<ObjectumApp store={store} _username="admin" _password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()} name="objectum-react">
+				<ObjectumApp
+					store={store}
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					name="objectum-react"
+				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 				</ObjectumApp>
 			</div>

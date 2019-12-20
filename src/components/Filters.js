@@ -323,7 +323,7 @@ class Filters extends Component {
 				<div className="mt-1 ml-3"><h5>{i18n ("Filters")}</h5></div>
 				<div className="px-1 pb-1">
 					<div className="row no-gutters">
-						{me.state.filters.map ((rec) => {
+						{me.state.filters.map (rec => {
 							return (
 								<div className="col-sm-2 mr-1" key={"div-filter-" + rec.id}>
 									<Filter {...me.props} id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />

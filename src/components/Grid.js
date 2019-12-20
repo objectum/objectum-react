@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash, addHashListener, removeHashListener, timeout} from "./helper";
+import {getHash, setHash, addHashListener, removeHashListener, timeout, newId} from "./helper";
 import Cell from "./Cell";
 import Filters from "./Filters";
 import _ from "lodash";
@@ -229,7 +229,12 @@ class Grid extends Component {
 			let opts = {
 				offset: (me.state.page - 1) * me.state.pageRecs,
 				limit: me.state.pageRecs,
-				filters: me.state.filters
+				filters: me.state.filters.filter (f => {
+					if (f [2] == "" && f [1] != "is null" && f [1] != "is not null") {
+						return false;
+					}
+					return true;
+				})
 			};
 			if (me.props.tree) {
 				opts.parent = me.state.parent;
@@ -395,6 +400,65 @@ class Grid extends Component {
 			</div>
 		);
 	}
+
+	visibleColNum () {
+		let me = this;
+		let n = 0;
+		
+		me.state.cols.forEach (col => {
+			if (me.state.hideCols.indexOf (col.code) > - 1 || me.props.groupCol == col.code) {
+				return;
+			}
+			n ++;
+		});
+		return n;
+	}
+	
+	renderTableRows () {
+		let me = this;
+		let rows = [];
+		let prevGroupColValue = null;
+		
+		me.state.recs.forEach ((rec, i) => {
+			let child = me.childMap [rec.id];
+			
+			if (me.props.groupCol) {
+				if (rec [me.props.groupCol] != prevGroupColValue) {
+					rows.push (
+						<tr key={newId ()} className="table-secondary">
+							<td
+								key={newId ()}
+								className="align-top text-left"
+								colSpan={me.visibleColNum ()}
+							>
+								<Cell
+									store={me.props.store}
+									value={rec [me.props.groupCol]}
+									col={me.colMap [me.props.groupCol]}
+									rec={rec}
+								/>
+							</td>
+						</tr>
+					);
+				}
+				prevGroupColValue = rec [me.props.groupCol];
+			}
+			rows.push (
+				<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
+					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
+					{me.state.cols.map ((col, j) => {
+						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
+							return;
+						}
+						return (
+							<td key={i + "_" + j} className="align-top"><Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} /></td>
+						);
+					})}
+				</tr>
+			);
+		});
+		return rows;
+	}
 	
 	renderTableView () {
 		let me = this;
@@ -408,8 +472,7 @@ class Grid extends Component {
 				<tr>
 					{me.props.tree && <th className="align-top"><i className="far fa-folder-open ml-2" /></th>}
 					{me.state.cols.map ((col, i) => {
-						//if (col.area === 0) {
-						if (me.state.hideCols.indexOf (col.code) > -1) {
+						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
 							return;
 						}
 						let cls = "";
@@ -444,24 +507,7 @@ class Grid extends Component {
 				</tr>
 				</thead>
 				<tbody>
-				{me.state.recs.map ((rec, i) => {
-					let child = me.childMap [rec.id];
-					
-					return (
-						<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-							{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
-							{me.state.cols.map ((col, j) => {
-								//if (col.area === 0) {
-								if (me.state.hideCols.indexOf (col.code) > -1) {
-									return;
-								}
-								return (
-									<td key={i + "_" + j} className="align-top"><Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} /></td>
-								);
-							})}
-						</tr>
-					);
-				})}
+				{me.renderTableRows ()}
 				</tbody>
 			</table>
 		);

@@ -236,6 +236,13 @@ class TableForm extends Component {
 											if (_.isArray (me.props.editable) && me.props.editable.indexOf (code) == -1) {
 												editable = false;
 											}
+											if (!rec) {
+												return (
+													<td key={i} className="align-top pt-1 pb-0">
+														rec not exist
+													</td>
+												);
+											}
 											return (
 												<td key={i} className="align-top pt-1 pb-0">
 													{editable ?
