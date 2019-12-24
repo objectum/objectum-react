@@ -55,6 +55,7 @@
 }
 .filter-block {
     height: 115px;
+    min-width: 140px;
 }
 .objectum-table {
     overflow: auto;

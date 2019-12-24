@@ -53,6 +53,24 @@ class TableForm extends Component {
 		me.setState (state);
 	}
 	
+	onChange (id, value, file) {
+		let me = this;
+		
+		if (file) {
+			me.fileMap [id] = file;
+		}
+		let state = {[id]: v};
+		let [code] = id.split ("-");
+		
+		if (v == "" && me.model.properties [code].get ("notNull")) {
+			state [`error-${id}`] = i18n ("Please enter value");
+		} else {
+			state [`error-${id}`] = null;
+		}
+		me.setState (state);
+	}
+	
+/*
 	onChange (val, file) {
 		let me = this;
 		let id = val.target.id;
@@ -74,6 +92,7 @@ class TableForm extends Component {
 		}
 		me.setState (state);
 	}
+*/
 	
 	async onSave () {
 		let me = this;
