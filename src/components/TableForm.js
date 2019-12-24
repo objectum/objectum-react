@@ -53,9 +53,10 @@ class TableForm extends Component {
 		me.setState (state);
 	}
 	
-	onChange (id, value, file) {
+	onChange ({value, file, id}) {
 		let me = this;
 		
+		console.log (id, value);
 		if (file) {
 			me.fileMap [id] = file;
 		}

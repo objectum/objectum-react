@@ -497,7 +497,7 @@ class Grid extends Component {
 						}
 						return (
 							<th key={i} scope="col" className={cls + " align-top"}>
-								{me.props.system ?
+								{(me.props.system || me.props.groupCol) ?
 									<div>{name}</div> :
 									<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
 								}

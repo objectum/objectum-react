@@ -1,4 +1,4 @@
-const code = "rmp";
+const code = "rmp"; // rmp_dev
 const path = require ("path");
 
 const express = require ("express");
@@ -13,7 +13,7 @@ app.use (`/${code}`, proxy (`http://127.0.0.1:8200`, {
 		if (parts [0].substr (0, 7) == "/public") {
 			return `${parts [0]}${queryString ? "?" + queryString : ""}`;
 		} else {
-			return `/projects/${code}${parts [0]}${queryString ? "?" + queryString : ""}`;
+			return `/projects/rmp_dev${parts [0]}${queryString ? "?" + queryString : ""}`;
 		}
 	},
 	proxyErrorHandler: function (err, res) {

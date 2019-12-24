@@ -58,7 +58,7 @@ class FileField extends Component {
 		me.setState ({value});
 
 		if (me.props.onChange) {
-			me.props.onChange (me.state.code, value);
+			me.props.onChange ({code: me.state.code, value, id: me.props.id});
 		}
 	}
 	
@@ -68,7 +68,7 @@ class FileField extends Component {
 		me.setState ({value: file.path});
 
 		if (me.props.onChange) {
-			me.props.onChange (me.state.code, file.path, file);
+			me.props.onChange ({code: me.state.code, value: file.path, file, id: me.props.id});
 		}
 	}
 	

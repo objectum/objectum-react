@@ -116,7 +116,7 @@ class Form extends Component {
 		me.setState (state);
 	}
 	
-	onChange (code, value, file) {
+	onChange ({code, value, file}) {
 		let me = this;
 		
 		if (file) {

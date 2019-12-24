@@ -48,7 +48,7 @@ class ChooseField extends Component {
 		me.setState ({value: null, name: ""});
 		
 		if (me.props.onChange) {
-			me.props.onChange (me.state.code, null);
+			me.props.onChange ({code: me.state.code, value: null, id: me.props.id});
 		}
 	}
 	
@@ -69,7 +69,7 @@ class ChooseField extends Component {
 		me.updateName (value);
 
 		if (me.props.onChange) {
-			me.props.onChange (me.state.code, value);
+			me.props.onChange ({code: me.state.code, value, id: me.props.id});
 		}
 	}
 	

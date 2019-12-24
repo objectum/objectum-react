@@ -24,7 +24,7 @@ class DateField extends Component {
 		me.setState ({value});
 
 		if (me.props.onChange) {
-			me.props.onChange (me.state.code, value);
+			me.props.onChange ({code: me.state.code, value, id: me.props.id});
 		}
 	}
 	
