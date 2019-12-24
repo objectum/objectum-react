@@ -97,7 +97,7 @@ class ObjectumApp extends Component {
 	}
 	
 	onSetSidebarOpen (open) {
-		this.setState({ sidebarOpen: open });
+		this.setState ({sidebarOpen: open});
 	}
 	
 	async componentDidMount () {
