@@ -59,10 +59,10 @@ class TableForm extends Component {
 		if (file) {
 			me.fileMap [id] = file;
 		}
-		let state = {[id]: v};
+		let state = {[id]: value};
 		let [code] = id.split ("-");
 		
-		if (v == "" && me.model.properties [code].get ("notNull")) {
+		if (value == "" && me.model.properties [code].get ("notNull")) {
 			state [`error-${id}`] = i18n ("Please enter value");
 		} else {
 			state [`error-${id}`] = null;
