@@ -119,7 +119,7 @@ class TableForm extends Component {
 		try {
 			await timeout (200);
 			
-			me.props.store.startTransaction (`Save TableForm: ${records.join (",")}`);
+			await me.props.store.startTransaction (`Save TableForm: ${records.join (",")}`);
 			
 			for (let i = 0; i < records.length; i ++) {
 				me.setState ({progress: 100 / records.length * (i + 1)});
@@ -136,9 +136,9 @@ class TableForm extends Component {
 				}
 				await record.sync ();
 			}
-			me.props.store.commitTransaction ();
+			await me.props.store.commitTransaction ();
 		} catch (err) {
-			me.props.store.rollbackTransaction ();
+			await me.props.store.rollbackTransaction ();
 			state.error = err.message;
 		}
 		me.setState (state);
