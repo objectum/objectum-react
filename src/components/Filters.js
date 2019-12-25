@@ -105,6 +105,7 @@ class Filter extends Component {
 	}
 	
 	
+/*
 	onChange (val) {
 		let me = this;
 		let id = val.target.id;
@@ -113,6 +114,35 @@ class Filter extends Component {
 			id = "value";
 		}
 		let v = val.target.value;
+		let state = {...me.state};
+		
+		state [id] = v;
+		
+		if (id == "column") {
+			state.operatorRecs = me.getOperatorRecs (v);
+			
+			if (_.find (state.operatorRecs, {code: "="})) {
+				state.operator = "=";
+			} else {
+				state.operator = "";
+			}
+			state.value = "";
+		}
+		me.setState (state);
+		me.debouncedOnChange (me.props.id, state);
+	}
+*/
+	onChange (opts) {
+		let me = this;
+		let id = opts.id, v = opts.value;
+		
+		if (opts.target) {
+			id = opts.target.id;
+			v = opts.target.value;
+		}
+		if (id != "column" && id != "operator") {
+			id = "value";
+		}
 		let state = {...me.state};
 		
 		state [id] = v;
