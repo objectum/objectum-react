@@ -56,7 +56,7 @@ class MenuItem extends Component {
 		let me = this;
 		
 		return (
-			<div>
+			<div className="container">
 				<Tabs key="tabs" id="tabs" label={i18n ("Menu item") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>

@@ -280,7 +280,7 @@ class ModelRecord extends Component {
 		}
 		if (opts.layout) {
 			return (
-				<div>
+				<div className="container">
 					<h5 className="border bg-white shadow-sm pl-3 py-2 mb-1">{label + ": " + me.state.label}</h5>
 					{!me.record ? <div /> : me.renderLayout (opts.layout, m)}
 				</div>
@@ -291,7 +291,7 @@ class ModelRecord extends Component {
 		let colWidth = 12 / columns | 0;
 		
 		return (
-			<div>
+			<div className="container">
 				<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 					<Tab key={`tab1-${me.state.model}`} label="Information">
 						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>

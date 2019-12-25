@@ -235,8 +235,8 @@ class ObjectumApp extends Component {
 			if (parent [m.get ("id")]) {
 				return;
 			}
-			items.push (<Route key={`model-list-${path}`} path={`/model_list/${path.split (".").join ("_")}`} render={props => <ModelList {...props} store={me.store} model={path} />} />);
-			items.push (<Route key={`model-tree-${path}`} path={`/model_tree/${path.split (".").join ("_")}`} render={props => <ModelTree {...props} store={me.store} model={path} />} />);
+			items.push (<Route key={`model-list-${path}`} path={`/model_list/${path.split (".").join ("_")}`} render={props => <div className="container"><ModelList {...props} store={me.store} model={path} /></div>} />);
+			items.push (<Route key={`model-tree-${path}`} path={`/model_tree/${path.split (".").join ("_")}`} render={props => <div className="container"><ModelTree {...props} store={me.store} model={path} /></div>} />);
 		});
 		return items;
 	}
@@ -284,14 +284,14 @@ class ObjectumApp extends Component {
 							</div>
 						</Fade>
 
-						<div className="container">
+						<div>
 							<Sidebar
 								sidebar={me.renderMenu ("fa-lg")}
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
 								sidebarClassName="bg-white"
 							>
-								<div className="container" id="contentContainer" style={{marginTop: "40px", marginBottom: "20px"}}>
+								<div style={{marginTop: "40px", marginBottom: "20px"}}>
 									{me.renderRoutes ()}
 								</div>
 							</Sidebar>

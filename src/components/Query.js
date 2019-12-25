@@ -47,7 +47,7 @@ class Query extends Component {
 		let me = this;
 		
 		return (
-			<div>
+			<div className="container">
 				<Tabs key="tabs" id="tabs" label={i18n ("Query") + ": " + me.state.label}>
 					<Tab key="Tab1" label="Information">
 						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid} onCreate={me.onCreate}>
