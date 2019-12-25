@@ -28,11 +28,11 @@ class Log extends Component {
 		let state = {field: v};
 		
 		if (v) {
-			let record = await me.store.getRecord (me.props.form.state.rid);
+			let record = await me.store.getRecord (me.form.record.id);
 			let model = me.store.getModel (record.get ("_model"));
 			let property = model.properties [v];
 			
-			state.recs = await me.store.getLog (me.props.form.state.rid, property.get ("id"));
+			state.recs = await me.store.getLog (me.form.record.id, property.get ("id"));
 			
 		} else {
 			state.recs = [];
@@ -41,11 +41,21 @@ class Log extends Component {
 	}
 	render () {
 		let me = this;
+/*
 		let recs = _.map (me.form.map, (o, a) => {
 			return {
 				id: a, name: o.label
 			};
 		});
+*/
+		let fields = me.form.getFields (me.form.props.children);
+		let recs = [];
+		
+		for (let code in fields) {
+			recs.push ({
+				id: code, name: me.form.model.properties [code] && me.form.model.properties [code].name
+			});
+		}
 		return (
 			<div className="border p-1 mb-1 bg-white shadow-sm">
 				<h5>{i18n ("Log")}</h5>
