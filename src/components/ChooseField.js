@@ -151,6 +151,7 @@ class ChooseField extends Component {
 				</div>
 				<Modal
 					isOpen={me.state.visible}
+/*
 					style={{
 						content: {
 							top: "50%",
@@ -162,6 +163,7 @@ class ChooseField extends Component {
 							transform: "translate(-50%, -50%)"
 						}
 					}}
+*/
 				>
 					<div className="row">
 						<div className="col-md mb-1">
