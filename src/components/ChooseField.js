@@ -16,6 +16,7 @@ class ChooseField extends Component {
 		me.onChoose = me.onChoose.bind (me);
 		me.onVisible = me.onVisible.bind (me);
 		me.state = {
+			rsc: me.props.rsc || "record",
 			code: me.props.property,
 			value: me.props.value,
 			visible: false,
@@ -29,7 +30,7 @@ class ChooseField extends Component {
 		let name = "";
 		
 		if (value) {
-			let o = await me.props.store.getRsc (me.props.rsc, value);
+			let o = await me.props.store.getRsc (me.state.rsc, value);
 			
 			name = o.getLabel ();
 		}

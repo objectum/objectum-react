@@ -13,6 +13,7 @@ class NumberField extends Component {
 		
 		me.onChange = me.onChange.bind (me);
 		me.state = {
+			rsc: me.props.rsc || "record",
 			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value
 		};

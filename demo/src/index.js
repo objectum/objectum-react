@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import store from "objectum-client";
-import {ObjectumApp, ObjectumRoute, Grid} from '../../src'
+import {ObjectumApp, ObjectumRoute, Grid, ChooseField, ModelList} from '../../src'
 import {pushLocation} from "../../src/components/helper";
 
 class Test extends Component {
@@ -20,6 +20,7 @@ class Test extends Component {
 		return (
 			<div className="row no-gutters">
 				<div className="col-6">
+					<ChooseField store={me.props.store} label="Типовое меню" choose={{cmp: ModelList, model: "menu", ref: "list"}} onChange={({code, value}) => console.log (code, value)} />
 					<Grid
 						id="tm-list"
 						ref="tm-list"

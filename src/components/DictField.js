@@ -20,6 +20,7 @@ class DictField extends Component {
 		me.onShowDialog = me.onShowDialog.bind (me);
 
 		me.state = {
+			rsc: me.props.rsc || "record",
 			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value,
 			label: "",
