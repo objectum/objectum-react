@@ -274,7 +274,7 @@ class Form extends Component {
 			if (me.model && me.model.properties [code] && me.model.properties [code].notNull) {
 				notNull = true;
 			}
-			if (notNull && me.state [code] === "") {
+			if (notNull && (!me.state.hasOwnProperty (code) || me.state [code] === "")) {
 				state [`${code}-error`] = i18n ("Please enter value");
 				valid = false;
 			} else {

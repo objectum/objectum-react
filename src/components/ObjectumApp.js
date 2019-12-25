@@ -150,11 +150,12 @@ class ObjectumApp extends Component {
 		me.setState ({[key]: !me.state [key]});
 	}
 	
-	renderMenu () {
+	renderMenu (size) {
 		let me = this;
+		
 		function renderIcon (icon, key) {
 			if (icon) {
-				return (<i key={key} className={`${icon} menu-icon`} />);
+				return (<i key={key} className={`${icon} ${size} menu-icon`} />);
 			} else {
 				return (<span key={key} />);
 			}
@@ -186,7 +187,7 @@ class ObjectumApp extends Component {
 		return (
 			<div className="menu">
 				{renderItems (null, 0)}
-				<Link key="menu-logout" className="nav-link text-dark mt-4" to="/logout"><i key="icon-logout" className="fas fa-sign-out-alt mr-2 ml-2" />{i18n ("Logout")}</Link>
+				<Link key="menu-logout" className="nav-link text-dark mt-4" to="/logout"><i key="icon-logout" className={`fas fa-sign-out-alt ${size} mr-2 ml-2`} />{i18n ("Logout")}</Link>
 			</div>
 		);
 	}
@@ -285,7 +286,7 @@ class ObjectumApp extends Component {
 
 						<div className="container">
 							<Sidebar
-								sidebar={me.renderMenu ()}
+								sidebar={me.renderMenu ("fa-lg")}
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
 								sidebarClassName="bg-white"
