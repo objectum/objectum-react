@@ -60,6 +60,7 @@ class Columns extends Component {
 
 	async onSynchronize () {
 		let me = this;
+		let state = {synchronizing: false, refresh: !me.state.refresh};
 		
 		try {
 			me.setState ({synchronizing: true});
@@ -127,10 +128,10 @@ class Columns extends Component {
 			}
 			await me.props.store.commitTransaction ();
 		} catch (err) {
-			console.error (err);
+			state.error = err.message;
 			await me.props.store.rollbackTransaction ();
 		}
-		me.setState ({synchronizing: false, refresh: !me.state.refresh});
+		me.setState (state);
 	}
 	
 	render () {

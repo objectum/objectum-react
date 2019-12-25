@@ -47,7 +47,8 @@ import {
 	getDateString,
 	goRidLocation,
 	timeout,
-	newId
+	newId,
+	getTimestampString
 } from "./components/helper";
 
 export {
@@ -99,7 +100,8 @@ export {
 	i18n,
 	goRidLocation,
 	timeout,
-	newId
+	newId,
+	getTimestampString
 };
 
 export default {
@@ -151,5 +153,6 @@ export default {
 	i18n,
 	goRidLocation,
 	timeout,
-	newId
+	newId,
+	getTimestampString
 };
