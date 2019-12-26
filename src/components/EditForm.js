@@ -94,7 +94,7 @@ class EditForm extends Component {
 			let cp = child.props;
 			
 			if (!cp || !cp.property || !cp.rid) {
-				if (cp.children) {
+				if (cp && cp.children) {
 					return React.cloneElement (child, {
 						children: me.renderChildren (cp.children)
 					});
