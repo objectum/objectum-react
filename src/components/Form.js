@@ -13,6 +13,7 @@ import {i18n} from "./../i18n";
 import ModelList from "./ModelList";
 import Log from "./Log";
 import Loading from "./Loading";
+import EditForm from "./EditForm";
 import {timeout} from "./helper";
 
 class Form extends Component {
@@ -274,7 +275,7 @@ class Form extends Component {
 			if (me.model && me.model.properties [code] && me.model.properties [code].notNull) {
 				notNull = true;
 			}
-			if (notNull && (!me.state.hasOwnProperty (code) || me.state [code] === "")) {
+			if (notNull && (!me.state.hasOwnProperty (code) || me.state [code] === "" || me.state [code] === null)) {
 				state [`${code}-error`] = i18n ("Please enter value");
 				valid = false;
 			} else {
@@ -409,7 +410,8 @@ class Form extends Component {
 		let formChildren = me.renderChildren (me.props.children);
 		
 		if (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.mid && me.props.rsc == "record")) {
-			return (<div className="alert alert-danger" role="alert">need props: store, rsc, rid or mid (record)</div>);
+			//return (<div className="alert alert-danger" role="alert">need props: store, rsc, rid or mid (record)</div>);
+			return <EditForm {...me.props} />;
 		}
 		if (me.state._loading && !me.record) {
 			return (

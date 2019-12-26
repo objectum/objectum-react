@@ -145,7 +145,7 @@ class Filter extends Component {
 		}
 		let state = {...me.state};
 		
-		state [id] = v;
+		state [id] = v === null ? "" : v;
 		
 		if (id == "column") {
 			state.operatorRecs = me.getOperatorRecs (v);
@@ -227,7 +227,7 @@ class Filter extends Component {
 		}
 		return (
 			<div className="border p-1 bg-white shadow-sm text-center mt-1">
-				<button type="button" className="btn btn-primary btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2"></i>{i18n ("Remove")}</button>
+				<button type="button" className="btn btn-link btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2" />{i18n ("Remove")}</button>
 				<select id="column" className="filter-select" value={me.state.column} onChange={me.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
 						return (
@@ -352,8 +352,8 @@ class Filters extends Component {
 			<div className="border bg-white shadow-sm my-1">
 				<div className="mt-1 ml-3">
 					<h5 className="d-inline">{i18n ("Filters")}</h5>
-					<button type="button" className="btn btn-primary btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" />{i18n ("Add filter")}</button>
-					<button type="button" className="btn btn-primary btn-sm ml-1" onClick={me.onDock}>
+					<button type="button" className="btn btn-link btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" />{i18n ("Add filter")}</button>
+					<button type="button" className="btn btn-link btn-sm ml-1" onClick={me.onDock}>
 						<i className={`fas ${me.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
 						{me.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}
 					</button>

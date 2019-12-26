@@ -41,7 +41,7 @@ class DictField extends Component {
 		me.setState ({value: null, label: ""});
 
 		if (me.props.onChange) {
-			me.props.onChange ({code: me.state.code, value: null, id: me.props.id});
+			me.props.onChange ({...me.props, code: me.state.code, value: null, id: me.props.id});
 		}
 	}
 	
@@ -125,7 +125,7 @@ class DictField extends Component {
 		me.setState (state);
 		
 		if (me.props.onChange) {
-			me.props.onChange ({code: me.state.code, value: state.value, id: me.props.id});
+			me.props.onChange ({...me.props, code: me.state.code, value: state.value, id: me.props.id});
 		}
 	}
 	

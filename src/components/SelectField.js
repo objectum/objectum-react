@@ -24,7 +24,7 @@ class SelectField extends Component {
 		me.setState ({value});
 
 		if (me.props.onChange) {
-			me.props.onChange ({code: me.state.code, value, id: me.props.id});
+			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
 		}
 	}
 	
