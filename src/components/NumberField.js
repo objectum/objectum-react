@@ -43,14 +43,20 @@ class NumberField extends Component {
 		let me = this;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? "is-invalid" : "";
-		
-		return (
-			<div className="form-group">
-				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
-				<input type="number" className={`form-control ${addCls} numberfield`} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} />
-				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
-			</div>
-		);
+
+		if (me.props.label || me.props.error) {
+			return (
+				<div className="form-group">
+					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
+					<input type="number" className={`form-control ${addCls} numberfield`} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} />
+					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
+				</div>
+			);
+		} else {
+			return (
+				<input type="number" className="form-control numberfield" value={me.state.value} onChange={me.onChange} disabled={disabled} />
+			);
+		}
 	}
 };
 NumberField.displayName = "NumberField";
