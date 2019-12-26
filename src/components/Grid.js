@@ -81,11 +81,11 @@ class Grid extends Component {
 					state [a] = hash [a];
 					
 					if (a == "filters" && me.props.onFilters) {
-						me.props.onFilters (hash [a], _.map (hash [a], f => {
+						me.props.onFilters (_.map (hash [a], f => {
 							return {
 								col: f [0], oper: f [1], value: f [2]
 							};
-						}));
+						}), hash [a]);
 					}
 				}
 			});
