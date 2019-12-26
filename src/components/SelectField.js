@@ -42,7 +42,7 @@ class SelectField extends Component {
 		let addCls = me.props.error ? " is-invalid" : "";
 
 		return (
-			<div className="form-group">
+			<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
 				<select className={"form-control custom-select" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled}>
 					{[{id: "", name: "-"}, ...me.props.recs].map ((rec, i) => {

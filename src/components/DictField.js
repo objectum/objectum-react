@@ -204,7 +204,7 @@ class DictField extends Component {
 		
 		return (
 			<div>
-				<div className="form-group">
+				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
 					<div className="input-group">
 						{!me.props.disabled && <div>

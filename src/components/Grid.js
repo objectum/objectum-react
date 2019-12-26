@@ -79,6 +79,14 @@ class Grid extends Component {
 			["page", "pageRecs", "selected", "parent", "showFilters", "dockFilters", "filters", "mode", "order", "showCols", "hideCols"].forEach (a => {
 				if (hash.hasOwnProperty (a) && JSON.stringify (hash [a]) !== JSON.stringify (me.state [a])) {
 					state [a] = hash [a];
+					
+					if (a == "filters" && me.props.onFilters) {
+						me.props.onFilters (hash [a], _.map (hash [a], f => {
+							return {
+								col: f [0], oper: f [1], value: f [2]
+							};
+						}));
+					}
 				}
 			});
 		}
