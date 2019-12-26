@@ -36,6 +36,7 @@ import ModelList from "./components/ModelList";
 import ModelTree from "./components/ModelTree";
 import ModelRecord from "./components/ModelRecord";
 import RemoveAction from "./components/RemoveAction";
+import Loading from "./components/Loading";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -97,6 +98,7 @@ export {
 	ModelTree,
 	ModelRecord,
 	RemoveAction,
+	Loading,
 	i18n,
 	goRidLocation,
 	timeout,
@@ -150,6 +152,7 @@ export default {
 	ModelTree,
 	ModelRecord,
 	RemoveAction,
+	Loading,
 	i18n,
 	goRidLocation,
 	timeout,
