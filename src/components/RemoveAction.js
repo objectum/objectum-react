@@ -49,7 +49,7 @@ class RemoveAction extends Component {
 			);
 		}
 		return (
-			<button type="button" className="btn btn-primary btn-labeled mr-1" onClick={() => me.setState ({removeConfirm: true})} disabled={me.props.disabled}>
+			<button type="button" className={me.props.className || "btn btn-primary btn-labeled mr-1"} onClick={() => me.setState ({removeConfirm: true})} disabled={me.props.disabled}>
 				<i className="fas fa-minus mr-2"/>{i18n ("Remove")}
 			</button>
 		);
