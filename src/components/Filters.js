@@ -351,7 +351,7 @@ class Filters extends Component {
 		return (
 			<div className="border bg-white shadow-sm my-1">
 				<div className="mt-1 ml-3">
-					<h5 className="d-inline">{i18n ("Filters")}</h5>
+					<h6 className="d-inline">{i18n ("Filters")}</h6>
 					<button type="button" className="btn btn-link btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" />{i18n ("Add filter")}</button>
 					<button type="button" className="btn btn-link btn-sm ml-1" onClick={me.onDock}>
 						<i className={`fas ${me.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
