@@ -28,7 +28,7 @@ class Action extends Component {
 		let me = this;
 		
 		return (
-			<button type="button" className="btn btn-primary btn-labeled mr-1" onClick={me.onClick} disabled={me.props.disabled}>{me.props.children}</button>
+			<button type="button" className="btn btn-primary btn-labeled btn-sm mr-1" onClick={me.onClick} disabled={me.props.disabled}>{me.props.children}</button>
 		);
 	}
 };

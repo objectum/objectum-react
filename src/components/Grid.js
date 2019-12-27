@@ -475,7 +475,7 @@ class Grid extends Component {
 			return (<div />);
 		}
 		return (
-			<table className="table table-hover table-striped table-bordered p-1 bg-white shadow-sm mt-1 mb-0 objectum-table">
+			<table className="table table-hover table-striped table-bordered table-sm p-1 bg-white shadow-sm mt-1 mb-0 objectum-table">
 				<thead className="thead-dark">
 				<tr>
 					{me.props.tree && <th className="align-top"><i className="far fa-folder-open ml-2" /></th>}
@@ -564,7 +564,7 @@ class Grid extends Component {
 								<div className="card-body">
 									<h5 className="card-title">{rec [card.title]}</h5>
 									<p className="card-text">{text}</p>
-									<button className="btn btn-primary" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</button>
+									<button className="btn btn-primary btn-sm" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</button>
 									<a target="_blank" rel="noopener noreferrer" href={bigImage} className="ml-4">{i18n ("Image")}</a>
 								</div>
 							</div>
@@ -602,7 +602,7 @@ class Grid extends Component {
 				<div className="bg-white border shadow-sm p-1 mt-1">
 					<div className="btn-toolbar" role="toolbar">
 						<div className="btn-group mr-1" role="group">
-							{! me.props.system && <button type="button" className="btn btn-link" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
+							{! me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
 								{i18n ("Return")}
 							</button>}
 						</div>
@@ -615,7 +615,7 @@ class Grid extends Component {
 					<div className="btn-toolbar" role="toolbar">
 						<div className="objectum-5em">
 							<div className="input-group">
-								<select className="custom-select" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange} data-tip={i18n ("Records on page")}>
+								<select className="custom-select custom-select-sm" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange} data-tip={i18n ("Records on page")}>
 									<option value="10">10</option>
 									<option value="20">20</option>
 									<option value="30">30</option>
@@ -625,43 +625,43 @@ class Grid extends Component {
 							</div>
 						</div>
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onFirst} data-tip={i18n ("First page")}>
+							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onFirst} data-tip={i18n ("First page")}>
 								<i className="fas fa-angle-double-left"/>
 							</button>
-							<button type="button" className="btn btn-link" disabled={me.state.page == 1} onClick={me.onPrev} data-tip={i18n ("Previous page")}>
+							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onPrev} data-tip={i18n ("Previous page")}>
 								<i className="fas fa-angle-left"/>
 							</button>
 						</div>
 						<div className="objectum-5em">
 							<div className="input-group mr-1">
-								<input type="number" className="form-control" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} data-tip={i18n ("Page")}/>
+								<input type="number" className="form-control form-control-sm" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} data-tip={i18n ("Page")}/>
 							</div>
 						</div>
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext} data-tip={i18n ("Next page")}>
+							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext} data-tip={i18n ("Next page")}>
 								<i className="fas fa-angle-right"/>
 							</button>
-							<button type="button" className="btn btn-link" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast} data-tip={i18n ("Last page")}>
+							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast} data-tip={i18n ("Last page")}>
 								<i className="fas fa-angle-double-right"/>
 							</button>
 							<span data-tip={i18n ("Refresh")}>
 									{me.state.loading ?
 										<span className="spinner-border spinner-border-sm text-primary refresh-btn-loading" role="status" aria-hidden="true"/> :
-										<button type="button" className="btn btn-link" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
+										<button type="button" className="btn btn-link btn-sm" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
 											<i className="fas fa-sync"/>
 										</button>
 									}
 								</span>
-							{! me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowFilters}>
+							{! me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onShowFilters}>
 								<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} data-tip={i18n ("Filters")}/>
 							</button>}
-							{! me.props.system && <button type="button" className="btn btn-link" onClick={me.onShowCols} data-tip={i18n ("Columns")}>
+							{! me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onShowCols} data-tip={i18n ("Columns")}>
 								<i className={`fas fa-eye ${me.state.showCols ? "border-bottom border-primary" : ""}`}/>
 							</button>}
-							{! me.props.system && me.props.editable && <button type="button" className="btn btn-link" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
+							{! me.props.system && me.props.editable && <button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
 								<i className={`fas fa-edit ${me.state.mode == "edit" ? "border-bottom border-primary" : ""}`}/>
 							</button>}
-							{me.props.card && <button type="button" className="btn btn-link" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
+							{me.props.card && <button type="button" className="btn btn-link btn-sm" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
 								<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`}/>
 							</button>}
 						</div>

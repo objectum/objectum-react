@@ -108,7 +108,7 @@ class ChooseField extends Component {
 			return (
 				<div className="form-group">
 					<label htmlFor={me.id}>{i18n (me.props.label)}</label>
-					<input type="text" className={"form-control" + addCls} id={me.id} value={me.state.name} disabled={true}/>
+					<input type="text" className={"form-control form-control-sm" + addCls} id={me.id} value={me.state.name} disabled={true}/>
 				</div>
 			)
 		}
@@ -141,7 +141,7 @@ class ChooseField extends Component {
 						</div>}
 						<input
 							type="text"
-							className={"form-control" + addCls}
+							className={"form-control form-control-sm" + addCls}
 							id={me.id}
 							value={me.state.name}
 							onChange={() => {}}
@@ -168,8 +168,8 @@ class ChooseField extends Component {
 				>
 					<div className="row">
 						<div className="col-md mb-1">
-							<button type="button" className="btn btn-primary mr-1" onClick={me.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
-							<button type="button" className="btn btn-primary" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
+							<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
+							<button type="button" className="btn btn-primary btn-sm" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
 						</div>
 					</div>
 					<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true} />

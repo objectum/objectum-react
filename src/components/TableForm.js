@@ -205,7 +205,7 @@ class TableForm extends Component {
 		return (
 			<div>
 				<div className="actions border p-1 bg-white shadow-sm">
-					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving}>
+					<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving}>
 						{me.state.saving ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
 							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>

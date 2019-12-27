@@ -158,7 +158,7 @@ class DictField extends Component {
 			<div className="_dictfield-dialog text-left" ref="dialog">
 				<div className="_dictfield-filter border p-1 bg-white">
 					<h6 className="ml-2">{i18n ("Select parameter")}</h6>
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
+					<input type="text" className="form-control form-control-sm" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
 				</div>
 				<div className="_dictfield-params border p-1 bg-white">
 					<ul className="list-group">
@@ -181,7 +181,7 @@ class DictField extends Component {
 			<div className="_dictfield-dialog text-left" ref="dialog">
 				<div className="_dictfield-filter border p-1 bg-white">
 					<h6>{`${i18n ("Select")}: ${me.groupProperty.get ("name")}`}</h6>
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
+					<input type="text" className="form-control form-control-sm" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
 				</div>
 				<div className="_dictfield-params border p-1 bg-white">
 					<ul className="list-group">
@@ -227,7 +227,7 @@ class DictField extends Component {
 						</div>}
 						<input
 							type="text"
-							className={`form-control ${addCls} _dictfield-input`}
+							className={`form-control form-control-sm ${addCls} _dictfield-input`}
 							id={me.id}
 							value={me.state.label}
 							onChange={() => {}}
