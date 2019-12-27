@@ -228,7 +228,7 @@ class Filter extends Component {
 		return (
 			<div className="border p-1 bg-white shadow-sm text-center mt-1">
 				<button type="button" className="btn btn-link btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2" />{i18n ("Remove")}</button>
-				<select id="column" className="filter-select" value={me.state.column} onChange={me.onChange}>
+				<select id="column" className="filter-select custom-select custom-select-sm" value={me.state.column} onChange={me.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
 						return (
 							<option value={rec.code} key={"column-" + i}>{i18n (rec.name)}</option>
@@ -236,7 +236,7 @@ class Filter extends Component {
 					})}
 				</select>
 				<br />
-				{me.state.column && <select id="operator" className="filter-select mt-1" value={me.state.operator} onChange={me.onChange} disabled={!me.state.column}>
+				{me.state.column && <select id="operator" className="filter-select custom-select custom-select-sm mt-1" value={me.state.operator} onChange={me.onChange} disabled={!me.state.column}>
 					{[{code: "", name: i18n ("Choose operator")}, ...me.state.operatorRecs].map ((rec, i) => {
 						return (
 							<option value={rec.code} key={"operator-" + i}>{rec.name}</option>
