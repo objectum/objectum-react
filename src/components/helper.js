@@ -71,7 +71,7 @@ function setHash (cmp, next) {
 			hashListeners [i] ();
 		}
 	} else {
-		window.location.hash = JSON.stringify (hash);
+		window.location.hash = encodeURI (JSON.stringify (hash));
 	}
 };
 
