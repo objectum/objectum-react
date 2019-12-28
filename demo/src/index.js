@@ -1,9 +1,11 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
-import store from "objectum-client";
+import {Store} from "objectum-client";
 import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, ModelList} from '../../src'
 import {pushLocation} from "../../src/components/helper";
+
+const store = new Store ();
 
 class Test extends Component {
 	constructor (props) {
