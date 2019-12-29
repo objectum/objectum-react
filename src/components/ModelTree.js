@@ -35,7 +35,7 @@ class ModelTree extends Component {
 		});
 	}
 	
-	onEdit (id) {
+	onEdit ({id}) {
 		let me = this;
 		let opts = {
 			model: me.model

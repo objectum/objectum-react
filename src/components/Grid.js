@@ -358,16 +358,15 @@ class Grid extends Component {
 			}
 			let o = {};
 			
-			if (child.props.onClick) {
-				o.onClick = () => child.props.onClick (me);
-			} else
-			if (child.props.onClickSelected) {
-				o.onClick = () => {
-					child.props.onClickSelected (me.state.recs [me.state.selected].id, me);
+			if (child.type.displayName == "Action") {
+				if (child.props.onClick) {
+					o.onClick = (opts) => child.props.onClick (Object.assign (opts, {grid: me}));
+				} else if (child.props.onClickSelected) {
+					o.onClick = (opts) => child.props.onClickSelected (Object.assign (opts, {id: me.state.recs [me.state.selected].id, grid: me}));
 				}
-			}
-			if (child.props.onClickSelected && me.state.selected === null) {
-				o.disabled = true;
+				if (child.props.onClickSelected && me.state.selected === null) {
+					o.disabled = true;
+				}
 			}
 			if (child.type && child.type.displayName == "RemoveAction") {
 				if (me.state.selected === null) {

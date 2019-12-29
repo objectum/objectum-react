@@ -42,8 +42,8 @@ class RemoveAction extends Component {
 				<Fade>
 					<span className="text-danger ml-1 p-1">
 						{i18n ("Are you sure?")}
-						<button type="button" className="btn btn-danger btn-sm ml-2 mb-1" onClick={me.onRemove}><i className="fas fa-check mr-2" />{i18n ("Remove")}</button>
-						<button type="button" className="btn btn-success btn-sm ml-2 mb-1" onClick={() => this.setState ({removeConfirm: false})}><i className="fas fa-times mr-2" />{i18n ("Cancel")}</button>
+						<button type="button" className="btn btn-danger btn-sm ml-2" onClick={me.onRemove}><i className="fas fa-check mr-2" />{i18n ("Remove")}</button>
+						<button type="button" className="btn btn-success btn-sm ml-2" onClick={() => this.setState ({removeConfirm: false})}><i className="fas fa-times mr-2" />{i18n ("Cancel")}</button>
 					</span>
 				</Fade>
 			);

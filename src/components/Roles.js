@@ -27,7 +27,7 @@ class Roles extends Component {
 		});
 	}
 	
-	onEdit (id) {
+	onEdit ({id}) {
 		let me = this;
 		
 		me.props.history.push ({

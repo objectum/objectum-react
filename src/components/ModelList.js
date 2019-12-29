@@ -43,7 +43,7 @@ class ModelList extends Component {
 		});
 	}
 	
-	onEdit (id) {
+	onEdit ({id}) {
 		let me = this;
 		let opts = {
 			model: me.model
@@ -116,7 +116,7 @@ class ModelList extends Component {
 					grid,
 					parentModel: me.props.parentModel,
 					parentId: me.props.parentId,
-					progressCallback: (progressValue, progressMax) => updateActionState (i, _.extend (action, {progressValue, progressMax}))
+					progressCallback: ({label, value, max}) => updateActionState (i, _.extend (action, {label, value, max}))
 				});
 				if (promise && promise.then) {
 					promise.then (() => {
@@ -154,18 +154,20 @@ class ModelList extends Component {
 				let actionOpts = {};
 			
 				if (action.onClick) {
-					actionOpts.onClick = (grid) => {
+					actionOpts.onClick = ({grid}) => {
 						actionHandler ({action, i, Model, method, grid});
 					};
 				} else {
-					actionOpts.onClickSelected = (id, grid) => {
+					actionOpts.onClickSelected = ({id, grid}) => {
 						actionHandler ({action, i, Model, method, id, grid});
 					};
 				}
 				let text = i18n ("Processing") + " ...";
 				
-				if (action.progressMax) {
-					text = `${i18n ("Processing")}: ${action.progressValue} / ${action.progressMax}`;
+				if (action.progress) {
+					text = action.progress.label ? (action.progress.label + ": ") : "";
+					text += action.progress.value ? action.progress.value : "";
+					text += action.progress.max ? (" / " + action.progress.max) : "";
 				}
 				items.push (
 					action.processing ?

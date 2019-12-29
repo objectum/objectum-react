@@ -23,13 +23,13 @@ class Types extends Component {
 			<div className="row">
 				<div className="col-sm-12">
 					<Grid {...me.props} id="types" ref="types" label="Data types" store={me.props.store} query="objectum.type" tree={true} system={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent}>
-						<Action onClick={(grid) => grid.onFolderClick (null)}>
+						<Action onClick={({grid}) => grid.onFolderClick (null)}>
 							<i className="fas fa-home mr-2" />{i18n ("Basic")}
 						</Action>
-						<Action onClick={(grid) => grid.onFolderClick (grid.props.store.getModel ("d").get ("id"))}>
+						<Action onClick={({grid}) => grid.onFolderClick (grid.props.store.getModel ("d").get ("id"))}>
 							<i className="fas fa-book mr-2" />{i18n ("Dictionary")}
 						</Action>
-						<Action onClick={(grid) => grid.onFolderClick (grid.props.store.getModel ("t").get ("id"))}>
+						<Action onClick={({grid}) => grid.onFolderClick (grid.props.store.getModel ("t").get ("id"))}>
 							<i className="fas fa-table mr-2" />{i18n ("Table")}
 						</Action>
 					</Grid>
