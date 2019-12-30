@@ -61,7 +61,16 @@ class EditForm extends Component {
 			me.recordMap = {};
 			
 			let fields = me.getFields (me.props.children);
+			let ids = _.uniq (_.map (fields, f => f.props.rid));
+			let promises = _.map (ids, id => {
+				return me.props.store.getRecord.bind (null, id);
+			});
+			let records = await Promise.all (promises);
 			
+			records.forEach (record => me.recordMap [record.id] = record);
+			fields.forEach (field => state [`${field.props.rid}-${field.props.property}`] = me.recordMap [field.props.rid][field.props.property]);
+			
+/*
 			for (let i = 0; i < fields.length; i ++) {
 				let field = fields [i];
 				let record = await me.props.store.getRecord (field.props.rid);
@@ -69,6 +78,7 @@ class EditForm extends Component {
 				me.recordMap [field.props.rid] = record;
 				state [`${field.props.rid}-${field.props.property}`] = record [field.props.property];
 			}
+*/
 		} catch (err) {
 			state.error = err.message;
 		}
