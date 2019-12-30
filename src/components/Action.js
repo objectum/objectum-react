@@ -45,6 +45,7 @@ class Action extends Component {
 					me.setState (state);
 				}
 			} catch (err) {
+				console.error (err);
 				state.error = err.message;
 				me.setState (state);
 			}
