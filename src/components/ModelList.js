@@ -218,7 +218,12 @@ class ModelList extends Component {
 				};
 				if (action.onClick) {
 					actionOpts.onClick = ({grid}) => {
-						Model [method].call (grid, {grid, store: me.props.store});
+						Model [method].call (grid, {
+							grid,
+							store: me.props.store,
+							parentModel: me.props.parentModel,
+							parentId: me.props.parentId
+						});
 					};
 				} else {
 					actionOpts.onClickSelected = async ({id, grid}) => {
@@ -227,7 +232,13 @@ class ModelList extends Component {
 						if (typeof (record [method]) != "function") {
 							throw new Error (`Unknown method: ${method}, record: ${id}`);
 						}
-						record [method].call (record, {id, grid, store: me.props.store});
+						record [method].call (record, {
+							id,
+							grid,
+							store: me.props.store,
+							parentModel: me.props.parentModel,
+							parentId: me.props.parentId
+						});
 					};
 				}
 				items.push (
