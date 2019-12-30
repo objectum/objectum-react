@@ -62,15 +62,11 @@ class EditForm extends Component {
 			
 			let fields = me.getFields (me.props.children);
 			let ids = _.uniq (_.map (fields, f => f.props.rid));
-			let promises = _.map (ids, id => {
-				return me.props.store.getRecord.bind (me.props.store, id);
-			});
+			let promises = _.map (ids, id => me.props.store.getRecord (id));
 			let records = await Promise.all (promises);
 			
 			records.forEach (record => me.recordMap [record.id] = record);
 			fields.forEach (field => state [`${field.props.rid}-${field.props.property}`] = me.recordMap [field.props.rid][field.props.property]);
-			
-			console.log ("load", records, me.recordMap);
 			
 /*
 			for (let i = 0; i < fields.length; i ++) {
