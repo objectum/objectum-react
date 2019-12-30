@@ -70,6 +70,8 @@ class EditForm extends Component {
 			records.forEach (record => me.recordMap [record.id] = record);
 			fields.forEach (field => state [`${field.props.rid}-${field.props.property}`] = me.recordMap [field.props.rid][field.props.property]);
 			
+			console.log ("load", records, me.recordMap);
+			
 /*
 			for (let i = 0; i < fields.length; i ++) {
 				let field = fields [i];
