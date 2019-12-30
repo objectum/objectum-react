@@ -63,7 +63,7 @@ class EditForm extends Component {
 			let fields = me.getFields (me.props.children);
 			let ids = _.uniq (_.map (fields, f => f.props.rid));
 			let promises = _.map (ids, id => {
-				return me.props.store.getRecord.bind (null, id);
+				return me.props.store.getRecord.bind (me.props.store, id);
 			});
 			let records = await Promise.all (promises);
 			
