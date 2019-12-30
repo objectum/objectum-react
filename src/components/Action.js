@@ -30,7 +30,9 @@ class Action extends Component {
 			
 			try {
 				let promise = handler ({
-					progress: ({label, value, max}) => me.setState ({label, value, max})
+					progress: ({label, value, max}) => {
+						me.setState ({label, value, max});
+					}
 				});
 				if (promise && promise.then) {
 					promise.then (() => {

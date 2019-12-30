@@ -1,11 +1,21 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
-import {Store} from "objectum-client";
+import {Store, Record} from "objectum-client";
 import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, ModelList} from '../../src'
-import {pushLocation} from "../../src/components/helper";
+import {pushLocation, timeout} from "../../src/components/helper";
 
 const store = new Store ();
+
+class TOrgProductModel extends Record {
+	static async syncProductsAction ({parentId, store, progress}) {
+		for (let i = 0; i < 5; i ++) {
+			await timeout (1000);
+			progress ({value: i + 1, max: 5});
+		}
+	}
+};
+store.register ("t.org.product", TOrgProductModel);
 
 class Test extends Component {
 	constructor (props) {

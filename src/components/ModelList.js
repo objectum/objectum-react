@@ -218,7 +218,7 @@ class ModelList extends Component {
 				};
 				if (action.onClick) {
 					actionOpts.onClick = ({grid, progress}) => {
-						Model [method].call (grid, {
+						return Model [method].call (grid, {
 							grid,
 							store: me.props.store,
 							parentModel: me.props.parentModel,
@@ -233,7 +233,7 @@ class ModelList extends Component {
 						if (typeof (record [method]) != "function") {
 							throw new Error (`Unknown method: ${method}, record: ${id}`);
 						}
-						record [method].call (record, {
+						return record [method].call (record, {
 							id,
 							grid,
 							store: me.props.store,
