@@ -51,13 +51,15 @@ class Action extends Component {
 	
 	render () {
 		let me = this;
-		let text = i18n ("Processing") + " ...";
+		let text;
 		
 		if (me.state.processing) {
 			text = me.state.label ? (me.state.label + ": ") : "";
 			text += me.state.value ? me.state.value : "";
 			text += me.state.max ? (" / " + me.state.max) : "";
 		}
+		text = text || i18n ("Processing") + " ...";
+		
 		return (
 			me.state.processing ?
 				<span className="text-primary ml-2 mr-2">

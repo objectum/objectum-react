@@ -77,6 +77,7 @@ class ModelList extends Component {
 		this.model = this.props.model || this.props.match.params.model.split ("#")[0];
 	}
 	
+/*
 	renderActions () {
 		let me = this;
 		let items = [];
@@ -116,7 +117,7 @@ class ModelList extends Component {
 					grid,
 					parentModel: me.props.parentModel,
 					parentId: me.props.parentId,
-					progressCallback: ({label, value, max}) => updateActionState (i, _.extend (action, {label, value, max}))
+					progress: ({label, value, max}) => updateActionState (i, _.extend (action, {label, value, max}))
 				});
 				if (promise && promise.then) {
 					promise.then (() => {
@@ -178,6 +179,59 @@ class ModelList extends Component {
 							<Action {...actionOpts}>{action.icon ? <i className={action.icon + " mr-2"}/> : <span/>}{action.label}</Action>
 							{action.error && <span className="text-danger ml-1">{action.error}</span>}
 						</span>
+				);
+			} catch (err) {
+				items.push (
+					<span className="border p-1 text-danger ml-1" key={i}>{err.message}</span>
+				);
+			}
+		}
+		return items;
+	}
+*/
+	
+	renderActions () {
+		let me = this;
+		let items = [];
+		
+		for (let i = 0; i < me.state.actions.length; i ++) {
+			try {
+				let action = me.state.actions [i];
+				let fn = action.onClick || action.onClickSelected;
+				
+				if (!fn) {
+					throw new Error (`onClick, onClickSelected not exist`);
+				}
+				let tokens = fn.split (".");
+				let method = tokens.splice (tokens.length - 1, 1)[0];
+				let path = tokens.join (".");
+				let Model = me.props.store.registered [path];
+				
+				if (!Model) {
+					throw new Error (`Model "${path}" not registered`);
+				}
+				if (typeof (Model [method]) != "function") {
+					throw new Error (`Unknown static method ${method}`);
+				}
+				let actionOpts = {
+					key: i
+				};
+				if (action.onClick) {
+					actionOpts.onClick = ({grid}) => {
+						Model [method].call (grid, {grid, store: me.props.store});
+					};
+				} else {
+					actionOpts.onClickSelected = async ({id, grid}) => {
+						let record = await me.props.store.getRecord (id);
+						
+						if (typeof (record [method]) != "function") {
+							throw new Error (`Unknown method: ${method}, record: ${id}`);
+						}
+						record [method].call (record, {id, grid, store: me.props.store});
+					};
+				}
+				items.push (
+					<Action {...actionOpts}>{action.icon ? <i className={action.icon + " mr-2"} /> : <span />}{action.label}</Action>
 				);
 			} catch (err) {
 				items.push (

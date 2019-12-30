@@ -360,9 +360,9 @@ class Grid extends Component {
 			
 			if (child.type.displayName == "Action") {
 				if (child.props.onClick) {
-					o.onClick = (opts) => child.props.onClick (Object.assign (opts, {grid: me}));
+					o.onClick = (opts) => child.props.onClick (Object.assign (opts, {grid: me, store: me.props.store}));
 				} else if (child.props.onClickSelected) {
-					o.onClick = (opts) => child.props.onClickSelected (Object.assign (opts, {id: me.state.recs [me.state.selected].id, grid: me}));
+					o.onClick = (opts) => child.props.onClickSelected (Object.assign (opts, {id: me.state.recs [me.state.selected].id, grid: me, store: me.props.store}));
 				}
 				if (child.props.onClickSelected && me.state.selected === null) {
 					o.disabled = true;
