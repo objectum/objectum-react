@@ -217,16 +217,17 @@ class ModelList extends Component {
 					key: i
 				};
 				if (action.onClick) {
-					actionOpts.onClick = ({grid}) => {
+					actionOpts.onClick = ({grid, progress}) => {
 						Model [method].call (grid, {
 							grid,
 							store: me.props.store,
 							parentModel: me.props.parentModel,
-							parentId: me.props.parentId
+							parentId: me.props.parentId,
+							progress
 						});
 					};
 				} else {
-					actionOpts.onClickSelected = async ({id, grid}) => {
+					actionOpts.onClickSelected = async ({id, grid, progress}) => {
 						let record = await me.props.store.getRecord (id);
 						
 						if (typeof (record [method]) != "function") {
@@ -237,7 +238,8 @@ class ModelList extends Component {
 							grid,
 							store: me.props.store,
 							parentModel: me.props.parentModel,
-							parentId: me.props.parentId
+							parentId: me.props.parentId,
+							progress
 						});
 					};
 				}
