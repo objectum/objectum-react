@@ -3,7 +3,6 @@
 
 import React, {Component} from "react";
 import {i18n} from "../i18n";
-import _ from "lodash";
 
 class Action extends Component {
 	constructor (props) {
@@ -69,7 +68,7 @@ class Action extends Component {
 					<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true" />{text}
 				</span> :
 				<span>
-					<button type="button" className="btn btn-primary btn-labeled btn-sm mr-1" onClick={me.onClick} disabled={me.props.disabled}>{me.props.children}</button>
+					<button type="button" className="btn btn-primary btn-labeled btn-sm mr-1" onClick={me.onClick} disabled={me.props.disabled || me.props.disableActions}>{me.props.children}</button>
 					{me.state.error && <span className="text-danger ml-1">{me.state.error}</span>}
 				</span>
 		);
