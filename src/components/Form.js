@@ -426,7 +426,7 @@ class Form extends Component {
 					<h5 className="border bg-white shadow-sm pl-3 py-2 mb-1 ml-3">{me.props.label}</h5>
 				</div>}
 				{me.state._rid && <div className="mb-1 actions border p-1 bg-white shadow-sm">
-					<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving}>
+					<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving || me.props.disableActions}>
 						{me.state._saving ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
 							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
