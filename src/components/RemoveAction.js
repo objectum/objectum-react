@@ -52,7 +52,7 @@ class RemoveAction extends Component {
 			<button
 				type="button"
 				className={me.props.hasOwnProperty ("buttonClass") ? me.props.buttonClass : "btn btn-primary btn-labeled btn-sm mr-1"}
-				onClick={() => me.setState ({removeConfirm: true})} disabled={me.props.disabled}
+				onClick={() => me.setState ({removeConfirm: true})} disabled={me.props.disabled || me.props.disableActions}
 			>
 				<i className={me.props.hasOwnProperty ("iconClass") ? me.props.iconClass : "fas fa-minus mr-2"} />{me.props.hasOwnProperty ("buttonLabel") ? me.props.buttonLabel : i18n ("Remove")}
 			</button>
