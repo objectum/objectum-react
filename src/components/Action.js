@@ -37,6 +37,7 @@ class Action extends Component {
 					promise.then (() => {
 						me.setState (state);
 					}).catch (err => {
+						console.error (err);
 						state.error = err.message;
 						me.setState (state);
 					});

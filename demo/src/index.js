@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, ModelList} from '../../src'
+import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, ModelList, Action} from '../../src'
 import {pushLocation, timeout} from "../../src/components/helper";
 
 const store = new Store ();
@@ -23,9 +23,17 @@ class Test extends Component {
 		
 		let me = this;
 
+		me.onClick = me.onClick.bind (me);
+		
 		me.state = {
 			refresh: false
 		};
+	}
+	
+	async onClick () {
+		setTimeout (() => {
+			throw new Error ("1");
+		}, 1000);
 	}
 	
 	render () {
@@ -41,6 +49,7 @@ class Test extends Component {
 						query="menu.mtd" refresh={me.state.refresh}
 						onSelect={(menu) => me.setState ({menu, refresh: !me.state.refresh})}
 					>
+						<Action onClick={me.onClick}>Click</Action>
 					</Grid>
 				</div>
 				{me.state.menu && <div className="col ml-1">
