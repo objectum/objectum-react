@@ -65,16 +65,18 @@ class Queries extends Component {
 		let me = this;
 		
 		return (
-			<div className="row">
-				<div className="col-sm-12">
-					<Grid {...me.props} id="queries" ref="queries" label="Queries" store={me.props.store} query="objectum.query" tree={true} system={true} refresh={me.state.refresh} onSelectParent={(parent) => me.parent = parent}>
-						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
-						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
-						<RemoveAction onRemove={me.onRemove} />
-						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
-					</Grid>
+			<div className="container">
+				<div className="row">
+					<div className="col-sm-12">
+						<Grid {...me.props} id="queries" ref="queries" label="Queries" store={me.props.store} query="objectum.query" tree={true} system={true} refresh={me.state.refresh} onSelectParent={(parent) => me.parent = parent}>
+							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
+							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
+							<RemoveAction onRemove={me.onRemove} />
+							{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
+						</Grid>
+					</div>
+					<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
 				</div>
-				<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
 			</div>
 		);
 		
