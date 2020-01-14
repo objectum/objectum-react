@@ -152,19 +152,6 @@ class ChooseField extends Component {
 				</div>
 				<Modal
 					isOpen={me.state.visible}
-/*
-					style={{
-						content: {
-							top: "50%",
-							left: "50%",
-							right: "auto",
-							bottom: "auto",
-							marginTop: "50px",
-							marginRight: "-50%",
-							transform: "translate(-50%, -50%)"
-						}
-					}}
-*/
 				>
 					<div className="row">
 						<div className="col-md mb-1">

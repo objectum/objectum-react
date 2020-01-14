@@ -42,6 +42,11 @@ class Test extends Component {
 		return (
 			<div className="row no-gutters">
 				<div className="col-6">
+					<ChooseField
+						store={me.props.store}
+						choose={{cmp: ModelList, model: "tk", ref: "list"}}
+					/>
+					
 					<Grid
 						id="tm-list"
 						ref="tm-list"
