@@ -150,6 +150,9 @@ class Filter extends Component {
 		if (id == "column") {
 			state.operatorRecs = me.getOperatorRecs (v);
 			
+			if (_.find (state.operatorRecs, {code: "like"})) {
+				state.operator = "like";
+			} else
 			if (_.find (state.operatorRecs, {code: "="})) {
 				state.operator = "=";
 			} else {
