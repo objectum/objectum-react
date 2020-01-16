@@ -275,7 +275,7 @@ class ObjectumApp extends Component {
 						<Fade>
 							<div className="fixed-top text-light bg-dark">
 								<button className="btn btn-link text-light" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
-									<i className="fas fa-bars mr-2"></i>{i18n ("Menu")}
+									<i className="fas fa-bars mr-2" />{i18n ("Menu")}
 								</button>
 	
 								<BackButton popLocation={me.popLocation} locations={me.state.locations} />

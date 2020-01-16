@@ -91,8 +91,8 @@ class ModelTree extends Component {
 		return (
 			<div className="container">
 				<Grid {...me.props} id={me.props.id || `${me.model}-list`} ref={me.props.id || "list"} label={label} store={me.props.store} model={me.model} tree={true} refresh={me.state.refresh} params={params}>
-					<Action onClick={me.onCreate}><i className="fas fa-plus mr-2"></i>{i18n ("Create")}</Action>
-					<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2"></i>{i18n ("Edit")}</Action>
+					<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+					<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
 					<RemoveAction onRemove={me.onRemove} />
 					{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 				</Grid>

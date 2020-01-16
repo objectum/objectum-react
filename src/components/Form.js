@@ -172,7 +172,11 @@ class Form extends Component {
 					value = Number (value);
 				}
 				if (property && property.secure) {
-					value = require ("crypto").createHash ("sha1").update (String (value)).digest ("hex").toUpperCase ();
+					let hash = require ("crypto").createHash ("sha1").update (String (value)).digest ("hex").toUpperCase ();
+					
+					if (hash != value) {
+						value = hash;
+					}
 				}
 				if (value === "") {
 					value = null;
