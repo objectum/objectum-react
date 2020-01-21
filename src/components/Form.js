@@ -44,7 +44,7 @@ class Form extends Component {
 		let values = {};
 
 		React.Children.forEach (children, child => {
-			if (!child.props) {
+			if (!child || !child.props) {
 				return;
 			}
 			let code = child.props.property;
@@ -64,7 +64,7 @@ class Form extends Component {
 		let fields = {};
 		
 		React.Children.forEach (children, child => {
-			if (!child.props) {
+			if (!child || !child.props) {
 				return;
 			}
 			let code = child.props.property;
