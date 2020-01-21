@@ -33,13 +33,10 @@ class Auth extends Component {
 			me.setState ({loading: true});
 			await timeout ();
 			
-			let sid = await me.store.auth ({
+			await me.store.auth ({
 				username: me.state.username,
 				password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase ()
 			});
-			if (me.props.onConnect) {
-				me.props.onConnect (sid);
-			}
 		} catch (error) {
 			if (error.message == "401 Unauthenticated") {
 				me.setState ({loading: false, error: i18n ("Invalid username or password")});
