@@ -9,6 +9,7 @@ import Field from "./Field";
 import {timeout} from "./helper";
 import _ from "lodash";
 import Cell from "./Cell";
+import {factory} from "objectum-client";
 
 class TableForm extends Component {
 	constructor (props) {
@@ -238,7 +239,8 @@ class TableForm extends Component {
 						{me.state.recs.length != me.props.records.length ? <tr><td colSpan={me.props.properties.length} className="text-primary"><Loading /></td></tr> :
 							me.props.records.map ((id, i) => {
 								let rec = me.recMap [id];
-								let object = me.props.store.factory ({
+								let object = factory ({
+									store: me.props.store,
 									rsc: "record", data: {
 										id,
 										_model: me.model.getPath (),
