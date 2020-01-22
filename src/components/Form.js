@@ -230,6 +230,9 @@ class Form extends Component {
 			if (me.props.rsc == "record") {
 				data ["_model"] = me.model.getPath ();
 			}
+			if (me.props.defaults) {
+				Object.assign (data, me.props.defaults);
+			}
 			for (let code in values) {
 				let value = values [code];
 				let property = me.model && me.model.properties [code];
