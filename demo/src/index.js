@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, NumberField, ModelList, Action} from '../../src'
+import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, NumberField, ModelList, Action} from '../../src'
 import {pushLocation, timeout} from "../../src/components/helper";
 
 const store = new Store ();
@@ -42,15 +42,19 @@ class Test extends Component {
 		return (
 			<div className="row no-gutters">
 				<div className="col-12">
-					<NumberField
-						store={me.props.store} label="Вес упаковки, кг" value={me.state.packWeight}
-						onChange={({value}) => {
-							let state = {packWeight: value};
+					<DictField
+						store={me.props.store}
+						label="Продукт"
+						model="item"
+						property="product"
+						value={me.state.product}
+						onChange={async ({value}) => {
+							let productRecord = await me.props.store.getRecord (value);
 							
-							me.setState (state);
+							me.setState ({product: value, productRecord});
 						}}
 					/>
-					<Action onClick={() => me.setState ({packWeight: ""})}>test</Action>
+					<Action onClick={() => me.setState ({product: ""})}>test</Action>
 				</div>
 			</div>
 		);
