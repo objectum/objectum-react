@@ -75,6 +75,14 @@ class DictField extends Component {
 		me.setState (state);
 	}
 	
+	componentDidUpdate (prevProps) {
+		let me = this;
+		
+		if (prevProps.value !== me.props.value) {
+			me.setState ({value: me.props.value});
+		}
+	}
+	
 	componentWillUnmount () {
 		document.removeEventListener ("mousedown", this.onDocumentClick);
 	}

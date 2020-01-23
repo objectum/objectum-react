@@ -87,7 +87,7 @@ class ChooseField extends Component {
 		
 		if (prevProps.value !== me.props.value) {
 			me.setState ({value: me.props.value});
-			me.updateName (me.props.value);
+			await me.updateName (me.props.value);
 		}
 	}
 	

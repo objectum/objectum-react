@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, ModelList, Action} from '../../src'
+import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, NumberField, ModelList, Action} from '../../src'
 import {pushLocation, timeout} from "../../src/components/helper";
 
 const store = new Store ();
@@ -41,41 +41,17 @@ class Test extends Component {
 		
 		return (
 			<div className="row no-gutters">
-				<div className="col-6">
-					<ChooseField
-						store={me.props.store}
-						choose={{cmp: ModelList, model: "tk", ref: "list"}}
+				<div className="col-12">
+					<NumberField
+						store={me.props.store} label="Вес упаковки, кг" value={me.state.packWeight}
+						onChange={({value}) => {
+							let state = {packWeight: value};
+							
+							me.setState (state);
+						}}
 					/>
-					
-					<Grid
-						id="tm-list"
-						ref="tm-list"
-						store={me.props.store}
-						query="menu.mtd" refresh={me.state.refresh}
-						onSelect={(menu) => me.setState ({menu, refresh: !me.state.refresh})}
-					>
-						<Action onClick={me.onClick}>Click</Action>
-					</Grid>
+					<Action onClick={() => me.setState ({packWeight: ""})}>test</Action>
 				</div>
-				{me.state.menu && <div className="col ml-1">
-					<Form store={me.props.store} refresh={me.state.refresh}>
-						<Field rid={me.state.menu} property="name" />
-						<Field rid={me.state.menu} property="date" />
-						<Field rid={me.state.menu} property="category" dict={true} />
-					</Form>
-					<Grid
-						id="dish-list"
-						ref="dish-list"
-						label={`(id: ${me.state.menu})`}
-						store={me.props.store}
-						query="dish.mtd"
-						pageRecs={30}
-						refresh={me.state.refresh}
-						params={{menu: me.state.menu}}
-						groupCol="eating"
-					>
-					</Grid>
-				</div>}
 			</div>
 		);
 	}
