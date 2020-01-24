@@ -70,7 +70,7 @@ function BackButton ({popLocation, locations}) {
 	}
 	
 	return (
-		<button className="btn btn-link text-light ml-1 border-left border-right" disabled={locations.length < 2} onClick={handleClick}>
+		<button className="btn btn-link text-light border-right" disabled={locations.length < 2} onClick={handleClick}>
 			<i className="fas fa-arrow-left mr-2" />{i18n ("Back")}
 		</button>
 	);
@@ -83,12 +83,14 @@ class ObjectumApp extends Component {
 		let me = this;
 		
 		me.state = {
+			sidebarDocked: true,
 			sidebarOpen: false,
 			locations: []
 		};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
 		me.onSetSidebarOpen = me.onSetSidebarOpen.bind (me);
+		me.onWindowResize = me.onWindowResize.bind (me);
 		me.onClickMenu = me.onClickMenu.bind (me);
 		me.pushLocation = me.pushLocation.bind (me);
 		me.popLocation = me.popLocation.bind (me);
@@ -100,9 +102,18 @@ class ObjectumApp extends Component {
 		this.setState ({sidebarOpen: open});
 	}
 	
+	onWindowResize () {
+		if (document.documentElement.clientWidth > 1000) {
+			this.setState ({sidebarDocked: true});
+		} else {
+			this.setState ({sidebarDocked: false});
+		}
+	}
+	
 	async componentDidMount () {
 		let me = this;
 		
+		window.addEventListener ("resize", me.onWindowResize);
 		me.store.addListener ("connect", me.onConnect);
 		
 		if (me.props.username && me.props.password) {
@@ -114,6 +125,7 @@ class ObjectumApp extends Component {
 	}
 	
 	componentWillUnmount () {
+		window.removeEventListener ("resize", me.onWindowResize);
 		this.store.removeListener ("connect", this.onConnect);
 	}
 	
@@ -274,9 +286,9 @@ class ObjectumApp extends Component {
 						
 						<Fade>
 							<div className="fixed-top text-light bg-dark">
-								<button className="btn btn-link text-light" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
+								{!me.state.sidebarDocked && <button className="btn btn-link text-light border-right" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
 									<i className="fas fa-bars mr-2" />{i18n ("Menu")}
-								</button>
+								</button>}
 	
 								<BackButton popLocation={me.popLocation} locations={me.state.locations} />
 	
@@ -287,8 +299,9 @@ class ObjectumApp extends Component {
 						<div>
 							<Sidebar
 								sidebar={me.renderMenu ("fa-lg")}
-								open={this.state.sidebarOpen}
-								onSetOpen={this.onSetSidebarOpen}
+								open={me.state.sidebarOpen}
+								docked={me.state.sidebarDocked}
+								onSetOpen={me.onSetSidebarOpen}
 								sidebarClassName="bg-white"
 							>
 								<div style={{marginTop: "40px", marginBottom: "20px"}}>

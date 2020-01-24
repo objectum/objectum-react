@@ -3,6 +3,7 @@ import Action from "./Action";
 import Grid from "./Grid";
 import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
+import {getHash, setHash} from "./helper";
 import Loading from "./Loading";
 import _ from "lodash";
 
@@ -277,6 +278,19 @@ class ModelList extends Component {
 			if (opts.grid.query) {
 				delete gridOpts.model;
 				gridOpts.query = opts.grid.query;
+			}
+			if (opts.grid.filters) {
+				let hash = getHash (me) [gridOpts.id];
+				
+				if (!hash || !hash.filters) {
+					setHash (me, {
+						[gridOpts.id]: {
+							"showFilters": true,
+							"dockFilters": "top",
+							"filters": opts.grid.filters
+						}
+					});
+				}
 			}
 			if ((m.isDictionary () || m.isTable ()) && me.props.store.map ["query"][m.getPath ()]) {
 				delete gridOpts.model;
