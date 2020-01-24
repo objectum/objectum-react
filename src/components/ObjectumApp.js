@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route, Link, useHistory, useLocation} from "rea
 import Auth from "./Auth";
 import Models from "./Models";
 import Model from "./Model";
+import Schema from "./Schema";
 import Property from "./Property";
 import Queries from "./Queries";
 import Query from "./Query";
@@ -125,7 +126,7 @@ class ObjectumApp extends Component {
 	}
 	
 	componentWillUnmount () {
-		window.removeEventListener ("resize", me.onWindowResize);
+		window.removeEventListener ("resize", this.onWindowResize);
 		this.store.removeListener ("connect", this.onConnect);
 	}
 	
@@ -221,6 +222,7 @@ class ObjectumApp extends Component {
 			<Route key="objectum-12" path="/menu/:rid" render={props => <Menu {...props} store={me.store} />} />,
 			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={me.store} />} />,
 			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={me.store} />} />,
+			<Route key="objectum-17" path="/schema" render={props => <Schema {...props} store={me.store} />} />,
 			<Route key="objectum-logout" path="/logout" render={props => {
 				me.setState ({
 					sidebarOpen: false, locations: []
