@@ -74,11 +74,11 @@ class Model extends Component {
 								<div className="form-group col-md-12">
 									<JsonEditor property="opts" label="Options" />
 								</div>
-{/*
-								<div className="form-group col-md-6">
+							</div>
+							<div className="form-row">
+								<div className="form-group col">
 									<StringField property="formatFunc" label="Format function" codemirror={true} />
 								</div>
-*/}
 							</div>
 						</Form>
 					</Tab>
