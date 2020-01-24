@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import SortableTree from "react-sortable-tree";
+import "react-sortable-tree/style.css";
 
 class Schema extends Component {
 	constructor (props) {
