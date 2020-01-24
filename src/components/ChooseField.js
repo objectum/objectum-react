@@ -152,6 +152,13 @@ class ChooseField extends Component {
 				</div>
 				<Modal
 					isOpen={me.state.visible}
+					style={
+						document.documentElement.clientWidth > 1000 ? {
+							content: {
+								left: "270px"
+							}
+						} : {}
+					}
 				>
 					<div className="row">
 						<div className="col-md mb-1">
