@@ -163,6 +163,7 @@ class ObjectumApp extends Component {
 		me.setState ({[key]: !me.state [key]});
 	}
 	
+/*
 	renderMenu (size) {
 		let me = this;
 		
@@ -189,18 +190,80 @@ class ObjectumApp extends Component {
 							</button>
 							{opened && renderItems (rec.id, level + 1)}
 						</div>
-				);
+					);
 				} else {
 					return (
-						<Link key={`menu-${parent}-${i}`} className={`nav-link text-dark ml-${level * 2}`} to={rec.path}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</Link>
+						<li className="list-group-item">
+							<Link key={`menu-${parent}-${i}`} className={`nav-link text-dark ml-${level * 2}`} to={rec.path}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</Link>
+						</li>
 					);
 				}
 			});
 		};
 		return (
 			<div className="menu">
-				{renderItems (null, 0)}
-				<Link key="menu-logout" className="nav-link text-dark mt-4" to="/logout"><i key="icon-logout" className={`fas fa-sign-out-alt ${size} mr-2 ml-2`} />{i18n ("Logout")}</Link>
+				<ul className="list-group">
+					{renderItems (null, 0)}
+					<li className="list-group-item">
+						<Link key="menu-logout" className="nav-link text-dark mt-4" to="/logout"><i key="icon-logout" className={`fas fa-sign-out-alt ${size} mr-2 ml-2`} />{i18n ("Logout")}</Link>
+					</li>
+				</ul>
+			</div>
+		);
+	}
+*/
+	renderMenu (size) {
+		let me = this;
+		
+		function renderIcon (icon, key) {
+			if (icon) {
+				return (<i key={key} className={`${icon} ${size} menu-icon mr-1`} />);
+			} else {
+				return (<span key={key} />);
+			}
+		};
+		let items = [];
+		
+		function renderItems (parent, level) {
+			let recs = me.menuItemRecs.filter (rec => rec.parent == parent);
+			
+			recs.forEach ((rec, i) => {
+				let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
+				
+				if (childRecs.length) {
+					let opened = me.state [`open-${parent}-${i}`];
+					
+					items.push (
+						<tr><td className="bg-info">
+							<button key={`menu-${parent}-${i}`} className={`btn btn-link text-white pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
+								{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}<i key={`open-${parent}-${i}`} className={`far ${opened ? "fa-folder-open" : "fa-folder"} menu-icon`} />
+							</button>
+						</td></tr>
+					);
+					if (opened) {
+						renderItems (rec.id, level + 1);
+					}
+				} else {
+					items.push (
+						<tr><td className={level % 2 ? "bg-secondary" : "bg-info"}>
+							<Link key={`menu-${parent}-${i}`} className={`nav-link text-white ml-${level * 2}`} to={rec.path}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</Link>
+						</td></tr>
+					);
+				}
+			});
+		};
+		renderItems (null, 0);
+		
+		return (
+			<div className="menu">
+				<table className="table table-sm">
+					<tbody>
+						{items}
+						<tr><td className="bg-info">
+							<Link key="menu-logout" className="nav-link text-white" to="/logout"><i key="icon-logout" className={`fas fa-sign-out-alt ${size} menu-icon mr-1`} />{i18n ("Logout")}</Link>
+						</td></tr>
+					</tbody>
+				</table>
 			</div>
 		);
 	}
