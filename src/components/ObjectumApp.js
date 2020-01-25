@@ -351,9 +351,14 @@ class ObjectumApp extends Component {
 						
 						<Fade>
 							<div className="fixed-top text-light bg-dark">
-								{!me.state.sidebarDocked && <button className="btn btn-link text-light border-right" onClick={() => this.onSetSidebarOpen (!me.state.sidebarOpen)}>
+								<button className="btn btn-link text-light border-right" onClick={
+									() => {
+										me.setState ({sidebarDocked: !me.state.sidebarDocked});
+										//this.onSetSidebarOpen (!me.state.sidebarOpen);
+									}
+								}>
 									<i className="fas fa-bars mr-2" />{i18n ("Menu")}
-								</button>}
+								</button>
 	
 								<BackButton popLocation={me.popLocation} locations={me.state.locations} />
 	
@@ -364,9 +369,10 @@ class ObjectumApp extends Component {
 						<div>
 							<Sidebar
 								sidebar={me.renderMenu ("fa-lg")}
-								open={me.state.sidebarOpen}
+								/*open={me.state.sidebarOpen}*/
+								open={false}
 								docked={me.state.sidebarDocked}
-								onSetOpen={me.onSetSidebarOpen}
+								/*onSetOpen={me.onSetSidebarOpen}*/
 								sidebarClassName="bg-white"
 							>
 								<div style={{marginTop: "40px", marginBottom: "20px"}}>
