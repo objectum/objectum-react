@@ -85,12 +85,12 @@ class ObjectumApp extends Component {
 		
 		me.state = {
 			sidebarDocked: true,
-			sidebarOpen: false,
+			//sidebarOpen: false,
 			locations: []
 		};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
-		me.onSetSidebarOpen = me.onSetSidebarOpen.bind (me);
+		//me.onSetSidebarOpen = me.onSetSidebarOpen.bind (me);
 		me.onWindowResize = me.onWindowResize.bind (me);
 		me.onClickMenu = me.onClickMenu.bind (me);
 		me.pushLocation = me.pushLocation.bind (me);
@@ -99,10 +99,13 @@ class ObjectumApp extends Component {
 		lang (me.props.locale || "en");
 	}
 	
+/*
 	onSetSidebarOpen (open) {
 		this.setState ({sidebarOpen: open});
 	}
-	
+*/
+
+/*
 	onWindowResize () {
 		if (document.documentElement.clientWidth > 1000) {
 			this.setState ({sidebarDocked: true});
@@ -110,11 +113,12 @@ class ObjectumApp extends Component {
 			this.setState ({sidebarDocked: false});
 		}
 	}
+*/
 	
 	async componentDidMount () {
 		let me = this;
 		
-		window.addEventListener ("resize", me.onWindowResize);
+//		window.addEventListener ("resize", me.onWindowResize);
 		me.store.addListener ("connect", me.onConnect);
 		
 		if (me.props.username && me.props.password) {
@@ -126,7 +130,7 @@ class ObjectumApp extends Component {
 	}
 	
 	componentWillUnmount () {
-		window.removeEventListener ("resize", this.onWindowResize);
+//		window.removeEventListener ("resize", this.onWindowResize);
 		this.store.removeListener ("connect", this.onConnect);
 	}
 	
