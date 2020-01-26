@@ -51,7 +51,6 @@ class Column extends Component {
 			{id: "0", name: i18n ("Hidden")},
 			{id: "1", name: i18n ("Visible")}
 		];
-		console.log (me.state.area);
 		return (
 			<div className="container">
 				<Tabs key="tabs" id="tabs" label={i18n ("Column") + ": " + me.state.label}>

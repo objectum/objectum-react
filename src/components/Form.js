@@ -112,7 +112,7 @@ class Form extends Component {
 			}
 		} catch (err) {
 			state._error = err.message;
-			console.log (err.stack);
+			console.error (err);
 		}
 		me.setState (state);
 	}

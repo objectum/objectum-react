@@ -59,6 +59,19 @@ function PageViews ({pushLocation, locations}) {
 	return null;
 };
 
+function HomeButton () {
+	let history = useHistory ();
+	
+	function handleClick () {
+		history.push ("/");
+	}
+	return (
+		<button className="btn btn-link text-light border-right" onClick={handleClick}>
+			<i className="fas fa-home" />
+		</button>
+	);
+};
+
 function BackButton ({popLocation, locations}) {
 	let history = useHistory ();
 	
@@ -69,7 +82,6 @@ function BackButton ({popLocation, locations}) {
 		
 		history.push (decodeURI (pathname + hash));
 	}
-	
 	return (
 		<button className="btn btn-link text-light border-right" disabled={locations.length < 2} onClick={handleClick}>
 			<i className="fas fa-arrow-left mr-2" />{i18n ("Back")}
@@ -271,6 +283,14 @@ class ObjectumApp extends Component {
 		return l;
 	}
 	
+	onHome () {
+		let history = useHistory ();
+		
+		history.push ({
+			pathname: "/"
+		});
+	}
+	
 	render () {
 		let me = this;
 		
@@ -293,7 +313,8 @@ class ObjectumApp extends Component {
 								}>
 									<i className="fas fa-bars mr-2" />{i18n ("Menu")}
 								</button>
-	
+
+								<HomeButton />
 								<BackButton popLocation={me.popLocation} locations={me.state.locations} />
 	
 								<span className="ml-3 text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
