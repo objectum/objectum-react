@@ -2,6 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
+import Loading from "./Loading";
 import Action from "./Action";
 import {i18n} from "../i18n";
 import ModelList from "./ModelList";
