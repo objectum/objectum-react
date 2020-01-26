@@ -25,8 +25,6 @@ import _ from "lodash";
 import Fade from "react-reveal/Fade";
 
 import "../css/objectum.css";
-import "../css/bootstrap.css";
-import "../fontawesome/css/all.css";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
