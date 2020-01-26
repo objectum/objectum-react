@@ -192,7 +192,10 @@ class ObjectumApp extends Component {
 				} else {
 					items.push (
 						<tr key={`menu-${parent}-${i}`}><td className={level % 2 ? "bg-secondary" : "bg-info"}>
-							<Link className={`nav-link text-white ml-${level * 2}`} to={rec.path}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</Link>
+							<Link className={`nav-link text-nowrap text-white ml-${level * 2}`} to={rec.path}>
+								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
+								{i18n (rec.name)}
+							</Link>
 						</td></tr>
 					);
 				}
