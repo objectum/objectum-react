@@ -250,7 +250,7 @@ class ModelList extends Component {
 				);
 			} catch (err) {
 				items.push (
-					<span className="border p-1 text-danger ml-1" key={i}>{err.message}</span>
+					<span className="border p-1 text-white bg-danger ml-1" key={i}>{err.message}</span>
 				);
 			}
 		}

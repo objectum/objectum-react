@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Loading from "./Loading";
+import Action from "./Action";
 import {i18n} from "../i18n";
 import ModelList from "./ModelList";
 import Field from "./Field";
@@ -72,34 +72,10 @@ class TableForm extends Component {
 		me.setState (state);
 	}
 	
-/*
-	onChange (val, file) {
-		let me = this;
-		let id = val.target.id;
-		let v = val.target.value;
-		
-		if (val.target.type === "checkbox") {
-			v = val.target.checked;
-		}
-		if (file) {
-			me.fileMap [id] = file;
-		}
-		let state = {[id]: v};
-		let [code] = id.split ("-");
-		
-		if (v == "" && me.model.properties [code].get ("notNull")) {
-			state [`error-${id}`] = i18n ("Please enter value");
-		} else {
-			state [`error-${id}`] = null;
-		}
-		me.setState (state);
-	}
-*/
-	
-	async onSave () {
+	async onSave ({progress}) {
 		let me = this;
 		let records = [];
-
+		
 		for (let a in me.state) {
 			let [code, id] = a.split ("-");
 			
@@ -109,21 +85,12 @@ class TableForm extends Component {
 				}
 			}
 		}
-		me.setState ({
-			saving: true,
-			progress: 0
-		});
-		let state = {
-			saving: false,
-			progress: 0
-		};
 		try {
 			await timeout (200);
-			
 			await me.props.store.startTransaction (`Save TableForm: ${records.join (",")}`);
 			
 			for (let i = 0; i < records.length; i ++) {
-				me.setState ({progress: 100 / records.length * (i + 1)});
+				progress ({label: i18n ("Saving"), value: i + 1, max: records.length});
 				
 				let id = records [i];
 				let record = me.objectMap [id];
@@ -140,9 +107,8 @@ class TableForm extends Component {
 			await me.props.store.commitTransaction ();
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
-			state.error = err.message;
+			throw err;
 		}
-		me.setState (state);
 	}
 	
 	isChanged () {
@@ -206,15 +172,9 @@ class TableForm extends Component {
 		return (
 			<div>
 				<div className="actions border p-1 bg-white shadow-sm">
-					<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving}>
-						{me.state.saving ?
-							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
-							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
-						}
-					</button>
-					<div className="progress mt-1">
-						<div className="progress-bar" role="progressbar" style={{width: me.state.progress + "%"}} aria-valuenow={me.state.progress} aria-valuemin={0} aria-valuemax={100} />
-					</div>
+					<Action onClick={me.onSave}	disabled={!me.isChanged () || me.state.saving}>
+						<i className="fas fa-check mr-2"/>{i18n ("Save")}
+					</Action>
 				</div>
 				<div>
 					<table className="table table-bordered bg-white shadow-sm objectum-table px-1 pt-1 pb-5 mb-0 mt-1">

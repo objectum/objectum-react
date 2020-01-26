@@ -120,7 +120,7 @@ class ChooseField extends Component {
 			<div>
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
-					<div className="input-group">
+					<div className="input-group choosefield">
 						{!me.props.disabled && <div>
 							<button
 								type="button"
@@ -141,7 +141,7 @@ class ChooseField extends Component {
 						</div>}
 						<input
 							type="text"
-							className={"form-control form-control-sm" + addCls}
+							className={"form-control form-control-sm _dictfield-input" + addCls}
 							id={me.id}
 							value={me.state.name}
 							onChange={() => {}}

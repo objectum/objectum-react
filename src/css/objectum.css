@@ -1,57 +1,60 @@
-.content {
-    min-height: 100vh;
-    transition: all 0.3s;
-    margin-top: 20px;
-    padding: 20px;
-}
-#header {
-    width: 100%;
-    height: 32px;
-    padding-left: 10px;
-    padding-top: 7px;
-}
-.cute-text {
-    font-weight: bold;
-    font-style: italic;
-    text-shadow: -1px -1px 1px #073255, 1px -1px 1px #073255, -1px 1px 1px #073255, 1px 1px 1px #073255;
-}
-.objectum-title {
-    color: white;
-    text-shadow: -1px -1px 1px #073255, 1px -1px 1px #073255, -1px 1px 1px #073255, 1px 1px 1px #073255;
-}
 .auth {
-    margin-top: 50px;
-    min-width: 250px;
+    margin-top: 5em;
+    min-width: 21em;
 }
 .treegrid-button {
-    width: 60px;
+    width: 7em;
 }
 .menu {
-    width: 250px;
-    margin-top: 50px;
+    width: 21em;
+    margin-top: 4em;
 }
 .menu-icon {
-    width: 25px;
+    width: 2em;
     text-align: center;
 }
 .numberfield {
-    max-width: 150px !important;
-    min-width: 70px !important;
+    max-width: 11em;
+    min-width: 5em;
 }
 .datefield {
-    max-width: 150px !important;
+    max-width: 12em;
 }
 .choosefield {
-    min-width: 120px !important;
+    min-width: 11em;
+}
+.dictfield {
+    min-width: 11em;
+}
+.dictfield-dialog {
+    position: relative;
+}
+.dictfield-filter {
+    position: absolute;
+    left: -1px;
+    top: 2px;
+    width: 33em;
+    height: 5em;
+    z-index: 1000;
+}
+.dictfield-params {
+    position: absolute;
+    left: -1px;
+    top: 5em;
+    width: 33em;
+    min-height: 5em;
+    max-height: 25em;
+    z-index: 1000;
+    overflow: auto;
 }
 .stringfield {
-    min-width: 100px !important;
+    min-width: 10em;
 }
 .booleanfield {
     margin-top: 2px;
 }
 .filter-select {
-    width: 100% !important;
+    width: 100%;
 }
 .filter-block {
     width: 18em;
@@ -77,8 +80,8 @@
 .sort-up:before {
     font-family: "Font Awesome 5 Free";
     top: 0;
-    left: 10px;
-    margin-right: 5px;
+    left: 1em;
+    margin-right: 0.5em;
     content: "\F0DE";
 }
 .sort-down {
@@ -87,40 +90,10 @@
 .sort-down:before {
     font-family: "Font Awesome 5 Free";
     top: 0;
-    left: 10px;
-    margin-right: 5px;
+    left: 1em;
+    margin-right: 0.5em;
     content: "\F0DD";
 }
 .jsoneditor-codemirror {
     height: 300px;
-}
-.refresh-btn-loading {
-    margin-top: 8px;
-    margin-left: 11px;
-    margin-right: 10px;
-}
-._dictfield-input {
-    min-width: 70px;
-    max-height: 30px;
-}
-._dictfield-dialog {
-    position: relative;
-}
-._dictfield-filter {
-    position: absolute;
-    left: -1px;
-    top: 2px;
-    width: 400px;
-    height: 65px;
-    z-index: 1000;
-}
-._dictfield-params {
-    position: absolute;
-    left: -1px;
-    top: 66px;
-    width: 400px;
-    min-height: 50px;
-    max-height: 300px;
-    z-index: 2147483647;
-    overflow: auto;
 }

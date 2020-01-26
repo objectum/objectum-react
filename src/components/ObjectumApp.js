@@ -85,13 +85,10 @@ class ObjectumApp extends Component {
 		
 		me.state = {
 			sidebarDocked: true,
-			//sidebarOpen: false,
 			locations: []
 		};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
-		//me.onSetSidebarOpen = me.onSetSidebarOpen.bind (me);
-		me.onWindowResize = me.onWindowResize.bind (me);
 		me.onClickMenu = me.onClickMenu.bind (me);
 		me.pushLocation = me.pushLocation.bind (me);
 		me.popLocation = me.popLocation.bind (me);
@@ -99,26 +96,9 @@ class ObjectumApp extends Component {
 		lang (me.props.locale || "en");
 	}
 	
-/*
-	onSetSidebarOpen (open) {
-		this.setState ({sidebarOpen: open});
-	}
-*/
-
-/*
-	onWindowResize () {
-		if (document.documentElement.clientWidth > 1000) {
-			this.setState ({sidebarDocked: true});
-		} else {
-			this.setState ({sidebarDocked: false});
-		}
-	}
-*/
-	
 	async componentDidMount () {
 		let me = this;
 		
-//		window.addEventListener ("resize", me.onWindowResize);
 		me.store.addListener ("connect", me.onConnect);
 		
 		if (me.props.username && me.props.password) {
@@ -130,7 +110,6 @@ class ObjectumApp extends Component {
 	}
 	
 	componentWillUnmount () {
-//		window.removeEventListener ("resize", this.onWindowResize);
 		this.store.removeListener ("connect", this.onConnect);
 	}
 	
@@ -167,55 +146,6 @@ class ObjectumApp extends Component {
 		me.setState ({[key]: !me.state [key]});
 	}
 	
-/*
-	renderMenu (size) {
-		let me = this;
-		
-		function renderIcon (icon, key) {
-			if (icon) {
-				return (<i key={key} className={`${icon} ${size} menu-icon`} />);
-			} else {
-				return (<span key={key} />);
-			}
-		};
-		function renderItems (parent, level) {
-			let recs = me.menuItemRecs.filter (rec => rec.parent == parent);
-			
-			return recs.map ((rec, i) => {
-				let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
-				
-				if (childRecs.length) {
-					let opened = me.state [`open-${parent}-${i}`];
-					
-					return (
-						<div key={`menuDiv-${parent}-${i}`}>
-							<button key={`menu-${parent}-${i}`} className={`btn btn-link text-dark pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
-								{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}<i key={`open-${parent}-${i}`} className={`far ${opened ? "fa-folder-open" : "fa-folder"} menu-icon`} />
-							</button>
-							{opened && renderItems (rec.id, level + 1)}
-						</div>
-					);
-				} else {
-					return (
-						<li className="list-group-item">
-							<Link key={`menu-${parent}-${i}`} className={`nav-link text-dark ml-${level * 2}`} to={rec.path}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</Link>
-						</li>
-					);
-				}
-			});
-		};
-		return (
-			<div className="menu">
-				<ul className="list-group">
-					{renderItems (null, 0)}
-					<li className="list-group-item">
-						<Link key="menu-logout" className="nav-link text-dark mt-4" to="/logout"><i key="icon-logout" className={`fas fa-sign-out-alt ${size} mr-2 ml-2`} />{i18n ("Logout")}</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-*/
 	renderMenu (size) {
 		let me = this;
 		
@@ -238,8 +168,8 @@ class ObjectumApp extends Component {
 					let opened = me.state [`open-${parent}-${i}`];
 					
 					items.push (
-						<tr><td className="bg-info">
-							<button key={`menu-${parent}-${i}`} className={`btn btn-link text-white pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
+						<tr key={`menu-${parent}-${i}`}><td className="bg-info">
+							<button className={`btn btn-link text-white pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
 								{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}<i key={`open-${parent}-${i}`} className={`far ${opened ? "fa-folder-open" : "fa-folder"} menu-icon`} />
 							</button>
 						</td></tr>
@@ -249,8 +179,8 @@ class ObjectumApp extends Component {
 					}
 				} else {
 					items.push (
-						<tr><td className={level % 2 ? "bg-secondary" : "bg-info"}>
-							<Link key={`menu-${parent}-${i}`} className={`nav-link text-white ml-${level * 2}`} to={rec.path}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</Link>
+						<tr key={`menu-${parent}-${i}`}><td className={level % 2 ? "bg-secondary" : "bg-info"}>
+							<Link className={`nav-link text-white ml-${level * 2}`} to={rec.path}>{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}</Link>
 						</td></tr>
 					);
 				}
@@ -373,10 +303,8 @@ class ObjectumApp extends Component {
 						<div>
 							<Sidebar
 								sidebar={me.renderMenu ("fa-lg")}
-								/*open={me.state.sidebarOpen}*/
 								open={false}
 								docked={me.state.sidebarDocked}
-								/*onSetOpen={me.onSetSidebarOpen}*/
 								sidebarClassName="bg-white"
 							>
 								<div style={{marginTop: "40px", marginBottom: "20px"}}>
@@ -391,7 +319,7 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Fade>
-						<div id="header" className="fixed-top text-light bg-dark">
+						<div className="fixed-top text-light bg-dark p-2">
 							<span className="text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
 						</div>
 					</Fade>

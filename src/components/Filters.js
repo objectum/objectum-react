@@ -175,17 +175,6 @@ class Filter extends Component {
 		
 		if (t >= 1000) {
 			if (me.col.recs) {
-/*
-				return (
-					<select id="value" className="filter-select mt-1" value={me.state.value} onChange={me.onChange}>
-						{[{id: "", name: i18n ("Choose value")}, ...me.col.recs].map ((rec, i) => {
-							return (
-								<option value={rec.id} key={"value-" + i}>{rec.name}</option>
-							);
-						})}
-					</select>
-				);
-*/
 				let property = me.props.store.getProperty (me.col.property);
 				
 				return <DictField id="value" value={me.state.value} onChange={me.onChange} store={me.props.store} model={me.col.model} property={property.get ("code")} />

@@ -170,12 +170,12 @@ class DictField extends Component {
 			recs = recs.filter (rec => rec [me.groupProperty.code] == me.state.group);
 		}
 		return (
-			<div className="_dictfield-dialog text-left" ref="dialog">
-				<div className="_dictfield-filter border p-1 bg-white">
+			<div className="dictfield-dialog text-left" ref="dialog">
+				<div className="dictfield-filter border p-1 bg-white">
 					<h6 className="ml-2">{i18n ("Select parameter")}</h6>
 					<input type="text" className="form-control form-control-sm" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
 				</div>
-				<div className="_dictfield-params border p-1 bg-white">
+				<div className="dictfield-params border p-1 bg-white">
 					<ul className="list-group">
 						{recs.map (rec => {
 							return (
@@ -193,12 +193,12 @@ class DictField extends Component {
 		let recs = me.filter (me.state.groupRecs);
 		
 		return (
-			<div className="_dictfield-dialog text-left" ref="dialog">
-				<div className="_dictfield-filter border p-1 bg-white">
+			<div className="dictfield-dialog text-left" ref="dialog">
+				<div className="dictfield-filter border p-1 bg-white">
 					<h6>{`${i18n ("Select")}: ${me.groupProperty.get ("name")}`}</h6>
 					<input type="text" className="form-control form-control-sm" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
 				</div>
-				<div className="_dictfield-params border p-1 bg-white">
+				<div className="dictfield-params border p-1 bg-white">
 					<ul className="list-group">
 						{recs.map (rec => {
 							let num = _.filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
@@ -221,7 +221,7 @@ class DictField extends Component {
 			<div>
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
-					<div className="input-group">
+					<div className="input-group dictfield">
 						{!me.props.disabled && <div>
 							<button
 								type="button"
@@ -242,7 +242,7 @@ class DictField extends Component {
 						</div>}
 						<input
 							type="text"
-							className={`form-control form-control-sm ${addCls} _dictfield-input`}
+							className={`form-control form-control-sm ${addCls}`}
 							id={me.id}
 							value={me.state.label}
 							onChange={() => {}}
