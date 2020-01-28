@@ -54,7 +54,7 @@ class NumberField extends Component {
 			);
 		} else {
 			return (
-				<input type="number" className="form-control form-control-sm numberfield" value={me.state.value} onChange={me.onChange} disabled={disabled} />
+				<input type="number" className="form-control form-control-sm numberfield" value={me.state.value} onChange={me.onChange} disabled={disabled} min={me.props.min} max={me.props.max} />
 			);
 		}
 	}
