@@ -5,8 +5,8 @@ import {Store, Record} from "objectum-client";
 import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, NumberField, ModelList, Action} from '../../src'
 import {pushLocation, timeout} from "../../src/components/helper";
 
-import "react-sortable-tree/style.css";
-import SortableTree from "react-sortable-tree";
+import "../../src/css/bootstrap.css";
+import "../../src/fontawesome/css/all.css";
 
 const store = new Store ();
 
@@ -14,53 +14,19 @@ class Test extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		let models = [], has = {};
-		
-		for (let id in me.props.store.map ["model"]) {
-			let m = me.props.store.map ["model"][id];
-			
-			if (id >= 1000 && !has [m.id]) {
-				has [m.id] = true;
-				models.push (m);
-			}
-		}
-		me.state = {
-			treeData: me.getChildren (models, null)
-		};
-	}
-	
-	getChildren (models, parent) {
-		let me = this;
-		let items = [];
-		
-		models.forEach (m => {
-			if (m.parent == parent) {
-				let children = me.getChildren (models, m.id);
-				
-				for (let code in m.properties) {
-					let p = m.properties [code];
-					let subtitle = me.props.store.map ["model"][p.type] && me.props.store.map ["model"][p.type].getLabel ();
-					
-					children.push ({title: p.name + " (" + p.code + ": " + p.id + ")", subtitle});
-				}
-				items.push ({
-					title: m.name + " (" + m.getPath () + ": " + m.id + ")", children
-				});
-			}
-		});
-		return items;
+		this.state = {};
 	}
 	
 	render () {
+		let me = this;
+		
 		return (
-			<div style={{ height: "100%" }}>
-				<SortableTree
-					treeData={this.state.treeData}
-					onChange={treeData => this.setState({ treeData })}
-					isVirtualized={false}
-					canDrag={false}
-					canDrop={false}
+			<div className="container">
+				<NumberField
+					label="Вес"
+					value={me.state.weight}
+					min={0}
+					max={9}
 				/>
 			</div>
 		);
