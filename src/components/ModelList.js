@@ -267,9 +267,10 @@ class ModelList extends Component {
 			store: me.props.store,
 			label: (m.isDictionary () ? i18n ("Dictionary") : i18n ("List")) + ": " + m.get ("name"),
 			refresh: me.state.refresh,
-			model: me.model,
-			params: {}
+			model: me.model
 		};
+		gridOpts.params = gridOpts.params || {};
+		
 		let opts = m.getOpts ();
 		
 		if (opts.grid) {
