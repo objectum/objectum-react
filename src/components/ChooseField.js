@@ -106,7 +106,7 @@ class ChooseField extends Component {
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
 		
-		if (state.invalid) {
+		if (me.state.invalid) {
 			return (
 				<div className="form-group">
 					<label htmlFor={me.id}>{i18n (me.props.label)}</label>
