@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import Modal from "react-modal";
 import {i18n} from "./../i18n";
 import {newId} from "./helper";
+import Grid from "./Grid";
 
 class ChooseField extends Component {
 	constructor (props) {
@@ -166,7 +167,20 @@ class ChooseField extends Component {
 							<button type="button" className="btn btn-primary btn-sm" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
 						</div>
 					</div>
-					<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true} />
+					{me.props.choose.cmp ?
+						<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true}/> : (
+							me.props.choose.query ?
+								<Grid
+									id="list"
+									ref="list"
+									store={me.props.store}
+									{...me.props.choose}
+								/> :
+								<div className="alert alert-danger" role="alert">
+									{i18n ("cmp or query not exist")}
+								</div>
+						)
+					}
 				</Modal>
 			</div>
 		);
