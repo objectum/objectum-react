@@ -26,7 +26,7 @@ class Grid extends Component {
 			selected: null,
 			showFilters: false,
 			dockFilters: "bottom",
-			filters: [],
+			filters: me.props.filters || [],
 			order: [],
 			parent: null,
 			mode: me.props.mode || "table",
