@@ -108,6 +108,5 @@
 	"return": "вернуться",
 	"amount": "количество",
 	"processing": "выполнение",
-	"schema": "схема",
-	"cmp or query not exist": "cmp или query не указан"
+	"schema": "схема"
 }

@@ -12,6 +12,7 @@ class ChooseField extends Component {
 		super (props);
 		
 		let me = this;
+		let choose = me.props.choose || {};
 		
 		me.onClear = me.onClear.bind (me);
 		me.onChoose = me.onChoose.bind (me);
@@ -21,8 +22,16 @@ class ChooseField extends Component {
 			code: me.props.property,
 			value: me.props.value,
 			visible: false,
-			name: ""
+			name: "",
+			cmp: choose.cmp,
+			query: choose.query,
+			ref: choose.query ? "list" : choose.ref
 		};
+		if (!me.props.disabled) {
+			if (!choose.query && (!choose.cmp || !choose.ref)) {
+				state.invalid = true;
+			}
+		}
 		me.id = newId ();
 	}
 	
@@ -56,10 +65,10 @@ class ChooseField extends Component {
 	
 	onChoose () {
 		let me = this;
-		let cmp = me.refs ["component"].refs [me.props.choose.ref];
+		let cmp = me.refs ["component"].refs [me.state.ref];
 		
 		if (!cmp) {
-			throw new Error (`not found choose.ref: ${me.props.choose.ref}`);
+			throw new Error (`not found choose.ref: ${me.state.ref}`);
 		}
 		let selected = cmp.state.selected;
 		let value = "";
@@ -97,11 +106,11 @@ class ChooseField extends Component {
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
 		
-		if (!disabled && (!me.props.choose || !me.props.choose.cmp || !me.props.choose.ref)) {
+		if (state.invalid) {
 			return (
 				<div className="form-group">
 					<label htmlFor={me.id}>{i18n (me.props.label)}</label>
-					<div className="alert alert-danger">choose.cmp or choose.ref not exist</div>
+					<div className="alert alert-danger">"choose: cmp, ref" or "choose: query" not exist</div>
 				</div>
 			);
 		}
@@ -113,7 +122,7 @@ class ChooseField extends Component {
 				</div>
 			)
 		}
-		let ChooseComponent = me.props.choose.cmp;
+		let ChooseComponent = me.state.cmp;
 		let props = {
 			...me.props, addCls, disabled, value: me.state.value, localHash: true
 		};
@@ -168,18 +177,13 @@ class ChooseField extends Component {
 						</div>
 					</div>
 					{me.props.choose.cmp ?
-						<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true}/> : (
-							me.props.choose.query ?
-								<Grid
-									id="list"
-									ref="list"
-									store={me.props.store}
-									{...me.props.choose}
-								/> :
-								<div className="alert alert-danger" role="alert">
-									{i18n ("cmp or query not exist")}
-								</div>
-						)
+						<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true}/> :
+						<Grid
+							id="list"
+							ref="list"
+							store={me.props.store}
+							{...me.props.choose}
+						/>
 					}
 				</Modal>
 			</div>
