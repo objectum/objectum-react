@@ -132,7 +132,7 @@ class Grid extends Component {
 			me.props.onSelectParent (me.state.parent);
 		}
 		if (prevState.selected !== me.state.selected && me.props.onSelect) {
-			me.props.onSelect (me.state.recs [me.state.selected] && me.state.recs [me.state.selected].id);
+			me.props.onSelect (me.state.recs [me.state.selected] ? me.state.recs [me.state.selected].id : null);
 		}
 	}
 	
@@ -165,19 +165,19 @@ class Grid extends Component {
 	}
 	
 	onFirst () {
-		setHash (this, {[this.props.id]: {page: 1}});
+		setHash (this, {[this.props.id]: {page: 1, selected: null}});
 	}
 	
 	onPrev () {
-		setHash (this, {[this.props.id]: {page: Number (this.state.page) - 1}});
+		setHash (this, {[this.props.id]: {page: Number (this.state.page) - 1, selected: null}});
 	}
 	
 	onLast () {
-		setHash (this, {[this.props.id]: {page: this.state.pageNum}});
+		setHash (this, {[this.props.id]: {page: this.state.pageNum, selected: null}});
 	}
 	
 	onNext () {
-		setHash (this, {[this.props.id]: {page: Number (this.state.page) + 1}});
+		setHash (this, {[this.props.id]: {page: Number (this.state.page) + 1, selected: null}});
 	}
 	
 	onShowFilters () {
@@ -201,7 +201,7 @@ class Grid extends Component {
 	}
 	
 	onFilter (filters) {
-		setHash (this, {[this.props.id]: {filters}});
+		setHash (this, {[this.props.id]: {filters, selected: null}});
 	}
 	
 	onHideCols (hideCols) {
@@ -221,7 +221,7 @@ class Grid extends Component {
 		} else {
 			order = [colCode, "asc"];
 		}
-		setHash (this, {[this.props.id]: {order}});
+		setHash (this, {[this.props.id]: {order, selected: null}});
 	}
 	
 	async load () {
