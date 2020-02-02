@@ -201,16 +201,22 @@ class ObjectumApp extends Component {
 		};
 		renderItems (null, 0);
 		
+		let menu = (
+			<table className="table table-sm">
+				<tbody>
+				{items}
+				<tr><td className="bg-info">
+					<Link key="menu-logout" className="nav-link text-white" to="/logout"><i key="icon-logout" className={`fas fa-sign-out-alt ${size} menu-icon mr-1`} />{i18n ("Logout")}</Link>
+				</td></tr>
+				</tbody>
+			</table>
+		);
+		if (me.props.onRenderSidebar) {
+			menu = me.props.onRenderSidebar (menu);
+		}
 		return (
 			<div className="menu">
-				<table className="table table-sm">
-					<tbody>
-						{items}
-						<tr><td className="bg-info">
-							<Link key="menu-logout" className="nav-link text-white" to="/logout"><i key="icon-logout" className={`fas fa-sign-out-alt ${size} menu-icon mr-1`} />{i18n ("Logout")}</Link>
-						</td></tr>
-					</tbody>
-				</table>
+				{menu}
 			</div>
 		);
 	}
@@ -324,7 +330,7 @@ class ObjectumApp extends Component {
 
 						<div>
 							<Sidebar
-								sidebar={me.props.onRenderSidebar ? me.props.onRenderSidebar (me.renderMenu ("fa-lg")) : me.renderMenu ("fa-lg")}
+								sidebar={me.renderMenu ("fa-lg")}
 								open={false}
 								docked={me.state.sidebarDocked}
 								sidebarClassName="bg-white"
