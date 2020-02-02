@@ -387,7 +387,7 @@ class Grid extends Component {
 		let active = !!me.position.length || me.state.parent;
 		
 		return (
-			<div className="mt-1 mb-1 pl-1 border shadow-sm">
+			<div className="mt-1 pl-1 border-top">
 				<nav aria-label="breadcrumb">
 					<ol className="breadcrumb">
 						<li className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
@@ -474,49 +474,51 @@ class Grid extends Component {
 			return (<div />);
 		}
 		return (
-			<table className="table table-hover table-striped table-bordered table-sm p-1 bg-white shadow-sm mt-1 mb-0 objectum-table">
-				<thead className="thead-dark">
-				<tr>
-					{me.props.tree && <th className="align-top"><i className="far fa-folder-open ml-2" /></th>}
-					{me.state.cols.map ((col, i) => {
-						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
-							return;
-						}
-						let cls = "";
-						let f = me.state.filters.find (f => {
-							if (f [0] == col.code) {
-								return true;
+			<div className="p-1 border-top">
+				<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
+					<thead className="thead-dark">
+					<tr>
+						{me.props.tree && <th className="align-top"><i className="far fa-folder-open ml-2" /></th>}
+						{me.state.cols.map ((col, i) => {
+							if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
+								return;
 							}
-						});
-						let name = i18n (col.name);
-						
-						if (f) {
-							cls = "font-italic";
-						}
-						let orderClass = "sort";
-						
-						if (col.code === me.state.order [0]) {
-							if (me.state.order [1] == "asc") {
-								orderClass = "sort-up";
-							} else {
-								orderClass = "sort-down";
-							}
-						}
-						return (
-							<th key={i} scope="col" className={cls + " align-top"}>
-								{(me.props.system || me.props.groupCol) ?
-									<div>{name}</div> :
-									<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
+							let cls = "";
+							let f = me.state.filters.find (f => {
+								if (f [0] == col.code) {
+									return true;
 								}
-							</th>
-						);
-					})}
-				</tr>
-				</thead>
-				<tbody>
-				{me.renderTableRows ()}
-				</tbody>
-			</table>
+							});
+							let name = i18n (col.name);
+							
+							if (f) {
+								cls = "font-italic";
+							}
+							let orderClass = "sort";
+							
+							if (col.code === me.state.order [0]) {
+								if (me.state.order [1] == "asc") {
+									orderClass = "sort-up";
+								} else {
+									orderClass = "sort-down";
+								}
+							}
+							return (
+								<th key={i} scope="col" className={cls + " align-top"}>
+									{(me.props.system || me.props.groupCol) ?
+										<div>{name}</div> :
+										<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
+									}
+								</th>
+							);
+						})}
+					</tr>
+					</thead>
+					<tbody>
+					{me.renderTableRows ()}
+					</tbody>
+				</table>
+			</div>
 		);
 	}
 	
@@ -598,7 +600,7 @@ class Grid extends Component {
 		
 		if (me.state.mode == "edit") {
 			return (
-				<div className="bg-white border shadow-sm p-1 mt-1">
+				<div className="border-top p-1">
 					<div className="btn-toolbar" role="toolbar">
 						<div className="btn-group mr-1" role="group">
 							{! me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
@@ -610,7 +612,7 @@ class Grid extends Component {
 			);
 		} else {
 			return (
-				<div className="bg-white border shadow-sm p-1 mt-1">
+				<div className="border-top p-1">
 					<div className="btn-toolbar" role="toolbar">
 						<div className="objectum-5em">
 							<div className="input-group">
@@ -679,24 +681,26 @@ class Grid extends Component {
 		let me = this;
 		let gridChildren = me.renderChildren (me.props.children);
 		let filters =
-			<Filters
-				cols={me.state.cols}
-				store={me.props.store}
-				onFilter={me.onFilter}
-				filters={me.state.filters}
-				onDockFilters={me.onDockFilters}
-				dockFilters={me.state.dockFilters}
-			/>
+			<div className="border-top">
+				<Filters
+					cols={me.state.cols}
+					store={me.props.store}
+					onFilter={me.onFilter}
+					filters={me.state.filters}
+					onDockFilters={me.onDockFilters}
+					dockFilters={me.state.dockFilters}
+				/>
+			</div>
 		;
 		
 		return (
 			<Fade>
-				<div>
-					{me.props.label && <div>
-						<h5 className="border bg-white shadow-sm pl-3 py-2 mb-1">{i18n (me.props.label)}</h5>
-					</div>}
+				<div className="border">
 					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-					{me.state.mode == "table" && gridChildren && <div className="border p-1 bg-white shadow-sm">
+					{me.props.label && <div className="grid-label">
+						<h5 className="pl-3 pt-2">{i18n (me.props.label)}</h5>
+					</div>}
+					{me.state.mode == "table" && gridChildren && <div className="border-top p-1">
 						{gridChildren}
 					</div>}
 	
@@ -708,13 +712,14 @@ class Grid extends Component {
 					
 					{me.state.showFilters && me.state.dockFilters == "bottom" && me.state.mode != "edit" && filters}
 					
-					{me.state.showCols && me.state.mode != "edit" && <GridColumns
-						cols={me.state.cols}
-						store={me.props.store}
-						onHideCols={me.onHideCols}
-						hideCols={me.state.hideCols}
-					/>}
-	
+					{me.state.showCols && me.state.mode != "edit" && <div className="border-top">
+						<GridColumns
+							cols={me.state.cols}
+							store={me.props.store}
+							onHideCols={me.onHideCols}
+							hideCols={me.state.hideCols}
+						/>
+					</div>}
 					{me.renderToolbar ()}
 				</div>
 			</Fade>

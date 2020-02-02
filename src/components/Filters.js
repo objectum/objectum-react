@@ -218,7 +218,7 @@ class Filter extends Component {
 			showValue = false;
 		}
 		return (
-			<div className="border p-1 bg-white shadow-sm text-center mt-1">
+			<div className="border p-1 text-center mt-1">
 				<button type="button" className="btn btn-link btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2" />{i18n ("Remove")}</button>
 				<select id="column" className="filter-select custom-select custom-select-sm" value={me.state.column} onChange={me.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
@@ -341,7 +341,7 @@ class Filters extends Component {
 		let me = this;
 		
 		return (
-			<div className="border bg-white shadow-sm my-1">
+			<div>
 				<div className="mt-1 ml-3">
 					<h6 className="d-inline">{i18n ("Filters")}</h6>
 					<button type="button" className="btn btn-link btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" />{i18n ("Add filter")}</button>
