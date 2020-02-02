@@ -324,12 +324,12 @@ class ObjectumApp extends Component {
 
 						<div>
 							<Sidebar
-								sidebar={me.renderMenu ("fa-lg")}
+								sidebar={me.props.onRenderSidebar ? me.props.onRenderSidebar (me.renderMenu ("fa-lg")) : me.renderMenu ("fa-lg")}
 								open={false}
 								docked={me.state.sidebarDocked}
 								sidebarClassName="bg-white"
 							>
-								<div style={{marginTop: "40px", marginBottom: "20px"}}>
+								<div style={{marginTop: "4em", marginBottom: "20px"}}>
 									{me.renderRoutes ()}
 								</div>
 							</Sidebar>
