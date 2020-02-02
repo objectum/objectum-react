@@ -88,27 +88,29 @@ class Tabs extends Component {
 			}
 		}
 		return (
-			<div>
-				{me.props.label && <div>
-					<h5 className="border bg-white shadow-sm pl-3 py-2 mb-1">{i18n (me.props.label)}</h5>
+			<div className="bg-white border">
+				{me.props.label && <div className="border-bottom pl-3 pt-2">
+					<h5 className="">{i18n (me.props.label)}</h5>
 				</div>}
-				<ul className="nav nav-tabs">
-					{me.tabs.map ((item, i) => {
-						let active = "";
-						
-						if (i == me.state.tab) {
-							active = " active";
-						} else {
-							active = " bg-light";
-						}
-						return (
-							<li className="nav-item" key={i}>
-								<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</button>
-							</li>
-						);
-					})}
-				</ul>
-				{tab}
+				<div className="p-1">
+					<ul className="nav nav-tabs">
+						{me.tabs.map ((item, i) => {
+							let active = "";
+							
+							if (i == me.state.tab) {
+								active = " active";
+							} else {
+								active = " bg-light";
+							}
+							return (
+								<li className="nav-item" key={i}>
+									<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</button>
+								</li>
+							);
+						})}
+					</ul>
+					{tab}
+				</div>
 			</div>
 		);
 	}

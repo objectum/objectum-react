@@ -57,7 +57,7 @@ class Log extends Component {
 			});
 		}
 		return (
-			<div className="border p-1 mb-1 bg-white shadow-sm">
+			<div>
 				<h5>{i18n ("Log")}</h5>
 				<select className="form-control form-control-sm custom-select mb-1" value={me.state.tag} onChange={me.onChange}>
 					{[{id: "", name: i18n ("Select field")}, ...recs].map ((rec, i) => {
@@ -66,7 +66,7 @@ class Log extends Component {
 						);
 					})}
 				</select>
-				{me.state.recs && <table className="table table-bordered bg-white shadow-sm objectum-table p-1">
+				{me.state.recs && <table className="table table-bordered objectum-table p-1 mb-0">
 					<thead className="thead-dark">
 						<tr>
 							<th>{i18n ("Date")}</th>

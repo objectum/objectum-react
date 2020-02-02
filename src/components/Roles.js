@@ -56,12 +56,14 @@ class Roles extends Component {
 		
 		return (
 			<div className="container">
-				<Grid {...me.props} id="roles" ref="roles" label="Roles" store={me.props.store} query="objectum.role" refresh={me.state.refresh}>
-					<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-					<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-					<RemoveAction onRemove={me.onRemove} />
-					{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
-				</Grid>
+				<div className="bg-white shadow-sm">
+					<Grid {...me.props} id="roles" ref="roles" label="Roles" store={me.props.store} query="objectum.role" refresh={me.state.refresh}>
+						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+						<RemoveAction onRemove={me.onRemove} />
+						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
+					</Grid>
+				</div>
 			</div>
 		);
 		

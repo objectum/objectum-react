@@ -53,48 +53,50 @@ class Column extends Component {
 		];
 		return (
 			<div className="container">
-				<Tabs key="tabs" id="tabs" label={i18n ("Column") + ": " + me.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={me.props.store} rsc="column" rid={me.state.rid} onCreate={me.onCreate}>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="name" label="Name" />
+				<div className="bg-white shadow-sm">
+					<Tabs key="tabs" id="tabs" label={i18n ("Column") + ": " + me.state.label}>
+						<Tab key="Tab1" label="Information">
+							<Form key="form1" store={me.props.store} rsc="column" rid={me.state.rid} onCreate={me.onCreate}>
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<StringField property="name" label="Name" />
+									</div>
+									<div className="form-group col-md-6">
+										<ChooseField
+											property="query" label="Query" disabled={!!me.state.rid} rsc="query" value={me.state.query}
+											choose={{cmp: Queries, ref: "queries"}}
+										/>
+									</div>
 								</div>
-								<div className="form-group col-md-6">
-									<ChooseField
-										property="query" label="Query" disabled={!!me.state.rid} rsc="query" value={me.state.query}
-										choose={{cmp: Queries, ref: "queries"}}
-									/>
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<StringField property="code" label="Code" />
+									</div>
+									<div className="form-group col-md-6">
+										<NumberField property="order" label="Order" />
+									</div>
 								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="code" label="Code" />
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<SelectField property="area" label="Area" recs={areaRecs} value={me.state.area} />
+									</div>
+									<div className="form-group col-md-6">
+	{/*
+										<NumberField property="columnWidth" label="Column width" />
+	*/}
+									</div>
 								</div>
-								<div className="form-group col-md-6">
-									<NumberField property="order" label="Order" />
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<StringField property="description" label="Description" textarea={true} />
+									</div>
+									<div className="form-group col-md-6">
+									</div>
 								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<SelectField property="area" label="Area" recs={areaRecs} value={me.state.area} />
-								</div>
-								<div className="form-group col-md-6">
-{/*
-									<NumberField property="columnWidth" label="Column width" />
-*/}
-								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea={true} />
-								</div>
-								<div className="form-group col-md-6">
-								</div>
-							</div>
-						</Form>
-					</Tab>
-				</Tabs>
+							</Form>
+						</Tab>
+					</Tabs>
+				</div>
 			</div>
 		);
 	}

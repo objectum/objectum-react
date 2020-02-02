@@ -47,18 +47,20 @@ class Menu extends Component {
 		
 		return (
 			<div className="container">
-				<Tabs key="tabs" id="tabs" label={i18n ("Menu") + ": " + me.state.label}>
-					<Tab key="tab-1" label="Information">
-						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu" onCreate={me.onCreate}>
-							<Field property="name" />
-							<Field property="code" />
-							<Field property="order" />
-						</Form>
-					</Tab>
-					{me.state.rid &&<Tab key="Tab2" label="Menu items">
-						<MenuItems {...me.props} menu={me.state.rid} />
-					</Tab>}
-				</Tabs>
+				<div className="bg-white shadow-sm">
+					<Tabs key="tabs" id="tabs" label={i18n ("Menu") + ": " + me.state.label}>
+						<Tab key="tab-1" label="Information">
+							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu" onCreate={me.onCreate}>
+								<Field property="name" />
+								<Field property="code" />
+								<Field property="order" />
+							</Form>
+						</Tab>
+						{me.state.rid &&<Tab key="Tab2" label="Menu items">
+							<MenuItems {...me.props} menu={me.state.rid} />
+						</Tab>}
+					</Tabs>
+				</div>
 			</div>
 		);
 	}

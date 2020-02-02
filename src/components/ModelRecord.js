@@ -292,38 +292,40 @@ class ModelRecord extends Component {
 		
 		return (
 			<div className="container">
-				<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
-					<Tab key={`tab1-${me.state.model}`} label="Information">
-						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
-							{properties.map ((properties2, i) => {
-								return (
-									<div key={`row-${i}`} className="row">
-										{properties2.map ((p, j) => {
-											return (
-												<div key={`col-${i}-${j}`}className={`col-sm-${colWidth}`}>
-													{me.renderProperty (p, `field-${i}-${j}`)}
-												</div>
-											);
-										})}
-									</div>
-								);
-							})}
-						</Form>
-					</Tab>
-					{me.state.rid && me.getTables ().map ((t, i) => {
-						let label = t.get ("name");
-						let opts = t.getOpts ();
-						
-						if (opts.grid && opts.grid.label) {
-							label = opts.grid.label;
-						}
-						return (
-							<Tab key={`table-${me.state.model}-${i}`} label={label}>
-								<ModelList {...me.props} id={`list-${i}`} ref={`list-${i}`} label="" store={me.props.store} model={t.getPath ()} parentModel={m.getPath ()} parentId={me.state.rid} />
-							</Tab>
-						);
-					})}
-				</Tabs>
+				<div className="bg-white shadow-sm">
+					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
+						<Tab key={`tab1-${me.state.model}`} label="Information">
+							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
+								{properties.map ((properties2, i) => {
+									return (
+										<div key={`row-${i}`} className="row">
+											{properties2.map ((p, j) => {
+												return (
+													<div key={`col-${i}-${j}`}className={`col-sm-${colWidth}`}>
+														{me.renderProperty (p, `field-${i}-${j}`)}
+													</div>
+												);
+											})}
+										</div>
+									);
+								})}
+							</Form>
+						</Tab>
+						{me.state.rid && me.getTables ().map ((t, i) => {
+							let label = t.get ("name");
+							let opts = t.getOpts ();
+							
+							if (opts.grid && opts.grid.label) {
+								label = opts.grid.label;
+							}
+							return (
+								<Tab key={`table-${me.state.model}-${i}`} label={label}>
+									<ModelList {...me.props} id={`list-${i}`} ref={`list-${i}`} label="" store={me.props.store} model={t.getPath ()} parentModel={m.getPath ()} parentId={me.state.rid} />
+								</Tab>
+							);
+						})}
+					</Tabs>
+				</div>
 			</div>
 		);
 	}

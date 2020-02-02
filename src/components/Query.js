@@ -48,43 +48,47 @@ class Query extends Component {
 		
 		return (
 			<div className="container">
-				<Tabs key="tabs" id="tabs" label={i18n ("Query") + ": " + me.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid} onCreate={me.onCreate}>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="name" label="Name" />
+				<div className="bg-white shadow-sm">
+					<Tabs key="tabs" id="tabs" label={i18n ("Query") + ": " + me.state.label}>
+						<Tab key="Tab1" label="Information">
+							<Form key="form1" store={me.props.store} rsc="query" rid={me.state.rid} onCreate={me.onCreate}>
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<StringField property="name" label="Name" />
+									</div>
+									<div className="form-group col-md-6">
+										<ChooseField
+											property="parent" label="Parent" disabled={!!me.state.rid} rsc="query" value={me.state.parent}
+											choose={{cmp: Queries, ref: "queries"}}
+										/>
+									</div>
 								</div>
-								<div className="form-group col-md-6">
-									<ChooseField
-										property="parent" label="Parent" disabled={!!me.state.rid} rsc="query" value={me.state.parent}
-										choose={{cmp: Queries, ref: "queries"}}
-									/>
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<StringField property="code" label="Code" />
+									</div>
+									<div className="form-group col-md-6">
+										<StringField property="description" label="Description" textarea={true} />
+									</div>
 								</div>
+								<div className="row">
+									<div className="col-md-6">
+										<StringField property="query" label="Query" codemirror={true} />
+									</div>
+									<div className="col-md-6">
+										<StringField property="opts" label="Options" codemirror={true} />
+									</div>
+								</div>
+							</Form>
+						</Tab>
+						{me.state.rid &&
+						<Tab key="Tab2" label="Columns">
+							<div className="p-1">
+								<Columns {...me.props} query={me.state.rid} />
 							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="code" label="Code" />
-								</div>
-								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea={true} />
-								</div>
-							</div>
-							<div className="row">
-								<div className="col-md-6">
-									<StringField property="query" label="Query" codemirror={true} />
-								</div>
-								<div className="col-md-6">
-									<StringField property="opts" label="Options" codemirror={true} />
-								</div>
-							</div>
-						</Form>
-					</Tab>
-					{me.state.rid &&
-					<Tab key="Tab2" label="Columns">
-						<Columns {...me.props} query={me.state.rid} />
-					</Tab>}
-				</Tabs>
+						</Tab>}
+					</Tabs>
+				</div>
 			</div>
 		);
 	}

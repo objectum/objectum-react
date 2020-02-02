@@ -18,7 +18,7 @@ class Tab extends Component {
 		
 		return (
 			<Fade>
-				<div className="border border-top-0 p-1 bg-white shadow-sm">
+				<div className="border border-top-0">
 					{me.props.children}
 				</div>
 			</Fade>

@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import Grid from "./Grid";
 import Action from "./Action";
-import Confirm from "./Confirm";
 import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
 
@@ -65,17 +64,14 @@ class Models extends Component {
 		
 		return (
 			<div className="container">
-				<div className="row">
-					<div className="col-sm-12">
-						<Grid {...me.props} id="models" ref="models" label="Models" store={me.props.store} query="objectum.model" tree={true} system={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent}>
-							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-							<RemoveAction onRemove={me.onRemove} />
-							<Action onClick={() => me.props.history.push ({pathname: "/schema"})}><i className="fas fa-list-alt mr-2" />{i18n ("Schema")}</Action>
-							{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
-						</Grid>
-					</div>
-					<Confirm label={i18n ("Are you sure?")} visible={me.state.removeConfirm} onClick={me.onRemove} />
+				<div className="bg-white shadow-sm">
+					<Grid {...me.props} id="models" ref="models" label="Models" store={me.props.store} query="objectum.model" tree={true} system={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent}>
+						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+						<RemoveAction onRemove={me.onRemove} />
+						<Action onClick={() => me.props.history.push ({pathname: "/schema"})}><i className="fas fa-list-alt mr-2" />{i18n ("Schema")}</Action>
+						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
+					</Grid>
 				</div>
 			</div>
 		);

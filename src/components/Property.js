@@ -60,59 +60,61 @@ class Property extends Component {
 		];
 		return (
 			<div className="container">
-				<Tabs key="propertyTabs" id="propertyTabs" label={i18n ("Property") + ": " + me.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} onCreate={me.onCreate}>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="name" label="Name" notNull={true} />
+				<div className="bg-white shadow-sm">
+					<Tabs key="propertyTabs" id="propertyTabs" label={i18n ("Property") + ": " + me.state.label}>
+						<Tab key="Tab1" label="Information">
+							<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} onCreate={me.onCreate}>
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<StringField property="name" label="Name" notNull={true} />
+									</div>
+									<div className="form-group col-md-6">
+										<ChooseField
+											property="model" label="Model" disabled={true} rsc="model" value={me.state.model}
+											choose={{cmp: Models, ref: "models"}}
+										/>
+									</div>
 								</div>
-								<div className="form-group col-md-6">
-									<ChooseField
-										property="model" label="Model" disabled={true} rsc="model" value={me.state.model}
-										choose={{cmp: Models, ref: "models"}}
-									/>
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<StringField property="code" label="Code" disabled={!!me.state.rid} notNull={true} />
+									</div>
+									<div className="form-group col-md-6">
+										<NumberField property="order" label="Order" />
+									</div>
 								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="code" label="Code" disabled={!!me.state.rid} notNull={true} />
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<ChooseField
+											property="type" label="Type" disabled={!!me.state.rid} rsc="model" notNull={true}
+											choose={{cmp: Types, ref: "types"}}
+										/>
+									</div>
+									<div className="form-group col-md-6">
+										<StringField property="description" label="Description" textarea={true} />
+									</div>
 								</div>
-								<div className="form-group col-md-6">
-									<NumberField property="order" label="Order" />
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<BooleanField property="notNull" label="Not null" />
+										<BooleanField property="unique" label="Unique" />
+										<BooleanField property="secure" label="Secure" />
+									</div>
+									<div className="form-group col-md-6">
+										{me.state.type >= 1000 && <SelectField property="removeRule" label="Remove rule" recs={removeRuleRecs} value="set null" />}
+									</div>
 								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<ChooseField
-										property="type" label="Type" disabled={!!me.state.rid} rsc="model" notNull={true}
-										choose={{cmp: Types, ref: "types"}}
-									/>
+								<div className="form-row">
+									<div className="form-group col-md-6">
+										<StringField property="opts" label="Options" codemirror={true} />
+									</div>
+									<div className="form-group col-md-6">
+									</div>
 								</div>
-								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea={true} />
-								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<BooleanField property="notNull" label="Not null" />
-									<BooleanField property="unique" label="Unique" />
-									<BooleanField property="secure" label="Secure" />
-								</div>
-								<div className="form-group col-md-6">
-									{me.state.type >= 1000 && <SelectField property="removeRule" label="Remove rule" recs={removeRuleRecs} value="set null" />}
-								</div>
-							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="opts" label="Options" codemirror={true} />
-								</div>
-								<div className="form-group col-md-6">
-								</div>
-							</div>
-						</Form>
-					</Tab>
-				</Tabs>
+							</Form>
+						</Tab>
+					</Tabs>
+				</div>
 			</div>
 		);
 	}

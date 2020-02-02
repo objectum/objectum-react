@@ -57,26 +57,28 @@ class MenuItem extends Component {
 		
 		return (
 			<div className="container">
-				<Tabs key="tabs" id="tabs" label={i18n ("Menu item") + ": " + me.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>
-							<ChooseField
-								label="Menu"
-								property="menu" disabled={true} rsc="record" value={me.state.menu}
-								choose={{cmp: Menus, ref: "menus"}}
-							/>
-							<ChooseField
-								label="Parent"
-								property="parent" rsc="record" value={me.state.parent}
-								choose={{cmp: MenuItems, ref: "menuItems", menu: me.state.menu}}
-							/>
-							<Field property="name" />
-							<Field property="order" />
-							<Field property="path" />
-							<Field property="icon" />
-						</Form>
-					</Tab>
-				</Tabs>
+				<div className="bg-white shadow-sm">
+					<Tabs key="tabs" id="tabs" label={i18n ("Menu item") + ": " + me.state.label}>
+						<Tab key="Tab1" label="Information">
+							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>
+								<ChooseField
+									label="Menu"
+									property="menu" disabled={true} rsc="record" value={me.state.menu}
+									choose={{cmp: Menus, ref: "menus"}}
+								/>
+								<ChooseField
+									label="Parent"
+									property="parent" rsc="record" value={me.state.parent}
+									choose={{cmp: MenuItems, ref: "menuItems", menu: me.state.menu}}
+								/>
+								<Field property="name" />
+								<Field property="order" />
+								<Field property="path" />
+								<Field property="icon" />
+							</Form>
+						</Tab>
+					</Tabs>
+				</div>
 			</div>
 		);
 	}

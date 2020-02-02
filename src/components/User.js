@@ -47,16 +47,18 @@ class User extends Component {
 		
 		return (
 			<div className="container">
-				<Tabs key="tabs" id="tabs" label={i18n ("User") + ": " + me.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.user" onCreate={me.onCreate}>
-							<Field property="name" />
-							<Field property="login" />
-							<Field property="password" />
-							<Field property="role" dict={true} />
-						</Form>
-					</Tab>
-				</Tabs>
+				<div className="bg-white shadow-sm">
+					<Tabs key="tabs" id="tabs" label={i18n ("User") + ": " + me.state.label}>
+						<Tab key="Tab1" label="Information">
+							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.user" onCreate={me.onCreate}>
+								<Field property="name" />
+								<Field property="login" />
+								<Field property="password" />
+								<Field property="role" dict={true} />
+							</Form>
+						</Tab>
+					</Tabs>
+				</div>
 			</div>
 		);
 	}
