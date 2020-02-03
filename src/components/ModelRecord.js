@@ -192,7 +192,7 @@ class ModelRecord extends Component {
 		return item;
 	}
 	
-	renderLayout (layout, model, level = 0, result) {
+	renderLayout (layout, model, level = 0, result = {propertyNum: 0, tableNum: 0, newRecordFormNum: 0}) {
 		let me = this;
 		let items = [];
 		let gen = 0;
