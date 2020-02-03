@@ -432,7 +432,7 @@ class Form extends Component {
 				{me.props.label && <div>
 					<h5 className="pl-3 py-2 ml-3">{me.props.label}</h5>
 				</div>}
-				{me.state._rid && <div className="actions p-1">
+				{me.state._rid && <div className="actions p-1 border-bottom">
 					<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving || me.props.disableActions}>
 						{me.state._saving ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
@@ -447,7 +447,7 @@ class Form extends Component {
 				</div>}
 				{me.state._showLog && <div className="border-top p-1"><Log form={me} /></div>}
 				{me.state._error && <div className="alert alert-danger" role="alert">{me.state._error}</div>}
-				<div className="actions border-top p-1">
+				<div className="actions p-1">
 					{formChildren}
 				</div>
 				{!me.state._rid && <div className="mt-1 actions border-top p-1">

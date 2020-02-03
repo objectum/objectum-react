@@ -192,17 +192,16 @@ class ModelRecord extends Component {
 		let gen = 0;
 		
 		if (_.isArray (layout)) {
-			//if (!layout.length || typeof (layout [0]) != "string") {
 			if (!layout.length) {
 				return (<div />);
 			}
 			let formItems = [];
-			let rid;
+			let rid = null;
 			
 			for (let i = 0; i < layout.length; i ++) {
 				let row = layout [i];
 				
-				if (typeof (row) == "string" && me.record [row]) {
+				if (typeof (row) == "string" && me.record && me.record [row]) {
 					rid = me.record [row];
 				}
 				if (_.isArray (row)) {
@@ -232,12 +231,13 @@ class ModelRecord extends Component {
 					);
 				}
 			}
-			if (rid) {
+			//if (rid) {
 				items.push (
 					<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
 						{formItems}
 					</Form>
 				);
+/*
 			} else {
 				items.push (
 					<div key={`div-${level}-${gen ++}`}>
@@ -245,6 +245,7 @@ class ModelRecord extends Component {
 					</div>
 				);
 			}
+*/
 		} else
 		if (_.isObject (layout)) {
 			items.push (
@@ -285,7 +286,7 @@ class ModelRecord extends Component {
 						<h6 className="pl-3 pt-2"><strong>{label + ": " + me.state.label}</strong></h6>
 					</div>
 					<div className="border bg-white shadow-sm">
-						{!me.record ? <div /> : me.renderLayout (opts.layout, m)}
+						{me.renderLayout (opts.layout, m)}
 					</div>
 				</div>
 			);

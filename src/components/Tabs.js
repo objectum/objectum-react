@@ -92,7 +92,7 @@ class Tabs extends Component {
 				{me.props.label && <div className="grid-label text-white bg-secondary">
 					<h6 className="pl-3 pt-2"><strong>{i18n (me.props.label)}</strong></h6>
 				</div>}
-				<div className="bg-white border">
+				<div>
 					<div className="p-1">
 						<ul className="nav nav-tabs">
 							{me.tabs.map ((item, i) => {

@@ -694,7 +694,7 @@ class Grid extends Component {
 		;
 		
 		return (
-			<Fade>
+			<Fade><div>
 				{me.props.label && <div className="grid-label text-white bg-secondary">
 					<h6 className="pl-3 pt-2"><strong>{i18n (me.props.label)}</strong></h6>
 				</div>}
@@ -722,7 +722,7 @@ class Grid extends Component {
 					</div>}
 					{me.renderToolbar ()}
 				</div>
-			</Fade>
+			</div></Fade>
 		);
 	}
 };
