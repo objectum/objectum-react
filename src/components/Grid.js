@@ -695,11 +695,11 @@ class Grid extends Component {
 		
 		return (
 			<Fade>
+				{me.props.label && <div className="grid-label text-white bg-secondary">
+					<h6 className="pl-3 pt-2"><strong>{i18n (me.props.label)}</strong></h6>
+				</div>}
 				<div className="border">
 					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-					{me.props.label && <div className="grid-label border-bottom">
-						<h5 className="pl-3 pt-2">{i18n (me.props.label)}</h5>
-					</div>}
 					{me.state.mode == "table" && gridChildren && <div className="p-1">
 						{gridChildren}
 					</div>}

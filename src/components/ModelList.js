@@ -203,15 +203,13 @@ class ModelList extends Component {
 		let actions = me.renderActions ();
 		
 		return (
-			<div className="bg-white shadow-sm">
-				<Grid {...gridOpts}>
-					<Action {...me.props} onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-					<Action {...me.props} onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-					<RemoveAction {...me.props} onRemove={me.onRemove} />
-					{actions}
-					{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
-				</Grid>
-			</div>
+			<Grid {...gridOpts}>
+				<Action {...me.props} onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+				<Action {...me.props} onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+				<RemoveAction {...me.props} onRemove={me.onRemove} />
+				{actions}
+				{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
+			</Grid>
 		);
 	}
 };

@@ -88,28 +88,30 @@ class Tabs extends Component {
 			}
 		}
 		return (
-			<div className="bg-white border">
-				{me.props.label && <div className="border-bottom pl-3 pt-2">
-					<h5 className="">{i18n (me.props.label)}</h5>
-				</div>}
-				<div className="p-1">
-					<ul className="nav nav-tabs">
-						{me.tabs.map ((item, i) => {
-							let active = "";
-							
-							if (i == me.state.tab) {
-								active = " active";
-							} else {
-								active = " bg-light";
-							}
-							return (
-								<li className="nav-item" key={i}>
-									<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</button>
-								</li>
-							);
-						})}
-					</ul>
-					{tab}
+			<div>
+				<div className="grid-label text-white bg-secondary">
+					<h6 className="pl-3 pt-2"><strong>{i18n (me.props.label)}</strong></h6>
+				</div>
+				<div className="bg-white border">
+					<div className="p-1">
+						<ul className="nav nav-tabs">
+							{me.tabs.map ((item, i) => {
+								let active = "";
+								
+								if (i == me.state.tab) {
+									active = " active";
+								} else {
+									active = " bg-light";
+								}
+								return (
+									<li className="nav-item" key={i}>
+										<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</button>
+									</li>
+								);
+							})}
+						</ul>
+						{tab}
+					</div>
 				</div>
 			</div>
 		);

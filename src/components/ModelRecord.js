@@ -10,6 +10,7 @@ import ModelList from "./ModelList";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 import _ from "lodash";
+import Fade from "react-reveal/Fade";
 
 class ModelRecord extends Component {
 	constructor (props) {
@@ -150,11 +151,10 @@ class ModelRecord extends Component {
 				}
 				item = (
 					<div className="mb-2">
-						<h5>{i18n (label)}</h5>
 						<ModelList
 							{...me.props}
 							id={key}
-							label=""
+							label={i18n (label)}
 							store={me.props.store}
 							model={tableModel.getPath ()}
 							parentModel={model.getPath ()}
@@ -281,10 +281,10 @@ class ModelRecord extends Component {
 		if (opts.layout) {
 			return (
 				<div className="container">
+					<div className="grid-label text-white bg-secondary">
+						<h6 className="pl-3 pt-2"><strong>{label + ": " + me.state.label}</strong></h6>
+					</div>
 					<div className="border bg-white shadow-sm">
-						<div className="grid-label border-bottom">
-							<h5 className="pl-3 pt-2">{label + ": " + me.state.label}</h5>
-						</div>
 						{!me.record ? <div /> : me.renderLayout (opts.layout, m)}
 					</div>
 				</div>
