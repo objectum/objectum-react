@@ -450,7 +450,7 @@ class Form extends Component {
 				<div className="actions border-top p-1">
 					{formChildren}
 				</div>
-				{!me.state._rid && <div className="mt-1 actions border p-1 bg-white shadow-sm">
+				{!me.state._rid && <div className="mt-1 actions border-top p-1">
 					<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state._creating}>
 						{me.state._creating ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
