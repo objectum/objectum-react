@@ -136,11 +136,13 @@ class ModelRecord extends Component {
 		}
 	}
 	
-	renderCol (o, key, property, model) {
+	renderCol (o, key, property, model, result) {
 		let me = this;
 		let item;
 		
 		if (typeof (o) == "string" && o.substr (0, 2) == "t.") {
+			result.type = "table";
+			
 			try {
 				let tableModel = me.props.store.getModel (o);
 				let opts = tableModel.getOpts ();
@@ -148,6 +150,9 @@ class ModelRecord extends Component {
 				
 				if (opts.grid && opts.grid.hasOwnProperty ("label")) {
 					label = opts.grid.label;
+				}
+				if (!me.state.rid) {
+					return null;
 				}
 				item = (
 					<div className="mb-2">
@@ -172,6 +177,7 @@ class ModelRecord extends Component {
 			item = o.label;
 			
 			if (property || o.property) {
+				result.type = "property";
 				item = me.renderProperty (property || model.properties [o.property], key, o.props);
 			}
 		}
@@ -186,7 +192,7 @@ class ModelRecord extends Component {
 		return item;
 	}
 	
-	renderLayout (layout, model, level = 0) {
+	renderLayout (layout, model, level = 0, result) {
 		let me = this;
 		let items = [];
 		let gen = 0;
@@ -195,7 +201,7 @@ class ModelRecord extends Component {
 			if (!layout.length) {
 				return (<div />);
 			}
-			let formItems = [];
+			let formItems = [], propertyNum = 0;
 			let rid = null;
 			
 			for (let i = 0; i < layout.length; i ++) {
@@ -221,9 +227,18 @@ class ModelRecord extends Component {
 								if (j) {
 									cls += " ml-1";
 								}
+								let colResult = {};
+								let col = me.renderCol (code, `field-${j}`, property, model, colResult);
+								
+								if (colResult.type == "property") {
+									result.propertyNum ++;
+								}
+								if (colResult.type == "table" && col !== null) {
+									result.tableNum ++;
+								}
 								return (
 									<div className={"col " + cls} key={`col-${j}`}>
-										{me.renderCol (code, `field-${j}`, property, model)}
+										{col}
 									</div>
 								);
 							})}
@@ -231,32 +246,43 @@ class ModelRecord extends Component {
 					);
 				}
 			}
-			//if (rid) {
-				items.push (
-					<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
-						{formItems}
-					</Form>
-				);
-/*
-			} else {
-				items.push (
-					<div key={`div-${level}-${gen ++}`}>
-						{formItems}
-					</div>
-				);
+			if (formItems.length) {
+				if (result.propertyNum) {
+					if (!me.state.rid) {
+						result.newRecordFormNum ++;
+					}
+					items.push (
+						<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
+							{formItems}
+						</Form>
+					);
+				} else {
+					items.push (
+						<div key={`form-${level}-${gen ++}`}>{formItems}</div>
+					);
+				}
 			}
-*/
 		} else
 		if (_.isObject (layout)) {
+			let tabs = [], newRecordFormNum = 0;
+			
+			Object.keys (layout).forEach ((tabName, i) => {
+				let result = {propertyNum: 0, tableNum: 0, newRecordFormNum: 0};
+				let tab = me.renderLayout (layout [tabName], model, level + 1, result);
+				
+				newRecordFormNum += result.newRecordFormNum;
+				
+				if ((result.propertyNum && newRecordFormNum < 2) || (result.tableNum && (!result.propertyNum || newRecordFormNum < 2))) {
+					tabs.push (
+						<Tab key={`tab-${level}-${gen ++}`} label={tabName}>
+							{tab}
+						</Tab>
+					);
+				}
+			});
 			items.push (
 				<Tabs key={`tabs-${level}-${gen}`} id={`tabs-${level}-${gen}`}>
-					{Object.keys (layout).map ((tabName, i) => {
-						return (
-							<Tab key={`tab-${level}-${gen ++}`} label={tabName}>
-								{me.renderLayout (layout [tabName], model, level + 1)}
-							</Tab>
-						);
-					})}
+					{tabs}
 				</Tabs>
 			);
 		}
