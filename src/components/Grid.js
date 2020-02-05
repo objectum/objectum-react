@@ -668,7 +668,7 @@ class Grid extends Component {
 						</div>
 					</div>
 					<div>
-						<small className="text-muted ml-3">
+						<small className="text-muted ml-1">
 							{me.getInfo ()}
 						</small>
 					</div>
@@ -695,8 +695,8 @@ class Grid extends Component {
 		
 		return (
 			<Fade><div>
-				{me.props.label && <div className="grid-label text-white bg-secondary">
-					<h6 className="pl-3 pt-2"><strong>{i18n (me.props.label)}</strong></h6>
+				{me.props.label && <div className="text-white bg-secondary py-1">
+					<strong className="ml-2">{i18n (me.props.label)}</strong>
 				</div>}
 				<div className="border">
 					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}

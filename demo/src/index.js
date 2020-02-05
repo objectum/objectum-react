@@ -6,6 +6,7 @@ import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, N
 import {pushLocation, timeout} from "../../src/components/helper";
 
 import "../../src/css/bootstrap.css";
+import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 
 const store = new Store ();
