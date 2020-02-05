@@ -308,8 +308,8 @@ class ModelRecord extends Component {
 		if (opts.layout) {
 			return (
 				<div className="container">
-					<div className="grid-label text-white bg-secondary">
-						<h6 className="pl-3 pt-2"><strong>{label + ": " + me.state.label}</strong></h6>
+					<div className="text-white bg-secondary py-1">
+						<strong className="pl-2">{label + ": " + me.state.label}</strong>
 					</div>
 					<div className="border bg-white shadow-sm">
 						{me.renderLayout (opts.layout, m)}

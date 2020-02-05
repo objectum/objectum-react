@@ -89,8 +89,8 @@ class Tabs extends Component {
 		}
 		return (
 			<div>
-				{me.props.label && <div className="grid-label text-white bg-secondary">
-					<h6 className="pl-3 pt-2"><strong>{i18n (me.props.label)}</strong></h6>
+				{me.props.label && <div className="text-white bg-secondary py-1">
+					<strong className="pl-2">{i18n (me.props.label)}</strong>
 				</div>}
 				<div>
 					<div className="p-1">
