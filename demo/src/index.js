@@ -23,7 +23,7 @@ class Test extends Component {
 		return (
 			<div className="container">
 				<Grid
-					id="income-waybill" ref="income-waybill" label="Накладные" store={store}
+					id="income-waybill" ref="income-waybill" label="" store={store}
 					query="waybill.list"
 					params={{
 						type: 17511,

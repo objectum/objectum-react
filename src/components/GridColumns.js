@@ -45,14 +45,14 @@ class GridColumns extends Component {
 		
 		return (
 			<div>
-				<div className="mt-1 ml-3"><h5>{i18n ("Columns")}</h5></div>
-				<div>
-					<table className="table objectum-table mb-0">
+				<div className="mt-2 ml-3 mb-0"><h6>{i18n ("Columns")}</h6></div>
+				<div className="px-1 pb-1">
+					<table className="table table-bordered objectum-table mb-0 p-1">
 						<thead className="thead-dark">
 							<tr>
 								{me.props.cols.map ((col, i) => {
 									return (
-										<th key={i}>{col.name}</th>
+										<th key={i}>{i18n (col.name)}</th>
 									);
 								})}
 							</tr>
