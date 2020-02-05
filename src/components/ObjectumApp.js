@@ -327,7 +327,7 @@ class ObjectumApp extends Component {
 						<PageViews pushLocation={me.pushLocation} locations={me.state.locations} />
 						
 						<Fade>
-							<div className="fixed-top text-light bg-dark">
+							<div className="fixed-top text-light bg-dark border">
 								<button className="btn btn-link text-light border-right" onClick={
 									() => {
 										me.setState ({sidebarDocked: !me.state.sidebarDocked});
