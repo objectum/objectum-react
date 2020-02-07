@@ -350,7 +350,7 @@ class ObjectumApp extends Component {
 									</div>
 								</Fade>
 								
-								<div style={{marginTop: "4em", marginBottom: "20px"}}>
+								<div style={{marginTop: "1em", marginBottom: "5em"}}>
 									{me.renderRoutes ()}
 								</div>
 							</Sidebar>
