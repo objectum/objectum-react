@@ -27,6 +27,9 @@ class ChooseField extends Component {
 			query: choose.query,
 			ref: choose.query ? "list" : choose.ref
 		};
+		if (!choose.ref && choose.cmp && choose.cmp.displayName == "ModelList") {
+			me.state.ref = "list";
+		}
 		if (!me.props.disabled) {
 			if (!choose.query && (!choose.cmp || !choose.ref)) {
 				state.invalid = true;
@@ -178,12 +181,14 @@ class ChooseField extends Component {
 					</div>
 					{me.props.choose.cmp ?
 						<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true}/> :
-						<Grid
-							id="list"
-							ref="list"
-							store={me.props.store}
-							{...me.props.choose}
-						/>
+						<div ref="component">
+							<Grid
+								id="list"
+								ref="list"
+								store={me.props.store}
+								{...me.props.choose}
+							/>
+						</div>
 					}
 				</Modal>
 			</div>

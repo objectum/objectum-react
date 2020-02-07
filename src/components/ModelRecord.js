@@ -124,7 +124,7 @@ class ModelRecord extends Component {
 			return (
 				<Field
 					{...props} key={key} property={p.get ("code")} disabled={disabled} value={value}
-					choose={{cmp: ModelList, ref: `list-${chooseModel}`, model: chooseModel}}
+					choose={{cmp: ModelList, model: chooseModel}}
 				/>
 			);
 		} else {
