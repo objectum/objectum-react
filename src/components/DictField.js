@@ -61,7 +61,7 @@ class DictField extends Component {
 		for (let code in m.properties) {
 			let property = m.properties [code];
 			
-			if (property.get ("type") >= 1000) {
+			if (property.get ("type") >= 1000 && ((property.code == "group" && !me.props.hasOwnProperty ("groupProperty")) || property.code == me.props.groupProperty)) {
 				let pm = me.props.store.getModel (property.get ("type"));
 				
 				if (pm.isDictionary ()) {
