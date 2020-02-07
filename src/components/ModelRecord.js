@@ -155,7 +155,7 @@ class ModelRecord extends Component {
 					return null;
 				}
 				item = (
-					<div className="mb-2">
+					<div className="m-1">
 						<ModelList
 							{...me.props}
 							id={key}

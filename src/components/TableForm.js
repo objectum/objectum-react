@@ -170,14 +170,14 @@ class TableForm extends Component {
 		me.model = me.model || me.props.store.getModel (me.props.model);
 		
 		return (
-			<div>
-				<div className="actions border-top p-1">
+			<div className="p-1">
+				<div className="actions pb-1">
 					<Action onClick={me.onSave}	disabled={!me.isChanged () || me.state.saving}>
 						<i className="fas fa-check mr-2"/>{i18n ("Save")}
 					</Action>
 				</div>
 				<div>
-					<table className="table objectum-table pb-5 mb-0 border-top">
+					<table className="table objectum-table table-bordered pb-5 px-1 pt-1 mb-0">
 						<thead className="thead-dark">
 						<tr>
 							<th className="align-top">id</th>
