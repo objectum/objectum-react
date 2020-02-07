@@ -23,17 +23,19 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<Grid
-					id="income-waybill" ref="income-waybill" label="" store={store}
-					query="waybill.list"
-					params={{
-						type: 17511,
-						org: 2516
-					}}
-				>
-					<Action onClick={() => {}}><i className="fas fa-plus mr-2" />Добавить</Action>
-					<Action onClickSelected={() => {}}><i className="fas fa-edit mr-2" />Открыть</Action>
-				</Grid>
+				<div className="bg-white shadow-sm">
+					<Grid
+						id="income-waybill" ref="income-waybill" label="" store={store}
+						query="waybill.list"
+						params={{
+							type: 17511,
+							org: 2516
+						}}
+					>
+						<Action onClick={() => {}}><i className="fas fa-plus mr-2" />Добавить</Action>
+						<Action onClickSelected={() => {}}><i className="fas fa-edit mr-2" />Открыть</Action>
+					</Grid>
+				</div>
 			</div>
 		);
 	}

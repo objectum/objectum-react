@@ -62,7 +62,7 @@ function HomeButton () {
 		history.push ("/");
 	}
 	return (
-		<button className="btn btn-link text-light border-right" onClick={handleClick}>
+		<button className="btn btn-link text-white" onClick={handleClick}>
 			<i className="fas fa-home" />
 		</button>
 	);
@@ -79,7 +79,7 @@ function BackButton ({popLocation, locations}) {
 		history.push (decodeURI (pathname + hash));
 	}
 	return (
-		<button className="btn btn-link text-light border-right" disabled={locations.length < 2} onClick={handleClick}>
+		<button className="btn btn-link text-white" disabled={locations.length < 2} onClick={handleClick}>
 			<i className="fas fa-arrow-left mr-2" />{i18n ("Back")}
 		</button>
 	);
@@ -326,24 +326,6 @@ class ObjectumApp extends Component {
 					<Router>
 						<PageViews pushLocation={me.pushLocation} locations={me.state.locations} />
 						
-						<Fade>
-							<div className="fixed-top text-light bg-dark border">
-								<button className="btn btn-link text-light border-right" onClick={
-									() => {
-										me.setState ({sidebarDocked: !me.state.sidebarDocked});
-										//this.onSetSidebarOpen (!me.state.sidebarOpen);
-									}
-								}>
-									<i className="fas fa-bars mr-2" />{i18n ("Menu")}
-								</button>
-
-								<HomeButton />
-								<BackButton popLocation={me.popLocation} locations={me.state.locations} />
-	
-								<span className="ml-3 text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
-							</div>
-						</Fade>
-
 						<div>
 							<Sidebar
 								sidebar={me.renderMenu ("fa-lg")}
@@ -351,6 +333,23 @@ class ObjectumApp extends Component {
 								docked={me.state.sidebarDocked}
 								sidebarClassName="bg-white"
 							>
+								<Fade>
+									<div className="bg-dark text-white shadow">
+										<button className="btn btn-link text-white" onClick={
+											() => {
+												me.setState ({sidebarDocked: !me.state.sidebarDocked});
+											}
+										}>
+											<i className="fas fa-bars mr-2" />{i18n ("Menu")}
+										</button>
+										
+										<HomeButton />
+										<BackButton popLocation={me.popLocation} locations={me.state.locations} />
+										
+										<span className="ml-3 text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
+									</div>
+								</Fade>
+								
 								<div style={{marginTop: "4em", marginBottom: "20px"}}>
 									{me.renderRoutes ()}
 								</div>
@@ -363,7 +362,7 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Fade>
-						<div className="fixed-top text-light bg-dark p-2">
+						<div className="bg-dark text-white shadow p-2">
 							<span className="text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
 						</div>
 					</Fade>
