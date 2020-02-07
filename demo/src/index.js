@@ -24,6 +24,11 @@ class Test extends Component {
 		return (
 			<div className="container">
 				<div className="bg-white shadow-sm">
+					<ChooseField
+						store={store} property="tk"
+						choose={{cmp: ModelList, model: "tk"}}
+					/>
+					
 					<Grid
 						id="income-waybill" ref="income-waybill" label="" store={store}
 						query="waybill.list"
