@@ -62,7 +62,7 @@ function HomeButton () {
 		history.push ("/");
 	}
 	return (
-		<button className="btn btn-link text-white" onClick={handleClick}>
+		<button className="btn btn-link" onClick={handleClick}>
 			<i className="fas fa-home" />
 		</button>
 	);
@@ -79,8 +79,8 @@ function BackButton ({popLocation, locations}) {
 		history.push (decodeURI (pathname + hash));
 	}
 	return (
-		<button className="btn btn-link text-white" disabled={locations.length < 2} onClick={handleClick}>
-			<i className="fas fa-arrow-left mr-2" />{i18n ("Back")}
+		<button className="btn btn-link" disabled={locations.length < 2} onClick={handleClick}>
+			<i className="fas fa-arrow-left mr-2" /><span className="text-dark">{i18n ("Back")}</span>
 		</button>
 	);
 };
@@ -171,14 +171,17 @@ class ObjectumApp extends Component {
 			
 			recs.forEach ((rec, i) => {
 				let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
+				let selected = (rec.path || "").split ("#")[0] == document.location.pathname;
 				
 				if (childRecs.length) {
 					let opened = me.state [`open-${parent}-${i}`];
 					
 					items.push (
-						<tr key={`menu-${parent}-${i}`}><td className="bg-info">
-							<button className={`btn btn-link text-white pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
-								{renderIcon (rec.icon, `icon-${parent}-${i}`)}{i18n (rec.name)}<i key={`open-${parent}-${i}`} className={`far ${opened ? "fa-folder-open" : "fa-folder"} menu-icon`} />
+						<tr key={`menu-${parent}-${i}`}><td>
+							<button className={`btn btn-link pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
+								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
+								<span className="text-dark">{i18n (rec.name)}</span>
+								<i key={`open-${parent}-${i}`} className={`far ${opened ? "fa-folder-open" : "fa-folder"} menu-icon`} />
 							</button>
 						</td></tr>
 					);
@@ -187,10 +190,10 @@ class ObjectumApp extends Component {
 					}
 				} else {
 					items.push (
-						<tr key={`menu-${parent}-${i}`}><td className={level % 2 ? "bg-secondary" : "bg-info"}>
-							<Link className={`nav-link text-nowrap text-white ml-${level * 2}`} to={rec.path}>
+						<tr key={`menu-${parent}-${i}`}><td className={selected && "bg-primary"}>
+							<Link className={`nav-link text-nowrap ml-${level * 2} ${selected ? "text-white" : ""}`} to={rec.path}>
 								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
-								{i18n (rec.name)}
+								<span className={selected ? "text-white" : "text-dark"}>{i18n (rec.name)}</span>
 							</Link>
 						</td></tr>
 					);
@@ -200,11 +203,13 @@ class ObjectumApp extends Component {
 		renderItems (null, 0);
 		
 		let menu = (
-			<table className="table table-sm">
+			<table className="table table-sm table-borderless">
 				<tbody>
 				{items}
-				<tr><td className="bg-info">
-					<Link key="menu-logout" className="nav-link text-white" to="/logout"><i key="icon-logout" className={`fas fa-sign-out-alt ${size} menu-icon mr-1`} />{i18n ("Logout")}</Link>
+				<tr><td>
+					<Link key="menu-logout" className="nav-link" to="/logout">
+						<i key="icon-logout" className={`fas fa-sign-out-alt ${size} menu-icon mr-1`} /><span className="text-dark">{i18n ("Logout")}</span>
+					</Link>
 				</td></tr>
 				</tbody>
 			</table>
@@ -331,16 +336,17 @@ class ObjectumApp extends Component {
 								sidebar={me.renderMenu ("fa-lg")}
 								open={false}
 								docked={me.state.sidebarDocked}
-								sidebarClassName="bg-white"
+								sidebarClassName="bg-white border-right"
+								shadow={false}
 							>
 								<Fade>
-									<div className="bg-dark text-white shadow">
-										<button className="btn btn-link text-white" onClick={
+									<div className="bg-white shadow-sm header border-bottom py-1 form-inline">
+										<button className="btn btn-link" onClick={
 											() => {
 												me.setState ({sidebarDocked: !me.state.sidebarDocked});
 											}
 										}>
-											<i className="fas fa-bars mr-2" />{i18n ("Menu")}
+											<i className="fas fa-bars mr-2" /><span className="text-dark">{i18n ("Menu")}</span>
 										</button>
 										
 										<HomeButton />
@@ -362,7 +368,7 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Fade>
-						<div className="bg-dark text-white shadow p-2">
+						<div className="bg-white shadow-sm p-2">
 							<span className="text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
 						</div>
 					</Fade>

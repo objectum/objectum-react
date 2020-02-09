@@ -66,7 +66,7 @@ class Auth extends Component {
 			disabledButton = true;
 		}
 		return (
-			<div className="auth shadow bg-white mb-5">
+			<div className="auth shadow-sm bg-white mb-5">
 				<div className="p-3">
 					<h5><i className="fas fa-user mr-2 mb-2" />{i18n ("Sign in")}</h5>
 					<div className="form-group row">

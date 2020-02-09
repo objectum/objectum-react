@@ -219,7 +219,7 @@ class Filter extends Component {
 		}
 		return (
 			<div className="border p-1 text-center mt-1">
-				<button type="button" className="btn btn-link btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2" />{i18n ("Remove")}</button>
+				<button type="button" className="btn btn-link btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2" /><span className="text-dark"> {i18n ("Remove")}</span></button>
 				<select id="column" className="filter-select custom-select custom-select-sm" value={me.state.column} onChange={me.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
 						return (
@@ -344,10 +344,10 @@ class Filters extends Component {
 			<div>
 				<div className="mt-1 ml-3">
 					<h6 className="d-inline">{i18n ("Filters")}</h6>
-					<button type="button" className="btn btn-link btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" />{i18n ("Add filter")}</button>
+					<button type="button" className="btn btn-link btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Add filter")}</span></button>
 					<button type="button" className="btn btn-link btn-sm ml-1" onClick={me.onDock}>
 						<i className={`fas ${me.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
-						{me.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}
+						<span className="text-dark">{me.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}</span>
 					</button>
 				</div>
 				<div className="mx-1 mb-1 row flex-row">
