@@ -60,7 +60,7 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					username="admin"
+					_username="admin"
 					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 				>

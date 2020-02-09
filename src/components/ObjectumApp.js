@@ -369,7 +369,7 @@ class ObjectumApp extends Component {
 				<div>
 					<Fade>
 						<div className="bg-white shadow-sm p-2">
-							<span className="text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
+							<span className="text-uppercase font-weight-bold ml-3">{me.props.name || "Objectum"}</span>
 						</div>
 					</Fade>
 					<Fade top>
