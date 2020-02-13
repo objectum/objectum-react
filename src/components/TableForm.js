@@ -87,7 +87,7 @@ class TableForm extends Component {
 		}
 		try {
 			await timeout (200);
-			await me.props.store.startTransaction (`Save TableForm: ${records.join (",")}`);
+			await me.props.store.startTransaction (`${i18n ("Saving")}, id: ${records.join (",")}`);
 			
 			for (let i = 0; i < records.length; i ++) {
 				progress ({label: i18n ("Saving"), value: i + 1, max: records.length});

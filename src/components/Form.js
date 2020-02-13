@@ -158,7 +158,7 @@ class Form extends Component {
 		me.setState ({_saving: true});
 
 		await timeout (100);
-		await me.props.store.startTransaction (`Saving rsc: ${me.props.rsc}, rid: ${me.state._rid}`);
+		await me.props.store.startTransaction (`${i18n ("Saving")}, id: ${me.state._rid}`);
 		
 		let state = {_saving: false};
 		let values = me.getValues (me.props.children);
@@ -219,7 +219,7 @@ class Form extends Component {
 		me.setState ({_creating: true});
 		
 		await timeout (100);
-		await me.props.store.startTransaction (`Creating rsc: ${me.props.rsc}${me.props.mid ? `, mid: ${me.props.mid}` : ""}`);
+		await me.props.store.startTransaction (`${i18n ("Creating")}${me.props.mid ? `, ${i18n ("model")}: ${me.props.mid}` : ""}`);
 		
 		let state = {_creating: false};
 		let values = me.getValues (me.props.children);
