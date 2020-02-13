@@ -68,7 +68,7 @@ class ChooseField extends Component {
 	
 	onChoose () {
 		let me = this;
-		let cmp = me.refs ["component"].refs [me.state.ref];
+		let cmp = me.props.choose.cmp ? me.refs ["component"].refs [me.state.ref] : me.refs ["list"];
 		
 		if (!cmp) {
 			throw new Error (`not found choose.ref: ${me.state.ref}`);
@@ -181,14 +181,12 @@ class ChooseField extends Component {
 					</div>
 					{me.props.choose.cmp ?
 						<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true}/> :
-						<div ref="component">
-							<Grid
-								id="list"
-								ref="list"
-								store={me.props.store}
-								{...me.props.choose}
-							/>
-						</div>
+						<Grid
+							id="list"
+							ref="list"
+							store={me.props.store}
+							{...me.props.choose}
+						/>
 					}
 				</Modal>
 			</div>
