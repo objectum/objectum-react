@@ -190,7 +190,7 @@ class ObjectumApp extends Component {
 					}
 				} else {
 					items.push (
-						<tr key={`menu-${parent}-${i}`}><td className={selected && "bg-primary"}>
+						<tr key={`menu-${parent}-${i}`}><td className={selected ? "bg-primary" : ""}>
 							<Link className={`nav-link text-nowrap ml-${level * 2} ${selected ? "text-white" : ""}`} to={rec.path}>
 								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
 								<span className={selected ? "text-white" : "text-dark"}>{i18n (rec.name)}</span>
