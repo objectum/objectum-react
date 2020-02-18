@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {i18n} from "./../i18n";
 import Fade from "react-reveal/Fade";
 import {timeout} from "./helper";
-import ModelList from "./ModelList";
 
 class RemoveAction extends Component {
 	constructor (props) {

@@ -98,7 +98,7 @@ class ModelList extends Component {
 				if (!Model) {
 					throw new Error (`Model "${path}" not registered`);
 				}
-				if (typeof (Model [method]) != "function") {
+				if (action.onClick && typeof (Model [method]) != "function") {
 					throw new Error (`Unknown static method ${method}`);
 				}
 				let actionOpts = {
