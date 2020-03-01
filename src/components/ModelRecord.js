@@ -23,9 +23,11 @@ class ModelRecord extends Component {
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			model: hash.opts.model,
-			label: "",
-			disableActions: true
+			label: ""
 		};
+		if (me.state.rid) {
+			me.state.disableActions = true;
+		}
 		me.onCreate = me.onCreate.bind (me);
 	}
 	
@@ -35,7 +37,12 @@ class ModelRecord extends Component {
 		if (me.state.rid) {
 			me.record = await me.props.store.getRecord (me.state.rid);
 			
-			me.setState ({label: me.record.getLabel ()});
+			let state = {label: me.record.getLabel (), disableActions: false};
+			
+			if (me.record._canChange) {
+				state.disableActions = !(await me.record._canChange ());
+			}
+			me.setState (state);
 		}
 	}
 	
@@ -326,7 +333,7 @@ class ModelRecord extends Component {
 				<div className="bg-white shadow-sm">
 					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 						<Tab key={`tab1-${me.state.model}`} label="Information">
-							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
+							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate} disableActions={me.state.disableActions}>
 								{properties.map ((properties2, i) => {
 									return (
 										<div key={`row-${i}`} className="row">
@@ -351,7 +358,17 @@ class ModelRecord extends Component {
 							}
 							return (
 								<Tab key={`table-${me.state.model}-${i}`} label={label}>
-									<ModelList {...me.props} id={`list-${i}`} ref={`list-${i}`} label="" store={me.props.store} model={t.getPath ()} parentModel={m.getPath ()} parentId={me.state.rid} />
+									<ModelList
+										{...me.props}
+										id={`list-${i}`}
+										ref={`list-${i}`}
+										label=""
+										store={me.props.store}
+										model={t.getPath ()}
+										parentModel={m.getPath ()}
+										parentId={me.state.rid}
+										disableActions={me.state.disableActions}
+									/>
 								</Tab>
 							);
 						})}
