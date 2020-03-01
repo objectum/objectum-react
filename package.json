@@ -41,7 +41,7 @@
 	],
 	"dependencies": {
 		"lodash": "^4.17.15",
-		"objectum-client": "^1.1.53",
+		"objectum-client": "^1.1.58",
 		"react-dropzone": "^10.1.10",
 		"react-modal": "^3.11.1",
 		"react-reveal": "^1.2.2",

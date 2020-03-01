@@ -292,27 +292,25 @@ class ModelRecord extends Component {
 	render () {
 		let me = this;
 		let m = me.props.store.getModel (me.state.model);
-		let opts = m.getOpts ();
+		let regModel = me.props.store.getRegistered (me.state.model) || {};
 		let properties = _.sortBy (_.values (m.properties), ["order", "name"]);
 		let label = i18n ("Record");
 		let columns = 1;
 		
-		if (opts.form) {
-			if (opts.form.label) {
-				label = opts.form.label;
-			}
-			if (opts.form.columns) {
-				columns = opts.form.columns;
-			}
+		if (regModel._formLabel) {
+			label = regModel._formLabel ();
 		}
-		if (opts.layout) {
+		if (regModel._formColumns) {
+			columns = regModel._formColumns ();
+		}
+		if (regModel._layout) {
 			return (
 				<div className="container">
 					<div className="text-white bg-dark py-1">
 						<strong className="pl-2">{label + ": " + me.state.label}</strong>
 					</div>
 					<div className="border bg-white shadow-sm">
-						{me.renderLayout (opts.layout, m)}
+						{me.renderLayout (regModel._layout (), m)}
 					</div>
 				</div>
 			);

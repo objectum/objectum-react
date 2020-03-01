@@ -15,7 +15,23 @@ class Test extends Component {
 	constructor (props) {
 		super (props);
 		
+		this.onCLick = this.onClick.bind (this);
 		this.state = {};
+	}
+	
+	async onClick ({progress, confirm}) {
+		let me = this;
+		
+		let result = true;//await confirm ("Вы уверены?");
+		
+		if (result) {
+			throw new Error ("123");
+			
+			for (let i = 0; i < 10; i ++) {
+				progress ({label: "test", value: i + 1, max: 10});
+				await timeout (500);
+			}
+		}
 	}
 	
 	render () {
@@ -24,22 +40,7 @@ class Test extends Component {
 		return (
 			<div className="container">
 				<div className="bg-white shadow-sm">
-					<ChooseField
-						store={store} property="tk"
-						choose={{cmp: ModelList, model: "tk"}}
-					/>
-					
-					<Grid
-						id="income-waybill" ref="income-waybill" label="" store={store}
-						query="waybill.list"
-						params={{
-							type: 17511,
-							org: 2516
-						}}
-					>
-						<Action onClick={() => {}}><i className="fas fa-plus mr-2" />Добавить</Action>
-						<Action onClickSelected={() => {}}><i className="fas fa-edit mr-2" />Открыть</Action>
-					</Grid>
+					<Action onClick={me.onClick}>Action</Action>
 				</div>
 			</div>
 		);
@@ -60,7 +61,7 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					_username="admin"
+					username="admin"
 					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 				>

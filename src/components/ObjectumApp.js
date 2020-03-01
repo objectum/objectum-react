@@ -110,10 +110,15 @@ class ObjectumApp extends Component {
 		me.store.addListener ("connect", me.onConnect);
 		
 		if (me.props.username && me.props.password) {
-			await me.store.auth ({
-				username: me.props.username,
-				password: me.props.password
-			});
+			try {
+				await me.store.auth ({
+					username: me.props.username,
+					password: me.props.password
+				});
+			} catch (err) {
+				console.error (err);
+				me.setState ({error: err.message});
+			}
 		}
 	}
 	
@@ -322,6 +327,15 @@ class ObjectumApp extends Component {
 	render () {
 		let me = this;
 		
+		if (me.state.error) {
+			return (
+				<div className="container">
+					<div className="alert alert-danger mt-1" role="alert">
+						{me.state.error}
+					</div>
+				</div>
+			);
+		}
 		if (me.props.username && me.props.password && !me.state.sid) {
 			return (<div/>);
 		}

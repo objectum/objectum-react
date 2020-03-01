@@ -22,11 +22,10 @@ class ModelList extends Component {
 			refresh: false,
 			actions: []
 		};
-		let m = me.props.store.getModel (me.model);
-		let opts = m.getOpts ();
+		let regModel = me.props.store.getRegistered (me.model) || {};
 		
-		if (opts.grid && opts.grid.actions) {
-			me.state.actions = opts.grid.actions;
+		if (regModel._gridActions) {
+			me.state.actions = regModel._gridActions;
 		}
 	}
 	
@@ -146,6 +145,7 @@ class ModelList extends Component {
 	
 	render () {
 		let me = this;
+		let regModel = me.props.store.getRegistered (me.model) || {};
 		let m = me.props.store.getModel (me.model);
 		let gridOpts = {
 			...me.props,
@@ -158,32 +158,29 @@ class ModelList extends Component {
 		};
 		gridOpts.params = gridOpts.params || {};
 		
-		let opts = m.getOpts ();
-		
-		if (opts.grid) {
-			gridOpts.label = opts.grid.label || gridOpts.label;
-
-			if (opts.grid.query) {
-				delete gridOpts.model;
-				gridOpts.query = opts.grid.query;
+		if (regModel._gridLabel) {
+			gridOpts.label = regModel._gridLabel ();
+		}
+		if (regModel._gridQuery) {
+			delete gridOpts.model;
+			gridOpts.query = regModel._gridQuery ();
+		}
+		if (regModel._gridFilters) {
+			let hash = getHash (me) [gridOpts.id];
+			
+			if (!hash || !hash.filters) {
+				setHash (me, {
+					[gridOpts.id]: {
+						"showFilters": true,
+						"dockFilters": "top",
+						"filters": regModel._gridFilters ()
+					}
+				});
 			}
-			if (opts.grid.filters) {
-				let hash = getHash (me) [gridOpts.id];
-				
-				if (!hash || !hash.filters) {
-					setHash (me, {
-						[gridOpts.id]: {
-							"showFilters": true,
-							"dockFilters": "top",
-							"filters": opts.grid.filters
-						}
-					});
-				}
-			}
-			if ((m.isDictionary () || m.isTable ()) && me.props.store.map ["query"][m.getPath ()]) {
-				delete gridOpts.model;
-				gridOpts.query = m.getPath ();
-			}
+		}
+		if ((m.isDictionary () || m.isTable ()) && me.props.store.map ["query"][m.getPath ()]) {
+			delete gridOpts.model;
+			gridOpts.query = m.getPath ();
 		}
 		if (me.props.hasOwnProperty ("label")) {
 			gridOpts.label = me.props.label;
@@ -193,12 +190,8 @@ class ModelList extends Component {
 			
 			gridOpts.params [pm.get ("code")] = me.props.parentId;
 		}
-		if (opts.grid && opts.grid.card) {
-			gridOpts.card = JSON.parse (opts.grid.card);
-			gridOpts.card.onEdit = me.onEdit;
-		}
-		if (m.isDictionary () || (opts.grid && opts.grid.editable)) {
-			gridOpts.editable = (opts.grid && opts.grid.editable) || true;
+		if (m.isDictionary () || regModel._gridEditable) {
+			gridOpts.editable = regModel._gridEditable () || true;
 		}
 		let actions = me.renderActions ();
 		

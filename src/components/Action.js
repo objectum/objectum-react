@@ -31,10 +31,16 @@ class Action extends Component {
 				let promise = handler ({
 					progress: ({label, value, max}) => {
 						me.setState ({label, value, max});
+					},
+					confirm: (text) => {
+					
 					}
 				});
 				if (promise && promise.then) {
-					promise.then (() => {
+					promise.then (result => {
+						if (typeof (result) == "string") {
+							state.result = result;
+						}
 						me.setState (state);
 					}).catch (err => {
 						console.error (err);
@@ -42,6 +48,9 @@ class Action extends Component {
 						me.setState (state);
 					});
 				} else {
+					if (typeof (promise) == "string") {
+						state.result = promise;
+					}
 					me.setState (state);
 				}
 			} catch (err) {
@@ -63,15 +72,26 @@ class Action extends Component {
 		}
 		text = text || i18n ("Processing") + " ...";
 		
-		return (
-			me.state.processing ?
+		if (me.state.processing) {
+			return (
 				<span className="text-primary ml-2 mr-2">
 					<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true" />{text}
-				</span> :
-				<span>
-					<button type="button" className="btn btn-primary btn-labeled btn-sm mr-1" onClick={me.onClick} disabled={me.props.disabled || me.props.disableActions}>{me.props.children}</button>
-					{me.state.error && <span className="text-danger ml-1">{me.state.error}</span>}
 				</span>
+			);
+		}
+		return (
+			<span>
+				<button
+					type="button"
+					className="btn btn-primary btn-labeled btn-sm mr-1"
+					onClick={me.onClick}
+					disabled={me.props.disabled || me.props.disableActions}
+				>
+					{me.props.children}
+				</button>
+				{me.state.error && <span className="text-danger ml-1">{me.state.error}</span>}
+				{me.state.result && <span className="text-success ml-1">{me.state.result}</span>}
+			</span>
 		);
 	}
 };
