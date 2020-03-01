@@ -19,7 +19,9 @@ class ModelList extends Component {
 		me.onSelect = me.onSelect.bind (me);
 		me.state = {
 			refresh: false,
-			actions: []
+			actions: [],
+			canCreate: true,
+			canRemove: true
 		};
 		let regModel = me.props.store.getRegistered (me.model) || {};
 		
