@@ -207,8 +207,10 @@ class ModelList extends Component {
 			
 			gridOpts.params [pm.get ("code")] = me.props.parentId;
 		}
-		if (m.isDictionary () || regModel._gridEditable) {
-			gridOpts.editable = regModel._gridEditable () || true;
+		gridOpts.editable = m.isDictionary ();
+		
+		if (regModel._gridEditable) {
+			gridOpts.editable = regModel._gridEditable ();
 		}
 		let actions = me.renderActions ();
 		
