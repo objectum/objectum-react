@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {i18n} from "../i18n";
+import Fade from "react-reveal/Fade";
 
 class Action extends Component {
 	constructor (props) {
@@ -33,7 +34,10 @@ class Action extends Component {
 						me.setState ({label, value, max});
 					},
 					confirm: (text) => {
-					
+						return new Promise (resolve => {
+							me.confirmResolve = resolve;
+							me.setState ({confirm: text || i18n ("Are you sure?")});
+						});
 					}
 				});
 				if (promise && promise.then) {
@@ -61,8 +65,43 @@ class Action extends Component {
 		}
 	}
 	
+	confirm (result) {
+		let me = this;
+		
+		me.setState ({confirm: null});
+		me.confirmResolve (result);
+	}
+	
+	getDisabled () {
+		let me = this;
+		let disabled;
+		
+		if (me.props.disabled) {
+			if (typeof (me.props.disabled) == "function") {
+				disabled = me.props.disabled ();
+			} else {
+				disabled = me.props.disabled;
+			}
+		} else {
+			disabled = me.props.disableActions
+		}
+		return disabled;
+	}
+	
 	render () {
 		let me = this;
+
+		if (me.state.confirm) {
+			return (
+				<Fade>
+					<span className="text-danger ml-1 p-1">
+						{me.state.confirm}
+						<button type="button" className="btn btn-danger btn-sm ml-2" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
+						<button type="button" className="btn btn-success btn-sm ml-2" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
+					</span>
+				</Fade>
+			);
+		}
 		let text;
 		
 		if (me.state.processing) {
@@ -85,7 +124,7 @@ class Action extends Component {
 					type="button"
 					className="btn btn-primary btn-labeled btn-sm mr-1"
 					onClick={me.onClick}
-					disabled={me.props.disabled || me.props.disableActions}
+					disabled={me.getDisabled ()}
 				>
 					{me.props.children}
 				</button>

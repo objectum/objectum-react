@@ -23,7 +23,8 @@ class ModelRecord extends Component {
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			model: hash.opts.model,
-			label: ""
+			label: "",
+			disableActions: true
 		};
 		me.onCreate = me.onCreate.bind (me);
 	}
@@ -158,6 +159,7 @@ class ModelRecord extends Component {
 					<div className="m-1">
 						<ModelList
 							{...me.props}
+							disableActions={me.state.disableActions}
 							id={key}
 							label={i18n (label)}
 							store={me.props.store}
@@ -201,7 +203,7 @@ class ModelRecord extends Component {
 			if (!layout.length) {
 				return (<div />);
 			}
-			let formItems = [], propertyNum = 0;
+			let formItems = [];
 			let rid = null;
 			
 			for (let i = 0; i < layout.length; i ++) {
@@ -252,7 +254,7 @@ class ModelRecord extends Component {
 						result.newRecordFormNum ++;
 					}
 					items.push (
-						<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate}>
+						<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate} disableActions={me.state.disableActions}>
 							{formItems}
 						</Form>
 					);

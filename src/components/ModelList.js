@@ -4,8 +4,6 @@ import Grid from "./Grid";
 import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
 import {getHash, setHash} from "./helper";
-import Loading from "./Loading";
-import _ from "lodash";
 
 class ModelList extends Component {
 	constructor (props) {
@@ -18,6 +16,7 @@ class ModelList extends Component {
 		me.onCreate = me.onCreate.bind (me);
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
+		me.onSelect = me.onSelect.bind (me);
 		me.state = {
 			refresh: false,
 			actions: []
@@ -25,7 +24,7 @@ class ModelList extends Component {
 		let regModel = me.props.store.getRegistered (me.model) || {};
 		
 		if (regModel._gridActions) {
-			me.state.actions = regModel._gridActions;
+			me.state.actions = regModel._gridActions ();
 		}
 	}
 	
@@ -143,6 +142,23 @@ class ModelList extends Component {
 		return items;
 	}
 	
+	async onSelect (id) {
+		let me = this;
+		let state = {disableActions: false, canCreate: true, canRemove: true};
+		
+		me.setState ({disableActions: true});
+		
+		let record = await me.props.store.getRecord (id);
+		
+		if (record._canCreate) {
+			state.canCreate = await record._canCreate ();
+		}
+		if (record._canRemove) {
+			state.canRemove = await record._canRemove ();
+		}
+		me.setState (state);
+	}
+	
 	render () {
 		let me = this;
 		let regModel = me.props.store.getRegistered (me.model) || {};
@@ -154,7 +170,8 @@ class ModelList extends Component {
 			store: me.props.store,
 			label: (m.isDictionary () ? i18n ("Dictionary") : i18n ("List")) + ": " + m.get ("name"),
 			refresh: me.state.refresh,
-			model: me.model
+			model: me.model,
+			onSelect: me.onSelect
 		};
 		gridOpts.params = gridOpts.params || {};
 		
@@ -197,9 +214,13 @@ class ModelList extends Component {
 		
 		return (
 			<Grid {...gridOpts}>
-				<Action {...me.props} onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-				<Action {...me.props} onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-				<RemoveAction {...me.props} onRemove={me.onRemove} />
+				<Action {...me.props} onClick={me.onCreate} disabled={me.state.disableActions || !me.state.canCreate}>
+					<i className="fas fa-plus mr-2" />{i18n ("Create")}
+				</Action>
+				<Action {...me.props} onClickSelected={me.onEdit}>
+					<i className="fas fa-edit mr-2" />{i18n ("Edit")}
+				</Action>
+				<RemoveAction {...me.props} onRemove={me.onRemove} disabled={me.state.disableActions || !me.state.canRemove} />
 				{actions}
 				{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 			</Grid>
