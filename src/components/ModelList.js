@@ -117,30 +117,23 @@ class ModelList extends Component {
 					key: i
 				};
 				if (action.onClick) {
-					actionOpts.onClick = ({grid, progress}) => {
-						return Model [method].call (grid, {
-							grid,
-							store: me.props.store,
+					actionOpts.onClick = (opts) => {
+						return Model [method].call (opts.grid, Object.assign (opts, {
 							parentModel: me.props.parentModel,
-							parentId: me.props.parentId,
-							progress
-						});
+							parentId: me.props.parentId
+						}));
 					};
 				} else {
-					actionOpts.onClickSelected = async ({id, grid, progress}) => {
-						let record = await me.props.store.getRecord (id);
+					actionOpts.onClickSelected = async (opts) => {
+						let record = await me.props.store.getRecord (opts.id);
 						
 						if (typeof (record [method]) != "function") {
-							throw new Error (`Unknown method: ${method}, record: ${id}`);
+							throw new Error (`Unknown method: ${method}, record: ${opts.id}`);
 						}
-						return record [method].call (record, {
-							id,
-							grid,
-							store: me.props.store,
+						return record [method].call (record, Object.assign (opts, {
 							parentModel: me.props.parentModel,
-							parentId: me.props.parentId,
-							progress
-						});
+							parentId: me.props.parentId
+						}));
 					};
 				}
 				items.push (
