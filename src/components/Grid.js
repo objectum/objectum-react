@@ -330,6 +330,9 @@ class Grid extends Component {
 		}
 		state.loading = false;
 		
+		if (me.props.onLoad) {
+			me.props.onLoad (state);
+		}
 		me.setState (state);
 	}
 
