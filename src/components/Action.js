@@ -18,6 +18,7 @@ class Action extends Component {
 			max: ""
 		};
 		me.onClick = me.onClick.bind (me);
+		me.onClose = me.onClose.bind (me);
 	}
 	
 	async onClick () {
@@ -88,6 +89,10 @@ class Action extends Component {
 		return disabled;
 	}
 	
+	onClose () {
+		this.setState ({error: "", result: ""});
+	}
+	
 	render () {
 		let me = this;
 
@@ -128,8 +133,14 @@ class Action extends Component {
 				>
 					{me.props.children}
 				</button>
-				{me.state.error && <span className="text-danger ml-1">{me.state.error}</span>}
-				{me.state.result && <span className="text-success ml-1">{me.state.result}</span>}
+				{me.state.error && <span>
+					<span className="text-danger ml-1">{me.state.error}</span>
+					<button type="button" className="btn btn-link btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
+				</span>}
+				{me.state.result && <span>
+					<span className="text-success ml-1">{me.state.result}</span>
+					<button type="button" className="btn btn-link btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
+				</span>}
 			</span>
 		);
 	}

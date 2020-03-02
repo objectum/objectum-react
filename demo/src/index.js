@@ -25,17 +25,17 @@ class Test extends Component {
 	async onClick ({progress, confirm}) {
 		let me = this;
 		
-		let result = await confirm ("Вы уверены?");
+		//let result = await confirm ("Вы уверены?");
 		
-		if (result) {
+		//if (result) {
 			//throw new Error ("123");
 			
-			for (let i = 0; i < 10; i ++) {
+			for (let i = 0; i < 2; i ++) {
 				progress ({label: "test", value: i + 1, max: 10});
 				await timeout (500);
 			}
 			return "success";
-		}
+		//}
 	}
 	
 	render () {
