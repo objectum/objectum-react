@@ -21,7 +21,8 @@ class ModelList extends Component {
 			refresh: false,
 			actions: [],
 			canCreate: false,
-			canRemove: false
+			canRemove: false,
+			_grid: {}
 		};
 		let regModel = me.props.store.getRegistered (me.model) || {};
 		
@@ -30,7 +31,6 @@ class ModelList extends Component {
 			
 			if (me.state._grid.actions) {
 				me.state.actions = me.state._grid.actions;
-				delete me.state._grid.actions;
 			}
 		}
 	}
@@ -166,7 +166,6 @@ class ModelList extends Component {
 	
 	render () {
 		let me = this;
-		let regModel = me.props.store.getRegistered (me.model) || {};
 		let m = me.props.store.getModel (me.model);
 		let gridOpts = {
 			...me.props,
@@ -182,12 +181,10 @@ class ModelList extends Component {
 		
 		if (me.state._grid.label) {
 			gridOpts.label = me.state._grid.label;
-			delete me.state._grid.label;
 		}
 		if (me.state._grid.query) {
 			delete gridOpts.model;
 			gridOpts.query = me.state._grid.query;
-			delete me.state._grid.query;
 		}
 		if (me.state._grid.filters) {
 			let hash = getHash (me) [gridOpts.id];
@@ -201,7 +198,6 @@ class ModelList extends Component {
 					}
 				});
 			}
-			delete me.state._grid.filters;
 		}
 		if ((m.isDictionary () || m.isTable ()) && me.props.store.map ["query"][m.getPath ()]) {
 			delete gridOpts.model;

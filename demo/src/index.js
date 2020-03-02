@@ -19,7 +19,6 @@ class Test extends Component {
 		super (props);
 		
 		this.onCLick = this.onClick.bind (this);
-		this.onTableRow = this.onTableRow.bind (this);
 		this.state = {};
 	}
 	
@@ -39,17 +38,6 @@ class Test extends Component {
 		//}
 	}
 	
-	onTableRow ({row, rec}) {
-		let props = {};
-		
-		if (!row.props.className) {
-			props.className = "table-success";
-		}
-		let newRow = React.cloneElement (row, props);
-
-		return newRow;
-	}
-	
 	render () {
 		let me = this;
 		
@@ -58,7 +46,7 @@ class Test extends Component {
 				<div className="bg-white shadow-sm">
 					<Action onClick={me.onClick}>Action</Action>
 				</div>
-				<Grid id="org-list" store={store} query="org.list" onTableRow={me.onTableRow} />
+				<ModelList store={me.props.store} model="tk" />
 			</div>
 		);
 	}
