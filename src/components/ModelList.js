@@ -25,8 +25,13 @@ class ModelList extends Component {
 		};
 		let regModel = me.props.store.getRegistered (me.model) || {};
 		
-		if (regModel._gridActions) {
-			me.state.actions = regModel._gridActions ();
+		if (regModel._grid) {
+			me.state._grid = regModel._grid ();
+			
+			if (me.state._grid.actions) {
+				me.state.actions = me.state._grid.actions;
+				delete me.state._grid.actions;
+			}
 		}
 	}
 	
@@ -175,14 +180,16 @@ class ModelList extends Component {
 		};
 		gridOpts.params = gridOpts.params || {};
 		
-		if (regModel._gridLabel) {
-			gridOpts.label = regModel._gridLabel ();
+		if (me.state._grid.label) {
+			gridOpts.label = me.state._grid.label;
+			delete me.state._grid.label;
 		}
-		if (regModel._gridQuery) {
+		if (me.state._grid.query) {
 			delete gridOpts.model;
-			gridOpts.query = regModel._gridQuery ();
+			gridOpts.query = me.state._grid.query;
+			delete me.state._grid.query;
 		}
-		if (regModel._gridFilters) {
+		if (me.state._grid.filters) {
 			let hash = getHash (me) [gridOpts.id];
 			
 			if (!hash || !hash.filters) {
@@ -190,10 +197,11 @@ class ModelList extends Component {
 					[gridOpts.id]: {
 						"showFilters": true,
 						"dockFilters": "top",
-						"filters": regModel._gridFilters ()
+						"filters": me.state._grid.filters
 					}
 				});
 			}
+			delete me.state._grid.filters;
 		}
 		if ((m.isDictionary () || m.isTable ()) && me.props.store.map ["query"][m.getPath ()]) {
 			delete gridOpts.model;
@@ -209,9 +217,12 @@ class ModelList extends Component {
 		}
 		gridOpts.editable = m.isDictionary ();
 		
-		if (regModel._gridEditable) {
-			gridOpts.editable = regModel._gridEditable ();
+		if (me.state._grid.editable) {
+			gridOpts.editable = me.state._grid.editable;
+			delete me.state._grid.editable;
 		}
+		Object.assign (gridOpts, me.state._grid);
+		
 		let actions = me.renderActions ();
 		
 		return (

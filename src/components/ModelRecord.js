@@ -306,11 +306,15 @@ class ModelRecord extends Component {
 		let label = i18n ("Record");
 		let columns = 1;
 		
-		if (regModel._formLabel) {
-			label = regModel._formLabel ();
-		}
-		if (regModel._formColumns) {
-			columns = regModel._formColumns ();
+		if (regModel._form) {
+			let _form = regModel._form ();
+		
+			if (_form.label) {
+				label = _form.label;
+			}
+			if (_form.columns) {
+				columns = _form.columns;
+			}
 		}
 		if (regModel._layout) {
 			return (
