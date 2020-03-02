@@ -20,8 +20,8 @@ class ModelList extends Component {
 		me.state = {
 			refresh: false,
 			actions: [],
-			canCreate: true,
-			canRemove: true
+			canCreate: false,
+			canRemove: false
 		};
 		let regModel = me.props.store.getRegistered (me.model) || {};
 		
@@ -72,6 +72,17 @@ class ModelList extends Component {
 			state.error = err.message;
 		}
 		me.setState (state);
+	}
+	
+	async componentDidMount () {
+		let me = this;
+		let regModel = me.props.store.getRegistered (me.model);
+		
+		if (regModel._canCreate) {
+			me.setState ({canCreate: await regModel._canCreate ()});
+		} else {
+			me.setState ({canCreate: true});
+		}
 	}
 	
 	componentDidUpdate () {
@@ -146,19 +157,13 @@ class ModelList extends Component {
 	
 	async onSelect (id) {
 		let me = this;
-		let state = {disableActions: false, canCreate: true, canRemove: true};
-		
-		me.setState ({disableActions: true});
-		
 		let record = await me.props.store.getRecord (id);
 		
-		if (record._canCreate) {
-			state.canCreate = await record._canCreate ();
-		}
 		if (record._canRemove) {
-			state.canRemove = await record._canRemove ();
+			me.setState ({canRemove: await record._canRemove ()});
+		} else {
+			me.setState ({canRemove: true});
 		}
-		me.setState (state);
 	}
 	
 	render () {
@@ -218,13 +223,13 @@ class ModelList extends Component {
 		
 		return (
 			<Grid {...gridOpts}>
-				<Action {...me.props} onClick={me.onCreate} disabled={me.state.disableActions || !me.state.canCreate}>
+				<Action {...me.props} onClick={me.onCreate} disabled={!me.state.canCreate}>
 					<i className="fas fa-plus mr-2" />{i18n ("Create")}
 				</Action>
 				<Action {...me.props} onClickSelected={me.onEdit}>
 					<i className="fas fa-edit mr-2" />{i18n ("Edit")}
 				</Action>
-				<RemoveAction {...me.props} onRemove={me.onRemove} disabled={me.state.disableActions || !me.state.canRemove} />
+				<RemoveAction {...me.props} onRemove={me.onRemove} disabled={!me.state.canRemove} />
 				{actions}
 				{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 			</Grid>
