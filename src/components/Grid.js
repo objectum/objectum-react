@@ -453,7 +453,7 @@ class Grid extends Component {
 				}
 				prevGroupColValue = rec [me.props.groupCol];
 			}
-			rows.push (
+			let row = (
 				<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
 					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 					{me.state.cols.map ((col, j) => {
@@ -466,6 +466,10 @@ class Grid extends Component {
 					})}
 				</tr>
 			);
+			if (me.props.onTableRow) {
+				row = me.props.onTableRow ({row, rec});
+			}
+			rows.push (row);
 		});
 		return rows;
 	}
