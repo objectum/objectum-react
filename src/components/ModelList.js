@@ -79,7 +79,7 @@ class ModelList extends Component {
 		let regModel = me.props.store.getRegistered (me.model);
 		
 		if (regModel._canCreate) {
-			me.setState ({canCreate: await regModel._canCreate ()});
+			me.setState ({canCreate: await regModel._canCreate ({store: me.props.store})});
 		} else {
 			me.setState ({canCreate: true});
 		}
