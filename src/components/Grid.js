@@ -467,7 +467,7 @@ class Grid extends Component {
 				</tr>
 			);
 			if (me.props.onTableRow) {
-				row = me.props.onTableRow ({row, rec});
+				row = me.props.onTableRow ({row, rec, store: me.props.store, grid: me});
 			}
 			rows.push (row);
 		});
