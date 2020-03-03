@@ -1,27 +1,18 @@
-import fs from "fs";
-import express from "express";
 import Proxy from "objectum-proxy";
 
 import OrgModel from "./src/models/OrgModel.js";
 import TkModel from "./src/models/TkModel.js";
-/*
-const TOrgProductModel = require ("./src/models/TOrgProductModel");
-const MenuModel = require ("./src/models/MenuModel");
-const TkModel = require ("./src/models/TkModel");
-const MtModel = require ("./src/models/MtModel");
-*/
 
-const app = express ();
-const config = JSON.parse (fs.readFileSync ("./config.json"));
+import fs from "fs";
+import {fileURLToPath} from "url";
+import {dirname} from "path";
+
+const __filename = fileURLToPath (import.meta.url);
+const __dirname = dirname (__filename);
+const config = JSON.parse (fs.readFileSync ("./config.json", "utf8"));
 const proxy = new Proxy ();
 
 proxy.register ("org", OrgModel);
 proxy.register ("tk", TkModel);
-/*
-proxy.register ("t.org.product", TOrgProductModel);
-proxy.register ("tk", TkModel);
-proxy.register ("menu", MenuModel);
-proxy.register ("mt", MtModel);
-*/
 
-proxy.start ({app, config, code: "rmp"});
+proxy.start ({config, code: "rmp", __dirname});

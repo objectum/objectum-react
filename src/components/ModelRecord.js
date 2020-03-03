@@ -10,6 +10,7 @@ import ModelList from "./ModelList";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 import _ from "lodash";
+import Loading from "./Loading";
 import Fade from "react-reveal/Fade";
 
 class ModelRecord extends Component {
@@ -23,7 +24,8 @@ class ModelRecord extends Component {
 		me.state = {
 			rid: rid == "new" ? null : rid,
 			model: hash.opts.model,
-			label: ""
+			label: "",
+			loading: true
 		};
 		if (me.state.rid) {
 			me.state.disableActions = true;
@@ -33,17 +35,19 @@ class ModelRecord extends Component {
 	
 	async componentDidMount () {
 		let me = this;
+		let state = {loading: false};
 		
 		if (me.state.rid) {
 			me.record = await me.props.store.getRecord (me.state.rid);
 			
-			let state = {label: me.record.getLabel (), disableActions: false};
+			state.label = me.record.getLabel ();
+			state.disableActions = false;
 			
 			if (me.record._canChange) {
 				state.disableActions = !(await me.record._canChange ());
 			}
-			me.setState (state);
 		}
+		me.setState (state);
 	}
 	
 	async onCreate (rid) {
@@ -102,7 +106,7 @@ class ModelRecord extends Component {
 		}
 	}
 	
-	renderProperty (p, key, props = {}) {
+	renderProperty (p, key, o, props = {}) {
 		let me = this;
 		let dict = false;
 		let chooseModel;
@@ -120,6 +124,9 @@ class ModelRecord extends Component {
 		let disabled = false;
 		let hash = getHash ();
 		
+		if (o.disabled && typeof (me.record [o.disabled]) == "function") {
+			disabled = me.record [o.disabled] ();
+		}
 		if (hash.opts && hash.opts.parentModel) {
 			let pm = me.props.store.getModel (hash.opts.parentModel);
 			
@@ -187,7 +194,7 @@ class ModelRecord extends Component {
 			
 			if (property || o.property) {
 				result.type = "property";
-				item = me.renderProperty (property || model.properties [o.property], key, o.props);
+				item = me.renderProperty (property || model.properties [o.property], key, o, o.props);
 			}
 		}
 		if (o.tag) {
@@ -315,6 +322,15 @@ class ModelRecord extends Component {
 			if (_form.columns) {
 				columns = _form.columns;
 			}
+		}
+		if (me.state.loading) {
+			return (
+				<div className="container">
+					<div className="border bg-white shadow-sm">
+						<Loading />
+					</div>
+				</div>
+			);
 		}
 		if (regModel._layout) {
 			return (
