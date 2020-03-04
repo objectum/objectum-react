@@ -43,8 +43,8 @@ class ModelRecord extends Component {
 			state.label = me.record.getLabel ();
 			state.disableActions = false;
 			
-			if (me.record._canChange) {
-				state.disableActions = !(await me.record._canChange ());
+			if (me.record._change) {
+				state.disableActions = !(await me.record._change ());
 			}
 		}
 		me.setState (state);

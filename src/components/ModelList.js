@@ -83,8 +83,8 @@ class ModelList extends Component {
 		let me = this;
 		let regModel = me.props.store.getRegistered (me.model);
 		
-		if (regModel && regModel._canCreate) {
-			me.setState ({canCreate: await regModel._canCreate ({store: me.props.store})});
+		if (regModel && regModel._create) {
+			me.setState ({canCreate: await regModel._create ({store: me.props.store})});
 		} else {
 			me.setState ({canCreate: true});
 		}
@@ -157,8 +157,8 @@ class ModelList extends Component {
 		let me = this;
 		let record = await me.props.store.getRecord (id);
 		
-		if (record._canRemove) {
-			me.setState ({canRemove: await record._canRemove ()});
+		if (record._remove) {
+			me.setState ({canRemove: await record._remove ()});
 		} else {
 			me.setState ({canRemove: true});
 		}
