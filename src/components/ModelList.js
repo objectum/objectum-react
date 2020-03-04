@@ -206,7 +206,7 @@ class ModelList extends Component {
 		if (me.props.hasOwnProperty ("label")) {
 			gridOpts.label = me.props.label;
 		}
-		if (m.isTable () && me.props.parentModel && me.props.parentId) {
+		if ((m.isTable () || me.props.isTable) && me.props.parentModel && me.props.parentId) {
 			let pm = me.props.store.getModel (me.props.parentModel);
 			
 			gridOpts.params [pm.get ("code")] = me.props.parentId;

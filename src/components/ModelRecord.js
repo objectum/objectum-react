@@ -178,6 +178,7 @@ class ModelRecord extends Component {
 							label={i18n (label)}
 							store={me.props.store}
 							model={tableModel.getPath ()}
+							isTable={true}
 							parentModel={model.getPath ()}
 							parentId={me.state.rid}
 						/>
