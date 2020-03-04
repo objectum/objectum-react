@@ -124,7 +124,7 @@ class ModelRecord extends Component {
 		let disabled = false;
 		let hash = getHash ();
 		
-		if (o.disabled && me.record && typeof (me.record [o.disabled]) == "function") {
+		if (o && o.disabled && typeof (me.record [o.disabled]) == "function") {
 			disabled = me.record [o.disabled] ();
 		}
 		if (hash.opts && hash.opts.parentModel) {
