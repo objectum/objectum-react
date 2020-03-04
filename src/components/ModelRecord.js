@@ -155,11 +155,11 @@ class ModelRecord extends Component {
 		let me = this;
 		let item;
 		
-		if (typeof (o) == "string" && o.substr (0, 2) == "t.") {
+		if ((typeof (o) == "string" && o.substr (0, 2) == "t.") || o.table) {
 			result.type = "table";
 			
 			try {
-				let tableModel = me.props.store.getModel (o);
+				let tableModel = me.props.store.getModel (o.table || o);
 				let opts = tableModel.getOpts ();
 				let label = tableModel.getLabel ();
 				
