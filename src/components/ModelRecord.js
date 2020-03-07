@@ -127,6 +127,9 @@ class ModelRecord extends Component {
 		if (o && o.disabled && typeof (me.record [o.disabled]) == "function") {
 			disabled = me.record [o.disabled] ();
 		}
+		if (o.groupProperty) {
+			props.groupProperty = props.groupProperty || o.groupProperty;
+		}
 		if (hash.opts && hash.opts.parentModel) {
 			let pm = me.props.store.getModel (hash.opts.parentModel);
 			
