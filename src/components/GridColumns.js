@@ -52,7 +52,7 @@ class GridColumns extends Component {
 							<tr>
 								{me.props.cols.map ((col, i) => {
 									return (
-										<th key={i}>{i18n (col.name)}</th>
+										<th className="align-top text-left" key={i}>{i18n (col.name)}</th>
 									);
 								})}
 							</tr>
