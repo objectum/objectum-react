@@ -25,17 +25,17 @@ class Test extends Component {
 	async onClick ({progress, confirm}) {
 		let me = this;
 		
-		//let result = await confirm ("Вы уверены?");
+		let result = await confirm ("Вы уверены?");
 		
-		//if (result) {
+		if (result) {
 			//throw new Error ("123");
 			
 			for (let i = 0; i < 2; i ++) {
-				progress ({label: "test", value: i + 1, max: 10});
+				progress ({label: "test", value: i + 1, max: 2});
 				await timeout (500);
 			}
 			return "success";
-		//}
+		}
 	}
 	
 	render () {
@@ -43,10 +43,18 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<div className="bg-white shadow-sm">
-					<Action onClick={me.onClick}>Action</Action>
+				<ChooseField
+					store={store}
+					choose={{
+						query: "waybill.list",
+						params: {org: 1}
+					}}
+					value={17515}
+					onChange={({value}) => console.log (value)}
+				/>
+				<div className="bg-white shadow-sm mt-1">
+					<Action onClick={me.onClick} confirm={true}>Action</Action>
 				</div>
-				<ModelList store={me.props.store} model="tk" />
 			</div>
 		);
 	}

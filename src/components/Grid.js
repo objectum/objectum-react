@@ -512,7 +512,7 @@ class Grid extends Component {
 							}
 							return (
 								<th key={i} scope="col" className={cls + " align-top"}>
-									{(me.props.system || me.props.groupCol) ?
+									{(me.props.system || me.props.groupCol || !col.model) ?
 										<div>{name}</div> :
 										<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
 									}
@@ -690,7 +690,7 @@ class Grid extends Component {
 		let filters =
 			<div className="border-top">
 				<Filters
-					cols={me.state.cols}
+					cols={me.state.cols.filter (col => !!col.model)}
 					store={me.props.store}
 					onFilter={me.onFilter}
 					filters={me.state.filters}

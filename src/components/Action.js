@@ -23,50 +23,62 @@ class Action extends Component {
 	
 	async onClick () {
 		let me = this;
-		let handler = me.props.onClick || me.props.onClickSelected;
-		let state = {processing: false};
-		
-		if (handler) {
-			me.setState ({processing: true, label: "", value: "", max: ""});
+		let execute = () => {
+			let handler = me.props.onClick || me.props.onClickSelected;
+			let state = {processing: false};
 			
-			try {
-				let promise = handler ({
-					progress: ({label, value, max}) => {
-						me.setState ({label, value, max});
-					},
-					confirm: (text) => {
-						return new Promise (resolve => {
-							me.confirmResolve = resolve;
-							me.setState ({confirm: text || i18n ("Are you sure?")});
+			if (handler) {
+				me.setState ({processing: true, label: "", value: "", max: ""});
+				
+				try {
+					let promise = handler ({
+						progress: ({label, value, max}) => {
+							me.setState ({label, value, max});
+						},
+						confirm: (text) => {
+							return new Promise (resolve => {
+								me.confirmResolve = resolve;
+								me.setState ({confirm: text || i18n ("Are you sure?")});
+							});
+						}
+					});
+					if (promise && promise.then) {
+						promise.then (result => {
+							if (typeof (result) == "string") {
+								state.result = result;
+							}
+							me.setState (state);
+						}).catch (err => {
+							console.error (err);
+							state.error = err.message;
+							me.setState (state);
 						});
-					}
-				});
-				if (promise && promise.then) {
-					promise.then (result => {
-						if (typeof (result) == "string") {
-							state.result = result;
+					} else {
+						if (typeof (promise) == "string") {
+							state.result = promise;
 						}
 						me.setState (state);
-					}).catch (err => {
-						console.error (err);
-						state.error = err.message;
-						me.setState (state);
-					});
-				} else {
-					if (typeof (promise) == "string") {
-						state.result = promise;
 					}
+				} catch (err) {
+					console.error (err);
+					state.error = err.message;
 					me.setState (state);
 				}
-			} catch (err) {
-				console.error (err);
-				state.error = err.message;
-				me.setState (state);
 			}
+		};
+		if (me.props.confirm) {
+			me.confirmResolve = result => {
+				if (result) {
+					execute ();
+				}
+			};
+			me.setState ({confirm: typeof (me.props.confirm) == "string" ? me.props.confirm : i18n ("Are you sure?")});
+		} else {
+			execute ();
 		}
 	}
 	
-	confirm (result) {
+	async confirm (result) {
 		let me = this;
 		
 		me.setState ({confirm: null});
