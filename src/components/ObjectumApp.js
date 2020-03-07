@@ -18,6 +18,7 @@ import MenuItem from "./MenuItem";
 import ModelList from "./ModelList";
 import ModelTree from "./ModelTree";
 import ModelRecord from "./ModelRecord";
+import Records from "./Records";
 import Logout from "./Logout";
 import Sidebar from "react-sidebar";
 import {lang, i18n} from "./../i18n";
@@ -282,7 +283,8 @@ class ObjectumApp extends Component {
 							<ModelList {...props} store={me.store} model={path} />
 						</div>
 					</div>}
-				/>);
+				/>
+			);
 			items.push (
 				<Route
 					key={`model-tree-${path}`}
@@ -292,7 +294,19 @@ class ObjectumApp extends Component {
 							<ModelTree {...props} store={me.store} model={path} />
 						</div>
 					</div>}
-				/>);
+				/>
+			);
+			items.push (
+				<Route
+					key={`records-${path}`}
+					path={`/records/${path.split (".").join ("_")}`}
+					render={props => <div className="container">
+						<div className="bg-white shadow-sm">
+							<Records {...props} store={me.store} model={path} />
+						</div>
+					</div>}
+				/>
+			);
 		});
 		return items;
 	}
