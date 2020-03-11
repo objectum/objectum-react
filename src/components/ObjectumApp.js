@@ -77,7 +77,8 @@ function BackButton ({popLocation, locations}) {
 		
 		popLocation ();
 		
-		history.push (decodeURI (pathname + hash));
+//		history.push (decodeURI (pathname + hash));
+		history.push (pathname + hash);
 	}
 	return (
 		<button className="btn btn-link" disabled={locations.length < 2} onClick={handleClick}>

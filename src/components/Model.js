@@ -10,6 +10,7 @@ import Tab from "./Tab";
 import Tabs from "./Tabs";
 import Properties from "./Properties";
 import JsonEditor from "./JsonEditor";
+import BooleanField from "./BooleanField";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 
@@ -72,13 +73,13 @@ class Model extends Component {
 									</div>
 								</div>
 								<div className="form-row">
-									<div className="form-group col-md-12">
-										<JsonEditor property="opts" label="Options" />
+									<div className="form-group col-md-6">
+										<BooleanField property="unlogged" label="Unlogged" />
 									</div>
 								</div>
 								<div className="form-row">
-									<div className="form-group col">
-										<StringField property="format" label="Format function" codemirror={true} />
+									<div className="form-group col-md-12">
+										<JsonEditor property="opts" label="Options" />
 									</div>
 								</div>
 							</Form>

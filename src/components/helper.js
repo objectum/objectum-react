@@ -46,7 +46,7 @@ function getHash (cmp) {
 		let s = decodeURI (window.location.hash.substr (1) || "{}");
 		return JSON.parse (s);
 	} catch (err) {
-		console.error (err);
+		console.error (err, window.location.hash.substr (1));
 		return {};
 	}
 };
