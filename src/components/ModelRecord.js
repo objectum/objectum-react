@@ -123,9 +123,14 @@ class ModelRecord extends Component {
 		let value;
 		let disabled = false;
 		let hash = getHash ();
+		let m = me.props.store.getModel (me.state.model);
 		
-		if (o && o.disabled && typeof (me.record [o.disabled]) == "function") {
-			disabled = me.record [o.disabled] ();
+		if (o && o.disabled) {
+			if (me.record && typeof (me.record [o.disabled]) == "function") {
+				disabled = me.record [o.disabled] ();
+			} else if (typeof (m [o.disabled]) == "function") {
+				disabled = m [o.disabled] ();
+			}
 		}
 		if (o && o.groupProperty) {
 			props.groupProperty = props.groupProperty || o.groupProperty;
@@ -137,6 +142,9 @@ class ModelRecord extends Component {
 				disabled = true;
 				value = hash.opts.parentId;
 			}
+		}
+		if (o && o.defaultValue && !me.record) {
+			value = o.defaultValue;
 		}
 		if (chooseModel) {
 			return (
