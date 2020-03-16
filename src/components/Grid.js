@@ -483,7 +483,7 @@ class Grid extends Component {
 		return (
 			<div className="p-1 border-top">
 				<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
-					<thead className="thead-dark">
+					<thead className="bg-info text-white">
 					<tr>
 						{me.props.tree && <th className="align-top"><i className="far fa-folder-open ml-2" /></th>}
 						{me.state.cols.map ((col, i) => {
@@ -702,7 +702,7 @@ class Grid extends Component {
 		
 		return (
 			<Fade><div>
-				{me.props.label && <div className="text-white bg-dark py-1">
+				{me.props.label && <div className="text-white bg-info py-1">
 					<strong className="ml-2">{i18n (me.props.label)}</strong>
 				</div>}
 				<div className="border">

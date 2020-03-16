@@ -178,7 +178,7 @@ class TableForm extends Component {
 				</div>
 				<div>
 					<table className="table objectum-table table-bordered pb-5 px-1 pt-1 mb-0">
-						<thead className="thead-dark">
+						<thead className="bg-info text-white">
 						<tr>
 							<th className="align-top">id</th>
 							{me.props.properties.map ((code, i) => {

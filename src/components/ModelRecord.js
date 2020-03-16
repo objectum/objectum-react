@@ -339,7 +339,7 @@ class ModelRecord extends Component {
 		if (regModel._layout) {
 			return (
 				<div className="container">
-					<div className="text-white bg-dark py-1">
+					<div className="text-white bg-info py-1">
 						<strong className="pl-2">{label + ": " + me.state.label}</strong>
 					</div>
 					<div className="border bg-white shadow-sm">

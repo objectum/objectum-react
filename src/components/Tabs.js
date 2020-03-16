@@ -89,7 +89,7 @@ class Tabs extends Component {
 		}
 		return (
 			<div>
-				{me.props.label && <div className="text-white bg-dark py-1">
+				{me.props.label && <div className="text-white bg-info py-1">
 					<strong className="pl-2">{i18n (me.props.label)}</strong>
 				</div>}
 				<div>
