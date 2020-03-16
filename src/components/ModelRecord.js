@@ -123,13 +123,13 @@ class ModelRecord extends Component {
 		let value;
 		let disabled = false;
 		let hash = getHash ();
-		let m = me.props.store.getModel (me.state.model);
+		let rm = me.props.store.getRegistered (me.state.model);
 		
 		if (o && o.disabled) {
 			if (me.record && typeof (me.record [o.disabled]) == "function") {
 				disabled = me.record [o.disabled] ();
-			} else if (typeof (m [o.disabled]) == "function") {
-				disabled = m [o.disabled] ();
+			} else if (typeof (rm && rm [o.disabled]) == "function") {
+				disabled = rm [o.disabled] ({store: me.props.store});
 			}
 		}
 		if (o && o.groupProperty) {
