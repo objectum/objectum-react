@@ -47,7 +47,7 @@ class Role extends Component {
 		
 		return (
 			<div className="container">
-				<div className="bg-white shadow-sm">
+				<div className="bg-white shadow-sm border">
 					<Tabs key="tabs" id="tabs" label={i18n ("Role") + ": " + me.state.label}>
 						<Tab key="Tab1" label="Information">
 							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.role" onCreate={me.onCreate}>

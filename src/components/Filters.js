@@ -16,9 +16,11 @@ class Filter extends Component {
 		me.onChange = me.onChange.bind (me);
 		me.debouncedOnChange = _.debounce (me.debouncedOnChange.bind (me), 500);
 		me.onClick = me.onClick.bind (me);
-		
-		me.state = {...me.props.value, operatorRecs: []};
-		
+
+		me.state = {
+			...me.props.value,
+			operatorRecs: []
+		};
 		if (me.state.column) {
 			me.state.operatorRecs = me.getOperatorRecs (me.state.column);
 		}
@@ -204,9 +206,22 @@ class Filter extends Component {
 	
 	componentDidUpdate (prevProps) {
 		let me = this;
+		let state = {};
 		
 		if (prevProps.cols.length != me.props.cols.length) {
-			me.setState ({operatorRecs: me.getOperatorRecs (me.state.column)});
+			state.operatorRecs = me.getOperatorRecs (me.state.column);
+		}
+		if (prevProps.value.column != me.props.value.column) {
+			state.column = me.props.value.column;
+		}
+		if (prevProps.value.operator != me.props.value.operator) {
+			state.operator = me.props.value.operator;
+		}
+		if (prevProps.value.value != me.props.value.value) {
+			state.value = me.props.value.value;
+		}
+		if (!_.isEmpty (state)) {
+			me.setState (state);
 		}
 	}
 	
@@ -252,8 +267,15 @@ class Filters extends Component {
 		me.onAdd = me.onAdd.bind (me);
 		me.onRemove = me.onRemove.bind (me);
 		me.onDock = me.onDock.bind (me);
+		me.onSelectFilter = me.onSelectFilter.bind (me);
+		me.onCreateFilter = me.onCreateFilter.bind (me);
+		me.onRemoveFilter = me.onRemoveFilter.bind (me);
+		me.onChangeFilterName = me.onChangeFilterName.bind (me);
 		
 		me.gen = 1;
+		
+		let id = `grid-${me.props.gridId}`;
+		let data = JSON.parse (localStorage.getItem (id) || "{}");
 		
 		me.state = {
 			filters: [{
@@ -261,7 +283,9 @@ class Filters extends Component {
 				column: "",
 				operator: "",
 				value: ""
-			}]
+			}],
+			filterName: "",
+			filter: data.defaultFilter || ""
 		};
 		if (me.props.filters && me.props.filters.length) {
 			me.state.filters = me.props.filters.map (f => {
@@ -337,17 +361,98 @@ class Filters extends Component {
 		this.props.onDockFilters (this.props.dockFilters == "bottom" ? "top" : "bottom");
 	}
 	
+	onSelectFilter (val) {
+		let me = this;
+		let filter = val.target.value;
+		let id = `grid-${me.props.gridId}`;
+		let data = JSON.parse (localStorage.getItem (id) || "{}");
+		
+		data.filters = data.filters || {};
+		
+		if (filter == "-") {
+			delete data.defaultFilter;
+		} else {
+			data.defaultFilter = filter;
+		}
+		localStorage.setItem (id, JSON.stringify (data));
+		
+		let filters = data.filters [filter] || [{
+			id: 1,
+			column: "",
+			operator: "",
+			value: ""
+		}];
+		me.setState ({filter, filters});
+		me.sendFilters (filters);
+	}
+	
+	onCreateFilter () {
+		let me = this;
+		
+		if (me.state.filterName) {
+			let id = `grid-${me.props.gridId}`;
+			let data = JSON.parse (localStorage.getItem (id) || "{}");
+			
+			data.filters = data.filters || {};
+			data.filters [me.state.filterName] = me.state.filters;
+			localStorage.setItem (id, JSON.stringify (data));
+			me.setState ({filterName: "", filter: me.state.filterName});
+		}
+	}
+	
+	onRemoveFilter () {
+		let me = this;
+		let id = `grid-${me.props.gridId}`;
+		let data = JSON.parse (localStorage.getItem (id) || "{}");
+		
+		data.filters = data.filters || {};
+		delete data.filters [me.state.filter];
+		localStorage.setItem (id, JSON.stringify (data));
+		me.setState ({filter: "-", filters: [{
+			id: 1,
+			column: "",
+			operator: "",
+			value: ""
+		}]});
+		me.sendFilters ([{
+			id: 1,
+			column: "",
+			operator: "",
+			value: ""
+		}]);
+	}
+	
+	onChangeFilterName (val) {
+		this.setState ({filterName: val.target.value});
+	}
+	
 	render () {
 		let me = this;
+		let gridOpts = JSON.parse (localStorage.getItem (`grid-${me.props.gridId}`) || "{}");
+		let savedFilters = _.keys (gridOpts.filters || {});
 		
 		return (
 			<div>
-				<div className="mt-1 ml-3">
-					<h6 className="d-inline">{i18n ("Filters")}</h6>
+				<div className="mt-1 ml-3 form-inline">
+					<h6 className="mt-2">{i18n ("Filters")}</h6>
 					<button type="button" className="btn btn-link btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Add filter")}</span></button>
 					<button type="button" className="btn btn-link btn-sm ml-1" onClick={me.onDock}>
 						<i className={`fas ${me.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
 						<span className="text-dark">{me.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}</span>
+					</button>
+					<input type="text" className="form-control form-control-sm" value={me.state.filterName} placeholder={i18n ("Filter name")} onChange={me.onChangeFilterName} />
+					<button type="button" className="btn btn-link btn-sm" onClick={me.onCreateFilter} disabled={!me.state.filterName}>
+						<i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Create")}</span>
+					</button>
+					<select className="form-control custom-select choosefield" value={me.state.filter} onChange={me.onSelectFilter}>
+						{["-", ...savedFilters].map ((f, i) => {
+							return (
+								<option value={f} key={i}>{f}</option>
+							);
+						})}
+					</select>
+					<button type="button" className="btn btn-link btn-sm" onClick={me.onRemoveFilter} disabled={!me.state.filter}>
+						<i className="fas fa-minus mr-2" /><span className="text-dark">{i18n ("Remove")}</span>
 					</button>
 				</div>
 				<div className="mx-1 mb-1 row flex-row">

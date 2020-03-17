@@ -37,6 +37,26 @@ class Grid extends Component {
 			hideCols: [],
 			pageNum: 1
 		};
+		let id = `grid-${me.props.id}`;
+		let data = JSON.parse (localStorage.getItem (id) || "{}");
+
+		if (data.defaultFilter) {
+			let filters = [];
+			
+			data.filters [data.defaultFilter].forEach (f => {
+				if (f.column) {
+					if ((f.operator && f.value !== "") || f.operator == "is null" || f.operator == "is not null") {
+						filters.push ([f.column, f.operator, f.value]);
+					}
+					if (f.operator === "0" || f.operator === "1") {
+						filters.push ([f.column, "=", f.operator]);
+					}
+				}
+			});
+			me.state.filters = filters;
+			me.state.showFilters = true;
+			me.state.dockFilters = "top";
+		}
 		if (hash) {
 			["page", "pageRecs", "selected", "parent", "showFilters", "dockFilters", "filters", "mode", "order", "showCols", "hideCols"].forEach (a => {
 				if (hash.hasOwnProperty (a)) {
@@ -696,6 +716,7 @@ class Grid extends Component {
 					filters={me.state.filters}
 					onDockFilters={me.onDockFilters}
 					dockFilters={me.state.dockFilters}
+					gridId={me.props.id}
 				/>
 			</div>
 		;

@@ -47,7 +47,7 @@ class Menu extends Component {
 		
 		return (
 			<div className="container">
-				<div className="bg-white shadow-sm">
+				<div className="bg-white shadow-sm border">
 					<Tabs key="tabs" id="tabs" label={i18n ("Menu") + ": " + me.state.label}>
 						<Tab key="tab-1" label="Information">
 							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menu" onCreate={me.onCreate}>

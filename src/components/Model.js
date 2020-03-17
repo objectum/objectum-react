@@ -49,7 +49,7 @@ class Model extends Component {
 
 		return (
 			<div className="container">
-				<div className="bg-white shadow-sm">
+				<div className="bg-white shadow-sm border">
 					<Tabs key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + me.state.label}>
 						<Tab key="tab1" label="Information">
 							<Form key="form1" ref="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
