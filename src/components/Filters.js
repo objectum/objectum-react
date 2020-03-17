@@ -433,13 +433,24 @@ class Filters extends Component {
 		
 		return (
 			<div>
-				<div className="mt-1 ml-3 form-inline">
+				<div className="mt-1 ml-2 form-inline">
 					<h6 className="mt-2">{i18n ("Filters")}</h6>
 					<button type="button" className="btn btn-link btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Add filter")}</span></button>
 					<button type="button" className="btn btn-link btn-sm ml-1" onClick={me.onDock}>
 						<i className={`fas ${me.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
 						<span className="text-dark">{me.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}</span>
 					</button>
+				</div>
+				<div className="mx-1 mb-1 row flex-row">
+					{me.state.filters.map (rec => {
+						return (
+							<div className="mr-1 filter-block" key={"div-filter-" + rec.id}>
+								<Filter {...me.props} id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
+							</div>
+						);
+					})}
+				</div>
+				<div className="mt-1 ml-2 form-inline">
 					<input type="text" className="form-control form-control-sm" value={me.state.filterName} placeholder={i18n ("Filter name")} onChange={me.onChangeFilterName} />
 					<button type="button" className="btn btn-link btn-sm" onClick={me.onCreateFilter} disabled={!me.state.filterName}>
 						<i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Create")}</span>
@@ -451,18 +462,9 @@ class Filters extends Component {
 							);
 						})}
 					</select>
-					<button type="button" className="btn btn-link btn-sm" onClick={me.onRemoveFilter} disabled={!me.state.filter}>
+					<button type="button" className="btn btn-link btn-sm" onClick={me.onRemoveFilter} disabled={!me.state.filter || me.state.filter == "-"}>
 						<i className="fas fa-minus mr-2" /><span className="text-dark">{i18n ("Remove")}</span>
 					</button>
-				</div>
-				<div className="mx-1 mb-1 row flex-row">
-					{me.state.filters.map (rec => {
-						return (
-							<div className="mr-1 filter-block" key={"div-filter-" + rec.id}>
-								<Filter {...me.props} id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
-							</div>
-						);
-					})}
 				</div>
 			</div>
 		);
