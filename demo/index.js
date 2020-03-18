@@ -15,4 +15,4 @@ const proxy = new Proxy ();
 proxy.register ("org", OrgModel);
 proxy.register ("tk", TkModel);
 
-proxy.start ({config, code: "rmp", __dirname});
+proxy.start ({config, path: "/rmp", __dirname});
