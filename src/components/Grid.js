@@ -45,7 +45,7 @@ class Grid extends Component {
 			
 			data.filters [data.defaultFilter].forEach (f => {
 				if (f.column) {
-					if ((f.operator && f.value !== "") || f.operator == "is null" || f.operator == "is not null") {
+					if ((f.operator && f.hasOwnProperty ("value")) || f.operator == "is null" || f.operator == "is not null") {
 						filters.push ([f.column, f.operator, f.value]);
 					}
 					if (f.operator === "0" || f.operator === "1") {
