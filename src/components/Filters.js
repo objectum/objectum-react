@@ -455,7 +455,7 @@ class Filters extends Component {
 					<button type="button" className="btn btn-link btn-sm" onClick={me.onCreateFilter} disabled={!me.state.filterName}>
 						<i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Create")}</span>
 					</button>
-					<select className="form-control custom-select choosefield" value={me.state.filter} onChange={me.onSelectFilter}>
+					<select className="form-control form-control-sm custom-select choosefield" value={me.state.filter} onChange={me.onSelectFilter}>
 						{["-", ...savedFilters].map ((f, i) => {
 							return (
 								<option value={f} key={i}>{f}</option>
