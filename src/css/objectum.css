@@ -25,6 +25,9 @@ body {
 .choosefield {
     min-width: 11em;
 }
+.filter-name-field {
+    min-width: 13em;
+}
 .dictfield {
     min-width: 11em;
 }

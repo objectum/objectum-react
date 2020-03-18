@@ -451,7 +451,7 @@ class Filters extends Component {
 					})}
 				</div>
 				<div className="mt-1 ml-2 form-inline">
-					<input type="text" className="form-control form-control-sm" value={me.state.filterName} placeholder={i18n ("Filter name")} onChange={me.onChangeFilterName} />
+					<input type="text" className="form-control form-control-sm filter-name-field" value={me.state.filterName} placeholder={i18n ("Filter name")} onChange={me.onChangeFilterName} />
 					<button type="button" className="btn btn-link btn-sm" onClick={me.onCreateFilter} disabled={!me.state.filterName}>
 						<i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Create")}</span>
 					</button>
