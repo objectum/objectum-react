@@ -57,8 +57,8 @@ class Records extends Component {
 		let m = me.props.store.getModel (me.model);
 		let gridOpts = {
 			...me.props,
-			id: me.props.id || "list",
-			ref: me.props.id || "list",
+			id: me.props.id || `records-${me.model}`,
+			ref: me.props.id || `records-${me.model}`,
 			store: me.props.store,
 			label: i18n ("Records") + ": " + m.get ("name"),
 			refresh: me.state.refresh,
