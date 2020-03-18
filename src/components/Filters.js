@@ -271,6 +271,7 @@ class Filters extends Component {
 		me.onCreateFilter = me.onCreateFilter.bind (me);
 		me.onRemoveFilter = me.onRemoveFilter.bind (me);
 		me.onChangeFilterName = me.onChangeFilterName.bind (me);
+		me.onSaveFilter = me.onSaveFilter.bind (me);
 		
 		me.gen = 1;
 		
@@ -422,6 +423,38 @@ class Filters extends Component {
 		}]);
 	}
 	
+	onSaveFilter () {
+		let me = this;
+		let id = `grid-${me.props.gridId}`;
+		let data = JSON.parse (localStorage.getItem (id) || "{}");
+		
+		data.filters = data.filters || {};
+		data.filters [me.state.filter] = me.state.filters;
+		localStorage.setItem (id, JSON.stringify (data));
+	}
+	
+	saveDisabled () {
+		let me = this;
+		
+		if (!me.state.filter || me.state.filter == "-") {
+			return true;
+		}
+		let id = `grid-${me.props.gridId}`;
+		let data = JSON.parse (localStorage.getItem (id) || "{}");
+
+		let result = true;
+		
+		data.filters [me.state.filter].forEach ((filter, i) => {
+			let filter2 = me.state.filters [i];
+			
+			if (!filter2 || filter.column != filter2.column || filter.operator != filter2.operator || filter.value != filter2.value) {
+				console.log (filter, filter2);
+				result = false;
+			}
+		});
+		return result;
+	}
+	
 	onChangeFilterName (val) {
 		this.setState ({filterName: val.target.value});
 	}
@@ -462,6 +495,9 @@ class Filters extends Component {
 							);
 						})}
 					</select>
+					<button type="button" className="btn btn-link btn-sm" onClick={me.onSaveFilter} disabled={me.saveDisabled ()}>
+						<i className="fas fa-check mr-2" /><span className="text-dark">{i18n ("Save")}</span>
+					</button>
 					<button type="button" className="btn btn-link btn-sm" onClick={me.onRemoveFilter} disabled={!me.state.filter || me.state.filter == "-"}>
 						<i className="fas fa-minus mr-2" /><span className="text-dark">{i18n ("Remove")}</span>
 					</button>
