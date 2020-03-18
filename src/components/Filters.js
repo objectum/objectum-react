@@ -279,6 +279,7 @@ class Filters extends Component {
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 		
 		me.state = {
+			refresh: false,
 			filters: [{
 				id: me.gen,
 				column: "",
@@ -431,6 +432,7 @@ class Filters extends Component {
 		data.filters = data.filters || {};
 		data.filters [me.state.filter] = me.state.filters;
 		localStorage.setItem (id, JSON.stringify (data));
+		me.setState ({refresh: !me.state.refresh});
 	}
 	
 	saveDisabled () {
@@ -448,7 +450,6 @@ class Filters extends Component {
 			let filter2 = me.state.filters [i];
 			
 			if (!filter2 || filter.column != filter2.column || filter.operator != filter2.operator || filter.value != filter2.value) {
-				console.log (filter, filter2);
 				result = false;
 			}
 		});

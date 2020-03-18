@@ -129,6 +129,14 @@ class ChooseField extends Component {
 		let props = {
 			...me.props, addCls, disabled, value: me.state.value, localHash: true
 		};
+		let gridId = "list";
+		
+		if (me.props.choose.query) {
+			gridId = "list-" + me.props.choose.query;
+		}
+		if (me.props.choose.model) {
+			gridId = "list-" + me.props.choose.model;
+		}
 		return (
 			<div>
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
@@ -182,7 +190,7 @@ class ChooseField extends Component {
 					{me.props.choose.cmp ?
 						<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true}/> :
 						<Grid
-							id="list"
+							id={gridId}
 							ref="list"
 							store={me.props.store}
 							{...me.props.choose}
