@@ -641,17 +641,6 @@ class Grid extends Component {
 			return (
 				<div className="border-top p-1">
 					<div className="btn-toolbar" role="toolbar">
-						<div className="objectum-5em">
-							<div className="input-group">
-								<select className="custom-select custom-select-sm" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange} data-tip={i18n ("Records on page")}>
-									<option value="10">10</option>
-									<option value="20">20</option>
-									<option value="30">30</option>
-									<option value="40">40</option>
-									<option value="50">50</option>
-								</select>
-							</div>
-						</div>
 						<div className="btn-group mr-1" role="group">
 							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onFirst} data-tip={i18n ("First page")}>
 								<i className="fas fa-angle-double-left"/>
@@ -692,6 +681,17 @@ class Grid extends Component {
 							{me.props.card && <button type="button" className="btn btn-link btn-sm" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
 								<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`}/>
 							</button>}
+						</div>
+						<div className="objectum-5em">
+							<div className="input-group">
+								<select className="custom-select custom-select-sm" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange} data-tip={i18n ("Records on page")}>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+								</select>
+							</div>
 						</div>
 					</div>
 					<div>
