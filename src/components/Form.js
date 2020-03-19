@@ -423,7 +423,7 @@ class Form extends Component {
 		if (me.state._loading && !me.record) {
 			return (
 				<div className="alert alert-light text-primary" role="alert">
-					<Loading /> 11
+					<Loading />
 				</div>
 			);
 		}
