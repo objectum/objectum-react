@@ -25,7 +25,7 @@ class DictField extends Component {
 			value: me.props.value === null ? "" : me.props.value,
 			label: "",
 			showDialog: false,
-			recs: [],
+			recs: me.props.records || me.props.recs || [],
 			groupRecs: null,
 			group: null,
 			filter: ""
@@ -48,9 +48,11 @@ class DictField extends Component {
 	async componentDidMount () {
 		let me = this;
 		let state = {
-			recs: await me.props.store.getDict (me.property.get ("type")),
 			label: ""
 		};
+		if (!me.state.recs.length) {
+			state.recs = await me.props.store.getDict (me.property.get ("type"));
+		}
 		if (me.state.value) {
 			let record = await me.props.store.getRecord (me.state.value);
 
