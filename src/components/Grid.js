@@ -40,7 +40,7 @@ class Grid extends Component {
 		let id = `grid-${me.props.id}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 
-		if (data.defaultFilter) {
+		if (data.defaultFilter && data.filters && data.filters [data.defaultFilter]) {
 			let filters = [];
 			
 			data.filters [data.defaultFilter].forEach (f => {

@@ -146,6 +146,11 @@ class ModelRecord extends Component {
 		if (o && o.defaultValue && !me.record) {
 			value = o.defaultValue;
 		}
+/*
+		if (o && o.onChange && me.record && me.record [o.onChange]) {
+			props.onChange = me.record [o.onChange];
+		}
+*/
 		if (chooseModel) {
 			return (
 				<Field
