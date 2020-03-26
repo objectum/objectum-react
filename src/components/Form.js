@@ -407,7 +407,7 @@ class Form extends Component {
 				if (me.regModel) {
 					if (me.record) {
 						if (me.record._renderField) {
-							field = me.record._renderField ({field, form: me});
+							field = me.record._renderField ({field, form: me, store: me.props.store});
 						}
 					} else if (me.regModel._renderField) {
 						field = me.regModel._renderField ({field, form: me, store: me.props.store});

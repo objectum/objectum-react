@@ -13,4 +13,23 @@ static _defaultFilters
 
 "objectum-client".execute
 
+import React from "react";
+import objectumClient from "objectum-client";
 
+const {Record} = objectumClient;
+
+	static _renderGrid ({grid}) {
+		return React.cloneElement (grid, {
+			label: "Технологические карты",
+			query: "tk.list",
+			onTableRow: ({row, rec, store}) => {
+				let props = {};
+
+				if (!row.props.className) {
+					props.className = "table-success";
+				}
+				return React.cloneElement (row, props);
+			},
+			children: [...grid.props.children, ...actions]
+		});
+	}
