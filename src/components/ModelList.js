@@ -24,10 +24,10 @@ class ModelList extends Component {
 			canRemove: false,
 			_grid: {}
 		};
-		let regModel = me.props.store.getRegistered (me.model) || {};
+		me.regModel = me.props.store.getRegistered (me.model) || {};
 		
-		if (regModel._grid) {
-			me.state._grid = regModel._grid ();
+		if (me.regModel._grid) {
+			me.state._grid = me.regModel._grid ();
 			
 			if (me.state._grid.actions) {
 				me.state.actions = me.state._grid.actions;
@@ -81,10 +81,9 @@ class ModelList extends Component {
 	
 	async componentDidMount () {
 		let me = this;
-		let regModel = me.props.store.getRegistered (me.model);
 		
-		if (regModel && regModel._create) {
-			me.setState ({canCreate: await regModel._create ({store: me.props.store})});
+		if (me.regModel && me.regModel._accessCreate) {
+			me.setState ({canCreate: await me.regModel._accessCreate ({store: me.props.store})});
 		} else {
 			me.setState ({canCreate: true});
 		}
@@ -181,8 +180,8 @@ class ModelList extends Component {
 		let me = this;
 		let record = await me.props.store.getRecord (id);
 		
-		if (record._remove) {
-			me.setState ({canRemove: await record._remove ()});
+		if (record._accessDelete) {
+			me.setState ({canRemove: await record._accessDelete ()});
 		} else {
 			me.setState ({canRemove: true});
 		}
@@ -244,20 +243,22 @@ class ModelList extends Component {
 		Object.assign (gridOpts, me.state._grid);
 		
 		let actions = me.renderActions ();
+		let grid = <Grid {...gridOpts}>
+			<Action {...me.props} onClick={me.onCreate} disabled={!me.state.canCreate}>
+				<i className="fas fa-plus mr-2" />{i18n ("Create")}
+			</Action>
+			<Action {...me.props} onClickSelected={me.onEdit}>
+				<i className="fas fa-edit mr-2" />{i18n ("Edit")}
+			</Action>
+			<RemoveAction {...me.props} onRemove={me.onRemove} disabled={!me.state.canRemove} />
+			{actions}
+			{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
+		</Grid>;
 		
-		return (
-			<Grid {...gridOpts}>
-				<Action {...me.props} onClick={me.onCreate} disabled={!me.state.canCreate}>
-					<i className="fas fa-plus mr-2" />{i18n ("Create")}
-				</Action>
-				<Action {...me.props} onClickSelected={me.onEdit}>
-					<i className="fas fa-edit mr-2" />{i18n ("Edit")}
-				</Action>
-				<RemoveAction {...me.props} onRemove={me.onRemove} disabled={!me.state.canRemove} />
-				{actions}
-				{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
-			</Grid>
-		);
+		if (me.regModel && me.regModel._renderGrid) {
+			grid = me.regModel._renderGrid ({grid, store: me.props.store});
+		}
+		return grid;
 	}
 };
 ModelList.displayName = "ModelList";

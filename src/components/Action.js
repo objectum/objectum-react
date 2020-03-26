@@ -161,6 +161,8 @@ class Action extends Component {
 					onClick={me.onClick}
 					disabled={me.getDisabled ()}
 				>
+					{me.props.icon && <i className={me.props.icon + " mr-2"} />}
+					{me.props.label || ""}
 					{me.props.children}
 				</button>
 				{me.state.error && <span>

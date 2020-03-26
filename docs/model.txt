@@ -1,17 +1,16 @@
-static _accessFilter
-static _accessCreate
+(x) static _accessFilter
+(x) static _accessCreate
 _accessRead
-_accessUpdate
-_accessDelete
+(x) _accessUpdate
+(x) _accessDelete
 
-static _renderGrid
-static _layout
+(x) static _renderGrid
+(x) static _layout
+(x) static _renderField
 static _renderForm
-static _renderField
 static _defaultFilters
-
-    _grid
-    _fieldChange
-    _fieldDefaultValue
+(x) getLabel (_label)
 
 "objectum-client".execute
+
+

@@ -43,17 +43,8 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<ChooseField
-					store={store}
-					choose={{
-						query: "waybill.list",
-						params: {org: 1}
-					}}
-					value={17515}
-					onChange={({value}) => console.log (value)}
-				/>
 				<div className="bg-white shadow-sm mt-1">
-					<Action onClick={me.onClick} confirm={true}>Action</Action>
+					<ModelList store={store} model="tk" />
 				</div>
 			</div>
 		);

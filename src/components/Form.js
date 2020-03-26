@@ -98,6 +98,9 @@ class Form extends Component {
 			if (!me.model && me.props.rsc == "record" && me.props.mid) {
 				me.model = me.props.store.getModel (me.props.mid);
 			}
+			if (me.model) {
+				me.regModel = me.props.store.getRegistered (me.model.getPath ());
+			}
 			let fields = me.getFields (me.props.children);
 			
 			for (let code in fields) {
@@ -348,6 +351,8 @@ class Form extends Component {
 				};
 				props.rsc = props.rsc || me.props.rsc;
 				
+				let field;
+				
 				if (child.type.displayName == "Field") {
 					let type = child.props.type;
 					
@@ -365,37 +370,50 @@ class Form extends Component {
 						return (<div key={key} />);
 					}
 					if (type == 1) {
-						return (<StringField {...props} />);
+						field = <StringField {...props} />;
 					}
 					if (type == 2) {
-						return (<NumberField {...props} />);
+						field = <NumberField {...props} />;
 					}
 					if (type == 3) {
-						return (<DateField {...props} />);
+						field = <DateField {...props} />;
 					}
 					if (type == 4) {
-						return (<BooleanField {...props} />);
+						field = <BooleanField {...props} />;
 					}
 					if (type >= 1000) {
 						if (child.props.dict) {
-							return (<DictField {...props} />);
+							field = <DictField {...props} />;
 						} else
 						if (child.props.chooseModel) {
-							return (
-								<ChooseField
-									{...props}
-									choose={{cmp: ModelList, ref: `list-${child.props.chooseModel}`, model: child.props.chooseModel}}
-								/>);
+							field = <ChooseField
+								{...props}
+								choose={{cmp: ModelList, ref: `list-${child.props.chooseModel}`, model: child.props.chooseModel}}
+							/>;
 						} else {
-							return (<ChooseField {...props} />);
+							field = <ChooseField {...props} />;
 						}
 					}
 					if (type == 5) {
-						return (<FileField {...props} />);
+						field = <FileField {...props} />;
 					}
-					return (<div key={key}>unsupported type: {code}</div>);
+					if (!field) {
+						return (<div key={key}>unsupported type: {code}</div>);
+					}
 				}
-				return (React.cloneElement (child, props));
+				if (!field) {
+					field = React.cloneElement (child, props);
+				}
+				if (me.regModel) {
+					if (me.record) {
+						if (me.record._renderField) {
+							field = me.record._renderField ({field, form: me});
+						}
+					} else if (me.regModel._renderField) {
+						field = me.regModel._renderField ({field, form: me, store: me.props.store});
+					}
+				}
+				return field;
 			}
 			if (child.props.children) {
 				let o = {};
@@ -414,8 +432,6 @@ class Form extends Component {
 	
 	render () {
 		let me = this;
-		let formChildren = me.renderChildren (me.props.children);
-		
 		if (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.mid && me.props.rsc == "record")) {
 			//return (<div className="alert alert-danger" role="alert">need props: store, rsc, rid or mid (record)</div>);
 			return <EditForm {...me.props} />;
@@ -427,6 +443,8 @@ class Form extends Component {
 				</div>
 			);
 		}
+		let formChildren = me.renderChildren (me.props.children);
+		
 		return (
 			<div>
 				{me.props.label && <div>
