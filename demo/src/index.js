@@ -6,7 +6,7 @@ import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, N
 import {pushLocation, timeout} from "../../src/components/helper";
 
 import OrgModel from "./models/OrgModel";
-import TkModel from "./models/TkModel";
+import TkModelClient from "./models/TkModelClient";
 
 import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
@@ -67,7 +67,7 @@ class Demo extends Component {
 		store.setUrl ("/rmp");
 		
 		store.register ("org", OrgModel);
-		store.register ("tk", TkModel);
+		store.register ("tk", TkModelClient);
 		
 		window.store = store;
 	}

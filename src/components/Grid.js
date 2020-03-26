@@ -382,13 +382,33 @@ class Grid extends Component {
 			let o = {};
 			
 			if (child.type.displayName == "Action") {
+/*
 				if (child.props.onClick) {
-					o.onClick = (opts) => child.props.onClick (Object.assign (opts, {grid: me, store: me.props.store}));
+					o.onClick = (opts) => {
+						Object.assign (opts, {grid: me, store: me.props.store})
+						
+						if (child.props.selected) {
+							opts.id = me.state.recs [me.state.selected].id;
+						}
+						child.props.onClick (opts);
+					};
 				} else if (child.props.onClickSelected) {
 					o.onClick = (opts) => child.props.onClickSelected (Object.assign (opts, {id: me.state.recs [me.state.selected].id, grid: me, store: me.props.store}));
 				}
-				if (child.props.onClickSelected && me.state.selected === null) {
+*/
+				o.onClick = (opts) => {
+					Object.assign (opts, {grid: me, store: me.props.store})
+					
+					if (child.props.selected || child.props.onClickSelected) {
+						opts.id = me.state.recs [me.state.selected].id;
+					}
+					child.props.onClick (opts);
+				};
+				if ((child.props.selected || child.props.onClickSelected) && me.state.selected === null) {
 					o.disabled = true;
+				}
+				if (child.props.modalComponent && me.state.recs [me.state.selected]) {
+					o.recordId = me.state.recs [me.state.selected].id;
 				}
 			}
 			if (child.type && child.type.displayName == "RemoveAction") {

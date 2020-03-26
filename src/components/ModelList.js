@@ -103,24 +103,29 @@ class ModelList extends Component {
 				let action = me.state.actions [i];
 				let fn = action.onClick || action.onClickSelected;
 				
-				if (!fn) {
-					throw new Error (`onClick, onClickSelected not exist`);
+				if (!fn && !action.modalComponent) {
+					throw new Error (`onClick, onClickSelected, modalComponent not exist`);
 				}
-				let tokens = fn.split (".");
-				let method = tokens.splice (tokens.length - 1, 1)[0];
-				let path = tokens.join (".");
-				let Model = me.props.store.registered [path];
-				
-				if (!Model) {
-					throw new Error (`Model "${path}" not registered`);
-				}
-				if (action.onClick && typeof (Model [method]) != "function") {
-					throw new Error (`Unknown static method ${method}`);
+				if (fn) {
+					let tokens = fn.split (".");
+					let method = tokens.splice (tokens.length - 1, 1)[0];
+					let path = tokens.join (".");
+					let Model = me.props.store.registered [path];
+					
+					if (!Model && !action.modalComponent) {
+						throw new Error (`Model "${path}" not registered`);
+					}
+					if (action.onClick && !action.selected && typeof (Model [method]) != "function") {
+						throw new Error (`Unknown static method ${method}`);
+					}
 				}
 				let actionOpts = {
 					...me.props,
+					selected: action.selected,
+					modalComponent: action.modalComponent,
 					key: i
 				};
+/*
 				if (action.onClick) {
 					actionOpts.onClick = (opts) => {
 						return Model [method].call (opts.grid, Object.assign (opts, {
@@ -141,6 +146,25 @@ class ModelList extends Component {
 						}));
 					};
 				}
+*/
+				actionOpts.onClick = async (opts) => {
+					if (actionOpts.onClickSelected || actionOpts.selected) {
+						let record = await me.props.store.getRecord (opts.id);
+						
+						if (typeof (record [method]) != "function") {
+							throw new Error (`Unknown method: ${method}, record: ${opts.id}`);
+						}
+						return record [method].call (record, Object.assign (opts, {
+							parentModel: me.props.parentModel,
+							parentId: me.props.parentId
+						}));
+					} else {
+						return Model [method].call (opts.grid, Object.assign (opts, {
+							parentModel: me.props.parentModel,
+							parentId: me.props.parentId
+						}));
+					}
+				};
 				items.push (
 					<Action {...actionOpts}>{action.icon ? <i className={action.icon + " mr-2"} /> : <span />}{action.label}</Action>
 				);
