@@ -409,7 +409,7 @@ class Grid extends Component {
 					if (child.props.selected || child.props.onClickSelected) {
 						opts.id = me.state.recs [me.state.selected].id;
 					}
-					child.props.onClick (opts);
+					(child.props.onClick || child.props.onClickSelected) (opts);
 				};
 				if ((child.props.selected || child.props.onClickSelected) && me.state.selected === null) {
 					o.disabled = true;
