@@ -408,8 +408,12 @@ class Filters extends Component {
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 		
 		data.filters = data.filters || {};
+		
 		delete data.filters [me.state.filter];
+		delete data.defaultFilter;
+		
 		localStorage.setItem (id, JSON.stringify (data));
+		
 		me.setState ({filter: "-", filters: [{
 			id: 1,
 			column: "",

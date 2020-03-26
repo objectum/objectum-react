@@ -40,22 +40,29 @@ class Grid extends Component {
 		let id = `grid-${me.props.id}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 
-		if (data.defaultFilter && data.filters && data.filters [data.defaultFilter]) {
-			let filters = [];
-			
-			data.filters [data.defaultFilter].forEach (f => {
-				if (f.column) {
-					if ((f.operator && f.hasOwnProperty ("value")) || f.operator == "is null" || f.operator == "is not null") {
-						filters.push ([f.column, f.operator, f.value]);
+		if (data.defaultFilter) {
+			if (!data.filters) {
+				localStorage.setItem (id, "");
+			} else if (!data.filters [data.defaultFilter]) {
+				delete data.defaultFilter;
+				localStorage.setItem (id, JSON.stringify (data));
+			} else {
+				let filters = [];
+				
+				data.filters [data.defaultFilter].forEach (f => {
+					if (f.column) {
+						if ((f.operator && f.hasOwnProperty ("value")) || f.operator == "is null" || f.operator == "is not null") {
+							filters.push ([f.column, f.operator, f.value]);
+						}
+						if (f.operator === "0" || f.operator === "1") {
+							filters.push ([f.column, "=", f.operator]);
+						}
 					}
-					if (f.operator === "0" || f.operator === "1") {
-						filters.push ([f.column, "=", f.operator]);
-					}
-				}
-			});
-			me.state.filters = filters;
-			me.state.showFilters = true;
-			me.state.dockFilters = "top";
+				});
+				me.state.filters = filters;
+				me.state.showFilters = true;
+				me.state.dockFilters = "top";
+			}
 		}
 		if (hash) {
 			["page", "pageRecs", "selected", "parent", "showFilters", "dockFilters", "filters", "mode", "order", "showCols", "hideCols"].forEach (a => {
