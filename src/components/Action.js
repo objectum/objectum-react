@@ -162,8 +162,7 @@ class Action extends Component {
 					disabled={me.getDisabled ()}
 				>
 					{me.props.icon && <i className={me.props.icon + " mr-2"} />}
-					{me.props.label || ""}
-					{me.props.children}
+					{me.props.children ? me.props.children : (me.props.label || "")}
 				</button>
 				{me.state.error && <span>
 					<span className="text-danger ml-1">{me.state.error}</span>
