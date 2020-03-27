@@ -10,6 +10,7 @@ import {i18n} from "./../i18n";
 import GridColumns from "./GridColumns";
 import TableForm from "./TableForm";
 import Fade from "react-reveal/Fade";
+import {execute} from "objectum-client";
 
 class Grid extends Component {
 	constructor (props) {
@@ -403,8 +404,8 @@ class Grid extends Component {
 					o.onClick = (opts) => child.props.onClickSelected (Object.assign (opts, {id: me.state.recs [me.state.selected].id, grid: me, store: me.props.store}));
 				}
 */
-				o.onClick = (opts) => {
-					Object.assign (opts, {grid: me, store: me.props.store})
+				o.onClick = async (opts) => {
+					Object.assign (opts, {grid: me, store: me.props.store, parentId: me.props.parentId, parentModel: me.props.parentModel})
 					
 					if (child.props.selected || child.props.onClickSelected) {
 						opts.id = me.state.recs [me.state.selected].id;
@@ -412,7 +413,7 @@ class Grid extends Component {
 					let fn = child.props.onClick || child.props.onClickSelected;
 					
 					if (fn) {
-						fn (opts);
+						await execute (fn, opts);
 					}
 				};
 				if ((child.props.selected || child.props.onClickSelected) && me.state.selected === null) {
