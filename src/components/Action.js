@@ -175,11 +175,11 @@ class Action extends Component {
 				{ModalComponent && <Modal
 					isOpen={me.state.showModal}
 					style={
-						document.documentElement.clientWidth > 1000 ? {
-							content: {
-								left: "270px"
+						{
+							content: me.props.modalStyle || {
+								marginLeft: "21em"
 							}
-						} : {}
+						}
 					}
 				>
 					<div className="pb-2 mb-3 border-bottom">
