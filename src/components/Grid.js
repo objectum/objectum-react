@@ -387,8 +387,9 @@ class Grid extends Component {
 			if (!child || !child.props) {
 				return child;
 			}
-			let o = {};
-			
+			let o = {
+				store: me.props.store
+			};
 			if (child.type.displayName == "Action") {
 /*
 				if (child.props.onClick) {
