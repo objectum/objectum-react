@@ -22,7 +22,7 @@ body {
 }
 .numberfield {
     max-width: 11em;
-    min-width: 5em;
+    min-width: 6em;
 }
 .datefield {
     max-width: 12em;
