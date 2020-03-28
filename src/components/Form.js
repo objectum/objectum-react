@@ -451,14 +451,14 @@ class Form extends Component {
 					<h5 className="pl-3 py-2 ml-3">{me.props.label}</h5>
 				</div>}
 				{me.state._rid && <div className="actions p-1 border-bottom">
-					<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving || me.props.disableActions}>
+					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving || me.props.disableActions}>
 						{me.state._saving ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
 							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
 						}
 					</button>
 					{me.props.rsc == "record" &&
-						<button type="button" className="btn btn-primary btn-sm" onClick={() => me.setState ({_showLog: !me.state._showLog})}>
+						<button type="button" className="btn btn-primary" onClick={() => me.setState ({_showLog: !me.state._showLog})}>
 							<i className="fas fa-history mr-2" />{i18n ("Log")}
 						</button>
 					}
@@ -469,7 +469,7 @@ class Form extends Component {
 					{formChildren}
 				</div>
 				{!me.state._rid && <div className="mt-1 actions border-top p-1">
-					<button type="button" className="btn btn-primary btn-sm mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state._creating}>
+					<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state._creating}>
 						{me.state._creating ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
 							<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>

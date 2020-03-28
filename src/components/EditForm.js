@@ -256,7 +256,7 @@ class EditForm extends Component {
 		} else {
 			return (
 				<div>
-					<button type="button" className="btn btn-primary btn-sm mb-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving || me.props.disableActions}>
+					<button type="button" className="btn btn-primary mb-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving || me.props.disableActions}>
 						{me.state.saving ?
 							<span>
 								<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}

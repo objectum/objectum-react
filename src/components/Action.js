@@ -129,8 +129,8 @@ class Action extends Component {
 				<Fade>
 					<span className="text-danger ml-1 p-1">
 						{me.state.confirm}
-						<button type="button" className="btn btn-danger btn-sm ml-2" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
-						<button type="button" className="btn btn-success btn-sm ml-2" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
+						<button type="button" className="btn btn-danger ml-2" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
+						<button type="button" className="btn btn-success ml-2" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
 					</span>
 				</Fade>
 			);
@@ -157,7 +157,7 @@ class Action extends Component {
 			<span>
 				<button
 					type="button"
-					className="btn btn-primary btn-labeled btn-sm mr-1"
+					className="btn btn-primary btn-labeled mr-1"
 					onClick={me.onClick}
 					disabled={me.getDisabled ()}
 				>
@@ -166,11 +166,11 @@ class Action extends Component {
 				</button>
 				{me.state.error && <span>
 					<span className="text-danger ml-1">{me.state.error}</span>
-					<button type="button" className="btn btn-link btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
+					<button type="button" className="btn btn-link mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
 				</span>}
 				{me.state.result && <span>
 					<span className="text-success ml-1">{me.state.result}</span>
-					<button type="button" className="btn btn-link btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
+					<button type="button" className="btn btn-link mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
 				</span>}
 				{ModalComponent && <Modal
 					isOpen={me.state.showModal}
