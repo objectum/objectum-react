@@ -47,7 +47,9 @@ class ModelRecord extends Component {
 				state.disableActions = !(await me.record._accessUpdate ());
 			}
 		}
-		me.setState (state);
+		setTimeout (() => {
+			me.setState (state);
+		}, 1000);
 	}
 	
 	async onCreate (rid) {
@@ -343,7 +345,7 @@ class ModelRecord extends Component {
 		if (me.state.loading) {
 			return (
 				<div className="container">
-					<div className="border bg-white shadow-sm">
+					<div className="p-4 border bg-white shadow-sm">
 						<Loading />
 					</div>
 				</div>
