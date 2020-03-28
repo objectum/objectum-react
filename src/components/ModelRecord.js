@@ -47,9 +47,7 @@ class ModelRecord extends Component {
 				state.disableActions = !(await me.record._accessUpdate ());
 			}
 		}
-		setTimeout (() => {
-			me.setState (state);
-		}, 1000);
+		me.setState (state);
 	}
 	
 	async onCreate (rid) {
