@@ -149,7 +149,7 @@ class JsonEditor extends Component {
 		
 		return (
 			<div className="form-group border p-1">
-				<label htmlFor={me.id}><h6>{i18n (me.props.label)}</h6></label>
+				<label htmlFor={me.id}><h5>{i18n (me.props.label)}</h5></label>
 				<div className="row">
 					<div className="col-sm-6 pr-1" id={me.id}>
 						<div className="border jsoneditor-codemirror">

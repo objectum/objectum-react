@@ -234,8 +234,8 @@ class Filter extends Component {
 		}
 		return (
 			<div className="border p-1 text-center mt-1">
-				<button type="button" className="btn btn-link btn-sm mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2" /><span className="text-dark"> {i18n ("Remove")}</span></button>
-				<select id="column" className="filter-select custom-select custom-select-sm" value={me.state.column} onChange={me.onChange}>
+				<button type="button" className="btn btn-link mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2" /><span className="text-dark"> {i18n ("Remove")}</span></button>
+				<select id="column" className="filter-select custom-select" value={me.state.column} onChange={me.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
 						return (
 							<option value={rec.code} key={"column-" + i}>{i18n (rec.name)}</option>
@@ -243,7 +243,7 @@ class Filter extends Component {
 					})}
 				</select>
 				<br />
-				{me.state.column && <select id="operator" className="filter-select custom-select custom-select-sm mt-1" value={me.state.operator} onChange={me.onChange} disabled={!me.state.column}>
+				{me.state.column && <select id="operator" className="filter-select custom-select mt-1" value={me.state.operator} onChange={me.onChange} disabled={!me.state.column}>
 					{[{code: "", name: i18n ("Choose operator")}, ...me.state.operatorRecs].map ((rec, i) => {
 						return (
 							<option value={rec.code} key={"operator-" + i}>{rec.name}</option>
@@ -472,9 +472,9 @@ class Filters extends Component {
 		return (
 			<div>
 				<div className="mt-1 ml-2 form-inline">
-					<h6 className="mt-2">{i18n ("Filters")}</h6>
-					<button type="button" className="btn btn-link btn-sm ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Add filter")}</span></button>
-					<button type="button" className="btn btn-link btn-sm ml-1" onClick={me.onDock}>
+					<strong className="">{i18n ("Filters")}</strong>
+					<button type="button" className="btn btn-link ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Add filter")}</span></button>
+					<button type="button" className="btn btn-link ml-1" onClick={me.onDock}>
 						<i className={`fas ${me.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
 						<span className="text-dark">{me.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}</span>
 					</button>
@@ -490,23 +490,23 @@ class Filters extends Component {
 				</div>
 				<div className="m-1 p-1 border">
 					<div className="form-inline">
-						<input type="text" className="form-control form-control-sm filter-name-field" value={me.state.filterName} placeholder={i18n ("Filter name")} onChange={me.onChangeFilterName} />
-						<button type="button" className="btn btn-link btn-sm" onClick={me.onCreateFilter} disabled={!me.state.filterName}>
+						<input type="text" className="form-control filter-name-field" value={me.state.filterName} placeholder={i18n ("Filter name")} onChange={me.onChangeFilterName} />
+						<button type="button" className="btn btn-link" onClick={me.onCreateFilter} disabled={!me.state.filterName}>
 							<i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Create")}</span>
 						</button>
 					</div>
 					<div className="form-inline mt-1">
-						<select className="form-control form-control-sm filter-name-field" value={me.state.filter} onChange={me.onSelectFilter}>
+						<select className="form-control filter-name-field" value={me.state.filter} onChange={me.onSelectFilter}>
 							{["-", ...savedFilters].map ((f, i) => {
 								return (
 									<option value={f} key={i}>{f}</option>
 								);
 							})}
 						</select>
-						<button type="button" className="btn btn-link btn-sm" onClick={me.onSaveFilter} disabled={me.saveDisabled ()}>
+						<button type="button" className="btn btn-link" onClick={me.onSaveFilter} disabled={me.saveDisabled ()}>
 							<i className="fas fa-check mr-2" /><span className="text-dark">{i18n ("Save")}</span>
 						</button>
-						<button type="button" className="btn btn-link btn-sm" onClick={me.onRemoveFilter} disabled={!me.state.filter || me.state.filter == "-"}>
+						<button type="button" className="btn btn-link" onClick={me.onRemoveFilter} disabled={!me.state.filter || me.state.filter == "-"}>
 							<i className="fas fa-minus mr-2" /><span className="text-dark">{i18n ("Remove")}</span>
 						</button>
 					</div>

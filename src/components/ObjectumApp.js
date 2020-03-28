@@ -95,7 +95,9 @@ class ObjectumApp extends Component {
 		
 		me.state = {
 			sidebarDocked: true,
-			locations: []
+			locations: [],
+			name: me.props.name || "Objectum",
+			version: me.props.version || "0.0.1"
 		};
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
@@ -381,7 +383,7 @@ class ObjectumApp extends Component {
 										<HomeButton />
 										<BackButton popLocation={me.popLocation} locations={me.state.locations} />
 										
-										<span className="ml-3 text-uppercase font-weight-bold">{me.props.name || "Objectum"}</span>
+										<span className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${store.username})`}</span>
 									</div>
 								</Fade>
 								
@@ -396,19 +398,8 @@ class ObjectumApp extends Component {
 		} else {
 			return (
 				<div>
-					<Fade>
-						<div className="bg-white shadow-sm p-2">
-							<span className="text-uppercase font-weight-bold ml-3">{me.props.name || "Objectum"}</span>
-						</div>
-					</Fade>
 					<Fade top>
-						<div className="container">
-							<div className="row">
-								<div className="col-sm-4 offset-sm-4 col-md-2 offset-md-5 col-lg-2 offset-lg-5">
-									<Auth store={me.store} />
-								</div>
-							</div>
-						</div>
+						<Auth store={me.store} name={me.state.name} version={me.state.version} />
 					</Fade>
 				</div>
 			);

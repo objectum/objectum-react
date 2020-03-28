@@ -66,44 +66,54 @@ class Auth extends Component {
 			disabledButton = true;
 		}
 		return (
-			<div className="auth shadow-sm border bg-white mb-5">
-				<div className="p-3">
-					<h5><i className="fas fa-user mr-2 mb-2" />{i18n ("Sign in")}</h5>
-					<div className="form-group row">
-						<div className="col-sm">
-							<input
-								type="text"
-								className="form-control"
-								id="username"
-								placeholder={i18n ("Username")}
-								onChange={me.fieldChange}
-								ref={input => me.usernameInput = input}
-								onKeyDown={me.onKeyDown}
-							/>
+			<div className="auth">
+				<div className="border bg-white shadow mt-5">
+					<div className="bg-info text-white py-2 pl-4">
+						<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
+					</div>
+					<div className="d-flex">
+						<div className="auth-login p-3">
+							<div>
+								<input
+									type="text"
+									className="form-control"
+									id="username"
+									placeholder={i18n ("Username")}
+									onChange={me.fieldChange}
+									ref={input => me.usernameInput = input}
+									onKeyDown={me.onKeyDown}
+								/>
+							</div>
+							<div className="mt-3">
+								<input
+									type="password"
+									className="form-control"
+									id="password"
+									placeholder={i18n ("Password")}
+									onChange={me.fieldChange}
+									onKeyDown={me.onKeyDown}
+								/>
+							</div>
+							<div className="mt-3">
+								<button type="button" className="btn btn-primary" onClick={me.buttonClick} disabled={disabledButton}>
+									{me.state.loading ? <Loading /> : <span><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</span>}
+								</button>
+							</div>
+							{me.state.error && (
+								<div className="alert alert-danger mt-3" role="alert">
+									{me.state.error}
+								</div>
+							)}
+						</div>
+						<div className="auth-info bg-secondary text-white flex-grow-1 p-3">
+							<div className="mt-1 ml-2">
+								<h3>{me.props.name}</h3>
+							</div>
+							<div className="mt-3 ml-2">
+								<h5>{i18n ("version") + " " + me.props.version}</h5>
+							</div>
 						</div>
 					</div>
-					<div className="form-group row">
-						<div className="col-sm">
-							<input
-								type="password"
-								className="form-control"
-								id="password"
-								placeholder={i18n ("Password")}
-								onChange={me.fieldChange}
-								onKeyDown={me.onKeyDown}
-							/>
-						</div>
-					</div>
-					
-					<button type="button" className="btn btn-primary" onClick={me.buttonClick} disabled={disabledButton}>
-						{me.state.loading ? <Loading /> : <span><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</span>}
-					</button>
-					
-					{me.state.error && (
-						<div className="alert alert-danger mt-3" role="alert">
-							{me.state.error}
-						</div>
-					)}
 				</div>
 			</div>
 		);

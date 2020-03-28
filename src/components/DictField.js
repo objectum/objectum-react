@@ -175,13 +175,13 @@ class DictField extends Component {
 			<div className="dictfield-dialog text-left" ref="dialog">
 				<div className="dictfield-filter border p-1 bg-white">
 					<div className="mb-1">{i18n ("Select parameter")}</div>
-					<input type="text" className="form-control form-control-sm" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
+					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
 				</div>
 				<div className="dictfield-params border p-1 bg-white">
 					<ul className="list-group">
 						{recs.map (rec => {
 							return (
-								<small><li className="border-bottom p-2" id={rec.id} key={rec.id} onClick={me.onClick}>{`${rec.name} (id: ${rec.id})`}</li></small>
+								<li className="border-bottom p-1" id={rec.id} key={rec.id} onClick={me.onClick}>{`${rec.name} (id: ${rec.id})`}</li>
 							);
 						})}
 					</ul>
@@ -198,7 +198,7 @@ class DictField extends Component {
 			<div className="dictfield-dialog text-left" ref="dialog">
 				<div className="dictfield-filter border p-1 bg-white">
 					<div className="mb-1">{`${i18n ("Select")}: ${me.groupProperty.get ("name")}`}</div>
-					<input type="text" className="form-control form-control-sm" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
+					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
 				</div>
 				<div className="dictfield-params border p-1 bg-white">
 					<ul className="list-group">
@@ -206,7 +206,7 @@ class DictField extends Component {
 							let num = _.filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
 							
 							return (
-								<small><li className="border-bottom p-2" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{`${rec.name} (${i18n ("Amount")}: ${num})`}</li></small>
+								<li className="border-bottom p-1" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{`${rec.name} (${i18n ("Amount")}: ${num})`}</li>
 							);
 						})}
 					</ul>
@@ -244,7 +244,7 @@ class DictField extends Component {
 						</div>}
 						<input
 							type="text"
-							className={`form-control form-control-sm ${addCls}`}
+							className={`form-control ${addCls}`}
 							id={me.id}
 							value={me.state.label}
 							onChange={() => {}}

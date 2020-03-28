@@ -121,7 +121,7 @@ class ChooseField extends Component {
 			return (
 				<div className="form-group">
 					<label htmlFor={me.id}>{i18n (me.props.label)}</label>
-					<input type="text" className={"form-control form-control-sm" + addCls} id={me.id} value={me.state.name} disabled={true}/>
+					<input type="text" className={"form-control" + addCls} id={me.id} value={me.state.name} disabled={true}/>
 				</div>
 			)
 		}
@@ -162,7 +162,7 @@ class ChooseField extends Component {
 						</div>}
 						<input
 							type="text"
-							className={"form-control form-control-sm _dictfield-input" + addCls}
+							className={"form-control _dictfield-input" + addCls}
 							id={me.id}
 							value={me.state.name}
 							onChange={() => {}}

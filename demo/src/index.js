@@ -13,6 +13,8 @@ import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 
+import packageConfig from "./../package";
+
 const store = new Store ();
 
 class Test extends Component {
@@ -70,9 +72,10 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					username="admin"
-					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					_username="admin"
+					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 					name="objectum-react"
+					version={packageConfig.version}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 				</ObjectumApp>

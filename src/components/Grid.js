@@ -663,7 +663,7 @@ class Grid extends Component {
 				<div className="border-top p-1">
 					<div className="btn-toolbar" role="toolbar">
 						<div className="btn-group mr-1" role="group">
-							{! me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
+							{! me.props.system && <button type="button" className="btn btn-link" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
 								{i18n ("Return")}
 							</button>}
 						</div>

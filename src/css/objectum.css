@@ -2,8 +2,13 @@ body {
     background-color: #fff;
 }
 .auth {
-    margin-top: 5em;
-    min-width: 21em;
+    width: 70em;
+    margin: auto;
+}
+.auth-login {
+    width: 20em;
+}
+.auth-info {
 }
 .treegrid-button {
     width: 7em;
@@ -39,13 +44,13 @@ body {
     left: -1px;
     top: 2px;
     width: 33em;
-    height: 5em;
+    height: 6em;
     z-index: 1000;
 }
 .dictfield-params {
     position: absolute;
     left: -1px;
-    top: 5em;
+    top: 6em;
     width: 33em;
     min-height: 5em;
     max-height: 25em;
