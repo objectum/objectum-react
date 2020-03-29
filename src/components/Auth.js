@@ -65,6 +65,19 @@ class Auth extends Component {
 		if (!me.state.username || !me.state.password || me.state.loading) {
 			disabledButton = true;
 		}
+		let authInfo = (
+			<div className="auth-info bg-secondary text-white flex-grow-1 p-3">
+				<div className="mt-1 ml-2">
+					<h3>{me.props.name}</h3>
+				</div>
+				<div className="mt-3 ml-2">
+					<h5>{i18n ("version") + " " + me.props.version}</h5>
+				</div>
+			</div>
+		);
+		if (me.props.onRenderAuthInfo) {
+			authInfo = me.props.onRenderAuthInfo (authInfo);
+		}
 		return (
 			<div className="auth">
 				<div className="border bg-white shadow mt-5">
@@ -105,14 +118,7 @@ class Auth extends Component {
 								</div>
 							)}
 						</div>
-						<div className="auth-info bg-secondary text-white flex-grow-1 p-3">
-							<div className="mt-1 ml-2">
-								<h3>{me.props.name}</h3>
-							</div>
-							<div className="mt-3 ml-2">
-								<h5>{i18n ("version") + " " + me.props.version}</h5>
-							</div>
-						</div>
+						{authInfo}
 					</div>
 				</div>
 			</div>

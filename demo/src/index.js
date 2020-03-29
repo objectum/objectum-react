@@ -12,6 +12,7 @@ import TOrgProductModel from "./models/TOrgProductModel";
 import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
+import bgImage from "./images/italian.jpg";
 
 import packageConfig from "./../package";
 
@@ -72,10 +73,16 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					username="admin"
-					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					_username="admin"
+					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
+					onRenderAuthInfo={div => {
+						return React.cloneElement (div, {style: {
+							backgroundImage: `url(${bgImage})`,
+							backgroundSize: "content"
+						}});
+					}}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 				</ObjectumApp>

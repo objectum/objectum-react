@@ -399,7 +399,7 @@ class ObjectumApp extends Component {
 			return (
 				<div>
 					<Fade top>
-						<Auth store={me.store} name={me.state.name} version={me.state.version} />
+						<Auth store={me.store} name={me.state.name} version={me.state.version} onRenderAuthInfo={me.props.onRenderAuthInfo} />
 					</Fade>
 				</div>
 			);
