@@ -256,6 +256,36 @@ class Grid extends Component {
 		setHash (this, {[this.props.id]: {order, selected: null}});
 	}
 	
+	prepareRequestOptions () {
+		let me = this;
+		let opts = {
+			offset: (me.state.page - 1) * me.state.pageRecs,
+			limit: me.state.pageRecs,
+			filters: me.state.filters.filter (f => {
+				if (f [2] == "" && f [1] != "is null" && f [1] != "is not null") {
+					return false;
+				}
+				return true;
+			})
+		};
+		if (me.props.tree) {
+			opts.parent = me.state.parent;
+		}
+		if (me.props.query) {
+			opts.query = me.props.query;
+		}
+		if (me.props.model) {
+			opts.model = me.props.model;
+		}
+		if (me.state.order.length) {
+			opts.order = me.state.order;
+		}
+		if (me.props.params) {
+			opts = {...opts, ...me.props.params};
+		}
+		return opts;
+	}
+	
 	async load () {
 		let me = this;
 		let state = {
@@ -266,32 +296,7 @@ class Grid extends Component {
 		
 			await timeout (100);
 			
-			let opts = {
-				offset: (me.state.page - 1) * me.state.pageRecs,
-				limit: me.state.pageRecs,
-				filters: me.state.filters.filter (f => {
-					if (f [2] == "" && f [1] != "is null" && f [1] != "is not null") {
-						return false;
-					}
-					return true;
-				})
-			};
-			if (me.props.tree) {
-				opts.parent = me.state.parent;
-			}
-			if (me.props.query) {
-				opts.query = me.props.query;
-			}
-			if (me.props.model) {
-				opts.model = me.props.model;
-			}
-			if (me.state.order.length) {
-				opts.order = me.state.order;
-			}
-			if (me.props.params) {
-				opts = {...opts, ...me.props.params};
-			}
-			let result = await me.props.store.getData (opts);
+			let result = await me.props.store.getData (me.prepareRequestOptions ());
 			
 			state.recs = result.recs;
 			state.cols = _.sortBy (result.cols, ["order", "name"]);
