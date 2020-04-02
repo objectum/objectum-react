@@ -426,6 +426,7 @@ class Grid extends Component {
 				}
 				if (child.props.modalComponent && me.state.recs [me.state.selected]) {
 					o.recordId = me.state.recs [me.state.selected].id;
+					o.grid = me;
 				}
 			}
 			if (child.type && child.type.displayName == "RemoveAction") {

@@ -168,7 +168,7 @@ class TableForm extends Component {
 			return (<div />);
 		}
 		me.model = me.model || me.props.store.getModel (me.props.model);
-		
+
 		return (
 			<div className="p-1">
 				<div className="actions pb-1">
