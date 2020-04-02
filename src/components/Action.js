@@ -190,7 +190,7 @@ class Action extends Component {
 							<i className="fas fa-window-close fa-lg mr-2" /><span className="text-dark">{i18n ("Close")}</span>
 						</button>
 					</div>
-					<ModalComponent recordId={me.state.recordId} store={me.props.store} />
+					<ModalComponent recordId={me.state.recordId} store={me.props.store} grid={me.props.grid} />
 				</Modal>}
 			</span>
 		);
