@@ -38,6 +38,10 @@ class Grid extends Component {
 			hideCols: [],
 			pageNum: 1
 		};
+		if (me.props.filters && me.props.filters.length) {
+			me.state.showFilters = true;
+			me.state.dockFilters = "top";
+		}
 		let id = `grid-${me.props.id}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 
