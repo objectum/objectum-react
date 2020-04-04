@@ -31,6 +31,8 @@ class ModelRecord extends Component {
 			me.state.disableActions = true;
 		}
 		me.onCreate = me.onCreate.bind (me);
+
+		me.regModel = me.props.store.getRegistered (hash.opts.model) || {};
 	}
 	
 	async componentDidMount () {
@@ -350,7 +352,7 @@ class ModelRecord extends Component {
 			);
 		}
 		if (regModel._layout) {
-			return (
+			let form = (
 				<div className="container">
 					<div className="text-white bg-info py-1">
 						<strong className="pl-2">{label + ": " + me.state.label}</strong>
@@ -360,12 +362,15 @@ class ModelRecord extends Component {
 					</div>
 				</div>
 			);
+			if (me.regModel && me.regModel._renderForm) {
+				form = me.regModel._renderForm ({form, store: me.props.store});
+			}
+			return form;
 		}
 		properties = _.chunk (properties, columns);
 		
 		let colWidth = 12 / columns | 0;
-		
-		return (
+		let form = (
 			<div className="container">
 				<div className="bg-white shadow-sm">
 					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
@@ -413,6 +418,10 @@ class ModelRecord extends Component {
 				</div>
 			</div>
 		);
+		if (me.regModel && me.regModel._renderForm) {
+			form = me.regModel._renderForm ({form, store: me.props.store});
+		}
+		return form;
 	}
 };
 ModelRecord.displayName = "ModelRecord";

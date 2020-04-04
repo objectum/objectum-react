@@ -105,6 +105,10 @@ class TableForm extends Component {
 				await record.sync ();
 			}
 			await me.props.store.commitTransaction ();
+			
+			if (me.props.onSave) {
+				await me.props.store.execute (me.props.onSave, {tableForm: me, store: me.props.store});
+			}
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
 			throw err;

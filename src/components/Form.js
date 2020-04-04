@@ -205,6 +205,10 @@ class Form extends Component {
 				state [code] = me.record.get (code);
 			}
 			state._error = "";
+			
+			if (me.props.onSave) {
+				await me.props.store.execute (me.props.onSave, {form: me, store: me.props.store});
+			}
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
 			state._error = err.message;

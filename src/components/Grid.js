@@ -661,7 +661,15 @@ class Grid extends Component {
 			}
 		});
 		return (
-			<TableForm store={me.props.store} model={model.getPath ()} properties={properties} editable={me.props.editable} records={_.map (me.state.recs, "id")} colMap={me.colMap} />
+			<TableForm
+				store={me.props.store}
+				model={model.getPath ()}
+				properties={properties}
+				editable={me.props.editable}
+				records={_.map (me.state.recs, "id")}
+				colMap={me.colMap}
+				onSave={me.props.onSave}
+			/>
 		);
 	}
 
