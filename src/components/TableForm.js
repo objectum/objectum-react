@@ -10,7 +10,7 @@ import Field from "./Field";
 import {timeout} from "./helper";
 import _ from "lodash";
 import Cell from "./Cell";
-import {factory} from "objectum-client";
+import {factory, execute} from "objectum-client";
 
 class TableForm extends Component {
 	constructor (props) {
@@ -106,12 +106,16 @@ class TableForm extends Component {
 			}
 			await me.props.store.commitTransaction ();
 			
-			if (me.props.onSave) {
-				await me.props.store.execute (me.props.onSave, {tableForm: me, store: me.props.store});
-			}
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
 			throw err;
+		}
+		if (me.props.onSave) {
+			try {
+				await execute (me.props.onSave, {tableForm: me, store: me.props.store});
+			} catch (err) {
+				throw err;
+			}
 		}
 	}
 	

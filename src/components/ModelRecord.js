@@ -100,6 +100,8 @@ class ModelRecord extends Component {
 				
 				label = o.getLabel ();
 			}
+			me.regModel = me.props.store.getRegistered (hash.opts.model) || {};
+			
 			me.setState ({
 				rid,
 				model: hash.opts.model,
@@ -286,11 +288,15 @@ class ModelRecord extends Component {
 					if (!me.state.rid) {
 						result.newRecordFormNum ++;
 					}
-					items.push (
+					let form = (
 						<Form key={`form-${level}-${gen ++}`} store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate} disableActions={me.state.disableActions}>
 							{formItems}
 						</Form>
 					);
+					if (me.regModel && me.regModel._renderForm) {
+						form = me.regModel._renderForm ({form, store: me.props.store});
+					}
+					items.push (form);
 				} else {
 					items.push (
 						<div key={`form-${level}-${gen ++}`}>{formItems}</div>
@@ -371,25 +377,32 @@ class ModelRecord extends Component {
 		
 		let colWidth = 12 / columns | 0;
 		let form = (
+			<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate} disableActions={me.state.disableActions}>
+				{properties.map ((properties2, i) => {
+					return (
+						<div key={`row-${i}`} className="row">
+							{properties2.map ((p, j) => {
+								return (
+									<div key={`col-${i}-${j}`}className={`col-sm-${colWidth}`}>
+										{me.renderProperty (p, `field-${i}-${j}`)}
+									</div>
+								);
+							})}
+						</div>
+					);
+				})}
+			</Form>
+		);
+		if (me.regModel && me.regModel._renderForm) {
+			form = me.regModel._renderForm ({form, store: me.props.store});
+			console.log (2, form.props);
+		}
+		form = (
 			<div className="container">
 				<div className="bg-white shadow-sm">
 					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 						<Tab key={`tab1-${me.state.model}`} label="Information">
-							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid={me.state.model} onCreate={me.onCreate} disableActions={me.state.disableActions}>
-								{properties.map ((properties2, i) => {
-									return (
-										<div key={`row-${i}`} className="row">
-											{properties2.map ((p, j) => {
-												return (
-													<div key={`col-${i}-${j}`}className={`col-sm-${colWidth}`}>
-														{me.renderProperty (p, `field-${i}-${j}`)}
-													</div>
-												);
-											})}
-										</div>
-									);
-								})}
-							</Form>
+							{form}
 						</Tab>
 						{me.state.rid && me.getTables ().map ((t, i) => {
 							let label = t.get ("name");
@@ -418,9 +431,6 @@ class ModelRecord extends Component {
 				</div>
 			</div>
 		);
-		if (me.regModel && me.regModel._renderForm) {
-			form = me.regModel._renderForm ({form, store: me.props.store});
-		}
 		return form;
 	}
 };

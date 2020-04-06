@@ -15,6 +15,7 @@ import Log from "./Log";
 import Loading from "./Loading";
 import EditForm from "./EditForm";
 import {timeout} from "./helper";
+import {execute} from "objectum-client";
 
 class Form extends Component {
 	constructor (props) {
@@ -30,6 +31,7 @@ class Form extends Component {
 		me.onSave = me.onSave.bind (me);
 		me.onCreate = me.onCreate.bind (me);
 
+		console.log (1, me.props.onSave);
 		me.state = {
 			_loading: false,
 			_saving: false,
@@ -205,12 +207,16 @@ class Form extends Component {
 				state [code] = me.record.get (code);
 			}
 			state._error = "";
-			
+		} catch (err) {
+			state._error = err.message;
+			console.error (err.stack);
+			await me.props.store.rollbackTransaction ();
+		}
+		try {
 			if (me.props.onSave) {
-				await me.props.store.execute (me.props.onSave, {form: me, store: me.props.store});
+				await execute (me.props.onSave, {form: me, store: me.props.store});
 			}
 		} catch (err) {
-			await me.props.store.rollbackTransaction ();
 			state._error = err.message;
 			console.error (err.stack);
 		}
