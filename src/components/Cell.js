@@ -48,7 +48,12 @@ class Cell extends Component {
 					}
 				});
 				if (rec) {
-					return (<span>{`${rec.name} (id: ${value})`}</span>);
+					let label = `${rec.name} (id: ${value})`;
+					
+					if (rec.getLabel) {
+						label = rec.getLabel ();
+					}
+					return (<span>{label}</span>);
 				} else {
 					return (<span>{`${value}`}</span>);
 				}

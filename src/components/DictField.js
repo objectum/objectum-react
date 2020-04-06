@@ -180,8 +180,13 @@ class DictField extends Component {
 				<div className="dictfield-params border p-1 bg-white">
 					<ul className="list-group">
 						{recs.map (rec => {
+							let label = `${rec.name} (id: ${rec.id})`;
+							
+							if (rec.getLabel) {
+								label = rec.getLabel ();
+							}
 							return (
-								<li className="border-bottom p-1" id={rec.id} key={rec.id} onClick={me.onClick}>{`${rec.name} (id: ${rec.id})`}</li>
+								<li className="border-bottom p-1" id={rec.id} key={rec.id} onClick={me.onClick}>{label}</li>
 							);
 						})}
 					</ul>
@@ -203,10 +208,17 @@ class DictField extends Component {
 				<div className="dictfield-params border p-1 bg-white">
 					<ul className="list-group">
 						{recs.map (rec => {
+							let label = rec.name;
+							
+							if (rec.getLabel) {
+								label = rec.getLabel ();
+							}
 							let num = _.filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
 							
+							label += ` (${i18n ("Amount")}: ${num})`;
+							
 							return (
-								<li className="border-bottom p-1" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{`${rec.name} (${i18n ("Amount")}: ${num})`}</li>
+								<li className="border-bottom p-1" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{label}</li>
 							);
 						})}
 					</ul>
