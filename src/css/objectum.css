@@ -73,7 +73,6 @@ body {
     overflow: auto;
     display: block;
     table-layout: auto;
-    font-size: 11px;
 }
 .sort {
     cursor: pointer;
