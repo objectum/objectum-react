@@ -83,7 +83,7 @@ class Form extends Component {
 	async componentDidMount () {
 		let me = this;
 		let state = {_loading: false};
-
+		
 		try {
 			me.setState ({_loading: true});
 			
@@ -112,6 +112,10 @@ class Form extends Component {
 				} else
 				if (field.props.hasOwnProperty ("value")) {
 					state [code] = field.props.value;
+					
+					if (me.props.defaults && me.props.defaults.hasOwnProperty (code)) {
+						state [code] = me.props.defaults [code];
+					}
 				}
 			}
 		} catch (err) {
@@ -120,6 +124,30 @@ class Form extends Component {
 		}
 		me.setState (state);
 	}
+	
+/*
+	componentDidUpdate (prevProps) {
+		let me = this;
+		let state = {};
+
+		if (me.props.defaults && !me.record) {
+			let prev = prevProps.defaults || {};
+			
+			console.log (prev, me.props.defaults);
+			for (let code in me.props.defaults) {
+				let value = me.props.defaults [code];
+				
+				if (value !== prev [code] && me.state [code] !== value) {
+					state [code] = value;
+				}
+			}
+		}
+		if (!_.isEmpty (state)) {
+			console.log ("new state", state);
+			me.setState (state);
+		}
+	}
+*/
 	
 	onChange ({code, value, file}) {
 		let me = this;
@@ -294,7 +322,7 @@ class Form extends Component {
 			if (me.model && me.model.properties [code] && me.model.properties [code].notNull) {
 				notNull = true;
 			}
-			if (notNull && (!me.state.hasOwnProperty (code) || me.state [code] === "" || me.state [code] === null)) {
+			if (notNull && (!me.state.hasOwnProperty (code) || me.state [code] === "" || me.state [code] === null || me.state [code] === undefined)) {
 				state [`${code}-error`] = i18n ("Please enter value");
 				valid = false;
 			} else {

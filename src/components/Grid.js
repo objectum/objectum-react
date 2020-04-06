@@ -357,7 +357,7 @@ class Grid extends Component {
 				if (c.type >= 1000) {
 					let m = me.props.store.getModel (c.type);
 					
-					if (m.isDictionary ()) {
+					if (m.isDictionary () || me.props.store.dict [m.getPath ()]) {
 						c.recs = await me.props.store.getDict (c.type);
 					}
 				}

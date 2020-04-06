@@ -8,6 +8,7 @@ import {pushLocation, timeout} from "../../src/components/helper";
 import OrgModel from "./models/OrgModel";
 import TkModelClient from "./models/TkModelClient";
 import TOrgProductModel from "./models/TOrgProductModel";
+import BrakModel from "./models/BrakModel";
 
 import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
@@ -64,6 +65,7 @@ class Demo extends Component {
 		store.register ("org", OrgModel);
 		store.register ("tk", TkModelClient);
 		store.register ("t.org.product", TOrgProductModel);
+		store.register ("brak", BrakModel);
 		
 		window.store = store;
 	}
