@@ -395,7 +395,6 @@ class ModelRecord extends Component {
 		);
 		if (me.regModel && me.regModel._renderForm) {
 			form = me.regModel._renderForm ({form, store: me.props.store});
-			console.log (2, form.props);
 		}
 		form = (
 			<div className="container">

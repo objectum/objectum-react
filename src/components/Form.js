@@ -31,7 +31,6 @@ class Form extends Component {
 		me.onSave = me.onSave.bind (me);
 		me.onCreate = me.onCreate.bind (me);
 
-		console.log (1, me.props.onSave);
 		me.state = {
 			_loading: false,
 			_saving: false,
