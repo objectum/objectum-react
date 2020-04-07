@@ -128,10 +128,6 @@ class ObjectumApp extends Component {
 		}
 	}
 	
-	componentDidUpdate () {
-		console.log ("did update", this.props);
-	}
-	
 	componentWillUnmount () {
 		this.store.removeListener ("connect", this.onConnect);
 	}
@@ -245,7 +241,6 @@ class ObjectumApp extends Component {
 	}
 	
 	renderRoutes () {
-		console.log ("renderRoutes");
 		let me = this;
 		let items = [
 			<Route key="objectum-1" path="/queries" render={props => <Queries {...props} store={me.store} />} />,
@@ -272,12 +267,20 @@ class ObjectumApp extends Component {
 				);
 			}} />
 		];
-		React.Children.forEach (me.props.children, (child, i) => {
-			if (child && child.type && child.type.displayName == "ObjectumRoute") {
-				console.log ("route", child.props.path);
-				items.push (<Route key={`route-${i}`} {...child.props} />);
-			}
-		});
+		let SearchRoutes = (children) => {
+			React.Children.forEach (children, (child, i) => {
+				if (child && child.props) {
+					if (child && child.type && child.type.displayName == "ObjectumRoute") {
+						items.push (<Route key={`route-${i}`} {...child.props} />);
+					}
+					if (child.props.children) {
+						SearchRoutes (child.props.children);
+					}
+				}
+			});
+		};
+		SearchRoutes (me.props.children);
+		
 		let model = {}, parent = {};
 		
 		_.each (me.store.map ["model"], m => {
