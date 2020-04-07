@@ -24,6 +24,7 @@ import Sidebar from "react-sidebar";
 import {lang, i18n} from "./../i18n";
 import _ from "lodash";
 import Fade from "react-reveal/Fade";
+import {execute} from "objectum-client";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
@@ -111,7 +112,6 @@ class ObjectumApp extends Component {
 	async componentDidMount () {
 		let me = this;
 		
-		console.log ("objectumApp onConnect");
 		me.store.addListener ("connect", me.onConnect);
 		
 		if (me.props.username && me.props.password) {
@@ -154,6 +154,9 @@ class ObjectumApp extends Component {
 				menu: menuId
 			});
 			me.menuItemRecs = result.recs;
+		}
+		if (me.props.onConnect) {
+			await execute (me.props.onConnect);
 		}
 		me.setState ({sid: opts.sessionId});
 	}
