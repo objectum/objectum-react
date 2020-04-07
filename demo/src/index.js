@@ -9,6 +9,7 @@ import OrgModel from "./models/OrgModel";
 import TkModelClient from "./models/TkModelClient";
 import TOrgProductModel from "./models/TOrgProductModel";
 import BrakModel from "./models/BrakModel";
+import TBrakDishModel from "./models/TBrakDishModel";
 
 import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
@@ -66,6 +67,7 @@ class Demo extends Component {
 		store.register ("tk", TkModelClient);
 		store.register ("t.org.product", TOrgProductModel);
 		store.register ("brak", BrakModel);
+		store.register ("t.brak.dish", TBrakDishModel);
 		
 		window.store = store;
 	}

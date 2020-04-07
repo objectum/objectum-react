@@ -412,17 +412,19 @@ class ModelRecord extends Component {
 							}
 							return (
 								<Tab key={`table-${me.state.model}-${i}`} label={label}>
-									<ModelList
-										{...me.props}
-										id={`list-${i}`}
-										ref={`list-${i}`}
-										label=""
-										store={me.props.store}
-										model={t.getPath ()}
-										parentModel={m.getPath ()}
-										parentId={me.state.rid}
-										disableActions={me.state.disableActions}
-									/>
+									<div className="p-1">
+										<ModelList
+											{...me.props}
+											id={`list-${i}`}
+											ref={`list-${i}`}
+											label=""
+											store={me.props.store}
+											model={t.getPath ()}
+											parentModel={m.getPath ()}
+											parentId={me.state.rid}
+											disableActions={me.state.disableActions}
+										/>
+									</div>
 								</Tab>
 							);
 						})}

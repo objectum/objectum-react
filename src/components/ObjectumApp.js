@@ -111,6 +111,7 @@ class ObjectumApp extends Component {
 	async componentDidMount () {
 		let me = this;
 		
+		console.log ("objectumApp onConnect");
 		me.store.addListener ("connect", me.onConnect);
 		
 		if (me.props.username && me.props.password) {
