@@ -224,7 +224,7 @@ class ObjectumApp extends Component {
 				{items}
 				<tr><td>
 					<Link key="menu-logout" className="nav-link" to="/logout">
-						<i key="icon-logout" className={`fas fa-sign-out-alt ${size} menu-icon mr-1`} /><span className="text-dark">{i18n ("Logout")}</span>
+						<i key="icon-logout" className={`fas fa-sign-out-alt ${size} menu-icon mr-1`} /><span className="text-dark my-auto">{i18n ("Logout")}</span>
 					</Link>
 				</td></tr>
 				</tbody>
@@ -372,7 +372,7 @@ class ObjectumApp extends Component {
 		if (me.state.loading) {
 			return (
 				<div className="container">
-					<div className="p-4 border bg-white shadow-sm">
+					<div className="mt-2 p-4 border bg-white shadow-sm">
 						<Loading />
 					</div>
 				</div>
@@ -389,7 +389,7 @@ class ObjectumApp extends Component {
 						
 						<div>
 							<Sidebar
-								sidebar={me.renderMenu ("fa-lg")}
+								sidebar={me.renderMenu (me.props.menuIconSize || "fa-lg")}
 								open={false}
 								docked={me.state.sidebarDocked}
 								sidebarClassName="bg-white border-right"

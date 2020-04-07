@@ -653,6 +653,7 @@ class Grid extends Component {
 			return (<div />);
 		}
 		let model = me.props.store.getModel (me.colMap ["id"].model);
+/*
 		let properties = [];
 		
 		me.state.cols.forEach (col => {
@@ -660,15 +661,18 @@ class Grid extends Component {
 				properties.push (col.code);
 			}
 		});
+*/
 		return (
 			<TableForm
 				store={me.props.store}
 				model={model.getPath ()}
-				properties={properties}
 				editable={me.props.editable}
-				records={_.map (me.state.recs, "id")}
+				recs={me.state.recs}
+				cols={me.state.cols}
+				hideCols={me.state.hideCols}
 				colMap={me.colMap}
 				onSave={me.props.onSave}
+				groupCol={me.props.groupCol}
 			/>
 		);
 	}

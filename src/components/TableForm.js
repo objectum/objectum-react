@@ -10,7 +10,7 @@ import Field from "./Field";
 import {timeout} from "./helper";
 import _ from "lodash";
 import Cell from "./Cell";
-import {factory, execute} from "objectum-client";
+import {execute} from "objectum-client";
 
 class TableForm extends Component {
 	constructor (props) {
@@ -23,33 +23,34 @@ class TableForm extends Component {
 		me.recMap = {};
 		me.objectMap = {};
 		me.state = {
+			loading: true,
 			model: me.props.store.getModel (me.props.model),
-			recs: [],
+			recs: me.props.recs,
 			saving: false,
 			progress: 0
 		};
+		me.model = me.model || me.props.store.getModel (me.props.model);
 	}
 	async componentDidMount () {
 		let me = this;
-		let state = {};
-		let result = await me.props.store.getData ({
-			offset: 0,
-			limit: 1000,
-			filters: [["id", "in", me.props.records]],
-			model: me.props.model
+		let state = {
+			loading: false,
+			recordMap: {}
+		};
+		state.records = await me.props.store.getRecords ({
+			model: me.props.model,
+			filters: [
+				["id", "in", _.map (me.state.recs, "id")]
+			]
 		});
+		state.records.forEach (record => state.recordMap [record.id] = record);
 		
-		state.recs = result.recs;
-
-		me.recMap = {};
-		state.recs.forEach (rec => me.recMap [rec.id] = rec);
-		
-		for (let i = 0; i < me.props.properties.length; i ++) {
-			let code = me.props.properties [i];
+		for (let i = 0; i < me.props.cols.length; i ++) {
+			let code = me.props.cols [i].code;
 			let property = me.model.properties [code];
 			
-			if (property.get ("type") >= 1000 && me.props.store.getModel (property.get ("type")).isDictionary ()) {
-				me.state [`dictRecs-${property.get ("type")}`] = await me.props.store.getDict (property.get ("type"));
+			if (property && property.type >= 1000 && me.props.store.getModel (property.type).isDictionary ()) {
+				me.state [`dictRecs-${property.type}`] = await me.props.store.getDict (property.type);
 			}
 		}
 		me.setState (state);
@@ -76,10 +77,12 @@ class TableForm extends Component {
 		let me = this;
 		let records = [];
 		
+		me.setState ({saving: true});
+		
 		for (let a in me.state) {
 			let [code, id] = a.split ("-");
 			
-			if (id && me.objectMap [id] && me.objectMap [id][code] != me.state [a]) {
+			if (id && me.state.recordMap [id] && me.state.recordMap [id][code] != me.state [a]) {
 				if (records.indexOf (id) == -1) {
 					records.push (id);
 				}
@@ -93,12 +96,12 @@ class TableForm extends Component {
 				progress ({label: i18n ("Saving"), value: i + 1, max: records.length});
 				
 				let id = records [i];
-				let record = me.objectMap [id];
+				let record = me.state.recordMap [id];
 				
 				for (let a in me.state) {
 					let [code, stateId] = a.split ("-");
 					
-					if (stateId == id && me.objectMap [id][code] != me.state [a]) {
+					if (stateId == id && me.state.recordMap [id][code] != me.state [a]) {
 						record.set (code, me.state [a]);
 					}
 				}
@@ -106,6 +109,7 @@ class TableForm extends Component {
 			}
 			await me.props.store.commitTransaction ();
 			
+			me.setState ({saving: false});
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
 			throw err;
@@ -126,7 +130,7 @@ class TableForm extends Component {
 		for (let a in me.state) {
 			let [code, id] = a.split ("-");
 			
-			if (id && me.objectMap [id] && me.objectMap [id][code] != me.state [a]) {
+			if (id && me.state.recordMap [id] && me.state.recordMap [id][code] != me.state [a]) {
 				result = true;
 			}
 		}
@@ -175,8 +179,74 @@ class TableForm extends Component {
 		if (!me.props.colMap) {
 			return (<div />);
 		}
-		me.model = me.model || me.props.store.getModel (me.props.model);
-
+		if (me.state.loading) {
+			return (
+				<div className="p-2 bg-white text-primary">
+					<Loading />
+				</div>
+			);
+		}
+		let prevGroupColValue = null;
+		let items = [], visibleColNum = 0;
+		
+		me.props.cols.forEach (col => {
+			if (me.props.hideCols.indexOf (col.code) == - 1 && me.props.groupCol != col.code) {
+				visibleColNum ++;
+			}
+		});
+		me.state.records.forEach ((record, i) => {
+			let rec = _.find (me.state.recs, {id: record.id});
+			
+			if (me.props.groupCol) {
+				if (rec [me.props.groupCol] != prevGroupColValue) {
+					items.push (
+						<tr key={"groupCol-" + i} className="table-secondary">
+							<td
+								className="align-top text-left"
+								colSpan={visibleColNum}
+							>
+								<Cell
+									store={me.props.store}
+									value={rec [me.props.groupCol]}
+									col={me.props.colMap [me.props.groupCol]}
+									rec={rec}
+								/>
+							</td>
+						</tr>
+					);
+				}
+				prevGroupColValue = rec [me.props.groupCol];
+			}
+			items.push (
+				<tr key={i}>
+					{me.props.cols.map ((col, i) => {
+						if (me.props.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
+							return;
+						}
+						let code = col.code;
+						let editable = true;
+						
+						if (_.isArray (me.props.editable) && me.props.editable.indexOf (code) == -1) {
+							editable = false;
+						}
+						if (!me.model.properties [code]) {
+							editable = false;
+						}
+						return (
+							<td key={i} className="align-top p-1">
+								{editable ?
+									me.renderProperty (me.model.properties [code], record [code], record, me.model, `${code}-${record.id}`) :
+									me.model.properties [code] ?
+										<Cell store={me.props.store} value={record [code]} col={me.props.colMap [code]} rec={record} /> :
+										<Cell store={me.props.store} value={rec [code]} col={me.props.colMap [code]} rec={rec} />
+								}
+							</td>
+						);
+					})}
+				</tr>
+			);
+		});
+		
 		return (
 			<div className="p-1">
 				<div className="actions pb-1">
@@ -188,64 +258,20 @@ class TableForm extends Component {
 					<table className="table objectum-table table-bordered pb-5 px-1 pt-1 mb-0">
 						<thead className="bg-info text-white">
 						<tr>
-							<th className="align-top">id</th>
-							{me.props.properties.map ((code, i) => {
-								let opts = {
-									key: i,
-									className: "align-top"
-								};
-								if (me.props.colMap [code].type >= 1000) {
-									opts.style = {width: "250px"};
+							{me.props.cols.map ((col, i) => {
+								if (me.props.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
+									return;
 								}
+								let label = i18n (col.name);
+								
 								return (
-									<th {...opts}>{me.props.colMap [code] ? me.props.colMap [code].name : ""}</th>
+									<th key={i} scope="col" className="align-top">{label}</th>
 								);
 							})}
 						</tr>
 						</thead>
 						<tbody>
-						{me.state.recs.length != me.props.records.length ? <tr><td colSpan={me.props.properties.length} className="text-primary"><Loading /></td></tr> :
-							me.props.records.map ((id, i) => {
-								let rec = me.recMap [id];
-								let object = factory ({
-									store: me.props.store,
-									rsc: "record", data: {
-										id,
-										_model: me.model.getPath (),
-										...rec
-									}
-								});
-								me.objectMap [id] = object;
-								
-								return (
-									<tr key={i}>
-										<td key={`id-${i}`} className="align-top">{id}</td>
-										{me.props.properties.map ((code, i) => {
-											let editable = true;
-											
-											if (_.isArray (me.props.editable) && me.props.editable.indexOf (code) == -1) {
-												editable = false;
-											}
-											if (!rec) {
-												return (
-													<td key={i} className="align-top pt-1 pb-0">
-														rec not exist
-													</td>
-												);
-											}
-											return (
-												<td key={i} className="align-top pt-1 pb-0">
-													{editable ?
-														me.renderProperty (me.model.properties [code], rec [code], object, me.model, `${code}-${id}`) :
-														<Cell store={me.props.store} value={rec [code]} col={me.props.colMap [code]} rec={rec} />
-													}
-												</td>
-											);
-										})}
-									</tr>
-								);
-							})
-						}
+						{items}
 						</tbody>
 					</table>
 				</div>
