@@ -269,6 +269,7 @@ class ObjectumApp extends Component {
 		];
 		React.Children.forEach (me.props.children, (child, i) => {
 			if (child && child.type && child.type.displayName == "ObjectumRoute") {
+				console.log ("route", child.props.path);
 				items.push (<Route key={`route-${i}`} {...child.props} />);
 			}
 		});
