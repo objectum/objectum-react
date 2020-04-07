@@ -25,6 +25,7 @@ import {lang, i18n} from "./../i18n";
 import _ from "lodash";
 import Fade from "react-reveal/Fade";
 import {execute} from "objectum-client";
+import Loading from "./Loading";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
@@ -135,6 +136,8 @@ class ObjectumApp extends Component {
 		let me = this;
 		let menuId = opts.menuId;
 		
+		me.setState ({loading: true});
+		
 		if (menuId == "admin") {
 			let menuResult = await me.store.getData ({
 				query: "objectum.menu",
@@ -158,7 +161,7 @@ class ObjectumApp extends Component {
 		if (me.props.onConnect) {
 			await execute (me.props.onConnect);
 		}
-		me.setState ({sid: opts.sessionId});
+		me.setState ({sid: opts.sessionId, loading: false});
 	}
 	
 	onClickMenu (key) {
@@ -353,6 +356,15 @@ class ObjectumApp extends Component {
 				<div className="container">
 					<div className="alert alert-danger mt-1" role="alert">
 						{me.state.error}
+					</div>
+				</div>
+			);
+		}
+		if (me.state.loading) {
+			return (
+				<div className="container">
+					<div className="p-4 border bg-white shadow-sm">
+						<Loading />
 					</div>
 				</div>
 			);
