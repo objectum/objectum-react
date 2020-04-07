@@ -128,6 +128,10 @@ class ObjectumApp extends Component {
 		}
 	}
 	
+	componentDidUpdate () {
+		console.log ("did update", this.props);
+	}
+	
 	componentWillUnmount () {
 		this.store.removeListener ("connect", this.onConnect);
 	}
@@ -241,6 +245,7 @@ class ObjectumApp extends Component {
 	}
 	
 	renderRoutes () {
+		console.log ("renderRoutes");
 		let me = this;
 		let items = [
 			<Route key="objectum-1" path="/queries" render={props => <Queries {...props} store={me.store} />} />,
