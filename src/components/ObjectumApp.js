@@ -175,7 +175,7 @@ class ObjectumApp extends Component {
 		
 		function renderIcon (icon, key) {
 			if (icon) {
-				return (<i key={key} className={`${icon} ${size} menu-icon mr-1`} />);
+				return (<span key={key} className={`${icon} ${size} menu-icon mr-1 align-middle`} />);
 			} else {
 				return (<span key={key} />);
 			}
@@ -224,7 +224,7 @@ class ObjectumApp extends Component {
 				{items}
 				<tr><td>
 					<Link key="menu-logout" className="nav-link" to="/logout">
-						<i key="icon-logout" className={`fas fa-sign-out-alt ${size} menu-icon mr-1`} /><span className="text-dark my-auto">{i18n ("Logout")}</span>
+						<span className={`fas fa-sign-out-alt ${size} menu-icon mr-1 align-middle`} /><span className="text-dark">{i18n ("Logout")}</span>
 					</Link>
 				</td></tr>
 				</tbody>
@@ -389,7 +389,7 @@ class ObjectumApp extends Component {
 						
 						<div>
 							<Sidebar
-								sidebar={me.renderMenu (me.props.menuIconSize || "fa-lg")}
+								sidebar={me.renderMenu (me.props.menuIconSize || "fa-2x")}
 								open={false}
 								docked={me.state.sidebarDocked}
 								sidebarClassName="bg-white border-right"

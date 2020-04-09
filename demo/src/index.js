@@ -81,6 +81,7 @@ class Demo extends Component {
 					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
+					menuIconSize="fa-2x"
 					onRenderAuthInfo={div => {
 						return React.cloneElement (div, {style: {
 							backgroundImage: `url(${bgImage})`,
