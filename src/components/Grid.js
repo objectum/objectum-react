@@ -423,7 +423,7 @@ class Grid extends Component {
 					let fn = child.props.onClick || child.props.onClickSelected;
 					
 					if (fn) {
-						await execute (fn, opts);
+						return await execute (fn, opts);
 					}
 				};
 				if ((child.props.selected || child.props.onClickSelected) && me.state.selected === null) {

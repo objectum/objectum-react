@@ -49,6 +49,15 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<Grid
+					store={store}
+					model="item"
+				>
+					<Action label="test" onClick={async () => {
+						return "test";
+					}} />
+				</Grid>
+				
 				<div className="bg-white shadow-sm mt-1">
 					<ModelList store={store} model="tk" />
 				</div>
