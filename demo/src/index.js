@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, NumberField, ModelList, Action} from '../../src'
-import {pushLocation, timeout} from "../../src/components/helper";
+import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip} from '../../src'
+import {pushLocation, timeout, newId} from "../../src/components/helper";
 
 import OrgModel from "./models/OrgModel";
 import TkModelClient from "./models/TkModelClient";
@@ -49,6 +49,7 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<Tooltip label="tooltip tooltip tooltip tooltip tooltip tooltip"><div>TestDiv</div></Tooltip>
 				<Grid
 					store={store}
 					model="item"
@@ -57,10 +58,6 @@ class Test extends Component {
 						return "test";
 					}} />
 				</Grid>
-				
-				<div className="bg-white shadow-sm mt-1">
-					<ModelList store={store} model="tk" />
-				</div>
 			</div>
 		);
 	}

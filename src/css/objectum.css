@@ -110,3 +110,17 @@ body {
 .header {
     margin-top: 1px;
 }
+.objectum-tooltip {
+    text-decoration: none;
+    position: relative;
+}
+.objectum-tooltip span {
+    display: none;
+}
+.objectum-tooltip:hover span {
+    display: block;
+    position: fixed;
+    overflow: hidden;
+    z-index: 10000;
+    max-width: 30em;
+}

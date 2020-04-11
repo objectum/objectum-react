@@ -6,6 +6,7 @@ import Modal from "react-modal";
 import {i18n} from "./../i18n";
 import {newId} from "./helper";
 import Grid from "./Grid";
+import Tooltip from "./Tooltip";
 
 class ChooseField extends Component {
 	constructor (props) {
@@ -121,7 +122,9 @@ class ChooseField extends Component {
 			return (
 				<div className="form-group">
 					<label htmlFor={me.id}>{i18n (me.props.label)}</label>
-					<input type="text" className={"form-control" + addCls} id={me.id} value={me.state.name} disabled={true}/>
+					<Tooltip label={me.state.name}>
+						<input type="text" className={"form-control" + addCls} id={me.id} value={me.state.name} disabled={true}/>
+					</Tooltip>
 				</div>
 			)
 		}
@@ -160,14 +163,16 @@ class ChooseField extends Component {
 								<i className="fas fa-times" />
 							</button>
 						</div>}
-						<input
-							type="text"
-							className={"form-control _dictfield-input" + addCls}
-							id={me.id}
-							value={me.state.name}
-							onChange={() => {}}
-							disabled={true}
-						/>
+						<Tooltip label={me.state.name}>
+							<input
+								type="text"
+								className={"form-control _dictfield-input" + addCls}
+								id={me.id}
+								value={me.state.name}
+								onChange={() => {}}
+								disabled={true}
+							/>
+						</Tooltip>
 					</div>
 					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 				</div>

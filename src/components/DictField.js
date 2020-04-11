@@ -2,6 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
+import Tooltip from "./Tooltip";
 import {i18n} from "../i18n";
 import _ from "lodash";
 import {newId} from "./helper";
@@ -254,14 +255,16 @@ class DictField extends Component {
 								<i className="fas fa-times" />
 							</button>
 						</div>}
-						<input
-							type="text"
-							className={`form-control ${addCls}`}
-							id={me.id}
-							value={me.state.label}
-							onChange={() => {}}
-							disabled={true}
-						/>
+						<Tooltip label={me.state.label}>
+							<input
+								type="text"
+								className={`form-control ${addCls}`}
+								id={me.id}
+								value={me.state.label}
+								onChange={() => {}}
+								disabled={true}
+							/>
+						</Tooltip>
 					</div>
 					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 

@@ -2,13 +2,14 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash, addHashListener, removeHashListener, timeout, newId} from "./helper";
+import {getHash, setHash, addHashListener, removeHashListener, timeout, newId, createTooltip, removeTooltip} from "./helper";
 import Cell from "./Cell";
 import Filters from "./Filters";
 import _ from "lodash";
 import {i18n} from "./../i18n";
 import GridColumns from "./GridColumns";
 import TableForm from "./TableForm";
+import Tooltip from "./Tooltip";
 import Fade from "react-reveal/Fade";
 import {execute} from "objectum-client";
 
@@ -697,55 +698,69 @@ class Grid extends Component {
 				<div className="border-top p-1">
 					<div className="btn-toolbar" role="toolbar">
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onFirst} data-tip={i18n ("First page")}>
-								<i className="fas fa-angle-double-left"/>
-							</button>
-							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onPrev} data-tip={i18n ("Previous page")}>
-								<i className="fas fa-angle-left"/>
-							</button>
+							<Tooltip label={i18n ("First page")}>
+								<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onFirst}>
+									<i className="fas fa-angle-double-left"/>
+								</button>
+							</Tooltip>
+							<Tooltip label={i18n ("Previous page")}>
+								<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onPrev}>
+									<i className="fas fa-angle-left"/>
+								</button>
+							</Tooltip>
 						</div>
 						<div className="objectum-5em">
 							<div className="input-group mr-1">
-								<input type="number" className="form-control form-control-sm" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} data-tip={i18n ("Page")}/>
+								<Tooltip label={i18n ("Page")}>
+									<input type="number" className="form-control form-control-sm" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} />
+								</Tooltip>
 							</div>
 						</div>
 						<div className="btn-group mr-1" role="group">
-							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext} data-tip={i18n ("Next page")}>
-								<i className="fas fa-angle-right"/>
-							</button>
-							<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast} data-tip={i18n ("Last page")}>
-								<i className="fas fa-angle-double-right"/>
-							</button>
+							<Tooltip label={i18n ("Next page")}>
+								<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}>
+									<i className="fas fa-angle-right"/>
+								</button>
+							</Tooltip>
+							<Tooltip label={i18n ("Last page")}>
+								<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}>
+									<i className="fas fa-angle-double-right"/>
+								</button>
+							</Tooltip>
 							<span data-tip={i18n ("Refresh")}>
 									{me.state.loading ?
 										<span className="spinner-border spinner-border-sm text-primary mt-1 mx-1" role="status" aria-hidden="true"/> :
-										<button type="button" className="btn btn-link btn-sm" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
-											<i className="fas fa-sync"/>
-										</button>
+										<Tooltip label={i18n ("Refresh")}>
+											<button type="button" className="btn btn-link btn-sm" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
+												<i className="fas fa-sync"/>
+											</button>
+										</Tooltip>
 									}
 								</span>
-							{! me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onShowFilters}>
+							{! me.props.system && <Tooltip label={i18n ("Filters")}><button type="button" className="btn btn-link btn-sm" onClick={me.onShowFilters}>
 								<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} data-tip={i18n ("Filters")}/>
-							</button>}
-							{! me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onShowCols} data-tip={i18n ("Columns")}>
+							</button></Tooltip>}
+							{! me.props.system && <Tooltip label={i18n ("Columns")}><button type="button" className="btn btn-link btn-sm" onClick={me.onShowCols} data-tip={i18n ("Columns")}>
 								<i className={`fas fa-eye ${me.state.showCols ? "border-bottom border-primary" : ""}`}/>
-							</button>}
-							{! me.props.system && me.props.editable && <button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
-								<i className={`fas fa-edit ${me.state.mode == "edit" ? "border-bottom border-primary" : ""}`}/>
-							</button>}
-							{me.props.card && <button type="button" className="btn btn-link btn-sm" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
+							</button></Tooltip>}
+							{! me.props.system && me.props.editable && <Tooltip label={i18n ("Edit mode")}><button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode}>
+								<i className={`fas fa-edit ${me.state.mode == "edit" ? "border-bottom border-primary" : ""}`} />
+							</button></Tooltip>}
+							{me.props.card && <Tooltip label={i18n ("Images mode")}><button type="button" className="btn btn-link btn-sm" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
 								<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`}/>
-							</button>}
+							</button></Tooltip>}
 						</div>
 						<div className="objectum-5em">
 							<div className="input-group">
-								<select className="custom-select custom-select-sm" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange} data-tip={i18n ("Records on page")}>
-									<option value="10">10</option>
-									<option value="20">20</option>
-									<option value="30">30</option>
-									<option value="40">40</option>
-									<option value="50">50</option>
-								</select>
+								<Tooltip label={i18n ("Records on page")}>
+									<select className="custom-select custom-select-sm" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange}>
+										<option value="10">10</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+									</select>
+								</Tooltip>
 							</div>
 						</div>
 					</div>

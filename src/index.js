@@ -37,6 +37,7 @@ import ModelTree from "./components/ModelTree";
 import ModelRecord from "./components/ModelRecord";
 import RemoveAction from "./components/RemoveAction";
 import Loading from "./components/Loading";
+import Tooltip from "./components/Tooltip";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -99,6 +100,7 @@ export {
 	ModelRecord,
 	RemoveAction,
 	Loading,
+	Tooltip,
 	i18n,
 	goRidLocation,
 	timeout,
@@ -153,6 +155,7 @@ export default {
 	ModelRecord,
 	RemoveAction,
 	Loading,
+	Tooltip,
 	i18n,
 	goRidLocation,
 	timeout,
