@@ -144,7 +144,7 @@ class ChooseField extends Component {
 			<div>
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
-					<div className="input-group choosefield">
+					<div className="choosefield d-flex">
 						{!me.props.disabled && <div>
 							<button
 								type="button"
@@ -154,6 +154,8 @@ class ChooseField extends Component {
 							>
 								<i className="fas fa-edit" />
 							</button>
+						</div>}
+						{!me.props.disabled && <div>
 							<button
 								type="button"
 								className="btn btn-primary btn-sm border-left"
