@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip} from '../../src'
+import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 
 import OrgModel from "./models/OrgModel";
@@ -17,6 +17,7 @@ import "../../src/fontawesome/css/all.css";
 import bgImage from "./images/italian.jpg";
 
 import packageConfig from "./../package";
+import Fade from "react-reveal/Fade";
 
 const store = new Store ();
 
@@ -75,25 +76,41 @@ class Demo extends Component {
 		store.register ("brak", BrakModel);
 		store.register ("t.brak.dish", TBrakDishModel);
 		
+		this.onCustomRender = this.onCustomRender.bind (this);
+		
 		window.store = store;
 	}
 	
+	onCustomRender ({content, app}) {
+		return (
+			<div>
+				{store.username}
+				<Auth store={store} name="name" version="version" />
+				{content}
+			</div>
+		);
+	}
+	
 	render () {
+		let me = this;
+		
 		return (
 			<div>
 				<ObjectumApp
 					store={store}
-					username="admin"
-					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					_username="admin"
+					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					username="diet"
+					password="356A192B7913B04C54574D18C28D46E6395428AB"
 					name="objectum-react"
 					version={packageConfig.version}
-					menuIconSize="fa-2x"
 					onRenderAuthInfo={div => {
 						return React.cloneElement (div, {style: {
 							backgroundImage: `url(${bgImage})`,
 							backgroundSize: "content"
 						}});
 					}}
+					/*onCustomRender={me.onCustomRender}*/
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 				</ObjectumApp>

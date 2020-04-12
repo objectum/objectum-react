@@ -125,6 +125,12 @@ class ObjectumApp extends Component {
 				console.error (err);
 				me.setState ({error: err.message});
 			}
+		} else
+		if (me.store.getSessionId ()) {
+			await me.onConnect ({
+				sid: me.store.getSessionId (),
+				menuId: me.store.getMenuId ()
+			});
 		}
 	}
 	
@@ -140,9 +146,7 @@ class ObjectumApp extends Component {
 		
 		if (menuId == "admin") {
 			let menuResult = await me.store.getData ({
-				query: "objectum.menu",
-				offset: 0,
-				limit: 100000
+				query: "objectum.menu"
 			});
 			for (let i = 0; i < menuResult.recs.length; i ++) {
 				if (menuResult.recs [i].code == "admin") {
@@ -382,41 +386,54 @@ class ObjectumApp extends Component {
 			return (<div/>);
 		}
 		if (me.state.sid) {
+			let content;
+			
+			if (me.props.onCustomRender) {
+				content = (
+					<div className="objectum-content">
+						{me.renderRoutes ()}
+					</div>
+				);
+				content = me.props.onCustomRender ({content, app: me});
+			} else {
+				content = (
+					<div>
+						<Sidebar
+							sidebar={me.renderMenu (me.props.menuIconSize || "fa-2x")}
+							open={false}
+							docked={me.state.sidebarDocked}
+							sidebarClassName="bg-white border-right"
+							shadow={false}
+						>
+							<Fade>
+								<div className="bg-white shadow-sm header border-bottom py-1 form-inline">
+									<button className="btn btn-link" onClick={
+										() => {
+											me.setState ({sidebarDocked: !me.state.sidebarDocked});
+										}
+									}>
+										<i className="fas fa-bars mr-2" /><span className="text-dark">{i18n ("Menu")}</span>
+									</button>
+									
+									<HomeButton />
+									<BackButton popLocation={me.popLocation} locations={me.state.locations} />
+									
+									<span className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${store.username})`}</span>
+								</div>
+							</Fade>
+							
+							<div className="objectum-content">
+								{me.renderRoutes ()}
+							</div>
+						</Sidebar>
+					</div>
+				);
+			}
 			return (
 				<div>
 					<Router>
 						<PageViews pushLocation={me.pushLocation} locations={me.state.locations} />
-						
-						<div>
-							<Sidebar
-								sidebar={me.renderMenu (me.props.menuIconSize || "fa-2x")}
-								open={false}
-								docked={me.state.sidebarDocked}
-								sidebarClassName="bg-white border-right"
-								shadow={false}
-							>
-								<Fade>
-									<div className="bg-white shadow-sm header border-bottom py-1 form-inline">
-										<button className="btn btn-link" onClick={
-											() => {
-												me.setState ({sidebarDocked: !me.state.sidebarDocked});
-											}
-										}>
-											<i className="fas fa-bars mr-2" /><span className="text-dark">{i18n ("Menu")}</span>
-										</button>
-										
-										<HomeButton />
-										<BackButton popLocation={me.popLocation} locations={me.state.locations} />
-										
-										<span className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${store.username})`}</span>
-									</div>
-								</Fade>
-								
-								<div style={{marginTop: "1em", marginBottom: "5em"}}>
-									{me.renderRoutes ()}
-								</div>
-							</Sidebar>
-						</div>
+						{content}
 					</Router>
 				</div>
 			);

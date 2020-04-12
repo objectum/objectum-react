@@ -124,3 +124,7 @@ body {
     z-index: 10000;
     max-width: 30em;
 }
+.objectum-content {
+    margin-top: 1.5em;
+    margin-bottom: 5em;
+}
