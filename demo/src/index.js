@@ -98,10 +98,10 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					_username="admin"
-					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					username="diet"
-					password="356A192B7913B04C54574D18C28D46E6395428AB"
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					_username="diet"
+					_password="356A192B7913B04C54574D18C28D46E6395428AB"
 					name="objectum-react"
 					version={packageConfig.version}
 					onRenderAuthInfo={div => {
