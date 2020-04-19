@@ -19,10 +19,11 @@ function File (props) {
 			props.onFile (props.id, acceptedFiles [0]);
 		}
 	} else if (props.value) {
-		let propertyId = props.model.properties [props.id].get ("id");
+		let model = props.store.getModel (props.model);
+		let propertyId = model.properties [props.property].id;
 		
 		file = (
-			<div><a target="_blank" rel="noopener noreferrer" href={props.store.getUrl () + "/files/" + props.record.get ("id") + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
+			<div><a target="_blank" rel="noopener noreferrer" href={props.store.getUrl () + "/files/" + props.record.id + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
 		);
 	}
 	return (
@@ -87,7 +88,7 @@ class FileField extends Component {
 		return (
 			<div className="form-group">
 				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
-				<File id={me.id} onFile={me.onFile} value={me.state.value} store={me.props.store} record={me.props.record} model={me.props.model} />
+				<File id={me.id} onFile={me.onFile} value={me.state.value} store={me.props.store} record={me.props.record} model={me.props.model} property={me.props.property} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>
 		);

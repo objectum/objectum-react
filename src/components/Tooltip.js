@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {newId} from "./helper";
-import Grid from "./Grid";
 
 let tooltips = [];
 
