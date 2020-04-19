@@ -57,9 +57,9 @@ class Log extends Component {
 			});
 		}
 		return (
-			<div className="border p-1">
-				<h5>{i18n ("Log")}</h5>
-				<select className="form-control custom-select mb-1" value={me.state.tag} onChange={me.onChange}>
+			<div>
+				<strong>{i18n ("Log")}</strong>
+				<select className="form-control custom-select my-1" value={me.state.tag} onChange={me.onChange}>
 					{[{id: "", name: i18n ("Select field")}, ...recs].map ((rec, i) => {
 						return (
 							<option value={rec.id} key={i}>{rec.name}</option>

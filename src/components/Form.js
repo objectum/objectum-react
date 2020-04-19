@@ -500,7 +500,7 @@ class Form extends Component {
 						</button>
 					}
 				</div>}
-				{me.state._showLog && <div className="border-top p-1"><Log form={me} /></div>}
+				{me.state._showLog && <div className="border-bottom p-1"><Log form={me} /></div>}
 				{me.state._error && <div className="alert alert-danger" role="alert">{me.state._error}</div>}
 				<div className="actions p-1">
 					{formChildren}
