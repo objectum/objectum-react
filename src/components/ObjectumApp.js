@@ -201,13 +201,15 @@ class ObjectumApp extends Component {
 					let opened = me.state [`open-${parent}-${i}`];
 					
 					items.push (
-						<tr key={`menu-${parent}-${i}`}><td>
-							<button className={`btn btn-link pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
-								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
-								<span className="text-dark">{i18n (rec.name)}</span>
-								<i key={`open-${parent}-${i}`} className={`far ${opened ? "fa-folder-open" : "fa-folder"} menu-icon`} />
-							</button>
-						</td></tr>
+						<tr key={`menu-${parent}-${i}`}>
+							<td>
+								<button className={`btn btn-link pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
+									{renderIcon (rec.icon, `icon-${parent}-${i}`)}
+									<span className="text-dark">{i18n (rec.name)}</span>
+									<i key={`open-${parent}-${i}`} className={`fas ${opened ? "fa-angle-up" : "fa-angle-down"} ml-2`} />
+								</button>
+							</td>
+						</tr>
 					);
 					if (opened) {
 						renderItems (rec.id, level + 1);
