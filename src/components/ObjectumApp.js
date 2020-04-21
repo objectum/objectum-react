@@ -142,33 +142,32 @@ class ObjectumApp extends Component {
 		let me = this;
 		let menuId = opts.menuId;
 		
-		if (me.props.onCustomRender) {
-			return;
-		}
-		me.setState ({loading: true});
-		
-		if (menuId == "admin") {
-			let menuResult = await me.store.getData ({
-				query: "objectum.menu"
-			});
-			for (let i = 0; i < menuResult.recs.length; i ++) {
-				if (menuResult.recs [i].code == "admin") {
-					menuId = menuResult.recs [i].id;
-					break;
+		if (!me.props.onCustomRender) {
+			me.setState ({loading: true});
+			
+			if (menuId == "admin") {
+				let menuResult = await me.store.getData ({
+					query: "objectum.menu"
+				});
+				for (let i = 0; i < menuResult.recs.length; i ++) {
+					if (menuResult.recs [i].code == "admin") {
+						menuId = menuResult.recs [i].id;
+						break;
+					}
 				}
 			}
-		}
-		if (menuId) {
-			let result = await me.store.getData ({
-				query: "objectum.userMenuItems",
-				menu: menuId
-			});
-			me.menuItemRecs = result.recs;
+			if (menuId) {
+				let result = await me.store.getData ({
+					query: "objectum.userMenuItems",
+					menu: menuId
+				});
+				me.menuItemRecs = result.recs;
+			}
+			me.setState ({sid: opts.sessionId, loading: false});
 		}
 		if (me.props.onConnect) {
 			await execute (me.props.onConnect);
 		}
-		me.setState ({sid: opts.sessionId, loading: false});
 	}
 	
 	onClickMenu (key) {
