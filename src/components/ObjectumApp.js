@@ -142,6 +142,9 @@ class ObjectumApp extends Component {
 		let me = this;
 		let menuId = opts.menuId;
 		
+		if (me.props.onCustomRender) {
+			return;
+		}
 		me.setState ({loading: true});
 		
 		if (menuId == "admin") {

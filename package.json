@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.225",
+	"version": "1.1.226",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -41,8 +41,8 @@
 	],
 	"dependencies": {
 		"lodash": "^4.17.15",
-		"objectum-client": "^1.1.79",
-		"objectum-proxy": "^0.1.25",
+		"objectum-client": "^1.1.81",
+		"objectum-proxy": "^0.1.30",
 		"react-dropzone": "^10.2.1",
 		"react-modal": "^3.11.2",
 		"react-reveal": "^1.2.2",
