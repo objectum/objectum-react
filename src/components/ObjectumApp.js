@@ -141,6 +141,7 @@ class ObjectumApp extends Component {
 	async onConnect (opts) {
 		let me = this;
 		let menuId = opts.menuId;
+		let state = {sid: opts.sessionId};
 		
 		if (!me.props.onCustomRender) {
 			me.setState ({loading: true});
@@ -163,11 +164,12 @@ class ObjectumApp extends Component {
 				});
 				me.menuItemRecs = result.recs;
 			}
-			me.setState ({sid: opts.sessionId, loading: false});
+			state.loading = false;
 		}
 		if (me.props.onConnect) {
 			await execute (me.props.onConnect);
 		}
+		me.setState (state);
 	}
 	
 	onClickMenu (key) {
