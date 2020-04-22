@@ -30,7 +30,7 @@ class Cell extends Component {
 				return (
 					<span>
 						<a target="_blank" rel="noopener noreferrer"
-						   href={`${me.props.store.getUrl ()}/files/${me.props.rec.id}-${me.props.col.property}-${value}`}>{value}
+						   href={`/files/${me.props.rec.id}-${me.props.col.property}-${value}`}>{value}
 						</a>
 					</span>
 				);

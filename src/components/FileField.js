@@ -30,7 +30,7 @@ function FileInput (props) {
 		}
 	} else if (props.value) {
 		file = (
-			<div><a target="_blank" rel="noopener noreferrer" href={props.store.getUrl () + "/files/" + props.record.id + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
+			<div><a target="_blank" rel="noopener noreferrer" href={"/files/" + props.record.id + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
 		);
 	}
 	return (
