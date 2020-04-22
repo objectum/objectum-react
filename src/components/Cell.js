@@ -59,10 +59,14 @@ class Cell extends Component {
 					return (<span>{`${value}`}</span>);
 				}
 			} else {
-				if (value.length < 400) {
-					return (<span>{value}</span>);
+				if (typeof (value) == "string") {
+					if (value.length < 300) {
+						return (<span>{value}</span>);
+					} else {
+						return (<Tooltip label={value}>{value.substr (0, 300)} ...</Tooltip>);
+					}
 				} else {
-					return (<Tooltip label={value}>{value.substr (0, 400)} ...</Tooltip>);
+					return (<span>{value}</span>);
 				}
 			}
 		}
