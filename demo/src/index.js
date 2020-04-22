@@ -1,9 +1,10 @@
-import React, {Component} from "react";
+import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
 import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
+import ReactCrop from "react-image-crop";
 
 import OrgModel from "./models/OrgModel";
 import TkModelClient from "./models/TkModelClient";
@@ -11,6 +12,7 @@ import TOrgProductModel from "./models/TOrgProductModel";
 import BrakModel from "./models/BrakModel";
 import TBrakDishModel from "./models/TBrakDishModel";
 
+import "react-image-crop/dist/ReactCrop.css";
 import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
@@ -50,6 +52,7 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<ReactCrop src={null} crop={{unit: "%", width: 30, aspect: 16 / 9}} ruleOfThirds />
 				<Tooltip label="tooltip tooltip tooltip tooltip tooltip tooltip"><div>TestDiv</div></Tooltip>
 				<Grid
 					store={store}

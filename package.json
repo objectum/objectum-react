@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.228",
+	"version": "1.1.229",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -44,6 +44,7 @@
 		"objectum-client": "^1.1.81",
 		"objectum-proxy": "^0.1.30",
 		"react-dropzone": "^10.2.1",
+		"react-image-crop": "^8.6.2",
 		"react-modal": "^3.11.2",
 		"react-reveal": "^1.2.2",
 		"react-router-dom": "^5.1.2",
