@@ -293,6 +293,17 @@ class Form extends Component {
 			state._rid = me.record.get ("id");
 			state._error = "";
 			
+			for (let code in values) {
+				if (me.fileMap [code]) {
+					await me.upload ({
+						sessionId: me.props.store.getSessionId (),
+						objectId: me.record.get ("id"),
+						classAttrId: me.model.properties [code].get ("id"),
+						name: me.record.get (code),
+						file: me.fileMap [code]
+					});
+				}
+			}
 			await me.props.store.commitTransaction ();
 			
 			for (let code in values) {
