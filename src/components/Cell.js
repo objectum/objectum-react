@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {getTimestampString} from "./helper";
+import Tooltip from "./Tooltip";
 
 class Cell extends Component {
 	constructor (props) {
@@ -58,7 +59,11 @@ class Cell extends Component {
 					return (<span>{`${value}`}</span>);
 				}
 			} else {
-				return (<span>{value}</span>);
+				if (value.length < 400) {
+					return (<span>{value}</span>);
+				} else {
+					return (<Tooltip label={value}>{value.substr (0, 400)} ...</Tooltip>);
+				}
 			}
 		}
 	}
