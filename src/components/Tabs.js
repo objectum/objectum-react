@@ -35,6 +35,11 @@ class Tabs extends Component {
 		if (hash [me.props.id] && hash [me.props.id].tab) {
 			tab = hash [me.props.id].tab;
 		}
+		me.tabs.forEach ((item, i) => {
+			if (item.props && item.props.path == document.location.pathname) {
+				tab = i;
+			}
+		});
 		me.setState ({tab});
 	}
 	
