@@ -115,7 +115,7 @@ class Tabs extends Component {
 								if (item.props.path) {
 									return (
 										<li className="nav-item" key={i}>
-											<Link className={"nav-link" + active} to={item.props.path}>{i18n (item.props.label)}</Link>
+											<Link className={"nav-link" + active} to={item.props.path} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</Link>
 										</li>
 									);
 								} else {

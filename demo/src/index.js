@@ -2,7 +2,7 @@ import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, Form, Field, ObjectumRoute, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
+import {ObjectumApp, Form, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 import ReactCrop from "react-image-crop";
 
@@ -52,7 +52,6 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<ReactCrop src={null} crop={{unit: "%", width: 30, aspect: 16 / 9}} ruleOfThirds />
 				<Tooltip label="tooltip tooltip tooltip tooltip tooltip tooltip"><div>TestDiv</div></Tooltip>
 				<Grid
 					store={store}
@@ -85,10 +84,19 @@ class Demo extends Component {
 	}
 	
 	onCustomRender ({content, app}) {
+		let roleMenu = [
+			{label: "Модели", path: "/models"},
+			{label: "Запросы", path: "/queries"},
+		];
 		return (
 			<div>
-				{store.username}
-				<Auth store={store} name="name" version="version" />
+				<Tabs id="tabs">
+					{roleMenu.map ((o, i) => {
+						return (
+							<Tab key={i} {...o} />
+						);
+					})}
+				</Tabs>
 				{content}
 			</div>
 		);
@@ -113,9 +121,10 @@ class Demo extends Component {
 							backgroundSize: "content"
 						}});
 					}}
-					/*onCustomRender={me.onCustomRender}*/
+					onCustomRender={me.onCustomRender}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
+					<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />
 				</ObjectumApp>
 			</div>
 		);
