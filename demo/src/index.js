@@ -13,7 +13,7 @@ import BrakModel from "./models/BrakModel";
 import TBrakDishModel from "./models/TBrakDishModel";
 
 import "react-image-crop/dist/ReactCrop.css";
-import "../../src/css/bootstrap.css";
+import "../../src/css/bootstrap-site.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 import bgImage from "./images/italian.jpg";

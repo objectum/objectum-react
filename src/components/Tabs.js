@@ -101,11 +101,11 @@ class Tabs extends Component {
 								if (i == me.state.tab) {
 									active = " active";
 								} else {
-									active = " bg-light";
+									active = " border-bottom";
 								}
 								return (
 									<li className="nav-item" key={i}>
-										<button type="button" className={"btn btn-link nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</button>
+										<a href="javascript:void(0)" className={"nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</a>
 									</li>
 								);
 							})}
