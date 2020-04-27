@@ -89,6 +89,7 @@ class Model extends Component {
 							<div className="p-1"><Properties {...me.props} model={me.state.rid} /></div>
 						</Tab>
 						}
+						<Tab label="test" />
 					</Tabs>
 				</div>
 			</div>

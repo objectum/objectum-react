@@ -15,14 +15,18 @@ class Tab extends Component {
 	
 	render () {
 		let me = this;
-		
-		return (
-			<Fade>
-				<div className="border border-top-0">
-					{me.props.children}
-				</div>
-			</Fade>
-		);
+
+		if (me.props.children) {
+			return (
+				<Fade>
+					<div className="border border-top-0">
+						{me.props.children}
+					</div>
+				</Fade>
+			);
+		} else {
+			return null;
+		}
 	}
 };
 Tab.displayName = "Tab";
