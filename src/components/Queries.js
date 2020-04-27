@@ -74,6 +74,7 @@ class Queries extends Component {
 						<RemoveAction onRemove={me.onRemove} />
 						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 					</Grid>
+
 {/*
 					<Tabs {...me.props} id="tabs">
 						<Tab label="test1" path="/queries1" />
@@ -81,6 +82,7 @@ class Queries extends Component {
 						<Tab label="test" path="/queries" />
 					</Tabs>
 */}
+
 				</div>
 			</div>
 		);

@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
 import {i18n} from "./../i18n";
+import {Link} from "react-router-dom";
 
 class Tabs extends Component {
 	constructor (props) {
@@ -63,16 +64,10 @@ class Tabs extends Component {
 	changeTab (i) {
 		let me = this;
 		
-		if (me.tabs [i].props && me.tabs [i].props.path) {
-			me.props.history.push ({
-				pathname: me.tabs [i].props.path
-			});
-		} else {
-			setHash (me, {[me.props.id]: {tab: i}});
-			
-			if (me.props.onSelect) {
-				me.props.onSelect (i);
-			}
+		setHash (me, {[me.props.id]: {tab: i}});
+		
+		if (me.props.onSelect) {
+			me.props.onSelect (i);
 		}
 	}
 	
@@ -112,11 +107,19 @@ class Tabs extends Component {
 								} else {
 									active = " border-bottom";
 								}
-								return (
-									<li className="nav-item" key={i}>
-										<a href="javascript:void(0)" className={"nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</a>
-									</li>
-								);
+								if (item.props.path) {
+									return (
+										<li className="nav-item" key={i}>
+											<Link className={"nav-link" + active} to={item.props.path}>{i18n (item.props.label)}</Link>
+										</li>
+									);
+								} else {
+									return (
+										<li className="nav-item" key={i}>
+											<a href="javascript:void(0)" className={"nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</a>
+										</li>
+									);
+								}
 							})}
 						</ul>
 						{tab}
