@@ -38,22 +38,41 @@ class Tabs extends Component {
 	}
 	
 	componentDidMount () {
-		//window.addEventListener ("hashchange", this.hashChange);
+		let me = this;
+		
 		addHashListener (this, this.hashChange);
+
+		me.tabs = [];
+		
+		React.Children.forEach (me.props.children, child => {
+			if (child && child.type && child.type.displayName == "Tab") {
+				me.tabs.push (child);
+			}
+		});
+		me.tabs.forEach ((tab, i) => {
+			if (tab.props && tab.props.path == document.location.pathname) {
+				setHash (me, {[me.props.id]: {tab: i}});
+			}
+		});
 	}
 	
 	componentWillUnmount () {
-//		window.removeEventListener ("hashchange", this.hashChange);
 		removeHashListener (this, this.hashChange);
 	}
 	
 	changeTab (i) {
 		let me = this;
 		
-		setHash (me, {[me.props.id]: {tab: i}});
-		
-		if (me.props.onSelect) {
-			me.props.onSelect (i);
+		if (me.tabs [i].props && me.tabs [i].props.path) {
+			me.props.history.push ({
+				pathname: me.tabs [i].props.path
+			});
+		} else {
+			setHash (me, {[me.props.id]: {tab: i}});
+			
+			if (me.props.onSelect) {
+				me.props.onSelect (i);
+			}
 		}
 	}
 	
@@ -69,16 +88,6 @@ class Tabs extends Component {
 	
 	render () {
 		let me = this;
-		
-		me.tabs = [];
-		
-		//if (!me.tabs.length) {
-			React.Children.forEach (me.props.children, child => {
-				if (child && child.type && child.type.displayName == "Tab") {
-					me.tabs.push (child);
-				}
-			});
-		//}
 		let tab;
 		
 		for (let i = 0; i < me.tabs.length; i ++) {

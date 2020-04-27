@@ -3,6 +3,8 @@ import Grid from "./Grid";
 import Action from "./Action";
 import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
+import Tab from "./Tab";
+import Tabs from "./Tabs";
 
 class Queries extends Component {
 	constructor (props) {
@@ -72,6 +74,13 @@ class Queries extends Component {
 						<RemoveAction onRemove={me.onRemove} />
 						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 					</Grid>
+{/*
+					<Tabs {...me.props} id="tabs">
+						<Tab label="test1" path="/queries1" />
+						<Tab label="test2" path="/queries2" />
+						<Tab label="test" path="/queries" />
+					</Tabs>
+*/}
 				</div>
 			</div>
 		);

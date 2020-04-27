@@ -50,7 +50,7 @@ class Model extends Component {
 		return (
 			<div className="container">
 				<div className="bg-white shadow-sm border">
-					<Tabs key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + me.state.label}>
+					<Tabs {...me.props} key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + me.state.label}>
 						<Tab key="tab1" label="Information">
 							<Form key="form1" ref="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
 								<div className="form-row">
@@ -89,7 +89,9 @@ class Model extends Component {
 							<div className="p-1"><Properties {...me.props} model={me.state.rid} /></div>
 						</Tab>
 						}
-						<Tab label="test" />
+{/*
+						<Tab label="test" path="/queries" />
+*/}
 					</Tabs>
 				</div>
 			</div>
