@@ -185,7 +185,7 @@ class Form extends Component {
 		let me = this;
 		
 		if (!me.isValid ()) {
-			return;
+			return false;
 		}
 		me.setState ({_saving: true});
 
@@ -248,6 +248,8 @@ class Form extends Component {
 			console.error (err.stack);
 		}
 		me.setState (state);
+		
+		return !state._error;
 	}
 	
 	async onCreate () {
@@ -498,7 +500,7 @@ class Form extends Component {
 				{me.props.label && <div>
 					<h5 className="pl-3 py-2 ml-3">{me.props.label}</h5>
 				</div>}
-				{me.state._rid && <div className="actions p-1 border-bottom">
+				{me.state._rid && !me.props.hideButtons && <div className="actions p-1 border-bottom">
 					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving || me.props.disableActions}>
 						{me.state._saving ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
@@ -516,7 +518,7 @@ class Form extends Component {
 				<div className="actions p-1">
 					{formChildren}
 				</div>
-				{!me.state._rid && <div className="mt-1 actions border-top p-1">
+				{!me.state._rid && !me.props.hideButtons && <div className="mt-1 actions border-top p-1">
 					<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state._creating}>
 						{me.state._creating ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
