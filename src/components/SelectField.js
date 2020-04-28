@@ -47,7 +47,7 @@ class SelectField extends Component {
 				<select className={"form-control custom-select" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled}>
 					{[{id: "", name: "-"}, ...me.props.recs].map ((rec, i) => {
 						return (
-							<option value={rec.id} key={i}>{rec.name}</option>
+							<option value={rec.id} key={i}>{rec.getLabel ? rec.getLabel () : rec.name}</option>
 						);
 					})}
 				</select>
