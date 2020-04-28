@@ -121,7 +121,7 @@ class Demo extends Component {
 							backgroundSize: "content"
 						}});
 					}}
-					onCustomRender={me.onCustomRender}
+					/*onCustomRender={me.onCustomRender}*/
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 					<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />

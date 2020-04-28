@@ -22,9 +22,9 @@ class Tabs extends Component {
 			tab = hash [me.props.id].tab;
 		}
 		me.state = {
-			tab
+			tab,
+			tabs: []
 		};
-		me.tabs = [];
 	}
 	
 	hashChange () {
@@ -35,7 +35,7 @@ class Tabs extends Component {
 		if (hash [me.props.id] && hash [me.props.id].tab) {
 			tab = hash [me.props.id].tab;
 		}
-		me.tabs.forEach ((item, i) => {
+		me.state.tabs.forEach ((item, i) => {
 			if (item.props && item.props.path == document.location.pathname) {
 				tab = i;
 			}
@@ -48,14 +48,16 @@ class Tabs extends Component {
 		
 		addHashListener (this, this.hashChange);
 
-		me.tabs = [];
+		let tabs = [];
 		
 		React.Children.forEach (me.props.children, child => {
 			if (child && child.type && child.type.displayName == "Tab") {
-				me.tabs.push (child);
+				tabs.push (child);
 			}
 		});
-		me.tabs.forEach ((tab, i) => {
+		me.setState ({tabs});
+		
+		tabs.forEach ((tab, i) => {
 			if (tab.props && tab.props.path == document.location.pathname) {
 				setHash (me, {[me.props.id]: {tab: i}});
 			}
@@ -90,12 +92,13 @@ class Tabs extends Component {
 		let me = this;
 		let tab;
 		
-		for (let i = 0; i < me.tabs.length; i ++) {
+		for (let i = 0; i < me.state.tabs.length; i ++) {
 			if (me.state.tab == i) {
-				tab = me.tabs [i];
+				tab = me.state.tabs [i];
 				break;
 			}
 		}
+		console.log (me.state.tab, tab);
 		return (
 			<div>
 				{me.props.label && <div className="text-white bg-info py-1">
@@ -104,7 +107,7 @@ class Tabs extends Component {
 				<div>
 					<div className="p-1">
 						<ul className="nav nav-tabs">
-							{me.tabs.map ((item, i) => {
+							{me.state.tabs.map ((item, i) => {
 								let active = "";
 								
 								if (i == me.state.tab) {
