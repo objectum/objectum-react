@@ -322,9 +322,11 @@ class ModelRecord extends Component {
 				}
 			});
 			items.push (
-				<Tabs key={`tabs-${level}-${gen}`} id={`tabs-${level}-${gen}`}>
-					{tabs}
-				</Tabs>
+				<div className="p-1">
+					<Tabs key={`tabs-${level}-${gen}`} id={`tabs-${level}-${gen}`}>
+						{tabs}
+					</Tabs>
+				</div>
 			);
 		}
 		return items;
@@ -398,7 +400,7 @@ class ModelRecord extends Component {
 		}
 		form = (
 			<div className="container">
-				<div className="bg-white shadow-sm">
+				<div className="bg-white shadow-sm p-1">
 					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 						<Tab key={`tab1-${me.state.model}`} label="Information">
 							{form}

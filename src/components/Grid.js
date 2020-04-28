@@ -454,7 +454,7 @@ class Grid extends Component {
 		let active = !!me.position.length || me.state.parent;
 		
 		return (
-			<div className="mt-1 pl-1 border-top">
+			<div className="mt-1 p-1 border-top">
 				<nav aria-label="breadcrumb">
 					<ol className="breadcrumb">
 						<li className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>

@@ -94,7 +94,8 @@ class Tabs extends Component {
 	
 	render () {
 		let me = this;
-		let tab = me.getTabs () [me.state.tab];
+		let tabs = me.getTabs ();
+		let tab = tabs [me.state.tab];
 		
 /*
 		for (let i = 0; i < me.state.tabs.length; i ++) {
@@ -110,9 +111,9 @@ class Tabs extends Component {
 					<strong className="pl-2">{i18n (me.props.label)}</strong>
 				</div>}
 				<div>
-					<div className="p-1">
+					<div className={me.props.label ? "p-1" : ""}>
 						<ul className="nav nav-tabs">
-							{me.getTabs ().map ((item, i) => {
+							{tabs.map ((item, i) => {
 								let active = "";
 								
 								if (i == me.state.tab) {
