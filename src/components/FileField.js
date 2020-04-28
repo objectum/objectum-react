@@ -34,10 +34,10 @@ function FileInput (props) {
 		);
 	}
 	return (
-		<div className="border p-1">
+		<div className="border">
 			<div {...getRootProps ({className: "dropzone"})}>
 				<input {...getInputProps ()} />
-				<div className="border bg-light p-2">{i18n ("Drag 'n' drop some file here, or click to select file")}</div>
+				<div className="bg-light p-1">{i18n ("Drag 'n' drop some file here, or click to select file")}</div>
 			</div>
 			<div className="ml-2"><strong>{file}</strong></div>
 		</div>
