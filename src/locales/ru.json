@@ -112,5 +112,6 @@
 	"close": "закрыть",
 	"unlogged": "нежурналируемая",
 	"filter name": "наименование фильтра",
-	"version": "версия"
+	"version": "версия",
+	"drag 'n' drop some file here, or click to select file": "Переместите файл сюда или нажмите для выбора файла"
 }
