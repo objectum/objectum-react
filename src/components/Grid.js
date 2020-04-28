@@ -818,7 +818,7 @@ class Grid extends Component {
 							hideCols={me.state.hideCols}
 						/>
 					</div>}
-					{me.renderToolbar ()}
+					{!(me.props.smartHideToolbar && (me.state.length - me.state.pageRecs < 0)) && me.renderToolbar ()}
 				</div>
 			</div></Fade>
 		);
