@@ -505,7 +505,7 @@ class Form extends Component {
 							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
 						}
 					</button>
-					{me.props.rsc == "record" &&
+					{me.props.rsc == "record" && !me.props.hideLogButton &&
 						<button type="button" className="btn btn-primary" onClick={() => me.setState ({_showLog: !me.state._showLog})}>
 							<i className="fas fa-history mr-2" />{i18n ("Log")}
 						</button>
