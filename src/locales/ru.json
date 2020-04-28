@@ -113,5 +113,6 @@
 	"unlogged": "нежурналируемая",
 	"filter name": "наименование фильтра",
 	"version": "версия",
-	"drag 'n' drop some file here, or click to select file": "Переместите файл сюда или нажмите для выбора файла"
+	"drag 'n' drop some file here, or click to select file": "Переместите файл сюда или нажмите для выбора файла",
+	"bytes": "байт"
 }

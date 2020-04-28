@@ -23,7 +23,7 @@ function FileInput (props) {
 	let file;
 	
 	if (acceptedFiles.length) {
-		file = (<div>{acceptedFiles [0].path} - {acceptedFiles [0].size} bytes</div>);
+		file = (<div>{acceptedFiles [0].path} - {acceptedFiles [0].size} {i18n ("bytes")}</div>);
 		
 		if (acceptedFiles [0].path != props.value) {
 			props.onFile (props.id, acceptedFiles [0]);
