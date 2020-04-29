@@ -22,6 +22,7 @@ import Roles from "./components/Roles";
 import SelectField from "./components/SelectField";
 import DictField from "./components/DictField";
 import StringField from "./components/StringField";
+import JsonField from "./components/JsonField";
 import Tab from "./components/Tab";
 import Tabs from "./components/Tabs";
 import Types from "./components/Types";
@@ -78,6 +79,7 @@ export {
 	SelectField,
 	DictField,
 	StringField,
+	JsonField,
 	Tab,
 	Tabs,
 	Types,
@@ -133,6 +135,7 @@ export default {
 	SelectField,
 	DictField,
 	StringField,
+	JsonField,
 	Tab,
 	Tabs,
 	Types,

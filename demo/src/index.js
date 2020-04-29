@@ -2,7 +2,7 @@ import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, Form, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
+import {ObjectumApp, JsonField, BooleanField, Form, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 import ReactCrop from "react-image-crop";
 
@@ -52,7 +52,18 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<NumberField label="Numberfield" property="nf" value={123} notNull />
+				<Form store={store} rsc="record" rid={20436} mid="balance">
+					<JsonField
+						label="JsonField" property="opts"
+						props={[
+							{prop: "f1", label: "F1", component: BooleanField},
+							{prop: "f2", label: "F2", component: BooleanField},
+							{prop: "f3", label: "F3", component: BooleanField},
+							{prop: "f4", label: "F4", component: BooleanField},
+							{prop: "f5", label: "F5", component: BooleanField}
+						]}
+					/>
+				</Form>
 				<Tooltip label="tooltip tooltip tooltip tooltip tooltip tooltip"><div>TestDiv</div></Tooltip>
 				<Grid
 					store={store}
