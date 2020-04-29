@@ -6,11 +6,11 @@ import {ObjectumApp, JsonField, BooleanField, Form, Field, ObjectumRoute, Tabs, 
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 import ReactCrop from "react-image-crop";
 
-import OrgModel from "./models/OrgModel";
-import TkModelClient from "./models/TkModelClient";
-import TOrgProductModel from "./models/TOrgProductModel";
-import BrakModel from "./models/BrakModel";
-import TBrakDishModel from "./models/TBrakDishModel";
+//import OrgModel from "./models/OrgModel";
+//import TkModelClient from "./models/TkModelClient";
+//import TOrgProductModel from "./models/TOrgProductModel";
+//import BrakModel from "./models/BrakModel";
+//import TBrakDishModel from "./models/TBrakDishModel";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "../../src/css/bootstrap-site.css";
@@ -53,6 +53,7 @@ class Test extends Component {
 		return (
 			<div className="container">
 				<Action label="test" onClick={() => "result"} />
+{/*
 				<Form store={store} rsc="record" rid={20436} mid="balance">
 					<Field property="amount" notNull />
 					<JsonField
@@ -66,15 +67,7 @@ class Test extends Component {
 						]}
 					/>
 				</Form>
-				<Tooltip label="tooltip tooltip tooltip tooltip tooltip tooltip"><div>TestDiv</div></Tooltip>
-				<Grid
-					store={store}
-					model="item"
-				>
-					<Action label="test" onClick={async () => {
-						return "test";
-					}} />
-				</Grid>
+*/}
 			</div>
 		);
 	}
@@ -84,13 +77,13 @@ class Demo extends Component {
 	constructor (props) {
 		super (props);
 		
-		store.setUrl ("/rmp");
+		store.setUrl ("/api");
 		
-		store.register ("org", OrgModel);
-		store.register ("tk", TkModelClient);
-		store.register ("t.org.product", TOrgProductModel);
-		store.register ("brak", BrakModel);
-		store.register ("t.brak.dish", TBrakDishModel);
+		//store.register ("org", OrgModel);
+		//store.register ("tk", TkModelClient);
+		//store.register ("t.org.product", TOrgProductModel);
+		//store.register ("brak", BrakModel);
+		//store.register ("t.brak.dish", TBrakDishModel);
 		
 		this.onCustomRender = this.onCustomRender.bind (this);
 		

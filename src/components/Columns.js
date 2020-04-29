@@ -95,20 +95,30 @@ class Columns extends Component {
 			});
 			let queryCols = queryResult.cols;
 			let colMap = {};
+
+			for (let i = 0; i < queryCols.length; i ++) {
+				colMap [queryCols [i].code] = queryCols [i];
+			}
+			let idCol = colMap ["id"];
 			
 			for (let i = 0; i < queryCols.length; i ++) {
 				let col = queryCols [i];
 				let column = columnMap [col.code];
 				
-				colMap [col.code] = col;
-				
 				if (column) {
 					column.set ("order", i + 1);
 					await column.sync ();
 				} else {
+					let name = col.name;
+					
+					if (idCol && idCol.model && col.model && col.model != idCol.model) {
+						let model = me.props.store.getModel (col.model);
+						
+						name = `${model.name}: ${name}`;
+					}
 					column = await me.props.store.createColumn ({
 						query: query.getPath (),
-						name: col.name,
+						name,
 						code: col.code,
 						order: i + 1,
 						area: 1
