@@ -52,6 +52,7 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<NumberField label="Numberfield" property="nf" value={123} notNull />
 				<Tooltip label="tooltip tooltip tooltip tooltip tooltip tooltip"><div>TestDiv</div></Tooltip>
 				<Grid
 					store={store}

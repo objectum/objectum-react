@@ -86,7 +86,7 @@ class StringField extends Component {
 		}
 		return (
 			<div className={(me.props.label || me.props.error) ? "form-group stringfield" : "stringfield"}>
-				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
 				{cmp}
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>

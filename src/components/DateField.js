@@ -44,7 +44,7 @@ class DateField extends Component {
 		
 		return (
 			<div className={(me.props.label || me.props.error) ? "form-group objectum-date" : ""}>
-				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}</label>}
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
 				<input type="date" className={`form-control ${addCls} datefield`} id={me.id} value={getDateString (me.state.value)} onChange={me.onChange} disabled={disabled} />
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 			</div>
