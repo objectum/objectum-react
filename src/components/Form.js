@@ -151,11 +151,17 @@ class Form extends Component {
 	
 	onChange ({code, value, file}) {
 		let me = this;
+		let state = {};
 		
 		if (file) {
 			me.fileMap [code] = file;
 		}
-		me.setState ({[code]: value});
+		state [code] = value;
+		
+		if (value && me.state [`${code}-error`]) {
+			state [`${code}-error`] = "";
+		}
+		me.setState (state);
 		
 		if (me.props.onChange) {
 			me.props.onChange (code, value);
