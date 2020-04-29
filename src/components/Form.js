@@ -256,7 +256,7 @@ class Form extends Component {
 		let me = this;
 		
 		if (!me.isValid ()) {
-			return;
+			return false;
 		}
 		me.setState ({_creating: true});
 		
@@ -320,6 +320,8 @@ class Form extends Component {
 			state._error = err.message;
 		}
 		me.setState (state);
+		
+		return !state._error;
 	}
 	
 	isValid () {
