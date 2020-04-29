@@ -391,7 +391,12 @@ class Form extends Component {
 				let value = me.state.hasOwnProperty (code) ? me.state [code] : (child.props.value || "");
 				let props = {
 					...child.props,
-					onChange: me.onChange,
+					onChange: (opts) => {
+						if (child.props.onChange) {
+							child.props.onChange (opts);
+						}
+						me.onChange (opts);
+					},
 					property: code,
 					value,
 					record: me.record,
