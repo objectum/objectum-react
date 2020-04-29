@@ -170,7 +170,7 @@ class Action extends Component {
 				</span>}
 				{me.state.result && <span>
 					<span className="text-success ml-1">{me.state.result}</span>
-					<button type="button" className="btn btn-link mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
+					<button type="button" className="btn btn-outline-primary btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
 				</span>}
 				{ModalComponent && <Modal
 					isOpen={me.state.showModal}

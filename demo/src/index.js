@@ -52,6 +52,7 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<Action label="test" onClick={() => "result"} />
 				<Form store={store} rsc="record" rid={20436} mid="balance">
 					<JsonField
 						label="JsonField" property="opts"
