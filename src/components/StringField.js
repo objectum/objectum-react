@@ -8,7 +8,7 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {loadCSS, loadJS} from "./helper";
-import {i18n} from "./../i18n";
+import {i18n, getLocale} from "./../i18n";
 import {newId} from "./helper";
 
 class StringField extends Component {
@@ -120,6 +120,9 @@ class StringField extends Component {
 						wrapperClassName="demo-wrapper"
 						editorClassName="demo-editor"
 						onEditorStateChange={me.onEditorStateChange}
+						localization={{
+							locale: getLocale ()
+						}}
 					/>
 				</div>
 			);

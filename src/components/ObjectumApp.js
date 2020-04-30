@@ -21,7 +21,7 @@ import ModelRecord from "./ModelRecord";
 import Records from "./Records";
 import Logout from "./Logout";
 import Sidebar from "react-sidebar";
-import {lang, i18n} from "./../i18n";
+import {setLocale, i18n} from "./../i18n";
 import _ from "lodash";
 import Fade from "react-reveal/Fade";
 import {execute} from "objectum-client";
@@ -107,7 +107,7 @@ class ObjectumApp extends Component {
 		me.pushLocation = me.pushLocation.bind (me);
 		me.popLocation = me.popLocation.bind (me);
 		
-		lang (me.props.locale || "en");
+		setLocale (me.props.locale || "en");
 	}
 	
 	async componentDidMount () {

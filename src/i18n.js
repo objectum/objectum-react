@@ -5,10 +5,16 @@ let locales = {
 	"ru": require ("./locales/ru.json")
 };
 let map = {};
+let lang;
 
-function lang (lang) {
-	map = locales [lang];
+function setLocale (_lang) {
+	lang = _lang;
+	map = locales [_lang];
 };
+
+function getLocale () {
+	return lang || "en";
+}
 
 function i18n (s) {
 	if (!s || typeof (s) != "string") {
@@ -28,6 +34,7 @@ function i18n (s) {
 module.exports = {
 	locales,
 	map,
-	lang,
+	setLocale,
+	getLocale,
 	i18n
 };
