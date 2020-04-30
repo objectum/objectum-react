@@ -34,7 +34,7 @@ function FileInput (props) {
 		);
 	}
 	return (
-		<div className="border p-1">
+		<div className={`border p-1 ${props.error ? "border-danger" : ""}`}>
 			<div {...getRootProps ({className: "dropzone"})}>
 				<input {...getInputProps ()} />
 				<div className="bg-light p-1">{i18n ("Drag 'n' drop some file here, or click to select file")}</div>
@@ -181,7 +181,7 @@ class FileField extends Component {
 				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
 				<FileInput
 					id={me.id} onFile={me.onFile} value={me.state.value} store={me.props.store}
-					record={me.props.record} model={me.props.model} property={me.props.property} image={me.state.image}
+					record={me.props.record} model={me.props.model} property={me.props.property} image={me.state.image} error={me.props.error}
 				/>
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 				{me.state.src && <Modal

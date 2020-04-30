@@ -2,6 +2,11 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
+import {EditorState, convertToRaw, ContentState} from "draft-js";
+import {Editor} from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {loadCSS, loadJS} from "./helper";
 import {i18n} from "./../i18n";
 import {newId} from "./helper";
@@ -19,8 +24,31 @@ class StringField extends Component {
 			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value
 		};
+		if (me.props.wysiwyg) {
+			const html = me.state.value || "<p></p>";
+			const contentBlock = htmlToDraft (html);
+			
+			if (contentBlock) {
+				const contentState = ContentState.createFromBlockArray (contentBlock.contentBlocks);
+				
+				me.state.editorState = EditorState.createWithContent (contentState);
+			}
+		}
 		me.id = newId ();
 	}
+	
+	onEditorStateChange: Function = (editorState) => {
+		let me = this;
+		let value = draftToHtml (convertToRaw (editorState.getCurrentContent ()));
+		
+		me.setState ({
+			editorState,
+			value
+		});
+		if (me.props.onChange) {
+			me.props.onChange ({code: me.state.code, value});
+		}
+	};
 	
 	onChange (val) {
 		let me = this;
@@ -81,6 +109,18 @@ class StringField extends Component {
 			cmp = (
 				<div className="border">
 					<textarea ref="codemirror" className={"form-control" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} />
+				</div>
+			);
+		}
+		if (me.props.wysiwyg) {
+			cmp = (
+				<div className="border p-1">
+					<Editor
+						editorState={me.state.editorState}
+						wrapperClassName="demo-wrapper"
+						editorClassName="demo-editor"
+						onEditorStateChange={me.onEditorStateChange}
+					/>
 				</div>
 			);
 		}

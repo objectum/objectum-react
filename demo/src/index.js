@@ -2,7 +2,7 @@ import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, JsonField, BooleanField, Form, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
+import {ObjectumApp, JsonField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 import ReactCrop from "react-image-crop";
 
@@ -27,7 +27,8 @@ class Test extends Component {
 	constructor (props) {
 		super (props);
 		
-		this.onCLick = this.onClick.bind (this);
+		this.onClick = this.onClick.bind (this);
+
 		this.state = {};
 	}
 	
@@ -52,6 +53,7 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<StringField label="StringField" property="test" wysiwyg />
 				<Action label="test" onClick={() => "result"} />
 {/*
 				<Form store={store} rsc="record" rid={20436} mid="balance">
