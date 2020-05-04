@@ -5,6 +5,7 @@ React components for Objectum UI. Based on [Bootstrap](https://getbootstrap.com)
 Objectum ecosystem:
 * Javascript platform https://github.com/objectum/objectum  
 * Isomorhic javascript client https://github.com/objectum/objectum-client  
+* Proxy for server methods and access control https://github.com/objectum/objectum-proxy  
 * Command-line interface (CLI) https://github.com/objectum/objectum-cli  
 * Objectum project example https://github.com/objectum/catalog 
 
@@ -29,27 +30,34 @@ npm install objectum-react
     * [ChooseField](#choose_field)  
     * [FileField](#file_field)  
     * [SelectField](#select_field)
+    * [JsonField](#json_field)
     * [JsonEditor](#json_editor)
-* [Confirm](#confirm)
+* [Tooltip](#tooltip)  
 
 <a name="objectum_app" />
 
 ### ObjectumApp
 ```js
 import React, {Component} from "react";
-import store from "objectum-client";
+import {Store} from "objectum-client";
 import {ObjectumApp} from "objectum-react";
+
+import "objectum-react/lib/css/bootstrap.css";
+import "objectum-react/lib/css/objectum.css";
+import "objectum-react/lib/fontawesome/css/all.css";
+
+const store = new Store ();
 
 class App extends Component {
     constructor (props) {
         super (props);
         
-        store.setUrl ("/api/projects/catalog/");
+        store.setUrl ("/api");
     }
     
     render () {
         return (
-            <ObjectumApp store={store} name="Catalog" />
+            <ObjectumApp store={store} name="Catalog" version="0.0.1" />
         );
     }
 };
@@ -79,10 +87,11 @@ Authentication form.
 props:
 * **store**: - objectum store
 * **id**: - used in url hash navigation
-* **ref**: - used in ChooseField.chooseRef
+* **ref**: - used in ChooseField.choose.ref
 * **label**: - label of grid
 * **query**: - query
-* **pageRecs**: default 10 - recs on page
+* **model**: - model
+* **pageRecs**: recs on page
 * **refresh**: *boolean* - change for refresh grid 
 
 ```html
@@ -188,12 +197,12 @@ class User extends Component {
     
     render () {
         return (
-            <Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.user">
-                <Field attr="name" />
-                <Field attr="login" />
-                <Field attr="password" />
-                <Field attr="role" dict={true} />
-                <Field attr="file" />
+            <Form store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.user">
+                <Field property="name" />
+                <Field property="login" />
+                <Field property="password" />
+                <Field property="role" dict={true} />
+                <Field property="file" />
             </Form>
         );
     }
@@ -204,11 +213,11 @@ class User extends Component {
 
 ### Tabs
 ```html
-<Tabs key="tabs" id="tabs">
-    <Tab key="tab1" label="Main info">
+<Tabs id="tabs">
+    <Tab label="Main info">
         <Form />
     </Tab>
-    <Tab key="tab2" label="Additional">
+    <Tab label="Additional">
         <Form />
     </Tab>
 </Tabs>
@@ -240,6 +249,7 @@ String field. Type id: 1
 props:
 * **textarea**: *boolean* - textarea editor
 * **codemirror**: *boolean* - codemirror editor
+* **wysiwig**: *boolean* - wysiwig editor
 
 <a name="number_field" />
 
@@ -269,7 +279,7 @@ props:
 ### ChooseField
 Field for selecting from query. Type id: >= 1000
 ```html
-<ChooseField property="type" label="Type" rsc="record" value={this.state.type} choose={ItemTypes} chooseRef="d.item.type" />
+<ChooseField property="type" label="Type" rsc="record" value={this.state.type} choose={{cmp: ItemTypes, ref: "d.item.type"}} />
 ```
 
 <a name="select_field" />
@@ -283,6 +293,23 @@ let recs = [{id: 1, name: "Item 1"}, {id: 2, name: "Item 2"}];
 <SelectField property="type" label="Type" recs={recs} />
 ```
 
+<a name="json_field" />
+
+### JsonField
+Composite field
+```html
+<JsonField
+    label="My options"
+    property="opts"
+    value='{"p1": true, "p2": false}'
+    props={[
+        {prop: "p1", label: "P1", component: BooleanField},
+        {prop: "p2", label: "P2", component: BooleanField},
+        {prop: "p3", label: "P3", component: BooleanField}
+    ]}
+/>
+```
+
 <a name="json_editor" />
 
 ### JsonEditor
@@ -291,37 +318,13 @@ Codemirror textarea. You can select tag from JSON for multiline editing.
 <JsonEditor property="opts" label="Options" />
 ```
 
-<a name="confirm" />
+<a name="tooltip" />
 
-### Confirm
-```js
-class Items extends Component {
-    constructor (props) {
-        super (props);
-        
-        this.state = {
-            removeConfirm: false
-        };
-    }
-
-    async onRemove (confirmed) {
-        if (confirmed) {
-            ...
-        }
-        this.setState ({removeConfirm: false});
-    }
-
-    render () {
-        return (
-            <div>
-                ...
-                
-                <Confirm label="Are you sure?" visible={this.state.removeConfirm} onClick={this.onRemove} />
-            </div>
-        );
-    }
-};	
-
+### Tooltip
+```html
+<Tooltip label="My tooltip">
+    <div>...</div>
+</Tooltip>
 ```
 
 ## Author
