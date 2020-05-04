@@ -11,7 +11,7 @@ Objectum ecosystem:
 
 Install:
 ```bash
-npm install objectum-react
+npm install --save objectum-react
 ```
 
 ## Components
