@@ -33,6 +33,7 @@ npm install --save objectum-react
     * [JsonField](#json_field)
     * [JsonEditor](#json_editor)
 * [Tooltip](#tooltip)  
+* [Action](#action)  
 
 <a name="objectum_app" />
 
@@ -325,6 +326,44 @@ Codemirror textarea. You can select tag from JSON for multiline editing.
 <Tooltip label="My tooltip">
     <div>...</div>
 </Tooltip>
+```
+
+<a name="action" />
+
+### Action
+Action is a button. Helps with:
+* Execute sync and async functions
+* Catches and displays exceptions
+* Shows confirmation before execute
+* Shows progress (client and server methods)
+* Shows result
+
+Simple:
+```html
+<Action
+    label="My action"
+    onClick={() => {
+        ...
+    }}
+/>
+```
+
+Confirmation, progress, result:
+```html
+<Action
+    label="My action"
+    confirm={true}
+    onClick={async ({store, progress, confirm}) => {
+        for (let i = 0; i < 10; i ++) {
+            progress ({label: "My label", value: i + 1, max: 10});
+        }
+        if (await confirm ("Are you sure?")) {
+            return "My result 1";
+        } else {
+            return "My result 2";
+        } 
+    }}
+/>
 ```
 
 ## Author
