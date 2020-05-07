@@ -445,7 +445,9 @@ class Form extends Component {
 						field = <BooleanField {...props} />;
 					}
 					if (type >= 1000) {
-						if (child.props.dict) {
+						let property = me.model.properties [code];
+						
+						if (child.props.dict || me.props.store.getModel (property.type).isDictionary ()) {
 							field = <DictField {...props} />;
 						} else
 						if (child.props.chooseModel) {
