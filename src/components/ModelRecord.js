@@ -274,7 +274,7 @@ class ModelRecord extends Component {
 									result.tableNum ++;
 								}
 								return (
-									<div className={"col " + cls} key={`col-${j}`}>
+									<div key={j} className={"col " + cls} key={`col-${j}`}>
 										{col}
 									</div>
 								);
