@@ -19,8 +19,11 @@ class SelectField extends Component {
 	
 	onChange (val) {
 		let me = this;
-		let value = Number (val.target.value);
+		let value = val.target.value;
 		
+		if (!isNaN (value)) {
+			value = Number (value);
+		}
 		me.setState ({value});
 
 		if (me.props.onChange) {
