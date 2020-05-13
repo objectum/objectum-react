@@ -19,7 +19,7 @@ class SelectField extends Component {
 	
 	onChange (val) {
 		let me = this;
-		let value = val.target.value;
+		let value = Number (val.target.value);
 		
 		me.setState ({value});
 
@@ -41,6 +41,9 @@ class SelectField extends Component {
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
 
+		if (!me.props.recs && !me.props.records) {
+			return <div>recs or records not exist</div>
+		}
 		return (
 			<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
