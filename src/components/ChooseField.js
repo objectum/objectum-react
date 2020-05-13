@@ -32,7 +32,7 @@ class ChooseField extends Component {
 			me.state.ref = "list";
 		}
 		if (!me.props.disabled) {
-			if (!choose.query && (!me.state.cmp || !me.state.ref)) {
+			if (!choose.query && !choose.model && (!me.state.cmp || !me.state.ref)) {
 				me.state.invalid = true;
 			}
 		}
