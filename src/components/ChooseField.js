@@ -114,7 +114,7 @@ class ChooseField extends Component {
 			return (
 				<div className="form-group">
 					<label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>
-					<div className="alert alert-danger">"choose: cmp, ref" or "choose: query" not exist</div>
+					<div className="alert alert-danger">"choose: cmp, ref" or "choose: query" or "choose: model" not exist</div>
 				</div>
 			);
 		}
