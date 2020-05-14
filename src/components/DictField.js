@@ -51,7 +51,7 @@ class DictField extends Component {
 		let state = {
 			label: ""
 		};
-		if (!me.state.recs.length) {
+		if (!me.state.recs.length && !(me.props.recs || me.props.records)) {
 			state.recs = await me.props.store.getDict (me.property.get ("type"));
 		}
 		if (me.state.value) {
