@@ -48,7 +48,7 @@ class StringField extends Component {
 		if (me.props.onChange) {
 			me.props.onChange ({code: me.state.code, value});
 		}
-	};
+	}
 	
 	onChange (val) {
 		let me = this;

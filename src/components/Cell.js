@@ -10,6 +10,17 @@ class Cell extends Component {
 		super (props);
 	}
 	
+	renderString (v) {
+		let me = this;
+		let col = me.props.col;
+
+		if (col.property && me.props.store.getProperty (col.property).getOpts ().wysiwyg) {
+			return <span dangerouslySetInnerHTML={{__html: v}} />
+		} else {
+			return <span>{v}</span>
+		}
+	}
+	
 	render () {
 		let me = this;
 		let value = me.props.value;
@@ -61,12 +72,12 @@ class Cell extends Component {
 			} else {
 				if (typeof (value) == "string") {
 					if (value.length < 300) {
-						return (<span>{value}</span>);
+						return me.renderString (value);
 					} else {
-						return (<Tooltip label={value}>{value.substr (0, 300)} ...</Tooltip>);
+						return (<Tooltip label={me.renderString (value)}>{me.renderString (value.substr (0, 300))} ...</Tooltip>);
 					}
 				} else {
-					return (<span>{value}</span>);
+					return <span>{value}</span>;
 				}
 			}
 		}

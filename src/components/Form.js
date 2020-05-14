@@ -427,6 +427,17 @@ class Form extends Component {
 						if (property.secure) {
 							props.secure = true;
 						}
+						let opts = property.getOpts ();
+						
+						if (opts.wysiwyg) {
+							props.wysiwyg = true;
+						}
+						if (opts.textarea) {
+							props.textarea = true;
+						}
+						if (opts.rows) {
+							props.rows = opts.rows;
+						}
 						props.label = props.label || property.name;
 					}
 					if (!type) {
