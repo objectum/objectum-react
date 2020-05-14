@@ -160,6 +160,17 @@ class Form extends Component {
 		
 		if (value && me.state [`${code}-error`]) {
 			state [`${code}-error`] = "";
+
+			let errors = false;
+			
+			_.each (me.state, (v, a) => {
+				if (v && a.endsWith ("-error") && a != `${code}-error`) {
+					errors = true;
+				}
+			});
+			if (!errors) {
+				state._error = "";
+			}
 		}
 		me.setState (state);
 		
