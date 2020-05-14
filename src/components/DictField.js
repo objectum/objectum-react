@@ -131,19 +131,24 @@ class DictField extends Component {
 	
 	async onClick (val) {
 		let me = this;
+		let value = val.target.id;
+		
+		if (!isNaN (value)) {
+			value = Number (value);
+		}
 		let state = {
 			showDialog: false,
-			value: val.target.id,
+			value,
 			filter: "",
 			group: null
 		};
-		let record = await me.props.store.getRecord (state.value);
+		let record = await me.props.store.getRecord (value);
 		
 		state.label = record.getLabel ();
 		me.setState (state);
 		
 		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value: state.value, id: me.props.id});
+			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
 		}
 	}
 	
