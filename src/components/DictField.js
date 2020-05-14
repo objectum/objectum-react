@@ -80,15 +80,24 @@ class DictField extends Component {
 	
 	async componentDidUpdate (prevProps) {
 		let me = this;
+		let state = {};
 		
 		if (prevProps.value !== me.props.value) {
-			let state = {value: me.props.value, label: ""};
+			state.value = me.props.value;
+			state.label = "";
 			
 			if (me.props.value) {
 				let record = await me.props.store.getRecord (me.props.value);
 				
 				state.label = record.getLabel ();
 			}
+		}
+		let recs = me.props.recs || me.props.records;
+		
+		if (recs && _.keys (recs).join () != _.keys (me.state.recs).join ()) {
+			state.recs = recs;
+		}
+		if (!_.isEmpty (state)) {
 			me.setState (state);
 		}
 	}
