@@ -175,7 +175,7 @@ class Form extends Component {
 		me.setState (state);
 		
 		if (me.props.onChange) {
-			me.props.onChange (code, value);
+			me.props.onChange ({property: code, code, value, file});
 		}
 	}
 	
