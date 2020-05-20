@@ -39,8 +39,8 @@ class Property extends Component {
 		me.onCreate = me.onCreate.bind (me);
 	}
 
-	onChange (id, v) {
-		this.setState ({[id]: v});
+	onChange ({property, value}) {
+		this.setState ({[property]: value});
 	}
 	
 	onCreate (rid) {
