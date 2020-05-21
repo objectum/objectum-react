@@ -188,11 +188,11 @@ class DictField extends Component {
 		}
 		return (
 			<div className="dictfield-dialog text-left" ref="dialog">
-				<div className="dictfield-filter border p-1 bg-white">
+				<div className="dictfield-filter border p-1 bg-white shadow">
 					<div className="mb-1">{i18n ("Select parameter")}</div>
 					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
 				</div>
-				<div className="dictfield-params border p-1 bg-white">
+				<div className="dictfield-params border p-1 bg-white shadow">
 					<ul className="list-group">
 						{recs.map (rec => {
 							let label = `${rec.name} (id: ${rec.id})`;
@@ -216,11 +216,11 @@ class DictField extends Component {
 		
 		return (
 			<div className="dictfield-dialog text-left" ref="dialog">
-				<div className="dictfield-filter border p-1 bg-white">
+				<div className="dictfield-filter border p-1 bg-white shadow">
 					<div className="mb-1">{`${i18n ("Select")}: ${me.groupProperty.get ("name")}`}</div>
 					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
 				</div>
-				<div className="dictfield-params border p-1 bg-white">
+				<div className="dictfield-params border p-1 bg-white shadow">
 					<ul className="list-group">
 						{recs.map (rec => {
 							let label = rec.name;
