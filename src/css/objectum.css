@@ -57,6 +57,9 @@ body {
     z-index: 1000;
     overflow: auto;
 }
+.dictfield-input {
+    border-radius: 0;
+}
 .stringfield {
     min-width: 10em;
 }

@@ -251,36 +251,36 @@ class DictField extends Component {
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
 					<div className="d-flex dictfield">
-						{!me.props.disabled && <div>
-							<button
+						{!me.props.disabled && <div className="border border-right-0 rounded-left">
+							<Tooltip label={i18n ("Choose")}><button
 								type="button"
-								className="btn btn-primary btn-sm"
+								className="btn btn-link btn-sm p-1"
 								onClick={me.onShowDialog}
 								style={{height: "100%", width: "27px"}}
 							>
 								<i className="fas fa-edit" ref="button" />
-							</button>
-						</div>}
-						{!me.props.disabled && <div>
-							<button
-								type="button"
-								className="btn btn-primary btn-sm border-left"
-								onClick={me.onClear}
-								style={{height: "100%", width: "27px"}}
-							>
-								<i className="fas fa-times" />
-							</button>
+							</button></Tooltip>
 						</div>}
 						<Tooltip label={me.state.label}>
 							<input
 								type="text"
-								className={`form-control ${addCls}`}
+								className={`form-control ${addCls} ${me.props.disabled ? "" : " dictfield-input"}`}
 								id={me.id}
 								value={me.state.label}
 								onChange={() => {}}
 								disabled={true}
 							/>
 						</Tooltip>
+						{!me.props.disabled && <div className="border border-left-0 rounded-right">
+							<Tooltip label={i18n ("Clear")}><button
+								type="button"
+								className="btn btn-link btn-sm p-1"
+								onClick={me.onClear}
+								style={{height: "100%", width: "27px"}}
+							>
+								<i className="fas fa-times" />
+							</button></Tooltip>
+						</div>}
 					</div>
 					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 
