@@ -102,6 +102,9 @@ class Form extends Component {
 			if (me.model) {
 				me.regModel = me.props.store.getRegistered (me.model.getPath ());
 			}
+			if (!me.record && me.props.record) {
+				me.record = me.props.record;
+			}
 			let fields = me.getFields (me.props.children);
 			
 			for (let code in fields) {
@@ -519,8 +522,7 @@ class Form extends Component {
 	
 	render () {
 		let me = this;
-		if (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.mid && me.props.rsc == "record")) {
-			//return (<div className="alert alert-danger" role="alert">need props: store, rsc, rid or mid (record)</div>);
+		if (!me.props.record && (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.mid && me.props.rsc == "record"))) {
 			return <EditForm {...me.props} />;
 		}
 		if (me.state._loading && !me.record) {

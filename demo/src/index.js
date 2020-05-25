@@ -53,10 +53,15 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<Form ref="my-form" record={{text: "test"}} hideButtons>
+					<StringField label="Text" property="text" notNull />
+					<Action label="test" onClick={() => {
+						me.refs ["my-form"].isValid ();
+					}} />
+				</Form>
 				<DictField label="DictField" store={store} model="declaration" property="state" value="1048" />
 				<ChooseField label="ChooseField" store={store} property="test" choose={{model: "org"}} value="1020" />
 				<StringField label="StringField" property="test" wysiwyg />
-				<Action label="test" onClick={() => "result"} />
 {/*
 				<Form store={store} rsc="record" rid={20436} mid="balance">
 					<Field property="amount" notNull />
