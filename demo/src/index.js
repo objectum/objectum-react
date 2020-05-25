@@ -29,7 +29,10 @@ class Test extends Component {
 		
 		this.onClick = this.onClick.bind (this);
 
-		this.state = {};
+		this.state = {
+			text: "1",
+			refresh: false
+		};
 	}
 	
 	async onClick ({progress, confirm}) {
@@ -53,11 +56,14 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<Form ref="my-form" record={{text: "test"}} hideButtons>
+				<Form ref="my-form" record={me.state} refresh={me.state.refresh} hideButtons>
 					<BooleanField label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />
 					<StringField label="Text" property="text" notNull />
 					<Action label="test" onClick={() => {
 						me.refs ["my-form"].isValid ();
+					}} />
+					<Action label="test value" onClick={() => {
+						me.setState ({refresh: !me.state.refresh, text: "2"});
 					}} />
 				</Form>
 				<DictField label="DictField" store={store} model="declaration" property="state" value="1048" />

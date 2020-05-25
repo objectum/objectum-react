@@ -128,29 +128,22 @@ class Form extends Component {
 		me.setState (state);
 	}
 	
-/*
 	componentDidUpdate (prevProps) {
 		let me = this;
-		let state = {};
-
-		if (me.props.defaults && !me.record) {
-			let prev = prevProps.defaults || {};
+		
+		if (prevProps.record && me.props.record && prevProps.record != me.props.record) {
+			me.record = me.props.record;
 			
-			console.log (prev, me.props.defaults);
-			for (let code in me.props.defaults) {
-				let value = me.props.defaults [code];
-				
-				if (value !== prev [code] && me.state [code] !== value) {
-					state [code] = value;
+			let state = {};
+			
+			_.each (me.state, (v, a) => {
+				if (me.record [a] != v) {
+					state [a] = me.record [a];
 				}
-			}
-		}
-		if (!_.isEmpty (state)) {
-			console.log ("new state", state);
+			});
 			me.setState (state);
 		}
 	}
-*/
 	
 	onChange ({code, value, file}) {
 		let me = this;
@@ -533,7 +526,7 @@ class Form extends Component {
 			);
 		}
 		let formChildren = me.renderChildren (me.props.children);
-		
+
 		return (
 			<div className={me.props.className}>
 				{me.props.label && <div>
