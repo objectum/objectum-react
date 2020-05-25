@@ -106,7 +106,7 @@ class Tabs extends Component {
 		}
 */
 		return (
-			<div>
+			<div className={me.props.className}>
 				{me.props.label && <div className="text-white bg-info py-1">
 					<strong className="pl-2">{i18n (me.props.label)}</strong>
 				</div>}

@@ -535,7 +535,7 @@ class Form extends Component {
 		let formChildren = me.renderChildren (me.props.children);
 		
 		return (
-			<div>
+			<div className={me.props.className}>
 				{me.props.label && <div>
 					<h5 className="pl-3 py-2 ml-3">{me.props.label}</h5>
 				</div>}

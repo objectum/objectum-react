@@ -792,7 +792,7 @@ class Grid extends Component {
 		;
 		
 		return (
-			<Fade><div>
+			<Fade><div className={me.props.className}>
 				{me.props.label && <div className="text-white bg-info py-1">
 					<strong className="ml-2">{i18n (me.props.label)}</strong>
 				</div>}

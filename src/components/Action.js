@@ -154,7 +154,7 @@ class Action extends Component {
 		let ModalComponent = me.props.modalComponent;
 		
 		return (
-			<span>
+			<span className={me.props.className}>
 				<button
 					type="button"
 					className="btn btn-primary btn-labeled mr-1"
