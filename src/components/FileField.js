@@ -10,9 +10,19 @@ import "react-image-crop/dist/ReactCrop.css";
 import Modal from "react-modal";
 
 function FileInput (props) {
-	let model = props.store.getModel (props.model);
-	let property = model.properties [props.property];
-	let propertyId = property.id;
+	let propertyId = props.propertyId;
+	
+	if (!propertyId) {
+		let model = props.store.getModel (props.model);
+		let property = model.properties [props.property];
+		
+		propertyId = property.id;
+	}
+	let recordId = props.recordId;
+	
+	if (!recordId) {
+		recordId = props.record.id;
+	}
 	let opts = {
 		multiple: false
 	};
@@ -30,7 +40,7 @@ function FileInput (props) {
 		}
 	} else if (props.value) {
 		file = (
-			<div><a target="_blank" rel="noopener noreferrer" href={"/files/" + props.record.id + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
+			<div><a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
 		);
 	}
 	return (
@@ -59,14 +69,17 @@ class FileField extends Component {
 		me.state = {
 			rsc: me.props.rsc || "record",
 			code: me.props.property,
-			value: me.props.value
+			value: me.props.value,
+			image: me.props.image
 		};
-		let model = me.props.store.getModel (me.props.model);
-		let property = model.properties [me.props.property];
-		let propertyOpts = property.getOpts ();
-		
-		if (propertyOpts.image) {
-			me.state.image = propertyOpts.image;
+		if (!me.state.image && me.props.model) {
+			let model = me.props.store.getModel (me.props.model);
+			let property = model.properties [me.props.property];
+			let propertyOpts = property.getOpts ();
+			
+			if (propertyOpts.image) {
+				me.state.image = propertyOpts.image;
+			}
 		}
 		me.id = newId ();
 	}
@@ -181,7 +194,8 @@ class FileField extends Component {
 				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
 				<FileInput
 					id={me.id} onFile={me.onFile} value={me.state.value} store={me.props.store}
-					record={me.props.record} model={me.props.model} property={me.props.property} image={me.state.image} error={me.props.error}
+					record={me.props.record} model={me.props.model} property={me.props.property} propertyId={me.props.propertyId} recordId={me.props.recordId}
+					image={me.state.image} error={me.props.error}
 				/>
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 				{me.state.src && <Modal
