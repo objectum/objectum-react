@@ -131,17 +131,20 @@ class Form extends Component {
 	componentDidUpdate (prevProps) {
 		let me = this;
 		
-		if (prevProps.record && me.props.record && prevProps.record != me.props.record) {
-			me.record = me.props.record;
-			
+		if (prevProps.record && me.props.record) {
+			let fields = me.getFields (me.props.children);
 			let state = {};
 			
-			_.each (me.state, (v, a) => {
-				if (me.record [a] != v) {
-					state [a] = me.record [a];
+			me.record = me.props.record;
+			
+			for (let code in fields) {
+				if (prevProps.record [code] !== me.props.record [code]) {
+					state [code] = me.props.record [code];
 				}
-			});
-			me.setState (state);
+			}
+			if (!_.isEmpty (state)) {
+				me.setState (state);
+			}
 		}
 	}
 	
