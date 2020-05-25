@@ -20,7 +20,7 @@ function FileInput (props) {
 	}
 	let recordId = props.recordId;
 	
-	if (!recordId) {
+	if (!recordId && props.record) {
 		recordId = props.record.id;
 	}
 	let opts = {
