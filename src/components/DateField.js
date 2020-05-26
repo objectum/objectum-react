@@ -14,7 +14,6 @@ class DateField extends Component {
 		if (value && typeof (value) == "string") {
 			value = new Date (value);
 		}
-		console.log (value);
 		me.state = {
 			rsc: me.props.rsc || "record",
 			code: me.props.property,

@@ -420,7 +420,7 @@ class Form extends Component {
 					store: me.props.store,
 					ref: code,
 					key,
-					disabled: me.props.disabled,
+					disabled: child.props.disabled || me.props.disabled,
 					error: me.state [`${code}-error`]
 				};
 				props.rsc = props.rsc || me.props.rsc;
