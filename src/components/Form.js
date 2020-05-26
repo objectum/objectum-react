@@ -404,6 +404,7 @@ class Form extends Component {
 			let code = child.props.property;
 			
 			if (code) {
+				console.log (code, child.props);
 				let value = me.state.hasOwnProperty (code) ? me.state [code] : (child.props.value || "");
 				let props = {
 					...child.props,
@@ -420,6 +421,7 @@ class Form extends Component {
 					store: me.props.store,
 					ref: code,
 					key,
+					disabled: me.props.disabled,
 					error: me.state [`${code}-error`]
 				};
 				props.rsc = props.rsc || me.props.rsc;
