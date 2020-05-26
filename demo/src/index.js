@@ -57,7 +57,7 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<DateField property="date" label="Date" value="2020-01-02" />
+				<DateField property="date" label="Date" value="" />
 				<Form ref="my-form" record={me.state} refresh={me.state.refresh} hideButtons>
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />

@@ -9,36 +9,30 @@ class DateField extends Component {
 		super (props);
 		
 		let me = this;
+		let value = me.props.value === null ? "" : me.props.value;
 		
-		me.onChange = me.onChange.bind (me);
+		if (value && typeof (value) == "string") {
+			value = new Date (value);
+		}
+		console.log (value);
 		me.state = {
 			rsc: me.props.rsc || "record",
 			code: me.props.property,
-			value: me.props.value === null ? "" : (typeof (me.props.value) == "string" ? new Date (me.props.value) : me.props.value)
+			value
 		};
 		me.id = newId ();
-	}
-	
-	onChange (val) {
-		let me = this;
-		let value = val.target.value;
-		let tokens = value.split ("-");
-		
-		if (Number (tokens [0]) < 1800) {
-			return;
-		}
-		me.setState ({value});
-		
-		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value: value ? new Date (value) : value, id: me.props.id});
-		}
 	}
 	
 	async componentDidUpdate (prevProps) {
 		let me = this;
 		
 		if (prevProps.value !== me.props.value) {
-			me.setState ({value: typeof (me.props.value) == "string" ? new Date (me.props.value) : me.props.value});
+			let value = me.props.value === null ? "" : me.props.value;
+			
+			if (value && typeof (value) == "string") {
+				value = new Date (value);
+			}
+			me.setState ({value});
 		}
 	}
 	
