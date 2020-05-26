@@ -2,7 +2,7 @@ import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
+import {ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 import ReactCrop from "react-image-crop";
 
@@ -34,6 +34,7 @@ class Test extends Component {
 			file: "test.jpg",
 			refresh: false
 		};
+		this.changed = {};
 	}
 	
 	async onClick ({progress, confirm}) {
@@ -57,8 +58,8 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<DateField property="date" label="Date" value="" />
-				<Form ref="my-form" record={me.state} refresh={me.state.refresh} hideButtons>
+				<Form ref="my-form" record={me.state} hideButtons>
+					<DateField property="date" label="Date" notNull />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />
 					<StringField label="Text" property="text" notNull />

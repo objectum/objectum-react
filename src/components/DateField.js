@@ -50,11 +50,11 @@ class DateField extends Component {
 						className={`form-control ${addCls}`}
 						dateFormat="dd.MM.yyyy"
 						selected={me.state.value}
-						onChange={date => {
-							me.setState ({value: date});
-	
+						onChange={value => {
+							me.setState ({value});
+
 							if (me.props.onChange) {
-								me.props.onChange ({...me.props, code: me.state.code, value: date ? new Date (value) : value, id: me.props.id});
+								me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
 							}
 						}}
 					/>
