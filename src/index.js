@@ -39,6 +39,7 @@ import ModelRecord from "./components/ModelRecord";
 import RemoveAction from "./components/RemoveAction";
 import Loading from "./components/Loading";
 import Tooltip from "./components/Tooltip";
+import Navbar from "./components/Navbar";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -103,6 +104,7 @@ export {
 	RemoveAction,
 	Loading,
 	Tooltip,
+	Navbar,
 	i18n,
 	goRidLocation,
 	timeout,
@@ -159,6 +161,7 @@ export default {
 	RemoveAction,
 	Loading,
 	Tooltip,
+	Navbar,
 	i18n,
 	goRidLocation,
 	timeout,
