@@ -142,12 +142,14 @@ class Demo extends Component {
 					_password="356A192B7913B04C54574D18C28D46E6395428AB"
 					name="objectum-react"
 					version={packageConfig.version}
+/*
 					onRenderAuthInfo={div => {
 						return React.cloneElement (div, {style: {
 							backgroundImage: `url(${bgImage})`,
 							backgroundSize: "content"
 						}});
 					}}
+*/
 					/*onCustomRender={me.onCustomRender}*/
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />

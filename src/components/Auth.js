@@ -66,7 +66,7 @@ class Auth extends Component {
 			disabledButton = true;
 		}
 		let authInfo = (
-			<div className="auth-info bg-secondary text-white flex-grow-1 p-3">
+			<div className="auth-info bg-white flex-grow-1 p-3 border-left">
 				<div className="mt-1 ml-2">
 					<h3>{me.props.name}</h3>
 				</div>

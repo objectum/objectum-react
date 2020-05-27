@@ -195,7 +195,7 @@ class ObjectumApp extends Component {
 			
 			recs.forEach ((rec, i) => {
 				let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
-				let selected = (rec.path || "").split ("#")[0] == document.location.pathname;
+				//let selected = (rec.path || "").split ("#")[0] == document.location.pathname;
 				
 				if (childRecs.length) {
 					let opened = me.state [`open-${parent}-${i}`];
@@ -215,9 +215,15 @@ class ObjectumApp extends Component {
 						renderItems (rec.id, level + 1);
 					}
 				} else {
+					let key = `menu-${parent}-${i}`;
+					let selected = me.state.selectedItem == key;
+					
 					items.push (
-						<tr key={`menu-${parent}-${i}`}><td className={selected ? "bg-primary" : ""}>
-							<Link className={`nav-link text-nowrap ml-${level * 2} ${selected ? "text-white" : ""}`} to={rec.path}>
+						<tr key={key}><td className={selected ? "bg-primary" : ""}>
+							<Link className={`nav-link text-nowrap ml-${level * 2} ${selected ? "text-white" : ""}`}
+								  to={rec.path}
+								  onClick={() => me.setState ({selectedItem: key})}
+							>
 								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
 								<span className={selected ? "text-white" : "text-dark"}>{i18n (rec.name)}</span>
 							</Link>
