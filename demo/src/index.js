@@ -58,6 +58,14 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<Tabs>
+					<Tab label="Tab1">
+						Tab1
+					</Tab>
+					<Tab label="Tab2">
+						Tab2
+					</Tab>
+				</Tabs>
 				<Form ref="my-form" record={me.state} hideButtons>
 					<DateField property="date" label="Date" notNull />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
@@ -136,8 +144,8 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					__username="admin"
-					__password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 					_username="diet"
 					_password="356A192B7913B04C54574D18C28D46E6395428AB"
 					name="objectum-react"

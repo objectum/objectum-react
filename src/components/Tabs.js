@@ -119,7 +119,7 @@ class Tabs extends Component {
 								if (i == me.state.tab) {
 									active = " active";
 								} else {
-									active = " border-bottom";
+									active = " border-bottom text-primary select-tab";
 								}
 								if (item.props.path) {
 									return (
@@ -130,7 +130,8 @@ class Tabs extends Component {
 								} else {
 									return (
 										<li className="nav-item" key={i}>
-											<a href="javascript:void(0)" className={"nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</a>
+											{/*<a href="javascript:void(0)" className={"nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</a>*/}
+											<span className={"nav-link" + active} onClick={() => me.changeTab (i)}>{i18n (item.props.label)}</span>
 										</li>
 									);
 								}

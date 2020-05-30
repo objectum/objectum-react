@@ -34,6 +34,10 @@ class Action extends Component {
 		}
 	}
 	
+	componentWillUnmount () {
+		this.unmounted = true;
+	}
+	
 	async onClick () {
 		let me = this;
 		let execute = () => {
@@ -63,17 +67,24 @@ class Action extends Component {
 							if (typeof (result) == "string") {
 								state.result = result;
 							}
-							me.setState (state);
+							if (!me.unmounted) {
+								me.setState (state);
+							}
 						}).catch (err => {
 							console.error (err);
 							state.error = err.message;
-							me.setState (state);
+
+							if (!me.unmounted) {
+								me.setState (state);
+							}
 						});
 					} else {
 						if (typeof (promise) == "string") {
 							state.result = promise;
 						}
-						me.setState (state);
+						if (!me.unmounted) {
+							me.setState (state);
+						}
 					}
 				} catch (err) {
 					console.error (err);
