@@ -729,7 +729,7 @@ class Grid extends Component {
 							</Tooltip>
 							<span data-tip={i18n ("Refresh")}>
 									{me.state.loading ?
-										<span className="spinner-border spinner-border-sm text-primary mt-1 mx-1" role="status" aria-hidden="true"/> :
+										<span className="spinner-border objectum-spinner text-primary mt-1 mx-1" role="status" aria-hidden="true"/> :
 										<Tooltip label={i18n ("Refresh")}>
 											<button type="button" className="btn btn-link btn-sm" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
 												<i className="fas fa-sync"/>

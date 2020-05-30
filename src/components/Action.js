@@ -147,7 +147,7 @@ class Action extends Component {
 		if (me.state.processing) {
 			return (
 				<span className="text-primary ml-2 mr-2">
-					<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true" />{text}
+					<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />{text}
 				</span>
 			);
 		}
