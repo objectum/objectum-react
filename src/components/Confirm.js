@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import Modal from "react-modal";
 import {i18n} from "./../i18n";
 import Loading from "./Loading";
-import Fade from "react-reveal/Fade";
+import Fade from "./Fade";
 
 class Confirm extends Component {
 	componentDidMount () {

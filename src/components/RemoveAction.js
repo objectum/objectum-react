@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {i18n} from "./../i18n";
-import Fade from "react-reveal/Fade";
+import Fade from "./Fade";
 import {timeout} from "./helper";
 
 class RemoveAction extends Component {

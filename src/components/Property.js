@@ -106,7 +106,7 @@ class Property extends Component {
 								</div>
 								<div className="form-row">
 									<div className="form-group col-md-6">
-										<StringField property="opts" label="Options" codemirror={true} />
+										<StringField property="opts" label="Options" textarea monospace rows={10} />
 									</div>
 									<div className="form-group col-md-6">
 									</div>

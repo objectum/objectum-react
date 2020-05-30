@@ -9,10 +9,11 @@ class BooleanField extends Component {
 		let me = this;
 		
 		me.onChange = me.onChange.bind (me);
+		
 		me.state = {
 			rsc: me.props.rsc || "record",
 			code: me.props.property,
-			value: me.props.value
+			value: me.props.value || ""
 		};
 		me.id = newId ();
 	}
@@ -32,7 +33,7 @@ class BooleanField extends Component {
 		let me = this;
 		
 		if (prevProps.value !== me.props.value) {
-			me.setState ({value: me.props.value});
+			me.setState ({value: me.props.value || ""});
 		}
 	}
 	

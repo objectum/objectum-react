@@ -92,7 +92,20 @@ class StringField extends Component {
 		let me = this;
 		
 		if (prevProps.value !== me.props.value) {
-			me.setState ({value: me.props.value});
+			me.setState ({value: me.props.value === null ? "" : me.props.value});
+		}
+	}
+	
+	onKeyDown (e) {
+		let ta = e.target;
+		
+		if (e.key === "Tab") {
+			let val = ta.value, start = ta.selectionStart, end = ta.selectionEnd;
+			
+			ta.value = val.substring (0, start) + "\t" + val.substring (end);
+			ta.selectionStart = ta.selectionEnd = start + 1;
+			
+			e.preventDefault ();
 		}
 	}
 	
@@ -100,10 +113,20 @@ class StringField extends Component {
 		let me = this;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
-		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} />;
+		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={me.id} value={me.state.value || ""} onChange={me.onChange} disabled={disabled} />;
 		
 		if (me.props.textarea) {
-			cmp = <textarea className={"form-control" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} rows={me.props.rows || 5} />;
+			cmp = (
+				<textarea
+					className={`form-control${addCls} ${me.props.monospace ? "text-monospace" : ""}`}
+					id={me.id}
+					value={me.state.value || ""}
+					onKeyDown={me.onKeyDown}
+					onChange={me.onChange}
+					disabled={disabled}
+					rows={me.props.rows || 5}
+				/>
+			);
 		}
 		if (me.props.codemirror) {
 			cmp = (

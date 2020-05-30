@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Fade from "react-reveal/Fade";
+import Fade from "./Fade";
 
 class Tab extends Component {
 	constructor (props) {

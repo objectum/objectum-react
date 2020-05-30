@@ -70,7 +70,9 @@ class Models extends Component {
 	}
 	
 	onSelect (id) {
-		this.setState ({model: this.props.store.getModel (id).getPath ()});
+		if (id) {
+			this.setState ({model: this.props.store.getModel (id).getPath ()});
+		}
 	}
 	
 	render () {

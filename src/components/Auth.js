@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {i18n} from "./../i18n";
 import Loading from "./Loading";
 import {timeout} from "./helper";
+import Fade from "./Fade";
 
 class Auth extends Component {
 	constructor (props) {
@@ -79,49 +80,51 @@ class Auth extends Component {
 			authInfo = me.props.onRenderAuthInfo (authInfo);
 		}
 		return (
-			<div className="auth">
-				<div className="border bg-white shadow mt-5">
-					<div className="bg-info text-white py-2 pl-4">
-						<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
-					</div>
-					<div className="d-flex">
-						<div className="auth-login p-3">
-							<div>
-								<input
-									type="text"
-									className="form-control"
-									id="username"
-									placeholder={i18n ("Username")}
-									onChange={me.fieldChange}
-									ref={input => me.usernameInput = input}
-									onKeyDown={me.onKeyDown}
-								/>
-							</div>
-							<div className="mt-3">
-								<input
-									type="password"
-									className="form-control"
-									id="password"
-									placeholder={i18n ("Password")}
-									onChange={me.fieldChange}
-									onKeyDown={me.onKeyDown}
-								/>
-							</div>
-							<div className="mt-3">
-								<button type="button" className="btn btn-primary" onClick={me.buttonClick} disabled={disabledButton}>
-									{me.state.loading ? <Loading /> : <span><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</span>}
-								</button>
-							</div>
-							{me.state.error && (
-								<div className="alert alert-danger mt-3" role="alert">
-									{me.state.error}
-								</div>
-							)}
+			<Fade>
+				<div className="auth">
+					<div className="border bg-white shadow mt-5">
+						<div className="bg-info text-white py-2 pl-4">
+							<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
 						</div>
-						{authInfo}
+						<div className="d-flex">
+							<div className="auth-login p-3">
+								<div>
+									<input
+										type="text"
+										className="form-control"
+										id="username"
+										placeholder={i18n ("Username")}
+										onChange={me.fieldChange}
+										ref={input => me.usernameInput = input}
+										onKeyDown={me.onKeyDown}
+									/>
+								</div>
+								<div className="mt-3">
+									<input
+										type="password"
+										className="form-control"
+										id="password"
+										placeholder={i18n ("Password")}
+										onChange={me.fieldChange}
+										onKeyDown={me.onKeyDown}
+									/>
+								</div>
+								<div className="mt-3">
+									<button type="button" className="btn btn-primary" onClick={me.buttonClick} disabled={disabledButton}>
+										{me.state.loading ? <Loading /> : <span><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</span>}
+									</button>
+								</div>
+								{me.state.error && (
+									<div className="alert alert-danger mt-3" role="alert">
+										{me.state.error}
+									</div>
+								)}
+							</div>
+							{authInfo}
+						</div>
 					</div>
 				</div>
-			</div>
+			</Fade>
 		);
 	}
 }

@@ -10,7 +10,7 @@ import {i18n} from "./../i18n";
 import GridColumns from "./GridColumns";
 import TableForm from "./TableForm";
 import Tooltip from "./Tooltip";
-import Fade from "react-reveal/Fade";
+import Fade from "./Fade";
 import {execute} from "objectum-client";
 
 class Grid extends Component {

@@ -16,10 +16,8 @@ import "react-image-crop/dist/ReactCrop.css";
 import "../../src/css/bootstrap-site.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
-import bgImage from "./images/italian.jpg";
 
 import packageConfig from "./../package";
-import Fade from "react-reveal/Fade";
 
 const store = new Store ();
 
@@ -146,8 +144,8 @@ class Demo extends Component {
 					store={store}
 					username="admin"
 					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					_username="diet"
-					_password="356A192B7913B04C54574D18C28D46E6395428AB"
+					__username="diet"
+					__password="356A192B7913B04C54574D18C28D46E6395428AB"
 					name="objectum-react"
 					version={packageConfig.version}
 /*

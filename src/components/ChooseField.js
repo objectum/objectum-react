@@ -48,7 +48,9 @@ class ChooseField extends Component {
 			
 			name = o.getLabel ();
 		}
-		me.setState ({name});
+		if (!me.unmounted) {
+			me.setState ({name});
+		}
 	}
 	
 	onVisible () {
@@ -91,9 +93,12 @@ class ChooseField extends Component {
 	async componentDidMount () {
 		let me = this;
 		
+		await me.updateName (me.state.value);
 		Modal.setAppElement ("body");
-		
-		me.updateName (me.state.value);
+	}
+	
+	componentWillUnmount () {
+		this.unmounted = true;
 	}
 	
 	async componentDidUpdate (prevProps) {

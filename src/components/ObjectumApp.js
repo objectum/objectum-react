@@ -23,7 +23,7 @@ import Logout from "./Logout";
 import Sidebar from "react-sidebar";
 import {setLocale, i18n} from "./../i18n";
 import _ from "lodash";
-import Fade from "react-reveal/Fade";
+import Fade from "./Fade";
 import {execute} from "objectum-client";
 import Loading from "./Loading";
 
@@ -455,9 +455,7 @@ class ObjectumApp extends Component {
 		} else {
 			return (
 				<div>
-					<Fade top>
-						<Auth store={me.store} name={me.state.name} version={me.state.version} onRenderAuthInfo={me.props.onRenderAuthInfo} />
-					</Fade>
+					<Auth store={me.store} name={me.state.name} version={me.state.version} onRenderAuthInfo={me.props.onRenderAuthInfo} />
 				</div>
 			);
 		}

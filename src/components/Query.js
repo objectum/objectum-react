@@ -72,12 +72,14 @@ class Query extends Component {
 									</div>
 								</div>
 								<div className="row">
-									<div className="col-md-6">
-										<StringField property="query" label="Query" codemirror={true} />
+									<div className="col">
+										<StringField property="query" label="Query" textarea monospace rows={20} />
 									</div>
+{/*
 									<div className="col-md-6">
-										<StringField property="opts" label="Options" codemirror={true} />
+										<StringField property="opts" label="Options" textarea monospace rows={20} />
 									</div>
+*/}
 								</div>
 							</Form>
 						</Tab>

@@ -11,7 +11,7 @@ import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
 import _ from "lodash";
 import Loading from "./Loading";
-import Fade from "react-reveal/Fade";
+import Fade from "./Fade";
 
 class ModelRecord extends Component {
 	constructor (props) {

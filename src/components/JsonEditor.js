@@ -2,7 +2,6 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {loadCSS, loadJS} from "./helper";
 import {i18n} from "../i18n";
 import _ from "lodash";
 import {newId} from "./helper";
@@ -19,7 +18,7 @@ class JsonEditor extends Component {
 		
 		me.state = {
 			code: me.props.property,
-			value: me.props.value,
+			value: me.props.value || "",
 			tags: [],
 			tag: "",
 			tagValue: ""
@@ -28,33 +27,7 @@ class JsonEditor extends Component {
 	}
 	
 	async componentDidMount () {
-		let me = this;
-		
-		if (!window.CodeMirror) {
-			await loadCSS (`${me.props.store.getUrl ()}/public/codemirror/codemirror.css`);
-			await loadJS (`${me.props.store.getUrl ()}/public/codemirror/codemirror.js`);
-		}
-		if (window.CodeMirror && me.refs.codemirror) {
-			me.codemirror = window.CodeMirror.fromTextArea (me.refs.codemirror, {
-				lineNumbers: true,
-				indentUnit: 4,
-				readOnly: !!me.props.disabled,
-				mode: "javascript"
-			});
-			me.codemirror.on ("change", function () {
-				me.onChange (me.codemirror.getValue ());
-			});
-			me.codemirror.setSize ("100%", 298);
-			me.codemirrorTag = window.CodeMirror.fromTextArea (me.refs.codemirrorTag, {
-				lineNumbers: true,
-				indentUnit: 4,
-				readOnly: !!me.props.disabled,
-				mode: "javascript"
-			});
-			me.codemirrorTag.setSize ("100%", 262);
-			me.codemirrorTag.on ("change", me.onChangeTagValue);
-		}
-		me.updateTags ();
+		this.updateTags ();
 	}
 	
 	updateTags (s) {
@@ -88,15 +61,12 @@ class JsonEditor extends Component {
 		if (!l.length) {
 			state.tag = "";
 			state.tagValue = "";
-			
-			if (me.codemirrorTag) {
-				me.codemirrorTag.setValue ("");
-			}
 		}
 		me.setState (state);
 	}
 
-	onChange (value) {
+	onChange (val) {
+		let value = val.target.value;
 		let me = this;
 
 		me.updateTags (value);
@@ -116,30 +86,40 @@ class JsonEditor extends Component {
 			tagValue = _.get (JSON.parse (me.state.value), v) || "";
 		} catch (err) {
 		}
-		me.codemirrorTag.off ("change", me.onChangeTagValue);
-		me.codemirrorTag.setValue (tagValue);
-		me.codemirrorTag.on ("change", me.onChangeTagValue);
-		
 		me.setState ({tag: v, tagValue});
 	}
 	
-	onChangeTagValue () {
+	onChangeTagValue (val) {
 		let me = this;
-		let s = me.codemirrorTag.getValue ();
+		let value = val.target.value;
 		
 		if (me.state.tag) {
-			let v = me.codemirror.getValue ();
-			
 			try {
-				let opts = JSON.parse (v);
+				let opts = JSON.parse (me.state.value);
 				
-				_.set (opts, me.state.tag, s);
+				_.set (opts, me.state.tag, value);
+				opts = JSON.stringify (opts, null, "\t");
 				
-				v = JSON.stringify (opts, null, "\t");
-				me.codemirror.setValue (v);
-				me.setState ({tagValue: s, value: s});
+				me.setState ({tagValue: value, value: opts});
+
+				if (me.props.onChange) {
+					me.props.onChange ({code: me.state.code, value: opts, id: me.props.id});
+				}
 			} catch (err) {
 			}
+		}
+	}
+	
+	onKeyDown (e) {
+		let ta = e.target;
+		
+		if (e.key === "Tab") {
+			let val = ta.value, start = ta.selectionStart, end = ta.selectionEnd;
+			
+			ta.value = val.substring (0, start) + "\t" + val.substring (end);
+			ta.selectionStart = ta.selectionEnd = start + 1;
+			
+			e.preventDefault ();
 		}
 	}
 	
@@ -152,8 +132,8 @@ class JsonEditor extends Component {
 				<label htmlFor={me.id}><h5>{i18n (me.props.label)}</h5></label>
 				<div className="row">
 					<div className="col-sm-6 pr-1" id={me.id}>
-						<div className="border jsoneditor-codemirror">
-							<textarea ref="codemirror" value={me.state.value} onChange={() => {}} />
+						<div className="">
+							<textarea className="text-monospace" rows={10} style={{width: "100%", height: "100%"}} value={me.state.value} onKeyDown={me.onKeyDown} onChange={me.onChange} />
 						</div>
 					</div>
 					<div className="col-sm-6 pl-1">
@@ -164,8 +144,8 @@ class JsonEditor extends Component {
 								);
 							})}
 						</select>
-						<div className={"border mt-1 " + cls}>
-							<textarea ref="codemirrorTag" value={me.state.tagValue} onChange={() => {}} />
+						<div className={"mt-1 " + cls}>
+							<textarea className="text-monospace" rows={8} style={{width: "100%", height: "100%"}} value={me.state.tagValue} onKeyDown={me.onKeyDown} onChange={me.onChangeTagValue} />
 						</div>
 					</div>
 				</div>

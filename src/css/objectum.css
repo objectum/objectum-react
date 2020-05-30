@@ -138,3 +138,6 @@ body {
 .select-tab {
     cursor: pointer;
 }
+textarea {
+    tab-size: 4;
+}
