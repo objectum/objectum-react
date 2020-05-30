@@ -12,7 +12,7 @@ class Loading extends Component {
 	render () {
 		return (
 			<span>
-				<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true" />
+				<span className="spinner-border spinner-border-sm mr-2" style={{width: "1em", height: "1em"}} role="status" aria-hidden="true" />
 				{i18n ("Loading") + " ..."}
 			</span>
 		);
