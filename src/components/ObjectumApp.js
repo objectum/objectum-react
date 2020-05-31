@@ -71,6 +71,25 @@ function HomeButton () {
 	);
 };
 
+function LogoutButton ({app, size}) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		app.store.setSessionId (null);
+		app.store.end ();
+		
+		app.setState ({
+			sidebarOpen: false, locations: [], sid: null
+		});
+		history.push ("/");
+	}
+	return (
+		<button className="btn btn-link pl-3" onClick={handleClick}>
+			<span className={`fas fa-sign-out-alt ${size} menu-icon align-middle mr-1`} /><span className="text-dark">{i18n ("Logout")}</span>
+		</button>
+	);
+};
+
 function BackButton ({popLocation, locations}) {
 	let history = useHistory ();
 	
@@ -239,9 +258,12 @@ class ObjectumApp extends Component {
 				<tbody>
 				{items}
 				<tr><td>
+{/*
 					<Link key="menu-logout" className="nav-link" to="/logout">
 						<span className={`fas fa-sign-out-alt ${size} menu-icon mr-1 align-middle`} /><span className="text-dark">{i18n ("Logout")}</span>
 					</Link>
+*/}
+					<LogoutButton app={me} size={size} />
 				</td></tr>
 				</tbody>
 			</table>
@@ -275,12 +297,20 @@ class ObjectumApp extends Component {
 			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={me.store} />} />,
 			<Route key="objectum-17" path="/schema" render={props => <Schema {...props} store={me.store} />} />,
 			<Route key="objectum-logout" path="/logout" render={props => {
+				me.store.setSessionId (null);
+				me.store.end ();
+
 				me.setState ({
-					sidebarOpen: false, locations: []
+					sidebarOpen: false, locations: [], sid: null
 				});
+				me.props.history.push ({
+					pathname: "/"
+				});
+/*
 				return (
 					<Logout {...props} store={me.store} onLogout={() => me.setState ({sid: null})} />
 				);
+*/
 			}} />
 		];
 		let SearchRoutes = (children) => {

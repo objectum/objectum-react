@@ -12,7 +12,7 @@ class Logout extends Component {
 	}
 	
 	render () {
-		return null;
+		return <div />;
 	}
 };
 Logout.displayName = "Logout";
