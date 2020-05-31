@@ -18,6 +18,7 @@ class StringField extends Component {
 		let me = this;
 		
 		me.onChange = me.onChange.bind (me);
+		me.onEditorStateChange = me.onEditorStateChange.bind (me);
 
 		me.state = {
 			rsc: me.props.rsc || "record",
@@ -25,7 +26,7 @@ class StringField extends Component {
 			value: me.props.value === null ? "" : me.props.value
 		};
 		if (me.props.wysiwyg) {
-			const html = me.state.value || "<p></p>";
+			const html = me.state.value || "<p />";
 			const contentBlock = htmlToDraft (html);
 			
 			if (contentBlock) {
@@ -37,7 +38,21 @@ class StringField extends Component {
 		me.id = newId ();
 	}
 	
+/*
 	onEditorStateChange: Function = (editorState) => {
+		let me = this;
+		let value = draftToHtml (convertToRaw (editorState.getCurrentContent ()));
+		
+		me.setState ({
+			editorState,
+			value
+		});
+		if (me.props.onChange) {
+			me.props.onChange ({code: me.state.code, value});
+		}
+	}
+*/
+	onEditorStateChange (editorState) {
 		let me = this;
 		let value = draftToHtml (convertToRaw (editorState.getCurrentContent ()));
 		

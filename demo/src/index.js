@@ -68,7 +68,7 @@ class Test extends Component {
 					<DateField property="date" label="Date" notNull />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />
-					<StringField label="Text" property="text" notNull />
+					<StringField label="Text" property="text" wysiwyg />
 					<Action label="test" onClick={() => {
 						me.refs ["my-form"].isValid ();
 					}} />
@@ -142,8 +142,8 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					_username="admin"
-					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 					__username="diet"
 					__password="356A192B7913B04C54574D18C28D46E6395428AB"
 					name="objectum-react"
