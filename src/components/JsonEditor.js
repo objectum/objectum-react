@@ -133,7 +133,7 @@ class JsonEditor extends Component {
 				<div className="row">
 					<div className="col-sm-6 pr-1" id={me.id}>
 						<div className="">
-							<textarea className="text-monospace" rows={10} style={{width: "100%", height: "100%"}} value={me.state.value} onKeyDown={me.onKeyDown} onChange={me.onChange} />
+							<textarea className="form-control text-monospace" rows={10} style={{width: "100%", height: "100%"}} value={me.state.value} onKeyDown={me.onKeyDown} onChange={me.onChange} />
 						</div>
 					</div>
 					<div className="col-sm-6 pl-1">
@@ -145,7 +145,7 @@ class JsonEditor extends Component {
 							})}
 						</select>
 						<div className={"mt-1 " + cls}>
-							<textarea className="text-monospace" rows={8} style={{width: "100%", height: "100%"}} value={me.state.tagValue} onKeyDown={me.onKeyDown} onChange={me.onChangeTagValue} />
+							<textarea className="form-control text-monospace" rows={8} style={{width: "100%", height: "100%"}} value={me.state.tagValue} onKeyDown={me.onKeyDown} onChange={me.onChangeTagValue} />
 						</div>
 					</div>
 				</div>
