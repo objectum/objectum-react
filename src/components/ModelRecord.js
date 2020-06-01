@@ -322,8 +322,8 @@ class ModelRecord extends Component {
 				}
 			});
 			items.push (
-				<div className="p-1">
-					<Tabs key={`tabs-${model ? model.id : "n"}-${level}-${gen}`} id={`tabs-${model ? model.id : "n"}-${level}-${gen}`}>
+				<div className="p-1" key={`tabs-${model ? model.id : "n"}-${level}-${gen}`}>
+					<Tabs id={`tabs-${model ? model.id : "n"}-${level}-${gen}`}>
 						{tabs}
 					</Tabs>
 				</div>

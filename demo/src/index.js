@@ -11,9 +11,10 @@ import ReactCrop from "react-image-crop";
 //import TOrgProductModel from "./models/TOrgProductModel";
 //import BrakModel from "./models/BrakModel";
 //import TBrakDishModel from "./models/TBrakDishModel";
+import ItemModel from "./models/ItemModel";
 
 import "react-image-crop/dist/ReactCrop.css";
-import "../../src/css/bootstrap-site.css";
+import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 
@@ -65,7 +66,7 @@ class Test extends Component {
 					</Tab>
 				</Tabs>
 				<Form ref="my-form" record={me.state} hideButtons>
-					<DateField property="date" label="Date" notNull />
+					<DateField property="date" label="Date" notNull showTime />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />
 					<StringField label="Text" property="text" wysiwyg />
@@ -76,7 +77,6 @@ class Test extends Component {
 						me.setState ({refresh: !me.state.refresh, text: "2"});
 					}} />
 				</Form>
-				<DictField label="DictField" store={store} model="declaration" property="state" value="1048" />
 				<ChooseField label="ChooseField" store={store} property="test" choose={{model: "org"}} value="1020" />
 				<StringField label="StringField" property="test" wysiwyg />
 {/*
@@ -110,6 +110,7 @@ class Demo extends Component {
 		//store.register ("t.org.product", TOrgProductModel);
 		//store.register ("brak", BrakModel);
 		//store.register ("t.brak.dish", TBrakDishModel);
+		store.register ("item", ItemModel);
 		
 		this.onCustomRender = this.onCustomRender.bind (this);
 		
@@ -142,10 +143,10 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					username="admin"
-					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					__username="diet"
-					__password="356A192B7913B04C54574D18C28D46E6395428AB"
+					_username="admin"
+					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					username="user"
+					password={require ("crypto").createHash ("sha1").update ("user").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
 /*
