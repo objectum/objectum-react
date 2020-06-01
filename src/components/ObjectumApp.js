@@ -440,7 +440,7 @@ class ObjectumApp extends Component {
 									<HomeButton />
 									<BackButton popLocation={me.popLocation} locations={me.state.locations} />
 									
-									<span className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${store.username})`}</span>
+									<span className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</span>
 								</div>
 							</Fade>
 							

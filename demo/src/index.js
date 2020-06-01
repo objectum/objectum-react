@@ -113,7 +113,7 @@ class Demo extends Component {
 		
 		this.onCustomRender = this.onCustomRender.bind (this);
 		
-		window.store = store;
+		//window.store = store;
 	}
 	
 	onCustomRender ({content, app}) {
