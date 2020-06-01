@@ -15,7 +15,7 @@ class NumberField extends Component {
 		me.state = {
 			rsc: me.props.rsc || "record",
 			code: me.props.property,
-			value: me.props.value === null ? "" : me.props.value
+			value: (me.props.value === null || me.props.value === undefined) ? "" : me.props.value
 		};
 		me.id = newId ();
 	}
@@ -35,7 +35,7 @@ class NumberField extends Component {
 		let me = this;
 		
 		if (prevProps.value !== me.props.value) {
-			me.setState ({value: me.props.value});
+			me.setState ({value: me.props.value === null || me.props.value === undefined ? "" : me.props.value});
 		}
 	}
 	
@@ -43,7 +43,7 @@ class NumberField extends Component {
 		let me = this;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? "is-invalid" : "";
-
+		
 		if (me.props.label || me.props.error) {
 			return (
 				<div className="form-group">
