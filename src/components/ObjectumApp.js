@@ -406,9 +406,9 @@ class ObjectumApp extends Component {
 			return (<div/>);
 		}
 */
+		let content;
+		
 		if (me.state.sid) {
-			let content;
-			
 			if (me.props.onCustomRender) {
 				content = me.renderRoutes ();
 				content = me.props.onCustomRender ({content, app: me});
@@ -456,11 +456,21 @@ class ObjectumApp extends Component {
 				</div>
 			);
 		} else {
-			return (
+			content = (
 				<div>
 					<Auth store={me.store} name={me.state.name} version={me.state.version} onRenderAuthInfo={me.props.onRenderAuthInfo} />
 				</div>
 			);
+			let customContent;
+			
+			if (me.props.onCustomRender) {
+				customContent = me.props.onCustomRender ({content, app: me});
+
+				if (customContent) {
+					content = customContent;
+				}
+			}
+			return content;
 		}
 	}
 };
