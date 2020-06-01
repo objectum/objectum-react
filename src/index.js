@@ -12,6 +12,7 @@ import Field from "./components/Field";
 import FileField from "./components/FileField";
 import Form from "./components/Form";
 import Grid from "./components/Grid";
+import Cell from "./components/Cell";
 import Menu from "./components/Menu";
 import Menus from "./components/Menus";
 import NumberField from "./components/NumberField";
@@ -70,6 +71,7 @@ export {
 	FileField,
 	Form,
 	Grid,
+	Cell,
 	Menu,
 	Menus,
 	NumberField,
@@ -127,6 +129,7 @@ export default {
 	FileField,
 	Form,
 	Grid,
+	Cell,
 	Menu,
 	Menus,
 	NumberField,
