@@ -401,9 +401,11 @@ class ObjectumApp extends Component {
 				</div>
 			);
 		}
+/*
 		if (me.props.username && me.props.password && !me.state.sid) {
 			return (<div/>);
 		}
+*/
 		if (me.state.sid) {
 			let content;
 			
