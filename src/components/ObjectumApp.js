@@ -408,16 +408,10 @@ class ObjectumApp extends Component {
 			let content;
 			
 			if (me.props.onCustomRender) {
-/*
-				content = (
-					<div className="objectum-content">
-						{me.renderRoutes ()}
-					</div>
-				);
-*/
 				content = me.renderRoutes ();
 				content = me.props.onCustomRender ({content, app: me});
-			} else {
+			}
+			if (!content) {
 				content = (
 					<div>
 						<Sidebar
