@@ -21,7 +21,7 @@ class Fade extends Component {
 		me.setState ({opacity});
 		
 		if (opacity < 1) {
-			me.timerId = setTimeout (me.smoothShow, 15);
+			me.timerId = setTimeout (me.smoothShow, 10);
 		}
 	}
 	

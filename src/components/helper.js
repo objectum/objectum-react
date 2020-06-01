@@ -27,7 +27,7 @@ function getTimestampString (d) {
 	if (!d || typeof d == "string") {
 		return d;
 	}
-	let s = `${d.getFullYear ()}-${pad (d.getMonth () + 1)}-${pad (d.getDate ())}`;
+	let s = `${pad (d.getDate ())}.${pad (d.getMonth () + 1)}.${d.getFullYear ()}`;
 	
 	if (d.getHours () || d.getMinutes () || d.getSeconds ()) {
 		s += ` ${pad (d.getHours ())}:${pad (d.getMinutes ())}:${pad (d.getSeconds ())}`;

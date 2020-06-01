@@ -539,8 +539,8 @@ class Grid extends Component {
 					})}
 				</tr>
 			);
-			if (me.props.onTableRow) {
-				row = me.props.onTableRow ({row, rec, store: me.props.store, grid: me});
+			if (me.props.onTableRow || me.props.onRenderRow) {
+				row = (me.props.onTableRow || me.props.onRenderRow) ({row, rec, store: me.props.store, grid: me});
 			}
 			rows.push (row);
 		});
@@ -552,6 +552,9 @@ class Grid extends Component {
 		
 		if (!me.state.cols.length) {
 			return (<div />);
+		}
+		if (me.props.onRenderTable) {
+			return me.props.onRenderTable ({grid: me, cols: me.state.cols, colMap: me.colMap, recs: me.state.recs, store: me.props.store});
 		}
 		return (
 			<div className="p-1 border-top">
