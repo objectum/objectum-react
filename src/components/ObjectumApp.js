@@ -160,7 +160,7 @@ class ObjectumApp extends Component {
 		let menuId = opts.menuId;
 		let state = {sid: opts.sessionId};
 		
-		if (!me.props.onCustomRender) {
+//		if (!me.props.onCustomRender) {
 			me.setState ({loading: true});
 			
 			if (menuId == "admin") {
@@ -182,7 +182,7 @@ class ObjectumApp extends Component {
 				me.menuItemRecs = result.recs;
 			}
 			state.loading = false;
-		}
+//		}
 		if (me.props.onConnect) {
 			await execute (me.props.onConnect);
 		}
