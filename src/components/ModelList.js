@@ -89,8 +89,14 @@ class ModelList extends Component {
 		}
 	}
 	
-	componentDidUpdate () {
-		this.model = this.props.model || this.props.match.params.model.split ("#")[0];
+	componentDidUpdate (prevProps) {
+		let me = this;
+		
+		me.model = me.props.model || me.props.match.params.model.split ("#")[0];
+		
+		if (me.props.hasOwnProperty ("refresh") && me.props.refresh != prevProps.refresh) {
+			me.setState ({refresh: !me.state.refresh});
+		}
 	}
 	
 	renderActions () {
