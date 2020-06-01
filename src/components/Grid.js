@@ -81,6 +81,7 @@ class Grid extends Component {
 		me.childMap = {};
 		me.nodeMap = {};
 		me.colMap = {};
+		me.unmounted = false;
 		
 		me.onRowClick = me.onRowClick.bind (me);
 		me.onFolderClick = me.onFolderClick.bind (me);
@@ -123,7 +124,9 @@ class Grid extends Component {
 				}
 			});
 		}
-		me.setState (state);
+		if (!me.unmounted) {
+			me.setState (state);
+		}
 	}
 	
 	async componentDidMount () {
@@ -171,6 +174,7 @@ class Grid extends Component {
 	
 	componentWillUnmount () {
 		removeHashListener (this, this.hashChange);
+		this.unmounted = true;
 	}
 	
 	onRowClick (row) {
@@ -293,8 +297,11 @@ class Grid extends Component {
 			pageRecs: me.state.pageRecs
 		};
 		try {
+			if (me.unmounted) {
+				return;
+			}
 			me.setState ({loading: true});
-		
+			
 			await timeout (100);
 			
 			let result = await me.props.store.getData (me.prepareRequestOptions ());
@@ -371,7 +378,9 @@ class Grid extends Component {
 		if (me.props.onLoad) {
 			me.props.onLoad (state);
 		}
-		me.setState (state);
+		if (!me.unmounted) {
+			me.setState (state);
+		}
 	}
 
 	getInfo () {
