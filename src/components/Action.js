@@ -168,7 +168,7 @@ class Action extends Component {
 			<span className={me.props.className}>
 				<button
 					type="button"
-					className="btn btn-primary btn-labeled mr-1"
+					className={me.props.btnClassName || "btn btn-primary btn-labeled mr-1"}
 					onClick={me.onClick}
 					disabled={me.getDisabled ()}
 				>
