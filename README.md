@@ -6,6 +6,7 @@ Objectum ecosystem:
 * Javascript platform https://github.com/objectum/objectum  
 * Isomorhic javascript client https://github.com/objectum/objectum-client  
 * Proxy for server methods and access control https://github.com/objectum/objectum-proxy  
+* React components https://github.com/objectum/objectum-react  
 * Command-line interface (CLI) https://github.com/objectum/objectum-cli  
 * Objectum project example https://github.com/objectum/catalog 
 
@@ -33,6 +34,7 @@ npm install --save objectum-react
     * [JsonField](#json_field)
     * [JsonEditor](#json_editor)
 * [Tooltip](#tooltip)  
+* [Fade](#fade)  
 * [Action](#action)  
 
 <a name="objectum_app" />
@@ -72,6 +74,18 @@ Quick login:
 Locale:
 ```html
 <ObjectumApp store={store} locale="ru" />
+```
+Custom render:
+```html
+<ObjectumApp store={store} onCustomRender={this.onCustomRender} />
+```
+```js
+onCustomRender ({content, app}) {
+    if (...) {
+        return (<div>{content}</div>);
+    }
+    // default render
+}
 ```
 
 <a name="auth" />
@@ -249,18 +263,23 @@ Common props for all fields:
 String field. Type id: 1
 props:
 * **textarea**: *boolean* - textarea editor
-* **codemirror**: *boolean* - codemirror editor
+* **monospace**: *boolean* - monospace font in textarea editor
 * **wysiwig**: *boolean* - wysiwig editor
 
 <a name="number_field" />
 
 ### NumberField
-Number field. Type id: 2
+Number field. Type id: 2  
+props:
+* **min**: *number* - min value
+* **max**: *number* - max value
 
 <a name="date_field" />
 
 ### DateField
-Date field. Type id: 3
+Date field. Type id: 3  
+props:
+* **showTime**: *boolean* - enable time (hh:mm:ss)
 
 <a name="boolean_field" />
 
@@ -278,9 +297,14 @@ props:
 <a name="choose_field" />
 
 ### ChooseField
-Field for selecting from query. Type id: >= 1000
+Field for selecting value. Type id: >= 1000  
+From query:
 ```html
 <ChooseField property="type" label="Type" rsc="record" value={this.state.type} choose={{cmp: ItemTypes, ref: "d.item.type"}} />
+```
+From model:
+```html
+<ChooseField property="type" label="Type" rsc="record" value={this.state.type} choose={{model: "d.item.type"}} />
 ```
 
 <a name="select_field" />
@@ -326,6 +350,16 @@ Codemirror textarea. You can select tag from JSON for multiline editing.
 <Tooltip label="My tooltip">
     <div>...</div>
 </Tooltip>
+```
+
+<a name="fade" />
+
+### Fade
+Smooth appearance animation
+```html
+<Fade>
+    <div>...</div>
+</Fade>
 ```
 
 <a name="action" />
