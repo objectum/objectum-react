@@ -440,6 +440,7 @@ class Form extends Component {
 						}
 						let opts = property.getOpts ();
 						
+/*
 						if (opts.wysiwyg) {
 							props.wysiwyg = true;
 						}
@@ -449,6 +450,8 @@ class Form extends Component {
 						if (opts.rows) {
 							props.rows = opts.rows;
 						}
+*/
+						Object.assign (props, opts);
 						props.label = props.label || property.name;
 					}
 					if (!type) {
