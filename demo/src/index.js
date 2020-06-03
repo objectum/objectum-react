@@ -65,6 +65,9 @@ class Test extends Component {
 						Tab2
 					</Tab>
 				</Tabs>
+				<DictField property="type" label="Type" model="item" store={store} />
+				<Form store={store} rsc="record" mid="item" hideButtons>
+				</Form>
 				<Form ref="my-form" record={me.state} hideButtons>
 					<DateField property="date" label="Date" notNull showTime />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
@@ -118,22 +121,13 @@ class Demo extends Component {
 	}
 	
 	onCustomRender ({content, app}) {
-		let roleMenu = [
-			{label: "Модели", path: "/models"},
-			{label: "Запросы", path: "/queries"},
-		];
+/*
 		return (
 			<div>
-				<Tabs id="tabs">
-					{roleMenu.map ((o, i) => {
-						return (
-							<Tab key={i} {...o} />
-						);
-					})}
-				</Tabs>
 				{content}
 			</div>
 		);
+*/
 	}
 	
 	render () {
@@ -143,10 +137,10 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					_username="admin"
-					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					username="user"
-					password={require ("crypto").createHash ("sha1").update ("user").digest ("hex").toUpperCase ()}
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					_username="user"
+					_password={require ("crypto").createHash ("sha1").update ("user").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
 /*
@@ -157,7 +151,7 @@ class Demo extends Component {
 						}});
 					}}
 */
-					onCustomRender={me.onCustomRender}
+					/*onCustomRender={me.onCustomRender}*/
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 					<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />

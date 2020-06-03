@@ -60,6 +60,13 @@ body {
 .dictfield-input {
     border-radius: 0;
 }
+.dictfield-option {
+    cursor: pointer;
+}
+.dictfield-option:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
 .stringfield {
     min-width: 10em;
 }

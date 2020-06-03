@@ -469,6 +469,8 @@ class ObjectumApp extends Component {
 				if (customContent) {
 					content = customContent;
 				}
+			} else if (me.props.username && me.props.password) {
+				return (<div/>);
 			}
 			return content;
 		}

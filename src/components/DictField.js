@@ -201,7 +201,7 @@ class DictField extends Component {
 								label = rec.getLabel ();
 							}
 							return (
-								<li className="border-bottom p-1" id={rec.id} key={rec.id} onClick={me.onClick}>{label}</li>
+								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={rec.id} onClick={me.onClick}>{label}</li>
 							);
 						})}
 					</ul>
@@ -233,7 +233,7 @@ class DictField extends Component {
 							label += ` (${i18n ("Amount")}: ${num})`;
 							
 							return (
-								<li className="border-bottom p-1" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{label}</li>
+								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{label}</li>
 							);
 						})}
 					</ul>
