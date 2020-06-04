@@ -2,7 +2,8 @@ body {
     background-color: #fff;
 }
 .auth {
-    width: 70em;
+    min-width: 40em;
+    max-width: 70em;
     margin: auto;
 }
 .auth-login {
