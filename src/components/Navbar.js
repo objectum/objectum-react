@@ -21,8 +21,8 @@ class Navbar extends Component {
 		let me = this;
 		
 		return (
-			<nav className="navbar navbar-expand-sm navbar-dark bg-primary">
-				<div className="collapse navbar-collapse">
+			<nav className="navbar navbar-expand navbar-dark bg-primary">
+				<div className="collapse navbar-collapse" id={me.state.id}>
 					<div className="navbar-nav">
 						{me.props.items.map ((item, i) => {
 							return (
