@@ -2,7 +2,7 @@ import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
+import {Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 import ReactCrop from "react-image-crop";
 
@@ -57,6 +57,10 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<Navbar items={[
+					{label: "Models", path: "/models"},
+					{label: "Queries", path: "/queries"}
+				]} />
 				<Tabs>
 					<Tab label="Tab1">
 						Tab1
