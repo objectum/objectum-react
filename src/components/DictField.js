@@ -249,7 +249,7 @@ class DictField extends Component {
 		return (
 			<div>
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
-					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
+					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 					<div className="d-flex dictfield">
 						{!me.props.disabled && <div className="border border-right-0 rounded-left">
 							<Tooltip label={i18n ("Choose")}><button

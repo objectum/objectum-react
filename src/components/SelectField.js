@@ -49,7 +49,7 @@ class SelectField extends Component {
 		}
 		return (
 			<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
-				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 				<select className={"form-control custom-select" + addCls} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled}>
 					{[{id: "", name: "-"}, ...(me.props.recs || me.props.records)].map ((rec, i) => {
 						return (

@@ -191,7 +191,7 @@ class FileField extends Component {
 		
 		return (
 			<div className="form-group">
-				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
+				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 				<FileInput
 					id={me.id} onFile={me.onFile} value={me.state.value} store={me.props.store}
 					record={me.props.record} model={me.props.model} property={me.props.property} propertyId={me.props.propertyId} recordId={me.props.recordId}

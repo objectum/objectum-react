@@ -118,7 +118,7 @@ class ChooseField extends Component {
 		if (me.state.invalid) {
 			return (
 				<div className="form-group">
-					<label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>
+					<label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
 					<div className="alert alert-danger">"choose: cmp, ref" or "choose: query" or "choose: model" not exist</div>
 				</div>
 			);
@@ -126,7 +126,7 @@ class ChooseField extends Component {
 		if (me.props.disabled) {
 			return (
 				<div className="form-group">
-					<label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>
+					<label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
 					<Tooltip label={me.state.name}>
 						<input type="text" className={"form-control" + addCls} id={me.id} value={me.state.name} disabled={true}/>
 					</Tooltip>
@@ -148,7 +148,7 @@ class ChooseField extends Component {
 		return (
 			<div>
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
-					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
+					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 					<div className="choosefield d-flex">
 						<div className="border border-right-0 rounded-left">
 							<Tooltip label={i18n ("Choose")}><button

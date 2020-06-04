@@ -73,7 +73,7 @@ class Test extends Component {
 				<Form store={store} rsc="record" mid="item" hideButtons>
 				</Form>
 				<Form ref="my-form" record={me.state} hideButtons>
-					<DateField property="date" label="Date" notNull showTime />
+					<DateField property="date" label="Date" notNull={0} showTime />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />
 					<StringField label="Text" property="text" wysiwyg />

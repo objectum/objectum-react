@@ -47,7 +47,7 @@ class NumberField extends Component {
 		if (me.props.label || me.props.error) {
 			return (
 				<div className="form-group">
-					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull && <span className="text-danger ml-1">*</span>}</label>}
+					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 					<input type="number" className={`form-control ${addCls} numberfield`} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} min={me.props.min} max={me.props.max} />
 					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 				</div>
