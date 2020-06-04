@@ -123,6 +123,7 @@ class ObjectumApp extends Component {
 		me.onClickMenu = me.onClickMenu.bind (me);
 		me.pushLocation = me.pushLocation.bind (me);
 		me.popLocation = me.popLocation.bind (me);
+		me.menuItemRecs = [];
 		
 		setLocale (me.props.locale || "en");
 	}
@@ -163,6 +164,7 @@ class ObjectumApp extends Component {
 //		if (!me.props.onCustomRender) {
 			me.setState ({loading: true});
 			
+/*
 			if (menuId == "admin") {
 				let menuResult = await me.store.getData ({
 					query: "objectum.menu"
@@ -174,6 +176,7 @@ class ObjectumApp extends Component {
 					}
 				}
 			}
+*/
 			if (menuId) {
 				let result = await me.store.getData ({
 					query: "objectum.userMenuItems",
