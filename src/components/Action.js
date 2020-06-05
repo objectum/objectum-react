@@ -138,10 +138,10 @@ class Action extends Component {
 		if (me.state.confirm) {
 			return (
 				<Fade>
-					<span className="text-danger ml-1 p-1">
+					<span className="text-danger mb-1">
 						{me.state.confirm}
-						<button type="button" className="btn btn-danger ml-2" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
-						<button type="button" className="btn btn-success ml-2" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
+						<button type="button" className="btn btn-danger ml-1 mb-1" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
+						<button type="button" className="btn btn-success mx-1 mb-1" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
 					</span>
 				</Fade>
 			);
@@ -157,7 +157,7 @@ class Action extends Component {
 		
 		if (me.state.processing) {
 			return (
-				<span className="text-primary ml-2 mr-2">
+				<span className="text-primary mx-2 mb-1">
 					<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />{text}
 				</span>
 			);
@@ -168,7 +168,7 @@ class Action extends Component {
 			<span className={me.props.className}>
 				<button
 					type="button"
-					className={me.props.btnClassName || "btn btn-primary btn-labeled mr-1"}
+					className={me.props.btnClassName || "btn btn-primary btn-labeled mr-1 mb-1"}
 					onClick={me.onClick}
 					disabled={me.getDisabled ()}
 				>

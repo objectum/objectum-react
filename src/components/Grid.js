@@ -463,7 +463,7 @@ class Grid extends Component {
 		let active = !!me.position.length || me.state.parent;
 		
 		return (
-			<div className="mt-1 p-1 border-top">
+			<div className="p-1 border-top">
 				<nav aria-label="breadcrumb">
 					<ol className="breadcrumb">
 						<li className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
@@ -810,7 +810,7 @@ class Grid extends Component {
 				</div>}
 				<div className="border">
 					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-					{me.state.mode == "table" && gridChildren && <div className="p-1">
+					{me.state.mode == "table" && gridChildren && <div className="pl-1 pt-1">
 						{gridChildren}
 					</div>}
 	

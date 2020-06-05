@@ -25,6 +25,7 @@ import _ from "lodash";
 import Fade from "./Fade";
 import {execute} from "objectum-client";
 import Loading from "./Loading";
+import {isMobile} from "react-device-detect";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
@@ -113,7 +114,7 @@ class ObjectumApp extends Component {
 		let me = this;
 		
 		me.state = {
-			sidebarDocked: true,
+			sidebarDocked: !isMobile,
 			locations: [],
 			name: me.props.name || "Objectum",
 			version: me.props.version || "0.0.1"
@@ -242,7 +243,7 @@ class ObjectumApp extends Component {
 						<tr key={key}><td className={selected ? "bg-primary" : ""}>
 							<Link className={`nav-link text-nowrap ml-${level * 2} ${selected ? "text-white" : ""}`}
 								  to={rec.path}
-								  onClick={() => me.setState ({selectedItem: key})}
+								  onClick={() => me.setState ({selectedItem: key, sidebarDocked: !isMobile})}
 							>
 								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
 								<span className={selected ? "text-white" : "text-dark"}>{i18n (rec.name)}</span>

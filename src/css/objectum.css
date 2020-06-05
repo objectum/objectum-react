@@ -1,7 +1,7 @@
 body {
     background-color: #fff;
 }
-.auth {
+.auth-long {
     min-width: 40em;
     max-width: 70em;
     margin: auto;
@@ -9,7 +9,9 @@ body {
 .auth-login {
     width: 20em;
 }
-.auth-info {
+.auth {
+    width: 30em;
+    margin: auto;
 }
 .treegrid-button {
     width: 7em;

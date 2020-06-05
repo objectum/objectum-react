@@ -57,6 +57,11 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<div className="p-1 border">
+					<div className="border p-1">
+					11
+					</div>
+				</div>
 				<Navbar items={[
 					{label: "Models", path: "/models"},
 					{label: "Queries", path: "/queries"}
@@ -141,18 +146,15 @@ class Demo extends Component {
 			<div>
 				<ObjectumApp
 					store={store}
-					__username="admin"
-					__password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					_username="user"
-					_password={require ("crypto").createHash ("sha1").update ("user").digest ("hex").toUpperCase ()}
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					__username="user"
+					__password={require ("crypto").createHash ("sha1").update ("user").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
 /*
 					onRenderAuthInfo={div => {
-						return React.cloneElement (div, {style: {
-							backgroundImage: `url(${bgImage})`,
-							backgroundSize: "content"
-						}});
+						return div;
 					}}
 */
 					/*onCustomRender={me.onCustomRender}*/

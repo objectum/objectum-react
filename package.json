@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.317",
+	"version": "1.1.318",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -47,6 +47,7 @@
 		"objectum-client": "^1.1.96",
 		"objectum-proxy": "^0.1.42",
 		"react-datepicker": "^2.16.0",
+		"react-device-detect": "^1.12.1",
 		"react-draft-wysiwyg": "^1.14.5",
 		"react-dropzone": "^10.2.2",
 		"react-image-crop": "^8.6.2",

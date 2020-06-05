@@ -31,26 +31,24 @@ class RemoveAction extends Component {
 		
 		if (me.state.removing) {
 			return (
-				<span className="text-danger  ml-3 mt-1">
+				<span className="text-danger ml-3 mr-1 mb-1">
 					<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />{i18n ("Removing") + " ..."}
 				</span>
 			);
 		}
 		if (me.state.removeConfirm) {
 			return (
-				<Fade>
-					<span className="text-danger ml-1 p-1">
+					<span className="text-danger mb-1">
 						{i18n ("Are you sure?")}
-						<button type="button" className="btn btn-danger ml-2" onClick={me.onRemove}><i className="fas fa-check mr-2" />{i18n ("Remove")}</button>
-						<button type="button" className="btn btn-success ml-2" onClick={() => this.setState ({removeConfirm: false})}><i className="fas fa-times mr-2" />{i18n ("Cancel")}</button>
+						<button type="button" className="btn btn-danger ml-1 mb-1" onClick={me.onRemove}><i className="fas fa-check mr-2" />{i18n ("Remove")}</button>
+						<button type="button" className="btn btn-success mx-1 mb-1" onClick={() => this.setState ({removeConfirm: false})}><i className="fas fa-times mr-2" />{i18n ("Cancel")}</button>
 					</span>
-				</Fade>
 			);
 		}
 		return (
 			<button
 				type="button"
-				className={me.props.hasOwnProperty ("buttonClass") ? me.props.buttonClass : "btn btn-primary btn-labeled mr-1"}
+				className={me.props.hasOwnProperty ("btnClassName") ? me.props.btnClassName : "btn btn-primary btn-labeled mr-1 mb-1"}
 				onClick={() => me.setState ({removeConfirm: true})} disabled={me.props.disabled || me.props.disableActions}
 			>
 				<i className={me.props.hasOwnProperty ("iconClass") ? me.props.iconClass : "fas fa-minus mr-2"} />{me.props.hasOwnProperty ("buttonLabel") ? me.props.buttonLabel : i18n ("Remove")}
