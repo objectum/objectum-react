@@ -338,7 +338,7 @@ Composite field
 <a name="json_editor" />
 
 ### JsonEditor
-Codemirror textarea. You can select tag from JSON for multiline editing.
+Textarea editor. You can select tag from JSON for multiline editing.
 ```html
 <JsonEditor property="opts" label="Options" />
 ```

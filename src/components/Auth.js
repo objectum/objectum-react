@@ -127,7 +127,7 @@ class Auth extends Component {
 					</div>
 				</div> : <div className="auth">
 					<div className="border bg-white shadow mt-5">
-						<div className="bg-info text-white py-2 pl-4">
+						<div className="bg-info text-white py-2 pl-2">
 							<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
 						</div>
 						<div className="border-bottom px-2 py-1">
