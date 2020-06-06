@@ -400,7 +400,7 @@ class ModelRecord extends Component {
 		}
 		form = (
 			<div className="container">
-				<div className="bg-white shadow-sm p-1">
+				<div className="bg-white border shadow-sm">
 					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 						<Tab key={`tab1-${me.state.model}`} label="Information">
 							{form}
