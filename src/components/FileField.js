@@ -36,7 +36,9 @@ function FileInput (props) {
 		file = (<div>{acceptedFiles [0].path} - {acceptedFiles [0].size} {i18n ("bytes")}</div>);
 		
 		if (acceptedFiles [0].path != props.value) {
-			props.onFile (props.id, acceptedFiles [0]);
+			setTimeout (() => {
+				props.onFile (props.id, acceptedFiles [0]);
+			}, 1);
 		}
 	} else if (props.value) {
 		file = (
