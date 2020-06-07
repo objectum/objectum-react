@@ -79,6 +79,7 @@ class StringField extends Component {
 	async componentDidMount () {
 		let me = this;
 		
+/*
 		if (me.props.codemirror) {
 			if (!window.CodeMirror) {
 				await loadCSS (`${me.props.store.getUrl ()}/public/codemirror/codemirror.css`);
@@ -101,6 +102,7 @@ class StringField extends Component {
 				});
 			}
 		}
+*/
 	}
 
 	async componentDidUpdate (prevProps) {
@@ -143,6 +145,7 @@ class StringField extends Component {
 				/>
 			);
 		}
+/*
 		if (me.props.codemirror) {
 			cmp = (
 				<div className="border">
@@ -150,6 +153,7 @@ class StringField extends Component {
 				</div>
 			);
 		}
+*/
 		if (me.props.wysiwyg) {
 			cmp = (
 				<div className="border p-1">

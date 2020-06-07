@@ -19,6 +19,7 @@ class MenuItems extends Component {
 			parent: null,
 			refresh: false
 		};
+		me._refs = {"menuItems": React.createRef ()};
 	}
 	
 	onCreate () {
@@ -70,7 +71,7 @@ class MenuItems extends Component {
 			<div>
 				<div className="row">
 					<div className="col-sm-12">
-						<Grid {...me.props} id="menuItems" ref="menuItems" store={me.props.store} query="objectum.menuItem" tree={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}}>
+						<Grid {...me.props} id="menuItems" ref={me._refs ["menuItems"]} store={me.props.store} query="objectum.menuItem" tree={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}}>
 							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
 							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
 							<RemoveAction onRemove={me.onRemove} />

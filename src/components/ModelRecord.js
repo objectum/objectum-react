@@ -418,7 +418,7 @@ class ModelRecord extends Component {
 										<ModelList
 											{...me.props}
 											id={`list-${i}`}
-											ref={`list-${i}`}
+											/*ref={`list-${i}`}*/
 											label=""
 											store={me.props.store}
 											model={t.getPath ()}

@@ -14,6 +14,7 @@ class Types extends Component {
 		me.state = {
 			refresh: false
 		};
+		me._refs = {"types": React.createRef ()};
 	}
 	
 	render () {
@@ -22,7 +23,7 @@ class Types extends Component {
 		return (
 			<div className="row">
 				<div className="col-sm-12">
-					<Grid {...me.props} id="types" ref="types" label="Data types" store={me.props.store} query="objectum.type" tree={true} system={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent}>
+					<Grid {...me.props} id="types" ref={me._refs ["types"]} label="Data types" store={me.props.store} query="objectum.type" tree={true} system={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent}>
 						<Action onClick={({grid}) => grid.onFolderClick (null)}>
 							<i className="fas fa-home mr-2" />{i18n ("Basic")}
 						</Action>

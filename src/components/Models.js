@@ -19,6 +19,7 @@ class Models extends Component {
 		me.state = {
 			refresh: false
 		};
+		me._refs = {"models": React.createRef ()};
 	}
 	
 	onCreate () {
@@ -83,7 +84,7 @@ class Models extends Component {
 				<div className="bg-white shadow-sm">
 					<Grid
 						{...me.props}
-						id="models" ref="models"
+						id="models" ref={me._refs ["models"]}
 						label="Models"
 						store={me.props.store}
 						query="objectum.model"

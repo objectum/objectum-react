@@ -20,6 +20,7 @@ class Queries extends Component {
 		me.state = {
 			refresh: false
 		};
+		me._refs = {"queries": React.createRef ()};
 	}
 	
 	onCreate () {
@@ -68,7 +69,7 @@ class Queries extends Component {
 		return (
 			<div className="container">
 				<div className="bg-white shadow-sm">
-					<Grid {...me.props} id="queries" ref="queries" label="Queries" store={me.props.store} query="objectum.query" tree={true} system={true} refresh={me.state.refresh} onSelectParent={(parent) => me.parent = parent}>
+					<Grid {...me.props} id="queries" ref={me._refs ["queries"]} label="Queries" store={me.props.store} query="objectum.query" tree={true} system={true} refresh={me.state.refresh} onSelectParent={(parent) => me.parent = parent}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
 						<RemoveAction onRemove={me.onRemove} />

@@ -36,6 +36,10 @@ class ChooseField extends Component {
 				me.state.invalid = true;
 			}
 		}
+		me._refs = {
+			"component": React.createRef (),
+			"list": React.createRef ()
+		};
 		me.id = newId ();
 	}
 	
@@ -71,8 +75,15 @@ class ChooseField extends Component {
 	
 	onChoose () {
 		let me = this;
-		let cmp = me.props.choose.cmp ? me.refs ["component"].refs [me.state.ref] : me.refs ["list"];
+		let cmp = me._refs ["list"].current;
 		
+		if (me.props.choose.cmp) {
+			if (me._refs ["component"].current._refs) {
+				cmp = me._refs ["component"].current._refs [me.state.ref].current;
+			} else {
+				cmp = me._refs ["component"].current.refs [me.state.ref];
+			}
+		}
 		if (!cmp) {
 			throw new Error (`not found choose.ref: ${me.state.ref}`);
 		}
@@ -201,10 +212,10 @@ class ChooseField extends Component {
 						</div>
 					</div>
 					{me.props.choose.cmp ?
-						<ChooseComponent {...props} {...me.props.choose} ref="component" disableActions={true}/> :
+						<ChooseComponent {...props} {...me.props.choose} ref={me._refs ["component"]} disableActions={true}/> :
 						<Grid
 							id={gridId}
-							ref="list"
+							ref={me._refs ["list"]}
 							store={me.props.store}
 							{...me.props.choose}
 						/>

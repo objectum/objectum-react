@@ -52,7 +52,7 @@ class Model extends Component {
 				<div className="bg-white shadow-sm border">
 					<Tabs {...me.props} key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + me.state.label}>
 						<Tab key="tab1" label="Information">
-							<Form key="form1" ref="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
+							<Form key="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
 								<div className="form-row">
 									<div className="form-group col-md-6">
 										<StringField property="name" label="Name" />

@@ -33,6 +33,11 @@ class DictField extends Component {
 		};
 		me.model = me.props.store.getModel (me.props.model);
 		me.property = me.model.properties [me.props.property];
+		me._refs = {
+			"optionDialog": React.createRef (),
+			"groupDialog": React.createRef (),
+			"button": React.createRef ()
+		};
 		me.id = newId ();
 	}
 	
@@ -108,8 +113,12 @@ class DictField extends Component {
 	
 	onDocumentClick (event) {
 		let me = this;
+		let dialog = me._refs ["optionDialog"] || me._refs ["groupDialog"];
 		
-		if (me.refs.dialog && !me.refs.dialog.contains (event.target) && me.refs.button && !me.refs.button.contains (event.target)) {
+		if (dialog) {
+			dialog = dialog.current;
+		}
+		if (dialog && !dialog.contains (event.target) && me._refs ["button"].current && !me._refs ["button"].current.contains (event.target)) {
 			me.setState ({
 				showDialog: false,
 				filter: "",
@@ -187,7 +196,7 @@ class DictField extends Component {
 			recs = recs.filter (rec => rec [me.groupProperty.code] == me.state.group);
 		}
 		return (
-			<div className="dictfield-dialog text-left" ref="dialog">
+			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
 				<div className="dictfield-filter border p-1 bg-white shadow">
 					<div className="mb-1">{i18n ("Select parameter")}</div>
 					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
@@ -215,7 +224,7 @@ class DictField extends Component {
 		let recs = me.filter (me.state.groupRecs);
 		
 		return (
-			<div className="dictfield-dialog text-left" ref="dialog">
+			<div className="dictfield-dialog text-left" ref={me._refs ["groupDialog"]}>
 				<div className="dictfield-filter border p-1 bg-white shadow">
 					<div className="mb-1">{`${i18n ("Select")}: ${me.groupProperty.get ("name")}`}</div>
 					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
@@ -258,7 +267,7 @@ class DictField extends Component {
 								onClick={me.onShowDialog}
 								style={{height: "100%", width: "27px"}}
 							>
-								<i className="fas fa-edit" ref="button" />
+								<i className="fas fa-edit" ref={me._refs ["button"]} />
 							</button></Tooltip>
 						</div>}
 						<Tooltip label={me.state.label}>

@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import Action from "./Action";
-import Confirm from "./Confirm";
 import Grid from "./Grid";
 import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
@@ -17,6 +16,7 @@ class Menus extends Component {
 		me.state = {
 			refresh: false
 		};
+		me._refs = {"menus": React.createRef ()};
 	}
 	
 	onCreate () {
@@ -57,7 +57,7 @@ class Menus extends Component {
 		return (
 			<div className="container">
 				<div className="bg-white shadow-sm">
-					<Grid {...me.props} id="menus" ref="menus" label="Menus" store={me.props.store} query="objectum.menu" refresh={me.state.refresh}>
+					<Grid {...me.props} id="menus" ref={me._refs ["menus"]} label="Menus" store={me.props.store} query="objectum.menu" refresh={me.state.refresh}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
 						<RemoveAction onRemove={me.onRemove} />

@@ -33,6 +33,7 @@ class Test extends Component {
 			file: "test.jpg",
 			refresh: false
 		};
+		this._refs = {"test": React.createRef ()};
 		this.changed = {};
 	}
 	
@@ -57,26 +58,9 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<div className="p-1 border">
-					<div className="border p-1">
-					11
-					</div>
-				</div>
-				<Navbar items={[
-					{label: "Models", path: "/models"},
-					{label: "Queries", path: "/queries"}
-				]} />
-				<Tabs>
-					<Tab label="Tab1">
-						Tab1
-					</Tab>
-					<Tab label="Tab2">
-						Tab2
-					</Tab>
-				</Tabs>
-				<DictField property="type" label="Type" model="item" store={store} />
-				<Form store={store} rsc="record" mid="item" hideButtons>
-				</Form>
+				<StringField ref={me._refs ["test"]} />
+				<Action label="tt" onClick={() => me._refs ["test"].current.setState ({value: "2"})} />
+				<ModelList store={store} model="item" />
 				<Form ref="my-form" record={me.state} hideButtons>
 					<DateField property="date" label="Date" notNull={0} showTime />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
@@ -89,23 +73,6 @@ class Test extends Component {
 						me.setState ({refresh: !me.state.refresh, text: "2"});
 					}} />
 				</Form>
-				<ChooseField label="ChooseField" store={store} property="test" choose={{model: "org"}} value="1020" />
-				<StringField label="StringField" property="test" wysiwyg />
-{/*
-				<Form store={store} rsc="record" rid={20436} mid="balance">
-					<Field property="amount" notNull />
-					<JsonField
-						label="JsonField" property="opts"
-						props={[
-							{prop: "f1", label: "F1", component: BooleanField},
-							{prop: "f2", label: "F2", component: BooleanField},
-							{prop: "f3", label: "F3", component: BooleanField},
-							{prop: "f4", label: "F4", component: BooleanField},
-							{prop: "f5", label: "F5", component: BooleanField}
-						]}
-					/>
-				</Form>
-*/}
 			</div>
 		);
 	}

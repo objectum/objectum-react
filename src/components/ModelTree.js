@@ -19,6 +19,9 @@ class ModelTree extends Component {
 		me.state = {
 			refresh: false
 		};
+		let id = me.props.id || `tree-${me.model}`;
+		
+		me._refs = {[id]: React.createRef ()};
 	}
 	
 	onCreate () {
@@ -92,7 +95,7 @@ class ModelTree extends Component {
 		
 		return (
 			<div className="bg-white shadow-sm">
-				<Grid {...me.props} id={id} ref={id} label={label} store={me.props.store} model={me.model} tree={true} refresh={me.state.refresh} params={params}>
+				<Grid {...me.props} id={id} ref={me._refs [id]} label={label} store={me.props.store} model={me.model} tree={true} refresh={me.state.refresh} params={params}>
 					<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
 					<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
 					<RemoveAction onRemove={me.onRemove} />

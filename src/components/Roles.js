@@ -17,6 +17,7 @@ class Roles extends Component {
 		me.state = {
 			refresh: false
 		};
+		me._refs = {"roles": React.createRef ()};
 	}
 	
 	onCreate () {
@@ -57,7 +58,7 @@ class Roles extends Component {
 		return (
 			<div className="container">
 				<div className="bg-white shadow-sm">
-					<Grid {...me.props} id="roles" ref="roles" label="Roles" store={me.props.store} query="objectum.role" refresh={me.state.refresh}>
+					<Grid {...me.props} id="roles" ref={me._refs ["roles"]} label="Roles" store={me.props.store} query="objectum.role" refresh={me.state.refresh}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
 						<RemoveAction onRemove={me.onRemove} />
