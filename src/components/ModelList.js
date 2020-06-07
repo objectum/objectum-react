@@ -33,6 +33,7 @@ class ModelList extends Component {
 				me.state.actions = me.state._grid.actions;
 			}
 		}
+		me._refs = {[me.props.id || "list"]: React.createRef ()};
 	}
 	
 	onCreate () {
@@ -202,7 +203,7 @@ class ModelList extends Component {
 		let gridOpts = {
 			...me.props,
 			id: me.props.id || `list-${me.model}`,
-			ref: me.props.id || "list",
+			ref: me._refs [me.props.id || "list"],
 			store: me.props.store,
 			label: (m.isDictionary () ? i18n ("Dictionary") : i18n ("List")) + ": " + m.get ("name"),
 			refresh: me.state.refresh,
