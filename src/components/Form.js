@@ -418,7 +418,7 @@ class Form extends Component {
 					record: me.record,
 					model: me.model && me.model.getPath (),
 					store: me.props.store,
-					ref: code,
+					//ref: code,
 					key,
 					disabled: child.props.disabled || me.props.disabled,
 					error: me.state [`${code}-error`]
