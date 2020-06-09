@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.324",
+	"version": "1.1.326",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -42,6 +42,8 @@
 	"dependencies": {
 		"draft-js": "^0.11.5",
 		"draftjs-to-html": "^0.9.1",
+		"exceljs": "^4.0.1",
+		"file-saver": "^2.0.2",
 		"html-to-draftjs": "^1.5.0",
 		"lodash": "^4.17.15",
 		"objectum-client": "^1.1.96",
