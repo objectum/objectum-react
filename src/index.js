@@ -55,6 +55,10 @@ import {
 	newId,
 	getTimestampString
 } from "./components/helper";
+import {
+	createReport,
+	reportStyles
+} from "./modules/report";
 
 export {
 	Action,
@@ -111,7 +115,9 @@ export {
 	goRidLocation,
 	timeout,
 	newId,
-	getTimestampString
+	getTimestampString,
+	createReport,
+	reportStyles
 };
 
 export default {
@@ -169,5 +175,7 @@ export default {
 	goRidLocation,
 	timeout,
 	newId,
-	getTimestampString
+	getTimestampString,
+	createReport,
+	reportStyles
 };
