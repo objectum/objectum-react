@@ -61,7 +61,7 @@ class Test extends Component {
 				<StringField ref={me._refs ["test"]} />
 				<Action label="tt" onClick={() => me._refs ["test"].current.setState ({value: "2"})} />
 				<ModelList store={store} model="item" />
-				<Form ref="my-form" record={me.state} hideButtons>
+				<Form ref="my-form" record={me.state} hideButtons disabled>
 					<DateField property="date" label="Date" notNull={0} showTime />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />

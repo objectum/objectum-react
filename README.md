@@ -19,7 +19,7 @@ npm install --save objectum-react
 * [ObjectumApp](#objectum_app)  
 * [Auth](#auth)
 * [Grid](#grid)  
-* [TreeGrid](#tree_grid)  
+* [Grid (tree)](#tree_grid)  
 * [Form](#form)  
 * [Tabs](#tabs)  
 * [Fields](#fields)  
@@ -139,12 +139,12 @@ offset {"param": "offset"}
 
 <a name="tree_grid" />
 
-### TreeGrid
+### Grid (tree)
 props:
 * **onSelectParent**: *function* - event listener 
 
 ```html
-<TreeGrid id="menuItems" ref="menuItems" label="Menu items" store={this.props.store} query="objectum.class" refresh={this.state.refresh} onSelectParent={parent => this.parent = parent}>
+<Grid id="menuItems" ref="menuItems" label="Menu items" store={this.props.store} query="objectum.class" refresh={this.state.refresh} tree onSelectParent={parent => this.parent = parent}>
 ```
 ```sql
 {"data": "begin"}
