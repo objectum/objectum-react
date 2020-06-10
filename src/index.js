@@ -41,6 +41,7 @@ import RemoveAction from "./components/RemoveAction";
 import Loading from "./components/Loading";
 import Tooltip from "./components/Tooltip";
 import Navbar from "./components/Navbar";
+import Fade from "./components/Fade";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -111,6 +112,7 @@ export {
 	Loading,
 	Tooltip,
 	Navbar,
+	Fade,
 	i18n,
 	goRidLocation,
 	timeout,
@@ -171,6 +173,7 @@ export default {
 	Loading,
 	Tooltip,
 	Navbar,
+	Fade,
 	i18n,
 	goRidLocation,
 	timeout,
