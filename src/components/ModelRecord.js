@@ -370,9 +370,11 @@ class ModelRecord extends Component {
 					</div>
 				</div>
 			);
+/*
 			if (me.regModel && me.regModel._renderForm) {
 				form = me.regModel._renderForm ({form, store: me.props.store});
 			}
+*/
 			return form;
 		}
 		properties = _.chunk (properties, columns);
