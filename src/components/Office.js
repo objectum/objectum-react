@@ -3,15 +3,19 @@
 
 import React, {Component} from "react";
 import Action from "./Action";
+import Loading from "./Loading";
 import crypto from "crypto";
 import {i18n} from "./../i18n";
+import {loadJS} from "./helper.js";
 
 class Office extends Component {
 	constructor (props) {
 		super (props);
 		
-		this.state = {};
-		
+		this.state = {
+			loading: true,
+			recaptchaLoading: true
+		};
 		this.onChange = this.onChange.bind (this);
 		this.onRegister = this.onRegister.bind (this);
 		this.onLogin = this.onLogin.bind (this);
@@ -38,12 +42,26 @@ class Office extends Component {
 			if (o.recoverId) {
 				this.state.recoverId = o.recoverId;
 				this.state.email = o.email;
+				this.state.newPassword = o.newPassword;
 			}
 		}
 	}
 	
 	async componentDidMount () {
 		let me = this;
+
+		window.onRecaptchaCallback = () => {
+			window.grecaptcha.render ("g-recaptcha", {
+				sitekey: me.props.siteKey,
+				callback: (res) => {
+					me.setState ({recaptchaRes: res})
+				},
+				theme: "light"
+			});
+			me.setState ({recaptchaLoading: false});
+		};
+		await loadJS ("https://www.google.com/recaptcha/api.js?onload=onRecaptchaCallback&render=explicit");
+		me.setState ({loading: false});
 		
 		if (me.state.activationId) {
 			let state = {activationId: ""};
@@ -72,17 +90,30 @@ class Office extends Component {
 					model: "admin",
 					method: "recover",
 					recoverId: me.state.recoverId,
-					email: me.state.email
+					email: me.state.email,
+					newPassword: me.state.newPassword
 				});
 				await me.props.store.auth ({
 					username: result.login,
 					password: result.password
 				});
-				state.recoverResult = i18n ("New password") + ": " + result.plainPassword;
+				state.recoverResult = i18n ("Password changed");
 			} catch (err) {
 				state.recoverResult = err.message;
 			}
 			me.setState (state);
+		}
+	}
+	
+	componentDidUpdate (prevProps, prevState) {
+		if (this.state.recover && !prevState.recover) {
+			window.grecaptcha.render ("g-recaptcha", {
+				sitekey: this.props.siteKey,
+				callback: (res) => {
+					this.setState ({recaptchaRes: res})
+				},
+				theme: "light"
+			});
 		}
 	}
 	
@@ -107,7 +138,10 @@ class Office extends Component {
 			activationHost,
 			email: me.state.email,
 			password: crypto.createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase (),
-			name: me.state.name
+			name: me.state.name,
+			subject: i18n ("User registration") + ": " + me.props.name,
+			text: i18n ("To activate your account, follow the link"),
+			recaptchaRes: me.state.recaptchaRes
 		});
 	}
 	
@@ -144,7 +178,11 @@ class Office extends Component {
 			model: "admin",
 			method: "recoverRequest",
 			activationHost,
-			email: me.state.recoverEmail
+			email: me.state.recoverEmail,
+			password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase (),
+			subject: i18n ("Password recovery") + ": " + me.props.name,
+			text: i18n ("To recover your password, follow the link"),
+			recaptchaRes: me.state.recaptchaRes
 		});
 	}
 	
@@ -194,16 +232,31 @@ class Office extends Component {
 		}
 		if (me.state.recover) {
 			return (
-				<div className={me.props.cardClassName || "p-4 shadow"}>
+				<div className={(me.props.cardClassName || "p-4 shadow") + " w-75"}>
 					<h3 className="">{i18n ("Password recovery")}</h3>
-						<div className="form-group mt-4">
-							<label htmlFor="recoverEmail">{i18n ("E-mail")}</label>
-							<input type="email" className="form-control" id="recoverEmail" onChange={me.onChange} />
-						</div>
-					<Action
-						onClick={me.onRecover}
-						disabled={!me.state.recoverEmail}
-					><i className="fas fa-envelope mr-2"/>{i18n ("Restore password")}</Action>
+					<div className="form-group mt-4">
+						<label htmlFor="recoverEmail">{i18n ("E-mail")}</label>
+						<input type="email" className="form-control" id="recoverEmail" onChange={me.onChange} />
+					</div>
+					<div className="form-group">
+						<label htmlFor="password">{i18n ("New password")}</label>
+						<input type="password" className="form-control" id="password" onChange={me.onChange} />
+					</div>
+					<div className="form-group">
+						<label htmlFor="password2">{i18n ("Confirm password")}</label>
+						<input type="password" className="form-control" id="password2" onChange={me.onChange} />
+					</div>
+					{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="alert alert-danger" role="alert">
+						{i18n ("Passwords do not match")}
+					</div>}
+					<div id="g-recaptcha" />
+					{me.state.recaptchaLoading && <Loading />}
+					<div className="pt-3">
+						<Action
+							onClick={me.onRecover}
+							disabled={!me.state.recoverEmail}
+						><i className="fas fa-envelope mr-2"/>{i18n ("Restore password")}</Action>
+					</div>
 				</div>
 			);
 		}
@@ -227,6 +280,8 @@ class Office extends Component {
 						{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="alert alert-danger" role="alert">
 							{i18n ("Passwords do not match")}
 						</div>}
+						<div id="g-recaptcha" />
+						{me.state.recaptchaLoading && <Loading />}
 						<div className="text-center pt-3">
 							<Action
 								onClick={me.onRegister}

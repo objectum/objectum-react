@@ -140,8 +140,12 @@ class Demo extends Component {
 					<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />
 					<ObjectumRoute path="/office" render={props => (
 						<div className="container">
-							<div className="p-4 w-50">
-								<Office {...props} store={store} cardClassName="p-4 border" authorized={me.state.username && me.state.username != "guest"}>
+							<div className="p-4 w-75">
+								<Office
+									{...props} store={store} name="objectum-react" cardClassName="p-4 border"
+									authorized={me.state.username && me.state.username != "guest"}
+									siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
+								>
 									authorized menu
 								</Office>
 							</div>

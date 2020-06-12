@@ -128,5 +128,17 @@
 	"incorrect e-mail (login) or password": "неправильное имя пользователя или пароль",
 	"account activated": "учетная запись активирована",
 	"new password": "новый пароль",
-	"account activation": "активация учетной записи"
+	"account activation": "активация учетной записи",
+	"account already exists": "учетная запись уже существует",
+	"unknown role": "неизвестная роль",
+	"user registration": "Регистрация пользователя",
+	"to activate your account, follow the link": "для активации учетной записи перейдите по ссылке",
+	"email has been sent to you with instructions to activate your account": "вам отправлено письмо с инструкцией по активации учетной записи",
+	"error sending email to": "ошибка отправления письма на адрес",
+	"no account": "учетная запись отсутствует",
+	"to recover your password, follow the link": "для восстановления пароля перейдите по ссылке",
+	"a password recovery email has been sent to you": "вам отправлено письмо с инструкцией по восстановлению пароля",
+	"invalid password recovery code": "неверный код восстановления пароля",
+	"password changed": "пароль изменён",
+	"invalid recaptcha response": "неверный ответ recaptcha"
 }
