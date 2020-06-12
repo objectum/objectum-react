@@ -226,7 +226,7 @@ class ModelRecord extends Component {
 				item = <Tag>{item}</Tag>;
 			});
 		}
-		return item;
+		return item || o;
 	}
 	
 	renderLayout (layout, model, level = 0, result = {propertyNum: 0, tableNum: 0, newRecordFormNum: 0}) {

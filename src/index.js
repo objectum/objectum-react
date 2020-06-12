@@ -42,6 +42,7 @@ import Loading from "./components/Loading";
 import Tooltip from "./components/Tooltip";
 import Navbar from "./components/Navbar";
 import Fade from "./components/Fade";
+import {isMobile} from "react-device-detect";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -113,6 +114,7 @@ export {
 	Tooltip,
 	Navbar,
 	Fade,
+	isMobile,
 	i18n,
 	goRidLocation,
 	timeout,
@@ -174,6 +176,7 @@ export default {
 	Tooltip,
 	Navbar,
 	Fade,
+	isMobile,
 	i18n,
 	goRidLocation,
 	timeout,
