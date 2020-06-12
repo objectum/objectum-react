@@ -125,5 +125,8 @@
 	"forgot password?": "забыли пароль?",
 	"restore password": "восстановить пароль",
 	"password recovery": "восстановление пароля",
-	"incorrect e-mail (login) or password": "неправильное имя пользователя или пароль"
+	"incorrect e-mail (login) or password": "неправильное имя пользователя или пароль",
+	"account activated": "учетная запись активирована",
+	"new password": "новый пароль",
+	"account activation": "активация учетной записи"
 }

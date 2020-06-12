@@ -23,6 +23,67 @@ class Office extends Component {
 		if (search.startsWith ("recover=")) {
 			this.state.recover = true;
 		}
+		if (search.startsWith ("activationId=")) {
+			this.state.actiovationId = search.substr (13);
+		}
+		if (search.startsWith ("email=")) {
+			let tokens = search.split ("&");
+			let o = {};
+			
+			tokens.forEach (s => {
+				let t = s.split ("=");
+				
+				o [t [0]] = t [1];
+			});
+			if (o.recoverId) {
+				this.state.recoverId = o.recoverId;
+				this.state.email = o.email;
+			}
+		}
+	}
+	
+	async componentDidMount () {
+		let me = this;
+		
+		if (me.state.activationId) {
+			let state = {activationId: ""};
+			
+			try {
+				let result = await me.props.store.remote ({
+					model: "admin",
+					method: "activation",
+					activationId: me.state.activationId
+				});
+				await me.props.store.auth ({
+					username: result.login,
+					password: result.password
+				});
+				state.activationResult = i18n ("Account activated");
+			} catch (err) {
+				state.activationResult = err.message;
+			}
+			me.setState (state);
+		}
+		if (me.state.recoverId) {
+			let state = {recoverId: ""};
+			
+			try {
+				let result = await me.props.store.remote ({
+					model: "admin",
+					method: "recover",
+					recoverId: me.state.recoverId,
+					email: me.state.email
+				});
+				await me.props.store.auth ({
+					username: result.login,
+					password: result.password
+				});
+				state.recoverResult = i18n ("New password") + ": " + result.plainPassword;
+			} catch (err) {
+				state.recoverResult = err.message;
+			}
+			me.setState (state);
+		}
 	}
 	
 	onChange (val) {
@@ -89,7 +150,45 @@ class Office extends Component {
 	
 	render () {
 		let me = this;
-
+		
+		if (me.state.activationId) {
+			return (
+				<div className={me.props.cardClassName || "p-4 shadow"}>
+					{i18n ("Account activation") + " ..."}
+				</div>
+			);
+		}
+		if (me.state.recoverId) {
+			return (
+				<div className={me.props.cardClassName || "p-4 shadow"}>
+					{i18n ("Password recovery") + " ..."}
+				</div>
+			);
+		}
+		if (me.state.activationResult) {
+			return (
+				<div className={me.props.cardClassName || "p-4 shadow"}>
+					<div className="mb-2">
+						{me.state.activationResult}
+					</div>
+					<Action
+						onClick={() => me.setState ({activationResult: ""})}
+					><i className="fas fa-check mr-2"/>Ok</Action>
+				</div>
+			);
+		}
+		if (me.state.recoverResult) {
+			return (
+				<div className={me.props.cardClassName || "p-4 shadow"}>
+					<div className="mb-2">
+						{me.state.recoverResult}
+					</div>
+					<Action
+						onClick={() => me.setState ({recoverResult: ""})}
+					><i className="fas fa-check mr-2"/>Ok</Action>
+				</div>
+			);
+		}
 		if (me.props.authorized) {
 			return me.props.children;
 		}
