@@ -42,6 +42,7 @@ import Loading from "./components/Loading";
 import Tooltip from "./components/Tooltip";
 import Navbar from "./components/Navbar";
 import Fade from "./components/Fade";
+import Office from "./components/Office";
 import {isMobile} from "react-device-detect";
 import i18n from "./i18n";
 import {
@@ -114,6 +115,7 @@ export {
 	Tooltip,
 	Navbar,
 	Fade,
+	Office,
 	isMobile,
 	i18n,
 	goRidLocation,
@@ -176,6 +178,7 @@ export default {
 	Tooltip,
 	Navbar,
 	Fade,
+	Office,
 	isMobile,
 	i18n,
 	goRidLocation,

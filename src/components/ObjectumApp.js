@@ -397,13 +397,7 @@ class ObjectumApp extends Component {
 			);
 		}
 		if (me.state.loading) {
-			return (
-				<div className="container">
-					<div className="mt-2 p-4 border bg-white shadow-sm">
-						<Loading />
-					</div>
-				</div>
-			);
+			return <Loading container />
 		}
 /*
 		if (me.props.username && me.props.password && !me.state.sid) {

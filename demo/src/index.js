@@ -2,7 +2,7 @@ import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Route} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
+import {Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 import ReactCrop from "react-image-crop";
 
@@ -93,17 +93,25 @@ class Demo extends Component {
 		
 		this.onCustomRender = this.onCustomRender.bind (this);
 		
+		this.state = {};
 		//window.store = store;
 	}
 	
+	onConnect = () => {
+		this.setState ({
+			username: store.username
+		});
+	}
+	
 	onCustomRender ({content, app}) {
-/*
+		if (!this.state.username) {
+			return <Loading container />
+		}
 		return (
 			<div>
 				{content}
 			</div>
 		);
-*/
 	}
 	
 	render () {
@@ -112,11 +120,12 @@ class Demo extends Component {
 		return (
 			<div>
 				<ObjectumApp
+					locale="ru"
 					store={store}
-					username="admin"
-					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					__username="user"
-					__password={require ("crypto").createHash ("sha1").update ("user").digest ("hex").toUpperCase ()}
+					_username="admin"
+					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					username="guest"
+					password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
 /*
@@ -124,10 +133,20 @@ class Demo extends Component {
 						return div;
 					}}
 */
-					/*onCustomRender={me.onCustomRender}*/
+					onCustomRender={me.onCustomRender}
+					onConnect={me.onConnect}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 					<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />
+					<ObjectumRoute path="/office" render={props => (
+						<div className="container">
+							<div className="p-4 w-50">
+								<Office {...props} store={store} cardClassName="p-4 border" authorized={me.state.username && me.state.username != "guest"}>
+									authorized menu
+								</Office>
+							</div>
+						</div>
+					)} />
 				</ObjectumApp>
 			</div>
 		);

@@ -10,6 +10,16 @@ class Loading extends Component {
 	}
 	
 	render () {
+		if (this.props.container) {
+			return (
+				<div className="container">
+					<div className="mt-2 p-4 border bg-white shadow-sm">
+						<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />
+						{i18n ("Loading") + " ..."}
+					</div>
+				</div>
+			);
+		}
 		return (
 			<span>
 				<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />

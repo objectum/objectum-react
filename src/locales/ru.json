@@ -115,5 +115,15 @@
 	"version": "версия",
 	"drag 'n' drop some file here, or click to select file": "Переместите файл сюда или нажмите для выбора файла",
 	"bytes": "байт",
-	"clear": "очистить"
+	"clear": "очистить",
+	"e-mail": "электронная почта",
+	"registration": "регистрация",
+	"confirm password": "подтвердить пароль",
+	"passwords do not match": "введенные пароли не совпадают",
+	"register": "зарегистрироваться",
+	"registration successful": "регистрация выполнена",
+	"forgot password?": "забыли пароль?",
+	"restore password": "восстановить пароль",
+	"password recovery": "восстановление пароля",
+	"incorrect e-mail (login) or password": "неправильное имя пользователя или пароль"
 }
