@@ -353,7 +353,7 @@ class ModelRecord extends Component {
 		if (me.state.loading) {
 			return (
 				<div className="container">
-					<div className="p-4 border bg-white shadow-sm">
+					<div className="p-4 border shadow-sm">
 						<Loading />
 					</div>
 				</div>
@@ -365,7 +365,7 @@ class ModelRecord extends Component {
 					<div className="text-white bg-info py-1">
 						<strong className="pl-2">{label + ": " + me.state.label}</strong>
 					</div>
-					<div className="border bg-white shadow-sm">
+					<div className="border shadow-sm">
 						{me.renderLayout (regModel._layout ({store: me.props.store}), m)}
 					</div>
 				</div>
@@ -402,7 +402,7 @@ class ModelRecord extends Component {
 		}
 		form = (
 			<div className="container">
-				<div className="bg-white border shadow-sm">
+				<div className="border shadow-sm">
 					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 						<Tab key={`tab1-${me.state.model}`} label="Information">
 							{form}

@@ -70,7 +70,7 @@ class Auth extends Component {
 		
 		if (me.props.onRenderAuthInfo) {
 			authInfo = (
-				<div className="auth-info bg-white flex-grow-1 p-3 border-left">
+				<div className="auth-info flex-grow-1 p-3 border-left">
 					<div className="mt-1 ml-2">
 						<h3>{me.props.name}</h3>
 					</div>
@@ -84,7 +84,7 @@ class Auth extends Component {
 		return (
 			<Fade>
 				{authInfo ? <div className="auth-long">
-					<div className="border bg-white shadow mt-5">
+					<div className="border shadow mt-5">
 						<div className="bg-info text-white py-2 pl-4">
 							<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
 						</div>
@@ -126,7 +126,7 @@ class Auth extends Component {
 						</div>
 					</div>
 				</div> : <div className="auth">
-					<div className="border bg-white shadow mt-5">
+					<div className="border shadow mt-5">
 						<div className="bg-info text-white py-2 pl-2">
 							<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
 						</div>

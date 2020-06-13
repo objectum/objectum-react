@@ -1,6 +1,6 @@
 import React, {Component, useState} from "react";
 import {render} from "react-dom";
-import {Route} from "react-router-dom";
+import {Link, Route, useHistory} from "react-router-dom";
 import {Store, Record} from "objectum-client";
 import {Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
@@ -13,14 +13,59 @@ import ReactCrop from "react-image-crop";
 //import TBrakDishModel from "./models/TBrakDishModel";
 import ItemModel from "./models/ItemModel";
 
-import "react-image-crop/dist/ReactCrop.css";
-import "../../src/css/bootstrap.css";
+import "../../src/css/bootstrap-superhero.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 
 import packageConfig from "./../package";
+import {i18n} from "../../src/i18n";
 
 const store = new Store ();
+
+function HomeButton (props) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		history.push ("/");
+	}
+	return (
+		<button className="btn btn-link p-0" onClick={handleClick}>
+			{props.children || <i className="fas fa-home" />}
+		</button>
+	);
+};
+
+function LogoutButton ({app, size}) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		app.store.end ();
+		
+		app.setState ({
+			sidebarOpen: false, locations: [], sid: null
+		});
+		history.push ("/");
+	}
+	return (
+		<Link className="nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</Link>
+	);
+};
+
+function BackButton ({popLocation, locations}) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		let {pathname, hash} = locations [locations.length - 2];
+		
+		popLocation ();
+
+//		history.push (decodeURI (pathname + hash));
+		history.push (pathname + hash);
+	}
+	return (
+		<Link className="nav-item nav-link font-weight-bold" disabled={locations.length < 2} onClick={handleClick}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</Link>
+	);
+};
 
 class Test extends Component {
 	constructor (props) {
@@ -109,6 +154,31 @@ class Demo extends Component {
 		}
 		return (
 			<div>
+				<Navbar className="navbar navbar-expand navbar-light bg-light" linkClassName="nav-item nav-link" items={[
+					<HomeButton>objectum-react (version 1.0.0, user: admin)</HomeButton>,
+				]} />
+				<Navbar className="navbar navbar-expand navbar-dark bg-primary" linkClassName="nav-item nav-link font-weight-bold" items={[
+					<BackButton locations={[1, 2, 3]} />,
+					{
+						label: "Objectum", icon: "fas fa-cubes", items: [
+							<Link className="dropdown-item nav-item nav-link font-weight-bold" to="/models"><i className="fas fa-cubes mr-2" />Модели</Link>,
+							<Link className="dropdown-item nav-item nav-link font-weight-bold" to="/queries"><i className="fas fa-eye mr-2" />Queries</Link>,
+							{
+								label: "Objectum", icon: "fas fa-cubes", items: [
+									<Link className="dropdown-item nav-item nav-link font-weight-bold" to="/models"><i className="fas fa-cubes mr-2" />Модели</Link>,
+									<Link className="dropdown-item nav-item nav-link font-weight-bold" to="/queries"><i className="fas fa-eye mr-2" />Queries</Link>
+								]
+							}
+						]
+					},
+					{
+						label: "Models", icon: "fas fa-cubes", path: "/models"
+					},
+					{
+						label: "Queries", icon: "fas fa-cubes", path: "/queries"
+					},
+					<LogoutButton app={this} />
+				]} />
 				{content}
 			</div>
 		);
@@ -122,10 +192,10 @@ class Demo extends Component {
 				<ObjectumApp
 					locale="ru"
 					store={store}
-					_username="admin"
-					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					username="guest"
-					password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					_username="guest"
+					_password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
 /*
@@ -133,7 +203,7 @@ class Demo extends Component {
 						return div;
 					}}
 */
-					onCustomRender={me.onCustomRender}
+					/*onCustomRender={me.onCustomRender}*/
 					onConnect={me.onConnect}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
@@ -142,7 +212,7 @@ class Demo extends Component {
 						<div className="container">
 							<div style={{width: "50em"}}>
 								<Office
-									{...props} store={store} name="objectum-react" cardClassName="p-4 border"
+									{...props} store={store} name="objectum-react" cardClassName="p-4 shadow"
 									authorized={me.state.username && me.state.username != "guest"}
 									siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
 								>

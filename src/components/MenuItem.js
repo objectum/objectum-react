@@ -57,7 +57,7 @@ class MenuItem extends Component {
 		
 		return (
 			<div className="container">
-				<div className="bg-white shadow-sm border">
+				<div className="shadow-sm border">
 					<Tabs key="tabs" id="tabs" label={i18n ("Menu item") + ": " + me.state.label}>
 						<Tab key="Tab1" label="Information">
 							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>

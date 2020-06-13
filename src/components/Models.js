@@ -81,7 +81,7 @@ class Models extends Component {
 		
 		return (
 			<div className="container">
-				<div className="bg-white shadow-sm">
+				<div className="shadow-sm">
 					<Grid
 						{...me.props}
 						id="models" ref={me._refs ["models"]}

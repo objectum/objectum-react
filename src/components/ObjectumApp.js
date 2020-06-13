@@ -26,6 +26,7 @@ import Fade from "./Fade";
 import {execute} from "objectum-client";
 import Loading from "./Loading";
 import {isMobile} from "react-device-detect";
+import {Navbar} from "../index";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
@@ -71,6 +72,19 @@ function HomeButton () {
 	);
 };
 
+function HomeButton2 (props) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		history.push ("/");
+	}
+	return (
+		<button className="btn btn-link p-0 text-white" onClick={handleClick}>
+			{props.children || <i className="fas fa-home" />}
+		</button>
+	);
+};
+
 function LogoutButton ({app, size}) {
 	let history = useHistory ();
 	
@@ -89,6 +103,22 @@ function LogoutButton ({app, size}) {
 	);
 };
 
+function LogoutButton2 ({app}) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		app.store.end ();
+		
+		app.setState ({
+			sidebarOpen: false, locations: [], sid: null
+		});
+		history.push ("/");
+	}
+	return (
+		<button className="btn btn-link btn-sm nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
+	);
+};
+
 function BackButton ({popLocation, locations}) {
 	let history = useHistory ();
 	
@@ -104,6 +134,22 @@ function BackButton ({popLocation, locations}) {
 		<button className="btn btn-link" disabled={locations.length < 2} onClick={handleClick}>
 			<i className="fas fa-arrow-left mr-2" /><span className="text-dark">{i18n ("Back")}</span>
 		</button>
+	);
+};
+
+function BackButton2 ({popLocation, locations}) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		let {pathname, hash} = locations [locations.length - 2];
+		
+		popLocation ();
+
+//		history.push (decodeURI (pathname + hash));
+		history.push (pathname + hash);
+	}
+	return (
+		<button className="btn btn-link btn-sm nav-item nav-link font-weight-bold" disabled={locations.length < 2} onClick={handleClick}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</button>
 	);
 };
 
@@ -275,6 +321,39 @@ class ObjectumApp extends Component {
 		);
 	}
 	
+	renderMenu2 () {
+		let me = this;
+		let allRecs = _.sortBy (me.menuItemRecs, "order");
+		let items = [];
+		let addItems = (items, recs) => {
+			recs.forEach (rec => {
+				let item = {
+					id: rec.id,
+					label: rec.name,
+					icon: rec.icon,
+					path: rec.path
+				};
+				items.push (item);
+				
+				let childs = _.filter (allRecs, {parent: rec.id});
+				
+				if (childs.length) {
+					item.items = [];
+					addItems (item.items, childs);
+				}
+			});
+		};
+		addItems (items, _.filter (allRecs, {parent: null}));
+		
+		return (
+			<Navbar className="navbar navbar-expand navbar-dark bg-primary" linkClassName="nav-item nav-link font-weight-bold" items={[
+				<BackButton2 key="back" popLocation={me.popLocation} locations={me.state.locations} />,
+				...items,
+				<LogoutButton2 key="logout" app={me} />
+			]} />
+		);
+	}
+	
 	renderRoutes () {
 		let me = this;
 		let items = [
@@ -412,38 +491,53 @@ class ObjectumApp extends Component {
 				content = me.props.onCustomRender ({content, app: me});
 			}
 			if (!content) {
-				content = (
-					<div>
-						<Sidebar
-							sidebar={me.renderMenu (me.props.menuIconSize || "fa-2x")}
-							open={false}
-							docked={me.state.sidebarDocked}
-							sidebarClassName="bg-white border-right"
-							shadow={false}
-						>
-							<Fade>
-								<div className="bg-white shadow-sm header border-bottom py-1 form-inline">
-									<button className="btn btn-link" onClick={
-										() => {
-											me.setState ({sidebarDocked: !me.state.sidebarDocked});
-										}
-									}>
-										<i className="fas fa-bars mr-2" /><span className="text-dark">{i18n ("Menu")}</span>
-									</button>
-									
-									<HomeButton />
-									<BackButton popLocation={me.popLocation} locations={me.state.locations} />
-									
-									<span className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</span>
+				if (me.props.sidebar) {
+					content = (
+						<div>
+							<Sidebar
+								sidebar={me.renderMenu (me.props.menuIconSize || "fa-2x")}
+								open={false}
+								docked={me.state.sidebarDocked}
+								sidebarClassName="bg-white border-right"
+								shadow={false}
+							>
+								<Fade>
+									<div className="bg-white shadow-sm header border-bottom py-1 form-inline">
+										<button className="btn btn-link" onClick={
+											() => {
+												me.setState ({sidebarDocked: !me.state.sidebarDocked});
+											}
+										}>
+											<i className="fas fa-bars mr-2"/><span className="text-dark">{i18n ("Menu")}</span>
+										</button>
+										
+										<HomeButton/>
+										<BackButton popLocation={me.popLocation} locations={me.state.locations}/>
+										
+										<span
+											className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</span>
+									</div>
+								</Fade>
+								
+								<div className="objectum-content">
+									{me.renderRoutes ()}
 								</div>
-							</Fade>
-							
+							</Sidebar>
+						</div>
+					);
+				} else {
+					content = (
+						<div>
+							<Navbar className="navbar navbar-expand navbar-dark bg-dark" linkClassName="nav-item nav-link" items={[
+								<HomeButton2>{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</HomeButton2>,
+							]} />
+							{me.renderMenu2 ()}
 							<div className="objectum-content">
 								{me.renderRoutes ()}
 							</div>
-						</Sidebar>
-					</div>
-				);
+						</div>
+					);
+				}
 			}
 			return (
 				<div>

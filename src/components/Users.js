@@ -57,7 +57,7 @@ class Users extends Component {
 		
 		return (
 			<div className="container">
-				<div className="bg-white shadow-sm">
+				<div className="shadow-sm">
 					<Grid {...me.props} id="users" ref={me._refs ["users"]} label="Users" store={me.props.store} query="objectum.user" refresh={me.state.refresh}>
 						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
 						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>

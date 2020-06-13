@@ -60,7 +60,7 @@ class Property extends Component {
 		];
 		return (
 			<div className="container">
-				<div className="bg-white shadow-sm">
+				<div className="shadow-sm">
 					<Tabs key="propertyTabs" id="propertyTabs" label={i18n ("Property") + ": " + me.state.label}>
 						<Tab key="Tab1" label="Information">
 							<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} onCreate={me.onCreate}>
