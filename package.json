@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.332",
+	"version": "1.1.333",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",

@@ -9,6 +9,9 @@ body {
 .auth-login {
     width: 20em;
 }
+.auth-button {
+    width: 17em;
+}
 .auth {
     width: 30em;
     margin: auto;

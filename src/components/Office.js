@@ -14,7 +14,8 @@ class Office extends Component {
 		
 		this.state = {
 			loading: true,
-			recaptchaLoading: true
+			recover: false,
+			register: false
 		};
 		this.onChange = this.onChange.bind (this);
 		this.onRegister = this.onRegister.bind (this);
@@ -24,9 +25,6 @@ class Office extends Component {
 
 		let search = document.location.search.substr (1);
 
-		if (search.startsWith ("recover=")) {
-			this.state.recover = true;
-		}
 		if (search.startsWith ("activationId=")) {
 			this.state.actiovationId = search.substr (13);
 		}
@@ -50,17 +48,22 @@ class Office extends Component {
 	async componentDidMount () {
 		let me = this;
 
+/*
 		window.onRecaptchaCallback = () => {
-			window.grecaptcha.render ("g-recaptcha", {
-				sitekey: me.props.siteKey,
-				callback: (res) => {
-					me.setState ({recaptchaRes: res})
-				},
-				theme: "light"
-			});
-			me.setState ({recaptchaLoading: false});
+			try {
+				window.grecaptcha.render ("g-recaptcha", {
+					sitekey: me.props.siteKey,
+					callback: (res) => {
+						me.setState ({recaptchaRes: res})
+					},
+					theme: "light"
+				});
+			} catch (err) {
+			}
 		};
-		await loadJS ("https://www.google.com/recaptcha/api.js?onload=onRecaptchaCallback&render=explicit");
+*/
+//		await loadJS ("https://www.google.com/recaptcha/api.js?onload=onRecaptchaCallback&render=explicit");
+		await loadJS ("https://www.google.com/recaptcha/api.js?render=explicit");
 		me.setState ({loading: false});
 		
 		if (me.state.activationId) {
@@ -95,7 +98,7 @@ class Office extends Component {
 				});
 				await me.props.store.auth ({
 					username: result.login,
-					password: result.password
+					password: me.state.newPassword
 				});
 				state.recoverResult = i18n ("Password changed");
 			} catch (err) {
@@ -103,17 +106,22 @@ class Office extends Component {
 			}
 			me.setState (state);
 		}
+		me.loginInput.focus ();
 	}
 	
 	componentDidUpdate (prevProps, prevState) {
-		if (this.state.recover && !prevState.recover) {
-			window.grecaptcha.render ("g-recaptcha", {
-				sitekey: this.props.siteKey,
-				callback: (res) => {
-					this.setState ({recaptchaRes: res})
-				},
-				theme: "light"
-			});
+		if ((this.state.recover && !prevState.recover) || (this.state.register && !prevState.register)) {
+			try {
+				window.grecaptcha.render ("g-recaptcha", {
+					sitekey: this.props.siteKey,
+					callback: (res) => {
+						this.setState ({recaptchaRes: res})
+					},
+					theme: "light"
+				});
+				this.setState ({recaptchaRendered: true});
+			} catch (err) {
+			}
 		}
 	}
 	
@@ -122,7 +130,7 @@ class Office extends Component {
 		let id = val.target.id;
 		let value = val.target.value;
 		
-		if (id == "email" || id == "loginEmail" || id == "recoverEmail") {
+		if (id == "email") {
 			value = value.trim ().toLowerCase ();
 		}
 		me.setState ({[id]: value});
@@ -150,14 +158,14 @@ class Office extends Component {
 		
 		try {
 			await me.props.store.auth ({
-				username: me.state.loginEmail,
-				password: require ("crypto").createHash ("sha1").update (me.state.loginPassword).digest ("hex").toUpperCase ()
+				username: me.state.email,
+				password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase ()
 			});
 		} catch (err) {
 			if (err.message == "401 Unauthenticated") {
-				me.setState ({loginError: i18n ("Incorrect e-mail (login) or password")});
+				me.setState ({error: i18n ("Incorrect e-mail (login) or password")});
 			} else {
-				me.setState ({loginError: err.message});
+				me.setState ({error: err.message});
 			}
 		}
 	}
@@ -165,7 +173,7 @@ class Office extends Component {
 	async onKeyDown (e) {
 		let me = this;
 		
-		if (e.key === "Enter" && me.state.loginEmail && me.state.loginPassword) {
+		if (e.key === "Enter" && me.state.email && me.state.password) {
 			await me.onLogin ();
 		}
 	}
@@ -178,7 +186,7 @@ class Office extends Component {
 			model: "admin",
 			method: "recoverRequest",
 			activationHost,
-			email: me.state.recoverEmail,
+			email: me.state.email,
 			password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase (),
 			subject: i18n ("Password recovery") + ": " + me.props.name,
 			text: i18n ("To recover your password, follow the link"),
@@ -188,24 +196,23 @@ class Office extends Component {
 	
 	render () {
 		let me = this;
+		let content;
 		
 		if (me.state.activationId) {
-			return (
-				<div className={me.props.cardClassName || "p-4 shadow"}>
+			content = (
+				<div className={me.props.cardClassName || "p-3 shadow"}>
 					{i18n ("Account activation") + " ..."}
 				</div>
 			);
-		}
-		if (me.state.recoverId) {
-			return (
-				<div className={me.props.cardClassName || "p-4 shadow"}>
+		} else if (me.state.recoverId) {
+			content = (
+				<div className={me.props.cardClassName || "p-3 shadow"}>
 					{i18n ("Password recovery") + " ..."}
 				</div>
 			);
-		}
-		if (me.state.activationResult) {
-			return (
-				<div className={me.props.cardClassName || "p-4 shadow"}>
+		} else if (me.state.activationResult) {
+			content = (
+				<div className={me.props.cardClassName || "p-3 shadow"}>
 					<div className="mb-2">
 						{me.state.activationResult}
 					</div>
@@ -214,10 +221,9 @@ class Office extends Component {
 					><i className="fas fa-check mr-2"/>Ok</Action>
 				</div>
 			);
-		}
-		if (me.state.recoverResult) {
-			return (
-				<div className={me.props.cardClassName || "p-4 shadow"}>
+		} else if (me.state.recoverResult) {
+			content = (
+				<div className={me.props.cardClassName || "p-3 shadow"}>
 					<div className="mb-2">
 						{me.state.recoverResult}
 					</div>
@@ -226,17 +232,15 @@ class Office extends Component {
 					><i className="fas fa-check mr-2"/>Ok</Action>
 				</div>
 			);
-		}
-		if (me.props.authorized) {
-			return me.props.children;
-		}
-		if (me.state.recover) {
-			return (
-				<div className={(me.props.cardClassName || "p-4 shadow") + " w-75"}>
-					<h3 className="">{i18n ("Password recovery")}</h3>
+		} else if (me.props.authorized) {
+			content = me.props.children;
+		} else if (me.state.recover) {
+			content = (
+				<div className={me.props.cardClassName || "p-3 shadow"}>
+					<h3 className="text-center">{i18n ("Password recovery")}</h3>
 					<div className="form-group mt-4">
-						<label htmlFor="recoverEmail">{i18n ("E-mail")}</label>
-						<input type="email" className="form-control" id="recoverEmail" onChange={me.onChange} />
+						<label htmlFor="email">{i18n ("E-mail")}</label>
+						<input type="email" className="form-control" id="email" onChange={me.onChange} />
 					</div>
 					<div className="form-group">
 						<label htmlFor="password">{i18n ("New password")}</label>
@@ -250,77 +254,113 @@ class Office extends Component {
 						{i18n ("Passwords do not match")}
 					</div>}
 					<div id="g-recaptcha" />
-					{me.state.recaptchaLoading && <Loading />}
-					<div className="pt-3">
-						<Action
-							onClick={me.onRecover}
-							disabled={!me.state.recoverEmail}
-						><i className="fas fa-envelope mr-2"/>{i18n ("Restore password")}</Action>
+					<div className="text-center">
+						<div className="mt-3">
+							<Action
+								btnClassName="btn btn-primary auth-button px-0"
+								disabled={!me.state.email || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
+								onClick={me.onRecover}
+							><i className="fas fa-envelope mr-2"/>{i18n ("Restore password")}</Action>
+						</div>
+						<div className="mt-3">
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({recover: false})}>
+								<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
+							</button>
+						</div>
+						<div className="mt-3">
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({register: true, recover: false})}>
+								<i className="fas fa-key mr-2"/>{i18n ("Registration")}
+							</button>
+						</div>
 					</div>
+				</div>
+			);
+		} else if (me.state.register) {
+			content = (
+				<div className={me.props.cardClassName || "p-3 shadow"}>
+					<h3 className="text-center">{i18n ("Registration")}</h3>
+					<div className="form-group mt-4">
+						<label htmlFor="email">{i18n ("E-mail")}</label>
+						<input type="email" className="form-control" id="email" onChange={me.onChange} />
+					</div>
+{/*
+					<div className="form-group">
+						<label htmlFor="name">{i18n ("Your name")}</label>
+						<input type="name" className="form-control" id="name" onChange={me.onChange} />
+					</div>
+*/}
+					<div className="form-group">
+						<label htmlFor="password">{i18n ("Password")}</label>
+						<input type="password" className="form-control" id="password" onChange={me.onChange} />
+					</div>
+					<div className="form-group">
+						<label htmlFor="password2">{i18n ("Confirm password")}</label>
+						<input type="password" className="form-control" id="password2" onChange={me.onChange} />
+					</div>
+					{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="alert alert-danger" role="alert">
+						{i18n ("Passwords do not match")}
+					</div>}
+					<div id="g-recaptcha" />
+					<div className="text-center">
+						<div className="mt-3">
+							<Action
+								btnClassName="btn btn-primary auth-button"
+								onClick={me.onRegister}
+								disabled={!me.state.email || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
+							><i className="fas fa-key mr-2"/>{i18n ("Register")}</Action>
+						</div>
+						<div className="mt-3">
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({register: false})}>
+								<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
+							</button>
+						</div>
+						<div className="mt-3">
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({recover: true, register: false})}>
+								<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
+							</button>
+						</div>
+					</div>
+				</div>
+			);
+		} else {
+			content = (
+				<div className={me.props.cardClassName || "p-3 shadow"}>
+					<h3 className="text-center">{i18n ("Sign In")}</h3>
+					<div className="form-group mt-4">
+						<label htmlFor="email">{i18n ("E-mail")}</label>
+						<input type="email" className="form-control" id="email" onChange={me.onChange} ref={input => me.loginInput = input} />
+					</div>
+					<div className="form-group">
+						<label htmlFor="loginPassword">{i18n ("Password")}</label>
+						<input type="password" className="form-control" id="password" onChange={me.onChange} onKeyDown={me.onKeyDown}/>
+					</div>
+					<div className="text-center">
+						<div className="mt-4">
+							<Action
+								btnClassName="btn btn-primary auth-button"
+								disabled={!me.state.email || !me.state.password}
+								onClick={me.onLogin}
+							><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</Action>
+						</div>
+						<div className="mt-3">
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({register: true})}>
+								<i className="fas fa-key mr-2"/>{i18n ("Registration")}
+							</button>
+						</div>
+						<div className="mt-3">
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({recover: true})}>
+								<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
+							</button>
+						</div>
+					</div>
+					{me.state.error && <div className="mt-3 alert alert-danger" role="alert">
+						{me.state.error}
+					</div>}
 				</div>
 			);
 		}
 		return (
-			<div>
-				<div className="d-flex">
-					<div className={(me.props.cardClassName || "p-4 shadow") + " mr-4 w-50"}>
-						<h3 className="text-center">{i18n ("Registration")}</h3>
-						<div className="form-group mt-4">
-							<label htmlFor="email">{i18n ("E-mail")}</label>
-							<input type="email" className="form-control" id="email" onChange={me.onChange} />
-						</div>
-						<div className="form-group">
-							<label htmlFor="password">{i18n ("Password")}</label>
-							<input type="password" className="form-control" id="password" onChange={me.onChange} />
-						</div>
-						<div className="form-group">
-							<label htmlFor="password2">{i18n ("Confirm password")}</label>
-							<input type="password" className="form-control" id="password2" onChange={me.onChange} />
-						</div>
-						{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="alert alert-danger" role="alert">
-							{i18n ("Passwords do not match")}
-						</div>}
-						<div id="g-recaptcha" />
-						{me.state.recaptchaLoading && <Loading />}
-						<div className="text-center pt-3">
-							<Action
-								onClick={me.onRegister}
-								disabled={!me.state.email || !me.state.password || !me.state.password2 || me.state.password != me.state.password2}
-							><i className="fas fa-key mr-2"/>{i18n ("Register")}</Action>
-						</div>
-						{me.state.registerError && <div className="mt-3 alert alert-danger" role="alert">
-							{me.state.registerError}
-						</div>}
-						{me.state.registerSuccess && <div className="mt-3 alert alert-info" role="alert">
-							{i18n ("Registration successful")}
-						</div>}
-					</div>
-					<div className={(me.props.cardClassName || "p-4 shadow") + " w-50"}>
-						<h3 className="text-center">{i18n ("Sign In")}</h3>
-						<div className="form-group mt-4">
-							<label htmlFor="loginEmail">{i18n ("E-mail")}</label>
-							<input type="email" className="form-control" id="loginEmail" onChange={me.onChange} />
-						</div>
-						<div className="form-group">
-							<label htmlFor="loginPassword">{i18n ("Password")}</label>
-							<input type="password" className="form-control" id="loginPassword" onChange={me.onChange} onKeyDown={me.onKeyDown} />
-						</div>
-						<div className="text-center pt-3">
-							<div>
-								<Action
-									btnClassName="btn btn-primary px-4"
-									disabled={!me.state.loginEmail || !me.state.loginPassword}
-									onClick={me.onLogin}
-								><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</Action>
-							</div>
-							<button className="btn btn-link mt-2" onClick={() => me.setState ({recover: true})}>{i18n ("Forgot password?")}</button>
-						</div>
-						{me.state.loginError && <div className="mt-3 alert alert-danger" role="alert">
-							{me.state.loginError}
-						</div>}
-					</div>
-				</div>
-			</div>
+			<div style={{width: me.props.width || "352px"}}>{content}</div>
 		);
 	}
 };
