@@ -243,7 +243,7 @@ class ObjectumApp extends Component {
 						};
 						items.push (item);
 						
-						let childs = _.filter (allRecs, {parent: rec.id});
+						let childs = _.filter (me.menuItemRecs, {parent: rec.id});
 						
 						if (childs.length) {
 							item.items = [];
@@ -251,7 +251,7 @@ class ObjectumApp extends Component {
 						}
 					});
 				};
-				addItems (items, _.filter (allRecs, {parent: null}));
+				addItems (items, _.filter (me.menuItemRecs, {parent: null}));
 				
 				me.menuItems = items;
 			} else {
