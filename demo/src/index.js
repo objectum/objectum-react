@@ -165,7 +165,7 @@ class Demo extends Component {
 		});
 	}
 	
-	onCustomRender ({content, app}) {
+	onCustomRender ({content, app, location}) {
 		if (!this.state.username) {
 			return <Loading container />
 		}

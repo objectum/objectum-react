@@ -491,7 +491,7 @@ class ObjectumApp extends Component {
 		if (me.state.sid) {
 			if (me.props.onCustomRender) {
 				content = me.renderRoutes ();
-				content = me.props.onCustomRender ({content, app: me});
+				content = me.props.onCustomRender ({content, app: me, location: me.state.locations.length ? me.state.locations [me.state.locations.length - 1]: {}});
 			}
 			if (!content) {
 				if (me.props.sidebar) {
@@ -559,7 +559,7 @@ class ObjectumApp extends Component {
 			let customContent;
 			
 			if (me.props.onCustomRender) {
-				customContent = me.props.onCustomRender ({content, app: me});
+				customContent = me.props.onCustomRender ({content, app: me, location: me.state.locations.length ? me.state.locations [me.state.locations.length - 1]: {}});
 
 				if (customContent) {
 					content = customContent;
