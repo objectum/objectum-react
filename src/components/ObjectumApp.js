@@ -103,22 +103,6 @@ function LogoutButton ({app, size}) {
 	);
 };
 
-function LogoutButton2 ({app}) {
-	let history = useHistory ();
-	
-	function handleClick () {
-		app.store.end ();
-		
-		app.setState ({
-			sidebarOpen: false, locations: [], sid: null
-		});
-		history.push ("/");
-	}
-	return (
-		<button className="btn btn-link nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
-	);
-};
-
 function BackButton ({popLocation, locations}) {
 	let history = useHistory ();
 	
@@ -134,6 +118,23 @@ function BackButton ({popLocation, locations}) {
 		<button className="btn btn-link" disabled={locations.length < 2} onClick={handleClick}>
 			<i className="fas fa-arrow-left mr-2" /><span className="text-dark">{i18n ("Back")}</span>
 		</button>
+	);
+};
+
+function LogoutButton2 ({app}) {
+	let history = useHistory ();
+	
+	function handleClick () {
+		app.store.end ();
+		
+		app.setState ({
+			sidebarOpen: false, locations: [], sid: null
+		});
+		history.push ("/");
+	}
+	return (
+		<button
+			className="btn btn-link nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
 	);
 };
 
@@ -346,11 +347,13 @@ class ObjectumApp extends Component {
 		addItems (items, _.filter (allRecs, {parent: null}));
 		
 		return (
-			<Navbar className="navbar navbar-expand navbar-dark bg-primary" linkClassName="nav-item nav-link font-weight-bold text-dark" items={[
-				<BackButton2 key="back" popLocation={me.popLocation} locations={me.state.locations} />,
-				...items,
-				<LogoutButton2 key="logout" app={me} />
-			]} />
+			<Navbar
+				items={[
+					<BackButton2 key="back" popLocation={me.popLocation} locations={me.state.locations} />,
+					...items,
+					<LogoutButton2 key="logout" app={me} />
+				]}
+			/>
 		);
 	}
 	

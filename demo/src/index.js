@@ -103,6 +103,23 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<Navbar
+					className="navbar navbar-expand navbar-dark bg-primary"
+					linkClassName="nav-item nav-link font-weight-bold p-1"
+					submenuLinkClassName="nav-item nav-link font-weight-bold text-dark"
+					items={[
+						<button className="btn btn-link nav-item nav-link font-weight-bold" onClick={() => {}}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</button>,
+						<Link
+							key={1}
+							className="btn btn-link nav-item nav-link font-weight-bold"
+							to="/#"
+							onClick={() => {}}
+						>
+							<i className="fas fa-utensils" /> Рецепты
+						</Link>,
+						<button className="btn btn-link nav-item nav-link font-weight-bold" onClick={() => {}}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
+					]}
+				/>
 				<StringField ref={me._refs ["test"]} />
 				<Action label="tt" onClick={() => me._refs ["test"].current.setState ({value: "2"})} />
 				<ModelList store={store} model="item" />

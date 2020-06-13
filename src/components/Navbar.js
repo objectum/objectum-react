@@ -35,7 +35,7 @@ class Navbar extends Component {
 		
 		return (
 			<div key={key} className="nav-item dropdown">
-				<button className="btn btn-link nav-item nav-link dropdown-toggle font-weight-bold" onClick={() => me.setState ({[key]: !me.state [key]})}>
+				<button className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"} dropdown-toggle`} onClick={() => me.setState ({[key]: !me.state [key]})}>
 					{item.icon ? <i className={`${item.icon} mr-2`} /> : null} {item.label}
 				</button>
 				<div className={`dropdown-menu ml-${level} ${me.state [key] ? "d-block" : ""}`}>
@@ -46,7 +46,7 @@ class Navbar extends Component {
 							return (
 								<Link
 									key={i}
-									className={me.props.linkClassName || "dropdown-item nav-item nav-link font-weight-bold"} to={item.path}
+									className={me.props.submenuLinkClassName || "dropdown-item nav-item nav-link font-weight-bold text-dark"} to={item.path}
 									onClick={() => me.hideSubmenu ({selected: key2})}
 								>
 									{item.icon ? <i className={`${item.icon} menu-icon mr-2`} /> : null} {item.label}
@@ -75,7 +75,7 @@ class Navbar extends Component {
 				return (
 					<Link
 						key={key}
-						className={`${me.props.linkClassName || "nav-item nav-link m-2 font-weight-bold"} ${me.state.selected == key ? "active" : ""}`}
+						className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"} ${me.state.selected == key ? "active" : ""}`}
 						to={item.path || "/#"}
 						onClick={() => me.setState ({path: item.path})}
 					>
