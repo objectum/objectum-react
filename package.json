@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.341",
+	"version": "1.1.342",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -40,6 +40,7 @@
 		"react-component"
 	],
 	"dependencies": {
+		"date-fns": "^2.14.0",
 		"draft-js": "^0.11.5",
 		"draftjs-to-html": "^0.9.1",
 		"exceljs": "^4.0.1",

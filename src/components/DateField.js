@@ -1,8 +1,12 @@
 import React, {Component} from "react";
 import DatePicker from "react-datepicker";
-import {i18n} from "./../i18n";
+import {registerLocale} from "react-datepicker";
+import {i18n, getLocale} from "./../i18n";
 import {newId} from "./helper";
 import "react-datepicker/dist/react-datepicker.css";
+import ru from "date-fns/locale/ru";
+
+registerLocale ("ru", ru);
 
 class DateField extends Component {
 	constructor (props) {
@@ -60,6 +64,9 @@ class DateField extends Component {
 				timeCaption: "time",
 				dateFormat: "dd.MM.yyyy HH:mm:ss"
 			};
+		}
+		if (getLocale () == "ru") {
+			props.locale = "ru";
 		}
 		return (
 			<div className={(me.props.label || me.props.error) ? "form-group objectum-date" : ""}>
