@@ -26,7 +26,7 @@ class Office extends Component {
 		let search = document.location.search.substr (1);
 
 		if (search.startsWith ("activationId=")) {
-			this.state.actiovationId = search.substr (13);
+			this.state.activationId = search.substr (13);
 		}
 		if (search.startsWith ("email=")) {
 			let tokens = search.split ("&");
@@ -106,7 +106,9 @@ class Office extends Component {
 			}
 			me.setState (state);
 		}
-		me.loginInput.focus ();
+		if (me.loginInput) {
+			me.loginInput.focus ();
+		}
 	}
 	
 	componentDidUpdate (prevProps, prevState) {
