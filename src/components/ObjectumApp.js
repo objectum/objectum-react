@@ -254,6 +254,9 @@ class ObjectumApp extends Component {
 				addItems (items, _.filter (allRecs, {parent: null}));
 				
 				me.menuItems = items;
+			} else {
+				me.menuItemRecs = [];
+				me.menuItems = [];
 			}
 			state.loading = false;
 //		}
