@@ -35,7 +35,7 @@ class Navbar extends Component {
 		
 		return (
 			<div key={key} className="nav-item dropdown">
-				<button className="btn btn-link btn-sm nav-item nav-link dropdown-toggle font-weight-bold" onClick={() => me.setState ({[key]: !me.state [key]})}>
+				<button className="btn btn-link nav-item nav-link dropdown-toggle font-weight-bold" onClick={() => me.setState ({[key]: !me.state [key]})}>
 					{item.icon ? <i className={`${item.icon} mr-2`} /> : null} {item.label}
 				</button>
 				<div className={`dropdown-menu ml-${level} ${me.state [key] ? "d-block" : ""}`}>
@@ -46,7 +46,7 @@ class Navbar extends Component {
 							return (
 								<Link
 									key={i}
-									className="dropdown-item nav-item nav-link font-weight-bold" to={item.path}
+									className={me.props.linkClassName || "dropdown-item nav-item nav-link font-weight-bold"} to={item.path}
 									onClick={() => me.hideSubmenu ({selected: key2})}
 								>
 									{item.icon ? <i className={`${item.icon} menu-icon mr-2`} /> : null} {item.label}

@@ -115,7 +115,7 @@ function LogoutButton2 ({app}) {
 		history.push ("/");
 	}
 	return (
-		<button className="btn btn-link btn-sm nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
+		<button className="btn btn-link nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
 	);
 };
 
@@ -149,7 +149,7 @@ function BackButton2 ({popLocation, locations}) {
 		history.push (pathname + hash);
 	}
 	return (
-		<button className="btn btn-link btn-sm nav-item nav-link font-weight-bold" disabled={locations.length < 2} onClick={handleClick}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</button>
+		<button className="btn btn-link nav-item nav-link font-weight-bold" disabled={locations.length < 2} onClick={handleClick}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</button>
 	);
 };
 
@@ -346,7 +346,7 @@ class ObjectumApp extends Component {
 		addItems (items, _.filter (allRecs, {parent: null}));
 		
 		return (
-			<Navbar className="navbar navbar-expand navbar-dark bg-primary" linkClassName="nav-item nav-link font-weight-bold" items={[
+			<Navbar className="navbar navbar-expand navbar-dark bg-primary" linkClassName="nav-item nav-link font-weight-bold text-dark" items={[
 				<BackButton2 key="back" popLocation={me.popLocation} locations={me.state.locations} />,
 				...items,
 				<LogoutButton2 key="logout" app={me} />

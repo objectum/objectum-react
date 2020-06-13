@@ -13,7 +13,7 @@ import ReactCrop from "react-image-crop";
 //import TBrakDishModel from "./models/TBrakDishModel";
 import ItemModel from "./models/ItemModel";
 
-import "../../src/css/bootstrap-superhero.css";
+import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 
