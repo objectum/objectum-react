@@ -231,6 +231,29 @@ class ObjectumApp extends Component {
 					menu: menuId
 				});
 				me.menuItemRecs = result.recs;
+				
+				let items = [];
+				let addItems = (items, recs) => {
+					recs.forEach (rec => {
+						let item = {
+							id: rec.id,
+							label: rec.name,
+							icon: rec.icon,
+							path: rec.path
+						};
+						items.push (item);
+						
+						let childs = _.filter (allRecs, {parent: rec.id});
+						
+						if (childs.length) {
+							item.items = [];
+							addItems (item.items, childs);
+						}
+					});
+				};
+				addItems (items, _.filter (allRecs, {parent: null}));
+				
+				me.menuItems = items;
 			}
 			state.loading = false;
 //		}
@@ -324,33 +347,12 @@ class ObjectumApp extends Component {
 	
 	renderMenu2 () {
 		let me = this;
-		let allRecs = _.sortBy (me.menuItemRecs, "order");
-		let items = [];
-		let addItems = (items, recs) => {
-			recs.forEach (rec => {
-				let item = {
-					id: rec.id,
-					label: rec.name,
-					icon: rec.icon,
-					path: rec.path
-				};
-				items.push (item);
-				
-				let childs = _.filter (allRecs, {parent: rec.id});
-				
-				if (childs.length) {
-					item.items = [];
-					addItems (item.items, childs);
-				}
-			});
-		};
-		addItems (items, _.filter (allRecs, {parent: null}));
 		
 		return (
 			<Navbar
 				items={[
 					<BackButton2 key="back" popLocation={me.popLocation} locations={me.state.locations} />,
-					...items,
+					...me.menuItems,
 					<LogoutButton2 key="logout" app={me} />
 				]}
 			/>
