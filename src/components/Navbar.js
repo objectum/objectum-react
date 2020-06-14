@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
+import {i18n} from "./../i18n";
 import {newId} from "./helper";
 
 class Navbar extends Component {
@@ -38,7 +39,7 @@ class Navbar extends Component {
 		return (
 			<div key={key} className="nav-item dropdown">
 				<button className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"} dropdown-toggle`} onClick={() => me.setState ({[key]: !me.state [key]})}>
-					{item.icon ? <i className={`${item.icon} mr-2`} /> : null} {item.label}
+					{item.icon ? <i className={`${item.icon} mr-2`} /> : null} {i18n (item.label)}
 				</button>
 				<div className={`dropdown-menu ml-${level} ${me.state [key] ? "d-block" : ""}`}>
 					{_.map (item.items, (item, i) => {
@@ -51,7 +52,7 @@ class Navbar extends Component {
 									className={me.props.submenuLinkClassName || "dropdown-item nav-item nav-link font-weight-bold text-dark"} to={item.path}
 									onClick={() => me.hideSubmenu ({selected: key2})}
 								>
-									{item.icon ? <i className={`${item.icon} menu-icon mr-2`} /> : null} {item.label}
+									{item.icon ? <i className={`${item.icon} menu-icon mr-2`} /> : null} {i18n (item.label)}
 								</Link>
 							);
 						}
@@ -81,7 +82,7 @@ class Navbar extends Component {
 						to={item.path || "/#"}
 						onClick={() => me.hideSubmenu ({selected: key})}
 					>
-						{item.icon ? <i className={`${item.icon} mr-2`}/> : null} {item.label}
+						{item.icon ? <i className={`${item.icon} mr-2`}/> : null} {i18n (item.label)}
 					</Link>
 				);
 			}
