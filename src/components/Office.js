@@ -172,6 +172,7 @@ class Office extends Component {
 				username: me.state.email,
 				password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase ()
 			});
+			me.setState ({authorized: true});
 		} catch (err) {
 			if (err.message == "401 Unauthenticated") {
 				me.setState ({error: i18n ("Incorrect e-mail (login) or password")});
@@ -214,7 +215,7 @@ class Office extends Component {
 		let me = this;
 		let content;
 		
-		if (me.props.authorized) {
+		if (me.props.authorized || me.state.authorized) {
 			content = me.props.children;
 		} else if (me.state.activationId) {
 			content = (
