@@ -35,8 +35,9 @@ class Fade extends Component {
 	
 	render () {
 		let me = this;
+		
 		return (
-			<div style={{opacity: me.state.opacity}}>
+			<div className={me.props.className} style={{opacity: me.state.opacity}}>
 				{me.props.children}
 			</div>
 		);

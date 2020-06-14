@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
+import {newId} from "./helper";
 
 class Navbar extends Component {
 	constructor (props) {
@@ -10,8 +11,9 @@ class Navbar extends Component {
 		
 		let me = this;
 		
-		me.state = {};
-		
+		me.state = {
+			id: "navbarToggler-" + newId ()
+		};
 		if (me.props.items && me.props.items.length) {
 			me.state.path = me.props.items [0].path;
 		}
@@ -75,9 +77,9 @@ class Navbar extends Component {
 				return (
 					<Link
 						key={key}
-						className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"} ${me.state.selected == key ? "active" : ""}`}
+						className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold text-left"} ${me.state.selected == key ? "active" : ""}`}
 						to={item.path || "/#"}
-						onClick={() => me.setState ({path: item.path})}
+						onClick={() => me.hideSubmenu ({selected: key})}
 					>
 						{item.icon ? <i className={`${item.icon} mr-2`}/> : null} {item.label}
 					</Link>
@@ -92,31 +94,15 @@ class Navbar extends Component {
 	render () {
 		let me = this;
 		
-/*
 		return (
-			<nav className={me.props.className || "navbar navbar-expand navbar-dark bg-primary"}>
-				<div className="collapse navbar-collapse" id={me.state.id}>
-					<div className="navbar-nav">
-						{me.props.items.map ((item, i) => {
-							return (
-								<Link
-									key={i}
-									className={`nav-item m-2 nav-link ${me.state.path == item.path ? "active" : ""}`}
-									to={item.path}
-									onClick={() => me.setState ({path: item.path})}
-								>
-									<strong>{item.label}</strong>
-								</Link>
-							);
-						})}
-					</div>
-				</div>
-			</nav>
-		);
-*/
-		return (
-			<nav className={me.props.className || "navbar navbar-expand navbar-dark bg-primary"}>
-				<div className="collapse navbar-collapse" id={me.state.id}>
+			<nav className={me.props.className || "navbar navbar-expand-lg navbar-dark bg-primary"}>
+				<button
+					className="navbar-toggler" type="button"
+					onClick={() => me.setState ({isVisible: !me.state.isVisible})}
+				>
+					<span className="navbar-toggler-icon" />
+				</button>
+				<div className={`collapse navbar-collapse ${me.state.isVisible ? "d-block": ""}`}>
 					<div className="navbar-nav">
 						{me.props.items.map ((item, i) => {
 							return me.renderItem (item, i);

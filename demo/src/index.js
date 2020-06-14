@@ -209,12 +209,14 @@ class Demo extends Component {
 				<ObjectumApp
 					locale="ru"
 					store={store}
-					_username="admin"
-					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					username="guest"
-					password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					__username="guest"
+					__password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
+					registration
+					siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
 /*
 					onRenderAuthInfo={div => {
 						return div;

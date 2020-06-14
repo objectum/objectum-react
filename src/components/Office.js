@@ -362,7 +362,7 @@ class Office extends Component {
 			);
 		}
 		return (
-			<div style={{width: me.props.width || "352px"}}>{content}</div>
+			<div className={me.props.className || "m-auto"} style={{width: me.props.width || "352px"}}>{content}</div>
 		);
 	}
 };

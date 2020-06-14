@@ -19,6 +19,7 @@ import ModelList from "./ModelList";
 import ModelTree from "./ModelTree";
 import ModelRecord from "./ModelRecord";
 import Records from "./Records";
+import Office from "./Office";
 import Sidebar from "react-sidebar";
 import {setLocale, i18n} from "./../i18n";
 import _ from "lodash";
@@ -535,7 +536,7 @@ class ObjectumApp extends Component {
 					);
 				} else {
 					content = (
-						<div>
+						<Fade>
 							<Navbar className="navbar navbar-expand navbar-dark bg-dark" linkClassName="nav-item nav-link" items={[
 								<HomeButton2>{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</HomeButton2>,
 							]} />
@@ -543,7 +544,7 @@ class ObjectumApp extends Component {
 							<div className="objectum-content">
 								{me.renderRoutes ()}
 							</div>
-						</div>
+						</Fade>
 					);
 				}
 			}
@@ -556,11 +557,14 @@ class ObjectumApp extends Component {
 				</div>
 			);
 		} else {
-			content = (
+			content = me.props.registration ?
+				<Fade className="mt-5">
+					<Office {...me.props} name={me.state.name} version={me.state.version} />
+				</Fade> :
 				<div>
-					<Auth store={me.store} name={me.state.name} version={me.state.version} onRenderAuthInfo={me.props.onRenderAuthInfo} />
+					<Auth store={me.store} name={me.state.name} version={me.state.version} onRenderAuthInfo={me.props.onRenderAuthInfo}/>
 				</div>
-			);
+			;
 			let customContent;
 			
 			if (me.props.onCustomRender) {
