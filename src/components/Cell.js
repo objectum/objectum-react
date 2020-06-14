@@ -8,6 +8,10 @@ import Tooltip from "./Tooltip";
 class Cell extends Component {
 	constructor (props) {
 		super (props);
+		
+		this.state = {
+			maxStrLen: this.props.maxStrLen || 300
+		};
 	}
 	
 	renderString (v) {
@@ -72,13 +76,13 @@ class Cell extends Component {
 				}
 			} else {
 				if (typeof (value) == "string") {
-					if (value.length < 300) {
+					if (value.length < me.state.maxStrLen) {
 						return me.renderString (value);
 					} else {
 						for (let i = 0; i < value.length; i ++) {
 							let c = value [i];
 						}
-						return (<Tooltip label={me.renderString (value)}>{me.renderString (value.substr (0, 300) + " ...")}</Tooltip>);
+						return (<Tooltip label={me.renderString (value)}>{me.renderString (value.substr (0, me.state.maxStrLen) + " ...")}</Tooltip>);
 					}
 				} else {
 					return <span>{value}</span>;

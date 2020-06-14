@@ -75,10 +75,12 @@ class Office extends Component {
 					method: "activation",
 					activationId: me.state.activationId
 				});
+/*
 				await me.props.store.auth ({
 					username: result.login,
 					password: result.password
 				});
+*/
 				state.activationResult = i18n ("Account activated");
 			} catch (err) {
 				state.activationResult = err.message;
@@ -89,17 +91,19 @@ class Office extends Component {
 			let state = {recoverId: ""};
 			
 			try {
-				let result = await me.props.store.remote ({
+				/*let result = */await me.props.store.remote ({
 					model: "admin",
 					method: "recover",
 					recoverId: me.state.recoverId,
 					email: me.state.email,
 					newPassword: me.state.newPassword
 				});
+/*
 				await me.props.store.auth ({
 					username: result.login,
 					password: me.state.newPassword
 				});
+*/
 				state.recoverResult = i18n ("Password changed");
 			} catch (err) {
 				state.recoverResult = err.message;

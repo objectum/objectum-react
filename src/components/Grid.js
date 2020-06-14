@@ -519,6 +519,7 @@ class Grid extends Component {
 									value={rec [me.props.groupCol]}
 									col={me.colMap [me.props.groupCol]}
 									rec={rec}
+									maxStrLen={me.props.maxStrLen}
 								/>
 							</td>
 						</tr>
