@@ -140,7 +140,7 @@ class Office extends Component {
 	
 	async onRegister () {
 		let me = this;
-		let activationHost = document.location.protocol + "//" + document.location.host;
+		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
 		
 		return await me.props.store.remote ({
 			model: "admin",
@@ -182,7 +182,7 @@ class Office extends Component {
 	
 	async onRecover () {
 		let me = this;
-		let activationHost = document.location.protocol + "//" + document.location.host;
+		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
 		
 		return await me.props.store.remote ({
 			model: "admin",
