@@ -214,7 +214,9 @@ class Office extends Component {
 		let me = this;
 		let content;
 		
-		if (me.state.activationId) {
+		if (me.props.authorized) {
+			content = me.props.children;
+		} else if (me.state.activationId) {
 			content = (
 				<div className={me.props.cardClassName || "p-3 shadow"}>
 					{i18n ("Account activation") + " ..."}
@@ -248,8 +250,6 @@ class Office extends Component {
 					><i className="fas fa-check mr-2"/>Ok</Action>
 				</div>
 			);
-		} else if (me.props.authorized) {
-			content = me.props.children;
 		} else if (me.state.recover) {
 			content = (
 				<div className={me.props.cardClassName || "p-3 shadow"}>
