@@ -17,7 +17,8 @@ class Cell extends Component {
 		if (col.property && me.props.store.getProperty (col.property).getOpts ().wysiwyg) {
 			return <span dangerouslySetInnerHTML={{__html: v}} />
 		} else {
-			return <span>{v}</span>
+			//return <span>{v}</span>
+			return v;
 		}
 	}
 	
@@ -74,7 +75,10 @@ class Cell extends Component {
 					if (value.length < 300) {
 						return me.renderString (value);
 					} else {
-						return (<Tooltip label={me.renderString (value)}>{me.renderString (value.substr (0, 300))} ...</Tooltip>);
+						for (let i = 0; i < value.length; i ++) {
+							let c = value [i];
+						}
+						return (<Tooltip label={me.renderString (value)}>{me.renderString (value.substr (0, 300) + " ...")}</Tooltip>);
 					}
 				} else {
 					return <span>{value}</span>;

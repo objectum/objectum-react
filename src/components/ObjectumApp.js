@@ -538,7 +538,7 @@ class ObjectumApp extends Component {
 					content = (
 						<Fade>
 							<Navbar className="navbar navbar-expand navbar-dark bg-dark" linkClassName="nav-item nav-link" items={[
-								<HomeButton2>{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</HomeButton2>,
+								<HomeButton2><strong>{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</strong></HomeButton2>,
 							]} />
 							{me.renderMenu2 ()}
 							<div className="objectum-content">
