@@ -142,9 +142,11 @@ class Office extends Component {
 		let me = this;
 		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
 		
+/*
 		if (!activationHost.endsWith ("/")) {
 			activationHost += "/";
 		}
+*/
 		return await me.props.store.remote ({
 			model: "admin",
 			method: "register",
@@ -187,9 +189,11 @@ class Office extends Component {
 		let me = this;
 		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
 		
+/*
 		if (!activationHost.endsWith ("/")) {
 			activationHost += "/";
 		}
+*/
 		return await me.props.store.remote ({
 			model: "admin",
 			method: "recoverRequest",
