@@ -58,8 +58,7 @@ function LogoutButton ({app}) {
 		history.push ("/");
 	}
 	return (
-		<button
-			className="btn btn-link nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
+		<button className="btn btn-link nav-item nav-link font-weight-bold text-left" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
 	);
 };
 
@@ -93,7 +92,7 @@ function BackButton ({popLocation, locations}) {
 		history.push (pathname + hash);
 	}
 	return (
-		<button className="btn btn-link nav-item nav-link font-weight-bold" disabled={!locations || locations.length < 2} onClick={handleClick}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</button>
+		<button className="btn btn-link nav-item nav-link font-weight-bold text-left" disabled={!locations || locations.length < 2} onClick={handleClick}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</button>
 	);
 };
 

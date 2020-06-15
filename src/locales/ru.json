@@ -141,5 +141,6 @@
 	"invalid password recovery code": "неверный код восстановления пароля",
 	"password changed": "пароль изменён",
 	"invalid recaptcha response": "неверный ответ recaptcha",
-	"your name": "ваше имя"
+	"your name": "ваше имя",
+	"change name": "изменить имя"
 }

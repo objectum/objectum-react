@@ -268,6 +268,10 @@ class Office extends Component {
 						<input type="email" className="form-control" id="email" onChange={me.onChange} />
 					</div>
 					<div className="form-group">
+						<label htmlFor="name">{i18n ("Change name")}</label>
+						<input type="name" className="form-control" id="name" onChange={me.onChange} />
+					</div>
+					<div className="form-group">
 						<label htmlFor="password">{i18n ("New password")}</label>
 						<input type="password" className="form-control" id="password" onChange={me.onChange} />
 					</div>
@@ -308,12 +312,10 @@ class Office extends Component {
 						<label htmlFor="email">{i18n ("E-mail")}</label>
 						<input type="email" className="form-control" id="email" onChange={me.onChange} />
 					</div>
-{/*
 					<div className="form-group">
 						<label htmlFor="name">{i18n ("Your name")}</label>
 						<input type="name" className="form-control" id="name" onChange={me.onChange} />
 					</div>
-*/}
 					<div className="form-group">
 						<label htmlFor="password">{i18n ("Password")}</label>
 						<input type="password" className="form-control" id="password" onChange={me.onChange} />
@@ -331,7 +333,7 @@ class Office extends Component {
 							<Action
 								btnClassName="btn btn-primary auth-button"
 								onClick={me.onRegister}
-								disabled={!me.state.email || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
+								disabled={!me.state.email || !me.state.name || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
 							><i className="fas fa-key mr-2"/>{i18n ("Register")}</Action>
 						</div>
 						<div className="mt-3">
