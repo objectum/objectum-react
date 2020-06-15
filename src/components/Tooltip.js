@@ -47,12 +47,12 @@ class Tooltip extends Component {
 		let me = this;
 		
 		return (
-			<span className="objectum-tooltip w-100 h-100">
+			<div className="objectum-tooltip w-100 h-100">
 				{me.props.children}
 				{me.props.label && <span id={me.state.id} className="border p-1 bg-white shadow-sm">
 					{me.props.label}
 				</span>}
-			</span>
+			</div>
 		);
 	}
 };
