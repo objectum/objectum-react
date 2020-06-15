@@ -212,6 +212,7 @@ class Office extends Component {
 			method: "recoverRequest",
 			activationHost,
 			email: me.state.email,
+			name: me.state.name || undefined,
 			password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase (),
 			subject: i18n ("Password recovery") + ": " + me.props.name,
 			text: i18n ("To recover your password, follow the link"),
