@@ -473,7 +473,7 @@ class Form extends Component {
 						let property = me.model.properties [code];
 						let model = me.props.store.getModel (property.type);
 						
-						if (child.props.dict || model.isDictionary () || me.props.dict [model.getPath ()] || me.props.dict [model.id]) {
+						if (child.props.dict || model.isDictionary () || me.props.store.dict [model.getPath ()] || me.props.store.dict [model.id]) {
 							field = <DictField {...props} />;
 						} else
 						if (child.props.chooseModel) {
