@@ -40,6 +40,7 @@ class Office extends Component {
 			if (o.recoverId) {
 				this.state.recoverId = o.recoverId;
 				this.state.email = o.email;
+				this.state.newName = o.newName;
 				this.state.newPassword = o.newPassword;
 			}
 		}
@@ -96,7 +97,8 @@ class Office extends Component {
 					method: "recover",
 					recoverId: me.state.recoverId,
 					email: me.state.email,
-					newPassword: me.state.newPassword
+					newPassword: me.state.newPassword,
+					newName: me.state.newName
 				});
 /*
 				await me.props.store.auth ({
