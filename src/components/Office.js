@@ -83,7 +83,7 @@ class Office extends Component {
 */
 				state.activationResult = i18n ("Account activated");
 			} catch (err) {
-				state.activationResult = err.message;
+				state.activationResult = i18n (err.message);
 			}
 			me.setState (state);
 		}
@@ -106,7 +106,7 @@ class Office extends Component {
 */
 				state.recoverResult = i18n ("Password changed");
 			} catch (err) {
-				state.recoverResult = err.message;
+				state.recoverResult = i18n (err.message);
 			}
 			me.setState (state);
 		}
@@ -129,6 +129,10 @@ class Office extends Component {
 			} catch (err) {
 			}
 		}
+	}
+	
+	componentWillUnmount () {
+		this.unmounted = true;
 	}
 	
 	onChange (val) {
@@ -172,12 +176,16 @@ class Office extends Component {
 				username: me.state.email,
 				password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase ()
 			});
-			me.setState ({authorized: true});
+			if (!me.unmounted) {
+				me.setState ({authorized: true});
+			}
 		} catch (err) {
-			if (err.message == "401 Unauthenticated") {
-				me.setState ({error: i18n ("Incorrect e-mail (login) or password")});
-			} else {
-				me.setState ({error: err.message});
+			if (!me.unmounted) {
+				if (err.message == "401 Unauthenticated") {
+					me.setState ({error: i18n ("Incorrect e-mail (login) or password")});
+				} else {
+					me.setState ({error: err.message});
+				}
 			}
 		}
 	}

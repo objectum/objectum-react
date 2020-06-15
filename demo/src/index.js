@@ -170,33 +170,18 @@ class Demo extends Component {
 			return <Loading container />
 		}
 		return (
-			<div>
-				<Navbar className="navbar navbar-expand navbar-light bg-light" linkClassName="nav-item nav-link" items={[
-					<HomeButton>objectum-react (version 1.0.0, user: admin)</HomeButton>,
+			<div className="container">
+				<Navbar className="navbar navbar-expand navbar-dark bg-dark" items={[
+					<HomeButton><strong className="text-white">Label</strong></HomeButton>,
 				]} />
-				<Navbar className="navbar navbar-expand navbar-dark bg-primary" linkClassName="nav-item nav-link font-weight-bold" items={[
-					<BackButton locations={[1, 2, 3]} />,
-					{
-						label: "Objectum", icon: "fas fa-cubes", items: [
-							<Link className="dropdown-item nav-item nav-link font-weight-bold" to="/models"><i className="fas fa-cubes mr-2" />Модели</Link>,
-							<Link className="dropdown-item nav-item nav-link font-weight-bold" to="/queries"><i className="fas fa-eye mr-2" />Queries</Link>,
-							{
-								label: "Objectum", icon: "fas fa-cubes", items: [
-									<Link className="dropdown-item nav-item nav-link font-weight-bold" to="/models"><i className="fas fa-cubes mr-2" />Модели</Link>,
-									<Link className="dropdown-item nav-item nav-link font-weight-bold" to="/queries"><i className="fas fa-eye mr-2" />Queries</Link>
-								]
-							}
-						]
-					},
-					{
-						label: "Models", icon: "fas fa-cubes", path: "/models"
-					},
-					{
-						label: "Queries", icon: "fas fa-cubes", path: "/queries"
-					},
-					<LogoutButton app={this} />
+				<Navbar app={app} items={[
+					"back",
+					...app.menuItems,
+					"logout"
 				]} />
-				{content}
+				<div className="bg-secondary p-1">
+					{content}
+				</div>
 			</div>
 		);
 	}
@@ -211,18 +196,19 @@ class Demo extends Component {
 					store={store}
 					username="admin"
 					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					__username="guest"
-					__password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
+					_username="guest"
+					_password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
 					registration
 					siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
+					label="Label"
 /*
 					onRenderAuthInfo={div => {
 						return div;
 					}}
 */
-					/*onCustomRender={me.onCustomRender}*/
+					onCustomRender={me.onCustomRender}
 					onConnect={me.onConnect}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />

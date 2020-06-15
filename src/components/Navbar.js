@@ -5,6 +5,10 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {i18n} from "./../i18n";
 import {newId} from "./helper";
+import {
+	BackButton,
+	LogoutButton
+} from "./Buttons";
 
 class Navbar extends Component {
 	constructor (props) {
@@ -70,7 +74,13 @@ class Navbar extends Component {
 	
 	renderItem (item, key) {
 		let me = this;
-		
+
+		if (item == "back") {
+			return <BackButton key="back" popLocation={me.props.app && me.props.app.popLocation} locations={me.props.app && me.props.app.state.locations} />;
+		}
+		if (item == "logout") {
+			return <LogoutButton key="logout" app={me.props.app} />;
+		}
 		if (item && item.label) {
 			if (item.items) {
 				return me.renderSubmenu (item, key, 1);

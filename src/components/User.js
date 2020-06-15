@@ -54,6 +54,7 @@ class User extends Component {
 								<Field property="name" />
 								<Field property="login" />
 								<Field property="password" />
+								<Field property="email" />
 								<Field property="role" dict={true} />
 							</Form>
 						</Tab>

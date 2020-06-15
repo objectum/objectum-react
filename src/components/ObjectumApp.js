@@ -28,6 +28,14 @@ import {execute} from "objectum-client";
 import Loading from "./Loading";
 import {isMobile} from "react-device-detect";
 import {Navbar} from "../index";
+import {
+	HomeButtonSB,
+	HomeButton,
+	LogoutButtonSB,
+	LogoutButton,
+	BackButtonSB,
+	BackButton
+} from "./Buttons";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
@@ -58,101 +66,6 @@ function usePageViews (pushLocation, locations) {
 function PageViews ({pushLocation, locations}) {
 	usePageViews (pushLocation, locations);
 	return null;
-};
-
-function HomeButton () {
-	let history = useHistory ();
-	
-	function handleClick () {
-		history.push ("/");
-	}
-	return (
-		<button className="btn btn-link" onClick={handleClick}>
-			<i className="fas fa-home" />
-		</button>
-	);
-};
-
-function HomeButton2 (props) {
-	let history = useHistory ();
-	
-	function handleClick () {
-		history.push ("/");
-	}
-	return (
-		<button className="btn btn-link p-0 text-white" onClick={handleClick}>
-			{props.children || <i className="fas fa-home" />}
-		</button>
-	);
-};
-
-function LogoutButton ({app, size}) {
-	let history = useHistory ();
-	
-	function handleClick () {
-		app.store.end ();
-		
-		app.setState ({
-			sidebarOpen: false, locations: [], sid: null
-		});
-		history.push ("/");
-	}
-	return (
-		<button className="btn btn-link pl-3" onClick={handleClick}>
-			<span className={`fas fa-sign-out-alt ${size} menu-icon align-middle mr-1`} /><span className="text-dark">{i18n ("Logout")}</span>
-		</button>
-	);
-};
-
-function BackButton ({popLocation, locations}) {
-	let history = useHistory ();
-	
-	function handleClick () {
-		let {pathname, hash} = locations [locations.length - 2];
-		
-		popLocation ();
-		
-//		history.push (decodeURI (pathname + hash));
-		history.push (pathname + hash);
-	}
-	return (
-		<button className="btn btn-link" disabled={locations.length < 2} onClick={handleClick}>
-			<i className="fas fa-arrow-left mr-2" /><span className="text-dark">{i18n ("Back")}</span>
-		</button>
-	);
-};
-
-function LogoutButton2 ({app}) {
-	let history = useHistory ();
-	
-	function handleClick () {
-		app.store.end ();
-		
-		app.setState ({
-			sidebarOpen: false, locations: [], sid: null
-		});
-		history.push ("/");
-	}
-	return (
-		<button
-			className="btn btn-link nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
-	);
-};
-
-function BackButton2 ({popLocation, locations}) {
-	let history = useHistory ();
-	
-	function handleClick () {
-		let {pathname, hash} = locations [locations.length - 2];
-		
-		popLocation ();
-
-//		history.push (decodeURI (pathname + hash));
-		history.push (pathname + hash);
-	}
-	return (
-		<button className="btn btn-link nav-item nav-link font-weight-bold" disabled={locations.length < 2} onClick={handleClick}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</button>
-	);
 };
 
 class ObjectumApp extends Component {
@@ -334,7 +247,7 @@ class ObjectumApp extends Component {
 				<tbody>
 				{items}
 				<tr><td>
-					<LogoutButton app={me} size={size} />
+					<LogoutButtonSB app={me} size={size} />
 				</td></tr>
 				</tbody>
 			</table>
@@ -355,9 +268,9 @@ class ObjectumApp extends Component {
 		return (
 			<Navbar
 				items={[
-					<BackButton2 key="back" popLocation={me.popLocation} locations={me.state.locations} />,
+					<BackButton key="back" popLocation={me.popLocation} locations={me.state.locations} />,
 					...me.menuItems,
-					<LogoutButton2 key="logout" app={me} />
+					<LogoutButton key="logout" app={me} />
 				]}
 			/>
 		);
@@ -464,14 +377,6 @@ class ObjectumApp extends Component {
 		return l;
 	}
 	
-	onHome () {
-		let history = useHistory ();
-		
-		history.push ({
-			pathname: "/"
-		});
-	}
-	
 	render () {
 		let me = this;
 		
@@ -520,8 +425,8 @@ class ObjectumApp extends Component {
 											<i className="fas fa-bars mr-2"/><span className="text-dark">{i18n ("Menu")}</span>
 										</button>
 										
-										<HomeButton/>
-										<BackButton popLocation={me.popLocation} locations={me.state.locations}/>
+										<HomeButtonSB />
+										<BackButtonSB popLocation={me.popLocation} locations={me.state.locations}/>
 										
 										<span
 											className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</span>
@@ -535,10 +440,12 @@ class ObjectumApp extends Component {
 						</div>
 					);
 				} else {
+					let label = me.props.label || `${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`;
+					
 					content = (
 						<Fade>
 							<Navbar className="navbar navbar-expand navbar-dark bg-dark" linkClassName="nav-item nav-link" items={[
-								<HomeButton2><strong>{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</strong></HomeButton2>,
+								<HomeButton><strong>{label}</strong></HomeButton>,
 							]} />
 							{me.renderMenu2 ()}
 							<div className="objectum-content">
@@ -558,7 +465,7 @@ class ObjectumApp extends Component {
 			);
 		} else {
 			content = me.props.registration ?
-				<Fade className="mt-5">
+				<Fade className="my-5">
 					<Office {...me.props} name={me.state.name} version={me.state.version} />
 				</Fade> :
 				<div>
@@ -576,7 +483,15 @@ class ObjectumApp extends Component {
 			} else if (me.props.username && me.props.password) {
 				return (<div/>);
 			}
-			return content;
+			//return content;
+			return (
+				<div>
+					<Router>
+						<PageViews pushLocation={me.pushLocation} locations={me.state.locations} />
+						{content}
+					</Router>
+				</div>
+			);
 		}
 	}
 };
