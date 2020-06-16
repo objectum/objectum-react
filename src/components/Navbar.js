@@ -107,12 +107,12 @@ class Navbar extends Component {
 		
 		return (
 			<nav className={me.props.className || "navbar navbar-expand-lg navbar-dark bg-primary"}>
-				<button
+				{me.props.collapsible !== false && <button
 					className="navbar-toggler" type="button"
 					onClick={() => me.setState ({isVisible: !me.state.isVisible})}
 				>
 					<span className="navbar-toggler-icon" />
-				</button>
+				</button>}
 				<div className={`collapse navbar-collapse ${me.state.isVisible ? "d-block": ""}`}>
 					<div className="navbar-nav">
 						{me.props.items.map ((item, i) => {
