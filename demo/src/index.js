@@ -174,9 +174,13 @@ class Demo extends Component {
 				<Navbar className="navbar navbar-expand navbar-dark bg-dark" items={[
 					<HomeButton><strong className="text-white">Label</strong></HomeButton>,
 				]} />
-				<Navbar app={app} items={[
+				<Navbar expand app={app} items={[
 					"back",
 					...app.menuItems,
+					"logout",
+					"logout",
+					"logout",
+					"logout",
 					"logout"
 				]} />
 				<div className="bg-secondary p-1">
