@@ -3,7 +3,7 @@
 
 import _ from "lodash";
 import {saveAs} from "file-saver";
-import ExcelJS from "exceljs";
+//import ExcelJS from "exceljs";
 
 let reportStyles;
 
@@ -183,9 +183,12 @@ function getHiddenCells (rows) {
 	return result;
 };
 
-async function createReport ({rows, columns, height = {}, font, worksheetName, worksheetOpts}) {
+async function createReport ({store, rows, columns, height = {}, font, worksheetName, worksheetOpts}) {
+	if (!window.ExcelJS) {
+		await loadJS (`${store.getUrl ()}/public/exceljs.js`);
+	}
 	const hiddenCells = getHiddenCells (rows);
-	const wb = new ExcelJS.Workbook ();
+	const wb = new window.ExcelJS.Workbook ();
 	const ws = wb.addWorksheet (worksheetName || "Sheet", worksheetOpts || {});
 	let y = 1;
 	
