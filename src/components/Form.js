@@ -16,6 +16,9 @@ import Loading from "./Loading";
 import EditForm from "./EditForm";
 import {timeout} from "./helper";
 import {execute} from "objectum-client";
+import _isNumber from "lodash.isnumber";
+import _each from "lodash.foreach";
+import _isEmpty from "lodash.isempty";
 
 class Form extends Component {
 	constructor (props) {
@@ -142,7 +145,7 @@ class Form extends Component {
 					state [code] = me.props.record [code];
 				}
 			}
-			if (!_.isEmpty (state)) {
+			if (!_isEmpty (state)) {
 				me.setState (state);
 			}
 		}
@@ -162,7 +165,7 @@ class Form extends Component {
 
 			let errors = false;
 			
-			_.each (me.state, (v, a) => {
+			_each (me.state, (v, a) => {
 				if (v && a.endsWith ("-error") && a != `${code}-error`) {
 					errors = true;
 				}
@@ -382,7 +385,7 @@ class Form extends Component {
 			if (recordValue === "" || recordValue === undefined) {
 				recordValue = null;
 			}
-			if (_.isNumber (stateValue) || _.isNumber (recordValue)) {
+			if (_isNumber (stateValue) || _isNumber (recordValue)) {
 				stateValue = Number (stateValue);
 				recordValue = Number (recordValue);
 			}

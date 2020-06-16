@@ -9,9 +9,13 @@ import Tabs from "./Tabs";
 import ModelList from "./ModelList";
 import {getHash, goRidLocation} from "./helper";
 import {i18n} from "./../i18n";
-import _ from "lodash";
+import _each from "lodash.foreach";
+import _values from "lodash.values";
+import _chunk from "lodash.chunk";
+import _isObject from "lodash.isobject";
+import _isArray from "lodash.isarray";
+import _sortBy from "lodash.sortby";
 import Loading from "./Loading";
-import Fade from "./Fade";
 
 class ModelRecord extends Component {
 	constructor (props) {
@@ -73,7 +77,7 @@ class ModelRecord extends Component {
 			let t = me.props.store.getModel (`t.${m.getPath ()}`);
 			let tables = [], has = {};
 			
-			_.each (me.props.store.map ["model"], m => {
+			_each (me.props.store.map ["model"], m => {
 				if (m.get ("parent") == t.get ("id") && !has [m.getPath ()]) {
 					tables.push (m);
 					has [m.getPath ()] = true;
@@ -219,10 +223,10 @@ class ModelRecord extends Component {
 			}
 		}
 		if (o.tag) {
-			if (! _.isArray (o.tag)) {
+			if (! _isArray (o.tag)) {
 				o.tag = [o.tag];
 			}
-			_.each (o.tag, Tag => {
+			_each (o.tag, Tag => {
 				item = <Tag>{item}</Tag>;
 			});
 		}
@@ -234,7 +238,7 @@ class ModelRecord extends Component {
 		let items = [];
 		let gen = 0;
 		
-		if (_.isArray (layout)) {
+		if (_isArray (layout)) {
 			if (!layout.length) {
 				return (<div />);
 			}
@@ -247,15 +251,15 @@ class ModelRecord extends Component {
 				if (typeof (row) == "string" && me.record && me.record [row]) {
 					rid = me.record [row];
 				}
-				if (_.isArray (row)) {
+				if (_isArray (row)) {
 					formItems.push (
 						<div className="row no-gutters" key={`row-${i}`}>
 							{row.map ((code, j) => {
 								let property = model.properties [code];
 								let cls = "";
 								
-								if (_.isObject (code) && code ["class"]) {
-									if (_.isArray (code ["class"])) {
+								if (_isObject (code) && code ["class"]) {
+									if (_isArray (code ["class"])) {
 										cls = code ["class"].join (" ");
 									} else {
 										cls = code ["class"];
@@ -304,7 +308,7 @@ class ModelRecord extends Component {
 				}
 			}
 		} else
-		if (_.isObject (layout)) {
+		if (_isObject (layout)) {
 			let tabs = [], newRecordFormNum = 0;
 			
 			Object.keys (layout).forEach ((tabName, i) => {
@@ -336,7 +340,7 @@ class ModelRecord extends Component {
 		let me = this;
 		let m = me.props.store.getModel (me.state.model);
 		let regModel = me.props.store.getRegistered (me.state.model) || {};
-		let properties = _.sortBy (_.values (m.properties), ["order", "name"]);
+		let properties = _sortBy (_values (m.properties), ["order", "name"]);
 		let label = i18n ("Record");
 		let columns = 1;
 		
@@ -377,7 +381,7 @@ class ModelRecord extends Component {
 */
 			return form;
 		}
-		properties = _.chunk (properties, columns);
+		properties = _chunk (properties, columns);
 		
 		let colWidth = 12 / columns | 0;
 		let form = (

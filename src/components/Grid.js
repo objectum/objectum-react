@@ -5,7 +5,9 @@ import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener, timeout, newId, createTooltip, removeTooltip} from "./helper";
 import Cell from "./Cell";
 import Filters from "./Filters";
-import _ from "lodash";
+import _sortBy from "lodash.sortby";
+import _filter from "lodash.filter";
+import _map from "lodash.map";
 import {i18n} from "./../i18n";
 import GridColumns from "./GridColumns";
 import TableForm from "./TableForm";
@@ -115,7 +117,7 @@ class Grid extends Component {
 					state [a] = hash [a];
 					
 					if (a == "filters" && me.props.onFilters) {
-						me.props.onFilters (_.map (hash [a], f => {
+						me.props.onFilters (_map (hash [a], f => {
 							return {
 								col: f [0], oper: f [1], value: f [2]
 							};
@@ -307,7 +309,7 @@ class Grid extends Component {
 			let result = await me.props.store.getData (me.prepareRequestOptions ());
 			
 			state.recs = result.recs;
-			state.cols = _.sortBy (result.cols, ["order", "name"]);
+			state.cols = _sortBy (result.cols, ["order", "name"]);
 			me.position = result.position;
 			state.length = result.length;
 			
@@ -349,7 +351,7 @@ class Grid extends Component {
 						model: imageModel.getPath (),
 						offset: 0,
 						limit: me.state.pageRecs * 3,
-						filters: [[model.get ("code"), "in", _.map (state.recs, "id")]]
+						filters: [[model.get ("code"), "in", _map (state.recs, "id")]]
 					});
 					state.imageRecs = result.recs;
 				}
@@ -620,7 +622,7 @@ class Grid extends Component {
 		return (
 			<div className="row">
 				{me.state.recs.map ((rec, i) => {
-					let imageRecs = _.filter (me.state.imageRecs, {[model.get ("code")]: rec.id});
+					let imageRecs = _filter (me.state.imageRecs, {[model.get ("code")]: rec.id});
 					let smallImageRec = null, bigImageRec = null;
 					
 					imageRecs.forEach (rec => {

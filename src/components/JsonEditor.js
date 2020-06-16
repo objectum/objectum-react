@@ -3,7 +3,9 @@
 
 import React, {Component} from "react";
 import {i18n} from "../i18n";
-import _ from "lodash";
+import _isArray from "lodash.isarray";
+import _set from "lodash.set";
+import _get from "lodash.get";
 import {newId} from "./helper";
 
 class JsonEditor extends Component {
@@ -38,7 +40,7 @@ class JsonEditor extends Component {
 			for (let a in opts) {
 				let o = opts [a];
 				
-				if (typeof (o) == "object" && !_.isArray (o)) {
+				if (typeof (o) == "object" && !_isArray (o)) {
 					process (o, prefix ? (prefix + "." + a) : a);
 				}
 				if (typeof (o) == "string") {
@@ -83,7 +85,7 @@ class JsonEditor extends Component {
 		let tagValue = "";
 		
 		try {
-			tagValue = _.get (JSON.parse (me.state.value), v) || "";
+			tagValue = _get (JSON.parse (me.state.value), v) || "";
 		} catch (err) {
 		}
 		me.setState ({tag: v, tagValue});
@@ -97,7 +99,7 @@ class JsonEditor extends Component {
 			try {
 				let opts = JSON.parse (me.state.value);
 				
-				_.set (opts, me.state.tag, value);
+				_set (opts, me.state.tag, value);
 				opts = JSON.stringify (opts, null, "\t");
 				
 				me.setState ({tagValue: value, value: opts});

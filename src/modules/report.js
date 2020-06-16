@@ -1,7 +1,6 @@
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 
-import _ from "lodash";
 import {saveAs} from "file-saver";
 //import ExcelJS from "exceljs";
 
@@ -129,12 +128,12 @@ function getHiddenCells (rows) {
 	let result = {};
 	let y = 1;
 	
-	_.each (rows, row => {
+	rows.forEach (row => {
 		let x = 1;
 		
 		result [y] = result [y] || {};
 		
-		_.each (row, cell => {
+		row.forEach (cell => {
 			if (cell.skip) {
 				for (let i = 0; i < cell.skip; i ++) {
 					while (1) {
@@ -196,10 +195,10 @@ async function createReport ({store, rows, columns, height = {}, font, worksheet
 		name: "Arial",
 		size: 10
 	});
-	_.each (rows, row => {
+	rows.forEach (row => {
 		let x = 1;
 		
-		_.each (row, c => {
+		row.forEach (c => {
 			while (1) {
 				if (!hiddenCells [y][x]) {
 					break;
@@ -239,8 +238,11 @@ async function createReport ({store, rows, columns, height = {}, font, worksheet
 	});
 	columns.forEach ((column, i) => ws.getColumn (i + 1).width = column);
 	
-	_.each (height, (h, i) => ws.getRow (i).height = h * 3 / 4);
-	
+	for (let i in height) {
+		let h = height [i];
+		
+		ws.getRow (i).height = h * 3 / 4;
+	}
 	const buf = await wb.xlsx.writeBuffer ();
 	
 	saveAs (new Blob ([buf]), "report.xlsx")

@@ -22,7 +22,9 @@ import Records from "./Records";
 import Office from "./Office";
 import Sidebar from "react-sidebar";
 import {setLocale, i18n} from "./../i18n";
-import _ from "lodash";
+import _filter from "lodash.filter";
+import _each from "lodash.foreach";
+import _keys from "lodash.keys";
 import Fade from "./Fade";
 import {execute} from "objectum-client";
 import Loading from "./Loading";
@@ -157,7 +159,7 @@ class ObjectumApp extends Component {
 						};
 						items.push (item);
 						
-						let childs = _.filter (me.menuItemRecs, {parent: rec.id});
+						let childs = _filter (me.menuItemRecs, {parent: rec.id});
 						
 						if (childs.length) {
 							item.items = [];
@@ -165,7 +167,7 @@ class ObjectumApp extends Component {
 						}
 					});
 				};
-				addItems (items, _.filter (me.menuItemRecs, {parent: null}));
+				addItems (items, _filter (me.menuItemRecs, {parent: null}));
 				
 				me.menuItems = items;
 			} else {
@@ -311,11 +313,11 @@ class ObjectumApp extends Component {
 		
 		let model = {}, parent = {};
 		
-		_.each (me.store.map ["model"], m => {
+		_each (me.store.map ["model"], m => {
 			model [m.getPath ()] = true;
 			parent [m.get ("parent")] = true;
 		});
-		_.each (_.keys (model), path => {
+		_each (_keys (model), path => {
 			let m = me.store.getModel (path);
 			
 			if (parent [m.get ("id")]) {

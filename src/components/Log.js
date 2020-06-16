@@ -3,7 +3,6 @@
 
 import React, {Component} from "react";
 import {i18n} from "../i18n";
-import _ from "lodash";
 import {getTimestampString} from "./helper";
 
 class Log extends Component {
@@ -41,13 +40,6 @@ class Log extends Component {
 	}
 	render () {
 		let me = this;
-/*
-		let recs = _.map (me.form.map, (o, a) => {
-			return {
-				id: a, name: o.label
-			};
-		});
-*/
 		let fields = me.form.getFields (me.form.props.children);
 		let recs = [];
 		

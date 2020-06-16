@@ -3,7 +3,10 @@
 
 import React, {Component} from "react";
 import {getDateString} from "./helper";
-import _ from "lodash";
+import _isEmpty from "lodash.isempty";
+import _find from "lodash.find";
+import _keys from "lodash.keys";
+import _debounce from "lodash.debounce";
 import {i18n} from "../i18n";
 import DictField from "./DictField";
 
@@ -14,7 +17,7 @@ class Filter extends Component {
 		let me = this;
 		
 		me.onChange = me.onChange.bind (me);
-		me.debouncedOnChange = _.debounce (me.debouncedOnChange.bind (me), 500);
+		me.debouncedOnChange = _debounce (me.debouncedOnChange.bind (me), 500);
 		me.onClick = me.onClick.bind (me);
 
 		me.state = {
@@ -105,35 +108,7 @@ class Filter extends Component {
 		}
 		return operatorRecs;
 	}
-	
-	
-/*
-	onChange (val) {
-		let me = this;
-		let id = val.target.id;
-		
-		if (id != "column" && id != "operator") {
-			id = "value";
-		}
-		let v = val.target.value;
-		let state = {...me.state};
-		
-		state [id] = v;
-		
-		if (id == "column") {
-			state.operatorRecs = me.getOperatorRecs (v);
-			
-			if (_.find (state.operatorRecs, {code: "="})) {
-				state.operator = "=";
-			} else {
-				state.operator = "";
-			}
-			state.value = "";
-		}
-		me.setState (state);
-		me.debouncedOnChange (me.props.id, state);
-	}
-*/
+
 	onChange (opts) {
 		let me = this;
 		let id = opts.id, v = opts.value;
@@ -152,10 +127,10 @@ class Filter extends Component {
 		if (id == "column") {
 			state.operatorRecs = me.getOperatorRecs (v);
 			
-			if (_.find (state.operatorRecs, {code: "like"})) {
+			if (_find (state.operatorRecs, {code: "like"})) {
 				state.operator = "like";
 			} else
-			if (_.find (state.operatorRecs, {code: "="})) {
+			if (_find (state.operatorRecs, {code: "="})) {
 				state.operator = "=";
 			} else {
 				state.operator = "";
@@ -220,7 +195,7 @@ class Filter extends Component {
 		if (prevProps.value.value != me.props.value.value) {
 			state.value = me.props.value.value;
 		}
-		if (!_.isEmpty (state)) {
+		if (!_isEmpty (state)) {
 			me.setState (state);
 		}
 	}
@@ -467,7 +442,7 @@ class Filters extends Component {
 	render () {
 		let me = this;
 		let gridOpts = JSON.parse (localStorage.getItem (`grid-${me.props.gridId}`) || "{}");
-		let savedFilters = _.keys (gridOpts.filters || {});
+		let savedFilters = _keys (gridOpts.filters || {});
 		
 		return (
 			<div>

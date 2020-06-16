@@ -8,7 +8,9 @@ import {i18n} from "../i18n";
 import ModelList from "./ModelList";
 import Field from "./Field";
 import {timeout} from "./helper";
-import _ from "lodash";
+import _find from "lodash.find"
+import _isArray from "lodash.isarray";
+import _map from "lodash.map";
 import Cell from "./Cell";
 import {execute} from "objectum-client";
 
@@ -40,7 +42,7 @@ class TableForm extends Component {
 		state.records = await me.props.store.getRecords ({
 			model: me.props.model,
 			filters: [
-				["id", "in", _.map (me.state.recs, "id")]
+				["id", "in", _map (me.state.recs, "id")]
 			]
 		});
 		state.records.forEach (record => state.recordMap [record.id] = record);
@@ -195,7 +197,7 @@ class TableForm extends Component {
 			}
 		});
 		me.state.records.forEach ((record, i) => {
-			let rec = _.find (me.state.recs, {id: record.id});
+			let rec = _find (me.state.recs, {id: record.id});
 			
 			if (me.props.groupCol) {
 				if (rec [me.props.groupCol] != prevGroupColValue) {
@@ -226,7 +228,7 @@ class TableForm extends Component {
 						let code = col.code;
 						let editable = true;
 						
-						if (_.isArray (me.props.editable) && me.props.editable.indexOf (code) == -1) {
+						if (_isArray (me.props.editable) && me.props.editable.indexOf (code) == -1) {
 							editable = false;
 						}
 						if (!me.model.properties [code]) {

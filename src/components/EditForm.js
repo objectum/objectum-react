@@ -5,6 +5,9 @@ import React, {Component} from "react";
 import Loading from "./Loading";
 import {newId, timeout} from "./helper";
 import {i18n} from "../i18n";
+import _isNumber from "lodash.isnumber";
+import _map from "lodash.map";
+import _uniq from "lodash.uniq";
 
 class EditForm extends Component {
 	constructor (props) {
@@ -61,8 +64,8 @@ class EditForm extends Component {
 			me.recordMap = {};
 			
 			let fields = me.getFields (me.props.children);
-			let ids = _.uniq (_.map (fields, f => f.props.rid));
-			let promises = _.map (ids, id => me.props.store.getRecord (id));
+			let ids = _uniq (_map (fields, f => f.props.rid));
+			let promises = _map (ids, id => me.props.store.getRecord (id));
 			let records = await Promise.all (promises);
 			
 			records.forEach (record => me.recordMap [record.id] = record);
@@ -170,7 +173,7 @@ class EditForm extends Component {
 			if (recordValue === "" || recordValue === undefined) {
 				recordValue = null;
 			}
-			if (_.isNumber (stateValue) || _.isNumber (recordValue)) {
+			if (_isNumber (stateValue) || _isNumber (recordValue)) {
 				stateValue = Number (stateValue);
 				recordValue = Number (recordValue);
 			}

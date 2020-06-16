@@ -3,6 +3,8 @@
 
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
+import _map from "lodash.map";
+import _each from "lodash.foreach";
 import {i18n} from "./../i18n";
 import {newId} from "./helper";
 import {
@@ -27,7 +29,7 @@ class Navbar extends Component {
 	hideSubmenu (state) {
 		let me = this;
 		
-		_.each (me.state, (v, a) => {
+		_each (me.state, (v, a) => {
 			if (a.startsWith ("opened-") && v) {
 				state [a] = false;
 			}
@@ -46,7 +48,7 @@ class Navbar extends Component {
 					{item.icon ? <i className={`${item.icon} mr-2`} /> : null} {i18n (item.label)}
 				</button>
 				<div className={`dropdown-menu ml-${level} ${me.state [key] ? "d-block" : ""}`}>
-					{_.map (item.items, (item, i) => {
+					{_map (item.items, (item, i) => {
 						let key2 = key + "-" + i;
 						
 						if (item && item.label && item.path) {

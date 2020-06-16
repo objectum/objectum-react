@@ -4,7 +4,9 @@
 import React, {Component} from "react";
 import Tooltip from "./Tooltip";
 import {i18n} from "../i18n";
-import _ from "lodash";
+import _isEmpty from "lodash.isempty";
+import _filter from "lodash.filter";
+import _keys from "lodash.keys";
 import {newId} from "./helper";
 
 class DictField extends Component {
@@ -99,10 +101,10 @@ class DictField extends Component {
 		}
 		let recs = me.props.recs || me.props.records;
 		
-		if (recs && _.keys (recs).join () != _.keys (me.state.recs).join ()) {
+		if (recs && _keys (recs).join () != _keys (me.state.recs).join ()) {
 			state.recs = recs;
 		}
-		if (!_.isEmpty (state)) {
+		if (!_isEmpty (state)) {
 			me.setState (state);
 		}
 	}
@@ -237,7 +239,7 @@ class DictField extends Component {
 							if (rec.getLabel) {
 								label = rec.getLabel ();
 							}
-							let num = _.filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
+							let num = _filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
 							
 							label += ` (${i18n ("Amount")}: ${num})`;
 							
