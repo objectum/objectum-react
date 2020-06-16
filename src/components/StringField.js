@@ -2,10 +2,12 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
+/*
 import {EditorState, convertToRaw, ContentState} from "draft-js";
 import {Editor} from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
+*/
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {loadCSS, loadJS} from "./helper";
 import {i18n, getLocale} from "./../i18n";
@@ -25,6 +27,7 @@ class StringField extends Component {
 			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value
 		};
+/*
 		if (me.props.wysiwyg) {
 			const html = me.state.value || "<p />";
 			const contentBlock = htmlToDraft (html);
@@ -35,6 +38,7 @@ class StringField extends Component {
 				me.state.editorState = EditorState.createWithContent (contentState);
 			}
 		}
+*/
 		me.id = newId ();
 	}
 	
@@ -52,6 +56,7 @@ class StringField extends Component {
 		}
 	}
 */
+/*
 	onEditorStateChange (editorState) {
 		let me = this;
 		let value = draftToHtml (convertToRaw (editorState.getCurrentContent ()));
@@ -64,6 +69,7 @@ class StringField extends Component {
 			me.props.onChange ({code: me.state.code, value});
 		}
 	}
+*/
 	
 	onChange (val) {
 		let me = this;
@@ -154,6 +160,7 @@ class StringField extends Component {
 			);
 		}
 */
+/*
 		if (me.props.wysiwyg) {
 			cmp = (
 				<div className="border p-1">
@@ -169,6 +176,7 @@ class StringField extends Component {
 				</div>
 			);
 		}
+*/
 		return (
 			<div className={(me.props.label || me.props.error) ? "form-group stringfield" : "stringfield"}>
 				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}

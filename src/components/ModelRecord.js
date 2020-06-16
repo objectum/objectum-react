@@ -13,7 +13,6 @@ import _each from "lodash.foreach";
 import _values from "lodash.values";
 import _chunk from "lodash.chunk";
 import _isObject from "lodash.isobject";
-import _isArray from "lodash.isarray";
 import _sortBy from "lodash.sortby";
 import Loading from "./Loading";
 
@@ -223,7 +222,7 @@ class ModelRecord extends Component {
 			}
 		}
 		if (o.tag) {
-			if (! _isArray (o.tag)) {
+			if (! Array.isArray (o.tag)) {
 				o.tag = [o.tag];
 			}
 			_each (o.tag, Tag => {
@@ -238,7 +237,7 @@ class ModelRecord extends Component {
 		let items = [];
 		let gen = 0;
 		
-		if (_isArray (layout)) {
+		if (Array.isArray (layout)) {
 			if (!layout.length) {
 				return (<div />);
 			}
@@ -251,7 +250,7 @@ class ModelRecord extends Component {
 				if (typeof (row) == "string" && me.record && me.record [row]) {
 					rid = me.record [row];
 				}
-				if (_isArray (row)) {
+				if (Array.isArray (row)) {
 					formItems.push (
 						<div className="row no-gutters" key={`row-${i}`}>
 							{row.map ((code, j) => {
@@ -259,7 +258,7 @@ class ModelRecord extends Component {
 								let cls = "";
 								
 								if (_isObject (code) && code ["class"]) {
-									if (_isArray (code ["class"])) {
+									if (Array.isArray (code ["class"])) {
 										cls = code ["class"].join (" ");
 									} else {
 										cls = code ["class"];

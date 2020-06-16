@@ -3,7 +3,6 @@
 
 import React, {Component} from "react";
 import {i18n} from "../i18n";
-import _isArray from "lodash.isarray";
 import _set from "lodash.set";
 import _get from "lodash.get";
 import {newId} from "./helper";
@@ -40,7 +39,7 @@ class JsonEditor extends Component {
 			for (let a in opts) {
 				let o = opts [a];
 				
-				if (typeof (o) == "object" && !_isArray (o)) {
+				if (typeof (o) == "object" && !Array.isArray (o)) {
 					process (o, prefix ? (prefix + "." + a) : a);
 				}
 				if (typeof (o) == "string") {

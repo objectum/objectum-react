@@ -9,7 +9,6 @@ import ModelList from "./ModelList";
 import Field from "./Field";
 import {timeout} from "./helper";
 import _find from "lodash.find"
-import _isArray from "lodash.isarray";
 import _map from "lodash.map";
 import Cell from "./Cell";
 import {execute} from "objectum-client";
@@ -228,7 +227,7 @@ class TableForm extends Component {
 						let code = col.code;
 						let editable = true;
 						
-						if (_isArray (me.props.editable) && me.props.editable.indexOf (code) == -1) {
+						if (Array.isArray (me.props.editable) && me.props.editable.indexOf (code) == -1) {
 							editable = false;
 						}
 						if (!me.model.properties [code]) {
