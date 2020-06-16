@@ -86,7 +86,7 @@ class Navbar extends Component {
 		if (item == "logout") {
 			return <LogoutButton key="logout" app={me.props.app} />;
 		}
-		if (item && item.label) {
+		if (item && (item.label || item.path)) {
 			if (item.items) {
 				return me.renderSubmenu (item, key, 1);
 			} else {
