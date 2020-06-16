@@ -80,7 +80,7 @@ function BackButtonSB ({popLocation, locations}) {
 	);
 };
 
-function BackButton ({popLocation, locations}) {
+function BackButton ({popLocation, locations, children}) {
 	let history = useHistory ();
 	
 	function handleClick () {
@@ -93,7 +93,7 @@ function BackButton ({popLocation, locations}) {
 	}
 	return (
 		<button className="btn btn-link nav-item nav-link font-weight-bold text-left" disabled={!locations || locations.length < 2} onClick={handleClick}>
-			{me.props.children || <span><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</span>}
+			{children || <span><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</span>}
 		</button>
 	);
 };
