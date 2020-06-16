@@ -78,6 +78,11 @@ class Navbar extends Component {
 		if (item == "back") {
 			return <BackButton key="back" popLocation={me.props.app && me.props.app.popLocation} locations={me.props.app && me.props.app.state.locations} />;
 		}
+		if (item == "backIcon") {
+			return <BackButton key="back" popLocation={me.props.app && me.props.app.popLocation} locations={me.props.app && me.props.app.state.locations}>
+				<i className="fas fa-arrow-left" />
+			</BackButton>;
+		}
 		if (item == "logout") {
 			return <LogoutButton key="logout" app={me.props.app} />;
 		}
