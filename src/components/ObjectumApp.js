@@ -169,7 +169,7 @@ class ObjectumApp extends Component {
 		me.setState (state);
 	}
 	
-	async onDisconnect () {
+	onDisconnect = async () => {
 		if (this.props.onDisconnect) {
 			await execute (this.props.onDisconnect);
 		}

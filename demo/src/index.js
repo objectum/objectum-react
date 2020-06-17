@@ -206,6 +206,7 @@ class Demo extends Component {
 					registration
 					siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
 					label="Label"
+					onDisconnect={() => console.log ("disc")}
 /*
 					onRenderAuthInfo={div => {
 						return div;
