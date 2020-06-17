@@ -43,7 +43,9 @@ import Tooltip from "./components/Tooltip";
 import Navbar from "./components/Navbar";
 import Fade from "./components/Fade";
 import Office from "./components/Office";
+/*
 import Schema from "./components/Schema";
+*/
 import MenuItem from "./components/MenuItem";
 import MenuItems from "./components/MenuItems";
 import Records from "./components/Records";
@@ -123,7 +125,9 @@ export {
 	Navbar,
 	Fade,
 	Office,
+/*
 	Schema,
+*/
 	MenuItems,
 	MenuItem,
 	Records,
@@ -194,7 +198,9 @@ export default {
 	Navbar,
 	Fade,
 	Office,
+/*
 	Schema,
+*/
 	MenuItems,
 	MenuItem,
 	Records,

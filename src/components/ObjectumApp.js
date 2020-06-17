@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Link, useLocation} from "react-router-dom";
 import {
-	Auth, Models, Model, Schema, Property, Queries, Query, Column, Roles, Role, Users, User,
+	Auth, Models, Model, Property, Queries, Query, Column, Roles, Role, Users, User,
 	Menus, Menu, MenuItem, ModelList, ModelTree, ModelRecord, Records, Office
 } from "..";
 import Sidebar from "react-sidebar";
@@ -280,7 +280,9 @@ class ObjectumApp extends Component {
 			<Route key="objectum-12" path="/menu/:rid" render={props => <Menu {...props} store={me.store} />} />,
 			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={me.store} />} />,
 			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={me.store} />} />,
+/*
 			<Route key="objectum-17" path="/schema" render={props => <Schema {...props} store={me.store} />} />,
+*/
 		];
 		let SearchRoutes = (children) => {
 			React.Children.forEach (children, (child, i) => {
