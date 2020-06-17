@@ -157,7 +157,7 @@ class Action extends Component {
 		
 		if (me.state.processing) {
 			return (
-				<span className="text-primary mx-2 mb-1">
+				<span className="text-primary p-1 mb-1 mx-1 border">
 					<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />{text}
 				</span>
 			);
@@ -175,14 +175,30 @@ class Action extends Component {
 					{me.props.icon && <i className={me.props.icon + " mr-2"} />}
 					{me.props.children ? me.props.children : (me.props.label || "")}
 				</button>
+{/*
 				{me.state.error && <span>
 					<span className="text-danger ml-1">{me.state.error}</span>
 					<button type="button" className="btn btn-outline-primary btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
 				</span>}
+*/}
+				{me.state.error && <div className="popup">
+					<div className="popup-content bg-white shadow text-danger p-1">
+						<div className="mb-1">{i18n (me.state.error)}</div>
+						<button type="button" className="btn btn-outline-primary btn-sm" onClick={me.onClose}>{i18n ("Close")}</button>
+					</div>
+				</div>}
+{/*
 				{me.state.result && <span>
 					<span className="text-success ml-1">{i18n (me.state.result)}</span>
 					<button type="button" className="btn btn-outline-primary btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
 				</span>}
+*/}
+				{me.state.result && <div className="popup">
+					<div className="popup-content bg-white shadow text-success p-1">
+						<div className="mb-1">{i18n (me.state.result)}</div>
+						<button type="button" className="btn btn-outline-primary btn-sm" onClick={me.onClose}>{i18n ("Close")}</button>
+					</div>
+				</div>}
 				{ModalComponent && <Modal
 					isOpen={me.state.showModal}
 					style={

@@ -81,6 +81,7 @@ class ObjectumApp extends Component {
 		let me = this;
 		
 		me.store.addListener ("connect", me.onConnect);
+		me.store.addListener ("disconnect", me.onDisconnect);
 		
 		if (me.props.username && me.props.password) {
 			try {
@@ -103,6 +104,7 @@ class ObjectumApp extends Component {
 	
 	componentWillUnmount () {
 		this.store.removeListener ("connect", this.onConnect);
+		this.store.removeListener ("disconnect", this.onConnect);
 	}
 	
 	async onConnect (opts) {
@@ -165,6 +167,12 @@ class ObjectumApp extends Component {
 			await execute (me.props.onConnect);
 		}
 		me.setState (state);
+	}
+	
+	async onDisconnect () {
+		if (this.props.onDisconnect) {
+			await execute (this.props.onDisconnect);
+		}
 	}
 	
 	onClickMenu (key) {

@@ -151,3 +151,17 @@
 textarea {
     tab-size: 4;
 }
+.popup {
+    position: relative;
+}
+.popup-content {
+    position: absolute;
+    left: -1px;
+    top: 1px;
+    min-width: 15em;
+    max-width: 40em;
+    min-height: 5em;
+    max-height: 20em;
+    z-index: 1000;
+    overflow: auto;
+}

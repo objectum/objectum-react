@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {isMobile} from "react-device-detect";
 import {newId} from "..";
 
 let tooltips = [];
@@ -46,6 +47,13 @@ class Tooltip extends Component {
 	render () {
 		let me = this;
 		
+		if (isMobile) {
+			return (
+				<div className="objectum-tooltip w-100 h-100">
+					{me.props.children}
+				</div>
+			);
+		}
 		return (
 			<div className="objectum-tooltip w-100 h-100">
 				{me.props.children}
