@@ -2,8 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {i18n} from "../i18n";
-import {getTimestampString} from "./helper";
+import {getTimestampString, i18n} from "..";
 
 class Log extends Component {
 	constructor (props) {

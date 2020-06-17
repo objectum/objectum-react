@@ -1,6 +1,5 @@
 import React, {Component} from "react";
-import {i18n} from "./../i18n";
-import {newId} from "./helper";
+import {i18n, newId} from "..";
 
 class BooleanField extends Component {
 	constructor (props) {

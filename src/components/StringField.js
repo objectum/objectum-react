@@ -2,10 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {loadCSS, loadJS} from "./helper";
-import {i18n, getLocale} from "./../i18n";
-import {newId} from "./helper";
-import {getStore} from "../modules/common";
+import {loadCSS, loadJS, i18n, getLocale, newId, getStore} from "..";
 
 class StringField extends Component {
 	constructor (props) {

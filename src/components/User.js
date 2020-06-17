@@ -2,13 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Field from "./Field";
-import Form from "./Form";
-import Tab from "./Tab";
-import Tabs from "./Tabs";
-import {goRidLocation} from "./helper";
-import {i18n} from "./../i18n";
-import DictField from "./DictField";
+import {DictField, Field, Form, Tab, Tabs} from "..";
+import {goRidLocation, i18n} from "..";
 
 class User extends Component {
 	constructor (props) {

@@ -2,15 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import StringField from "./StringField";
-import Form from "./Form";
-import Tab from "./Tab";
-import Tabs from "./Tabs";
-import Columns from "./Columns";
-import ChooseField from "./ChooseField";
-import Queries from "./Queries";
-import {getHash, goRidLocation} from "./helper";
-import {i18n} from "./../i18n";
+import {StringField, Form, Tab, Tabs, Columns, ChooseField, Queries} from "..";
+import {getHash, goRidLocation, i18n} from "..";
 
 class Query extends Component {
 	constructor (props) {

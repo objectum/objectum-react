@@ -3,7 +3,7 @@
 
 import React, {Component} from "react";
 import Loading from "./Loading";
-import {newId, timeout} from "./helper";
+import {newId, timeout} from "..";
 import {i18n} from "../i18n";
 import _isNumber from "lodash.isnumber";
 import _map from "lodash.map";

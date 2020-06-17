@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Grid from "./Grid";
 import Action from "./Action";
 import {i18n} from "../i18n";
-import {setHash} from "./helper";
+import {setHash} from "../modules/common";
 
 class Types extends Component {
 	constructor (props) {

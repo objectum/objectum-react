@@ -2,12 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Loading from "./Loading";
-import Action from "./Action";
-import {i18n} from "../i18n";
-import ModelList from "./ModelList";
-import Field from "./Field";
-import {timeout} from "./helper";
+import {Loading, Action, ModelList, Field} from "..";
+import {i18n, timeout} from "..";
 import _find from "lodash.find"
 import _map from "lodash.map";
 import Cell from "./Cell";

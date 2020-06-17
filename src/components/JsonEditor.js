@@ -2,10 +2,9 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {i18n} from "../i18n";
 import _set from "lodash.set";
 import _get from "lodash.get";
-import {newId} from "./helper";
+import {i18n, newId} from "..";
 
 class JsonEditor extends Component {
 	constructor (props) {

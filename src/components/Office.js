@@ -2,11 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Action from "./Action";
-import Loading from "./Loading";
+import {Action, i18n, loadJS} from "..";
 import crypto from "crypto";
-import {i18n} from "./../i18n";
-import {loadJS} from "./helper.js";
 
 class Office extends Component {
 	constructor (props) {

@@ -2,8 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash, addHashListener, removeHashListener} from "./helper";
-import {i18n} from "./../i18n";
+import {getHash, setHash, addHashListener, removeHashListener, i18n} from "..";
 import {Link} from "react-router-dom";
 
 class Tabs extends Component {

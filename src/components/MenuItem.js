@@ -2,15 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Field from "./Field";
-import Form from "./Form";
-import Tab from "./Tab";
-import Tabs from "./Tabs";
-import {getHash, goRidLocation} from "./helper";
-import Menus from "./Menus";
-import MenuItems from "./MenuItems";
-import ChooseField from "./ChooseField";
-import {i18n} from "./../i18n";
+import {Field, Form, Tab, Tabs, Menus, MenuItems, ChooseField} from "..";
+import {getHash, goRidLocation, i18n} from "..";
 
 class MenuItem extends Component {
 	constructor (props) {

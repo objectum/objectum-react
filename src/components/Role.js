@@ -2,12 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Field from "./Field";
-import Form from "./Form";
-import Tab from "./Tab";
-import Tabs from "./Tabs";
-import {getHash, goRidLocation} from "./helper";
-import {i18n} from "./../i18n";
+import {Field, Form, Tab, Tabs} from "..";
+import {getHash, goRidLocation, i18n} from "..";
 
 class Role extends Component {
 	constructor (props) {

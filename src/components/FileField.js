@@ -3,8 +3,7 @@
 
 import React, {Component} from "react";
 import {useDropzone} from "react-dropzone";
-import {i18n} from "./../i18n";
-import {newId} from "./helper";
+import {i18n, newId} from "..";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import Modal from "react-modal";

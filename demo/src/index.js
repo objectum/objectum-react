@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import {Link, Route, useHistory} from "react-router-dom";
 import {Store, Record} from "objectum-client";
 import {createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
-import {pushLocation, timeout, newId} from "../../src/components/helper";
+import {pushLocation, timeout, newId} from "../../src";
 import ReactCrop from "react-image-crop";
 
 //import OrgModel from "./models/OrgModel";

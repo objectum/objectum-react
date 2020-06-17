@@ -1,25 +1,9 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router, Route, Link, useHistory, useLocation} from "react-router-dom";
-import Auth from "./Auth";
-import Models from "./Models";
-import Model from "./Model";
-import Schema from "./Schema";
-import Property from "./Property";
-import Queries from "./Queries";
-import Query from "./Query";
-import Column from "./Column";
-import Roles from "./Roles";
-import Role from "./Role";
-import Users from "./Users";
-import User from "./User";
-import Menus from "./Menus";
-import Menu from "./Menu";
-import MenuItem from "./MenuItem";
-import ModelList from "./ModelList";
-import ModelTree from "./ModelTree";
-import ModelRecord from "./ModelRecord";
-import Records from "./Records";
-import Office from "./Office";
+import {BrowserRouter as Router, Route, Link, useLocation} from "react-router-dom";
+import {
+	Auth, Models, Model, Schema, Property, Queries, Query, Column, Roles, Role, Users, User,
+	Menus, Menu, MenuItem, ModelList, ModelTree, ModelRecord, Records, Office
+} from "..";
 import Sidebar from "react-sidebar";
 import {setLocale, i18n} from "./../i18n";
 import _filter from "lodash.filter";

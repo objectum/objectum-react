@@ -2,19 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import StringField from "./StringField";
-import NumberField from "./NumberField";
-import DateField from "./DateField";
-import BooleanField from "./BooleanField";
-import DictField from "./DictField";
-import ChooseField from "./ChooseField";
-import FileField from "./FileField";
-import {i18n} from "./../i18n";
-import ModelList from "./ModelList";
-import Log from "./Log";
-import Loading from "./Loading";
-import EditForm from "./EditForm";
-import {timeout} from "./helper";
+import {StringField, NumberField, DateField, BooleanField, DictField, ChooseField, FileField, ModelList, Log, Loading, EditForm} from "..";
+import {i18n, timeout} from "..";
 import {execute} from "objectum-client";
 import _isNumber from "lodash.isnumber";
 import _each from "lodash.foreach";

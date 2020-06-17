@@ -2,12 +2,10 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Tooltip from "./Tooltip";
-import {i18n} from "../i18n";
+import {Tooltip, i18n, newId} from "..";
 import _isEmpty from "lodash.isempty";
 import _filter from "lodash.filter";
 import _keys from "lodash.keys";
-import {newId} from "./helper";
 
 class DictField extends Component {
 	constructor (props) {

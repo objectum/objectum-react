@@ -7,7 +7,7 @@ import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
 import ModelList from "./ModelList";
-import {getHash, goRidLocation} from "./helper";
+import {getHash, goRidLocation} from "../modules/common";
 import {i18n} from "./../i18n";
 import _each from "lodash.foreach";
 import _values from "lodash.values";

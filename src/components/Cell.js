@@ -2,8 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getTimestampString} from "./helper";
-import Tooltip from "./Tooltip";
+import {Tooltip, getTimestampString} from "..";
 
 class Cell extends Component {
 	constructor (props) {

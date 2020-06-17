@@ -2,8 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import {saveAs} from "file-saver";
-import {loadJS} from "./../components/helper";
-import {getStore} from "./common";
+import {loadJS, getStore} from "..";
 
 let reportStyles;
 

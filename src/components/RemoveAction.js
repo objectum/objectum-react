@@ -1,7 +1,5 @@
 import React, {Component} from "react";
-import {i18n} from "./../i18n";
-import Fade from "./Fade";
-import {timeout} from "./helper";
+import {i18n, timeout} from "..";
 
 class RemoveAction extends Component {
 	constructor (props) {

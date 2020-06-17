@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import DatePicker from "react-datepicker";
 import {registerLocale} from "react-datepicker";
-import {i18n, getLocale} from "./../i18n";
-import {newId} from "./helper";
+import {i18n, getLocale, newId} from "..";
 import "react-datepicker/dist/react-datepicker.css";
 import ru from "date-fns/locale/ru";
 

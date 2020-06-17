@@ -2,13 +2,11 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getDateString} from "./helper";
+import {DictField, getDateString, i18n} from "..";
 import _isEmpty from "lodash.isempty";
 import _find from "lodash.find";
 import _keys from "lodash.keys";
 import _debounce from "lodash.debounce";
-import {i18n} from "../i18n";
-import DictField from "./DictField";
 
 class Filter extends Component {
 	constructor (props) {

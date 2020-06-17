@@ -3,10 +3,7 @@
 
 import React, {Component} from "react";
 import Modal from "react-modal";
-import {i18n} from "./../i18n";
-import {newId} from "./helper";
-import Grid from "./Grid";
-import Tooltip from "./Tooltip";
+import {Grid, Tooltip, i18n, newId} from "..";
 
 class ChooseField extends Component {
 	constructor (props) {

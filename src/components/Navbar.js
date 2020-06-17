@@ -5,8 +5,7 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import _map from "lodash.map";
 import _each from "lodash.foreach";
-import {i18n} from "./../i18n";
-import {newId} from "./helper";
+import {i18n, newId} from "..";
 import {
 	BackButton,
 	LogoutButton

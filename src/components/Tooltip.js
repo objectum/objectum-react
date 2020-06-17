@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {newId} from "./helper";
+import {newId} from "..";
 
 let tooltips = [];
 

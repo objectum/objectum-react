@@ -1,9 +1,6 @@
 import React, {Component} from "react";
-import Action from "./Action";
-import Grid from "./Grid";
-import RemoveAction from "./RemoveAction";
-import {i18n} from "./../i18n";
-import {getHash, setHash} from "./helper";
+import {Action, Grid, RemoveAction} from "..";
+import {i18n, getHash, setHash} from "..";
 
 class ModelList extends Component {
 	constructor (props) {

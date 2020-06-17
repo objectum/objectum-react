@@ -1,8 +1,5 @@
 import React, {Component} from "react";
-import {i18n} from "./../i18n";
-import Loading from "./Loading";
-import {timeout} from "./helper";
-import Fade from "./Fade";
+import {Loading, i18n, timeout, Fade} from "..";
 
 class Auth extends Component {
 	constructor (props) {

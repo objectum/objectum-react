@@ -2,18 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import StringField from "./StringField";
-import NumberField from "./NumberField";
-import BooleanField from "./BooleanField";
-import SelectField from "./SelectField";
-import ChooseField from "./ChooseField";
-import Types from "./Types";
-import Form from "./Form";
-import Tab from "./Tab";
-import Tabs from "./Tabs";
-import Models from "./Models";
-import {getHash, goRidLocation} from "./helper";
-import {i18n} from "./../i18n";
+import {StringField, NumberField, BooleanField, SelectField, ChooseField} from "..";
+import {Types, Form, Tab, Tabs, Models, getHash, goRidLocation, i18n} from "..";
 
 class Property extends Component {
 	constructor (props) {

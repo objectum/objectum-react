@@ -43,7 +43,14 @@ import Tooltip from "./components/Tooltip";
 import Navbar from "./components/Navbar";
 import Fade from "./components/Fade";
 import Office from "./components/Office";
-import i18n from "./i18n";
+import Schema from "./components/Schema";
+import MenuItem from "./components/MenuItem";
+import MenuItems from "./components/MenuItems";
+import Records from "./components/Records";
+import Log from "./components/Log";
+import EditForm from "./components/EditForm";
+
+import {i18n, setLocale, getLocale} from "./i18n";
 import {
 	getHash,
 	setHash,
@@ -55,8 +62,9 @@ import {
 	goRidLocation,
 	timeout,
 	newId,
-	getTimestampString
-} from "./components/helper";
+	getTimestampString,
+	getStore
+} from "./modules/common";
 import {
 	createReport,
 	reportStyles
@@ -115,13 +123,22 @@ export {
 	Navbar,
 	Fade,
 	Office,
+	Schema,
+	MenuItems,
+	MenuItem,
+	Records,
+	Log,
+	EditForm,
 	i18n,
+	setLocale,
+	getLocale,
 	goRidLocation,
 	timeout,
 	newId,
 	getTimestampString,
 	createReport,
-	reportStyles
+	reportStyles,
+	getStore
 };
 
 export default {
@@ -177,11 +194,20 @@ export default {
 	Navbar,
 	Fade,
 	Office,
+	Schema,
+	MenuItems,
+	MenuItem,
+	Records,
+	Log,
+	EditForm,
 	i18n,
+	setLocale,
+	getLocale,
 	goRidLocation,
 	timeout,
 	newId,
 	getTimestampString,
 	createReport,
-	reportStyles
+	reportStyles,
+	getStore
 };
