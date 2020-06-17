@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.367",
+	"version": "1.1.368",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -58,7 +58,7 @@
 		"lodash.sortby": "^4.7.0",
 		"lodash.uniq": "^4.5.0",
 		"lodash.values": "^4.3.0",
-		"objectum-client": "^1.1.96",
+		"objectum-client": "^1.1.97",
 		"react-datepicker": "^2.16.0",
 		"react-device-detect": "^1.13.1",
 		"react-dropzone": "^10.2.2",
