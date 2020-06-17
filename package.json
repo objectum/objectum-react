@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.1.361",
+	"version": "1.1.362",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -41,10 +41,7 @@
 	],
 	"dependencies": {
 		"date-fns": "^2.14.0",
-		"draft-js": "^0.11.5",
-		"draftjs-to-html": "^0.9.1",
 		"file-saver": "^2.0.2",
-		"html-to-draftjs": "^1.5.0",
 		"lodash.chunk": "^4.2.0",
 		"lodash.debounce": "^4.0.8",
 		"lodash.filter": "^4.6.0",
@@ -63,8 +60,6 @@
 		"objectum-client": "^1.1.96",
 		"objectum-proxy": "^0.1.42",
 		"react-datepicker": "^2.16.0",
-		"react-device-detect": "^1.12.1",
-		"react-draft-wysiwyg": "^1.14.5",
 		"react-dropzone": "^10.2.2",
 		"react-image-crop": "^8.6.2",
 		"react-modal": "^3.11.2",

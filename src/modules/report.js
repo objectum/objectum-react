@@ -2,7 +2,8 @@
 /* eslint-disable eqeqeq */
 
 import {saveAs} from "file-saver";
-//import ExcelJS from "exceljs";
+import {loadJS} from "./../components/helper";
+import {getStore} from "./common";
 
 let reportStyles;
 
@@ -182,9 +183,9 @@ function getHiddenCells (rows) {
 	return result;
 };
 
-async function createReport ({store, rows, columns, height = {}, font, worksheetName, worksheetOpts}) {
+async function createReport ({rows, columns, height = {}, font, worksheetName, worksheetOpts}) {
 	if (!window.ExcelJS) {
-		await loadJS (`${store.getUrl ()}/public/exceljs.js`);
+		await loadJS (`${getStore ().getUrl ()}/public/exceljs.js`);
 	}
 	const hiddenCells = getHiddenCells (rows);
 	const wb = new window.ExcelJS.Workbook ();

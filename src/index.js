@@ -43,7 +43,6 @@ import Tooltip from "./components/Tooltip";
 import Navbar from "./components/Navbar";
 import Fade from "./components/Fade";
 import Office from "./components/Office";
-import {isMobile} from "react-device-detect";
 import i18n from "./i18n";
 import {
 	getHash,
@@ -116,7 +115,6 @@ export {
 	Navbar,
 	Fade,
 	Office,
-	isMobile,
 	i18n,
 	goRidLocation,
 	timeout,
@@ -179,7 +177,6 @@ export default {
 	Navbar,
 	Fade,
 	Office,
-	isMobile,
 	i18n,
 	goRidLocation,
 	timeout,

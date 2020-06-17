@@ -2,7 +2,7 @@ import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Link, Route, useHistory} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
+import {createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
 import {pushLocation, timeout, newId} from "../../src/components/helper";
 import ReactCrop from "react-image-crop";
 
@@ -32,38 +32,6 @@ function HomeButton (props) {
 		<button className="btn btn-link p-0" onClick={handleClick}>
 			{props.children || <i className="fas fa-home" />}
 		</button>
-	);
-};
-
-function LogoutButton ({app, size}) {
-	let history = useHistory ();
-	
-	function handleClick () {
-		app.store.end ();
-		
-		app.setState ({
-			sidebarOpen: false, locations: [], sid: null
-		});
-		history.push ("/");
-	}
-	return (
-		<Link className="nav-item nav-link font-weight-bold" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</Link>
-	);
-};
-
-function BackButton ({popLocation, locations}) {
-	let history = useHistory ();
-	
-	function handleClick () {
-		let {pathname, hash} = locations [locations.length - 2];
-		
-		popLocation ();
-
-//		history.push (decodeURI (pathname + hash));
-		history.push (pathname + hash);
-	}
-	return (
-		<Link className="nav-item nav-link font-weight-bold" disabled={locations.length < 2} onClick={handleClick}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</Link>
 	);
 };
 
@@ -98,31 +66,56 @@ class Test extends Component {
 		}
 	}
 	
+	report = async () => {
+		let recs = [
+			{
+				s1: "123",
+				s2: "aa"
+			},
+			{
+				s1: "12",
+				s2: "aa"
+			},
+			{
+				s1: "13",
+				s2: "a"
+			}
+		];
+		let rows = [
+			[
+				{text: "Список", style: "border_center", colSpan: 3}
+			],
+			[
+				{text: "Наименование", style: "border"},
+				{text: "Дата", style: "border"},
+				{text: "Стоимость", style: "border"}
+			],
+			...recs.map (rec => {
+				return [
+					{text: rec.s1, style: "border"},
+					{text: rec.s2, style: "border"}
+				];
+			})
+		];
+		await createReport ({
+			store,
+			rows,
+			columns: [40, 10, 10],
+			font: {
+				name: "Arial",
+				size: 10
+			}
+		});
+	}
+	
 	render () {
 		let me = this;
 		
 		return (
 			<div className="container">
-				<Navbar
-					className="navbar navbar-expand navbar-dark bg-primary"
-					linkClassName="nav-item nav-link font-weight-bold p-1"
-					submenuLinkClassName="nav-item nav-link font-weight-bold text-dark"
-					items={[
-						<button className="btn btn-link nav-item nav-link font-weight-bold" onClick={() => {}}><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</button>,
-						<Link
-							key={1}
-							className="btn btn-link nav-item nav-link font-weight-bold"
-							to="/#"
-							onClick={() => {}}
-						>
-							<i className="fas fa-utensils" /> Рецепты
-						</Link>,
-						<button className="btn btn-link nav-item nav-link font-weight-bold" onClick={() => {}}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
-					]}
-				/>
-				<StringField ref={me._refs ["test"]} />
-				<Action label="tt" onClick={() => me._refs ["test"].current.setState ({value: "2"})} />
-				<ModelList store={store} model="item" />
+				<Form store={store} rsc="record" mid="item" rid={1027}>
+					<Field property="description" wysiwyg />
+				</Form>
 				<Form ref="my-form" record={me.state} hideButtons disabled>
 					<DateField property="date" label="Date" notNull={0} showTime />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
@@ -198,10 +191,10 @@ class Demo extends Component {
 				<ObjectumApp
 					locale="ru"
 					store={store}
-					_username="admin"
-					_password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					username="guest"
-					password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
+					username="admin"
+					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+					_username="guest"
+					_password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
 					name="objectum-react"
 					version={packageConfig.version}
 					registration
@@ -212,7 +205,7 @@ class Demo extends Component {
 						return div;
 					}}
 */
-					onCustomRender={me.onCustomRender}
+					/*onCustomRender={me.onCustomRender}*/
 					onConnect={me.onConnect}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
