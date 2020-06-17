@@ -69,12 +69,14 @@ class Records extends Component {
 			<div>
 				{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
 				<Grid {...gridOpts}>
-					<Action {...me.props} onClickSelected={me.onEdit}>
-						<i className="fas fa-edit mr-2" />{i18n ("Edit")}
-					</Action>
-					<Action {...me.props} confirm={true} onClickSelected={me.onRemove}>
-						<i className="fas fa-minus mr-2" />{i18n ("Remove")}
-					</Action>
+					<div className="d-flex">
+						<Action {...me.props} onClickSelected={me.onEdit}>
+							<i className="fas fa-edit mr-2" />{i18n ("Edit")}
+						</Action>
+						<Action {...me.props} confirm={true} onClickSelected={me.onRemove}>
+							<i className="fas fa-minus mr-2" />{i18n ("Remove")}
+						</Action>
+					</div>
 				</Grid>
 			</div>
 		);

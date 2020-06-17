@@ -134,18 +134,6 @@ class Action extends Component {
 	
 	render () {
 		let me = this;
-
-		if (me.state.confirm) {
-			return (
-				<Fade>
-					<span className="text-danger mb-1">
-						{me.state.confirm}
-						<button type="button" className="btn btn-danger ml-1 mb-1" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
-						<button type="button" className="btn btn-success mx-1 mb-1" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
-					</span>
-				</Fade>
-			);
-		}
 		let text;
 		
 		if (me.state.processing) {
@@ -157,15 +145,15 @@ class Action extends Component {
 		
 		if (me.state.processing) {
 			return (
-				<span className="text-primary p-1 mb-1 mx-1 border">
+				<div className="text-primary p-1 mb-1 mx-1 border">
 					<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />{text}
-				</span>
+				</div>
 			);
 		}
 		let ModalComponent = me.props.modalComponent;
 		
 		return (
-			<span className={me.props.className}>
+			<div className={me.props.className}>
 				<button
 					type="button"
 					className={me.props.btnClassName || "btn btn-primary btn-labeled mr-1 mb-1"}
@@ -181,24 +169,31 @@ class Action extends Component {
 					<button type="button" className="btn btn-outline-primary btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
 				</span>}
 */}
-				{me.state.error && <div className="popup">
+				{me.state.error && <Fade className="popup">
 					<div className="popup-content bg-white shadow text-danger p-1">
 						<div className="mb-1">{i18n (me.state.error)}</div>
 						<button type="button" className="btn btn-outline-primary btn-sm" onClick={me.onClose}>{i18n ("Close")}</button>
 					</div>
-				</div>}
+				</Fade>}
 {/*
 				{me.state.result && <span>
 					<span className="text-success ml-1">{i18n (me.state.result)}</span>
 					<button type="button" className="btn btn-outline-primary btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
 				</span>}
 */}
-				{me.state.result && <div className="popup">
+				{me.state.result && <Fade className="popup">
 					<div className="popup-content bg-white shadow text-success p-1">
 						<div className="mb-1">{i18n (me.state.result)}</div>
 						<button type="button" className="btn btn-outline-primary btn-sm" onClick={me.onClose}>{i18n ("Close")}</button>
 					</div>
-				</div>}
+				</Fade>}
+				{me.state.confirm && <Fade className="popup">
+					<div className="popup-content bg-white shadow text-danger p-1">
+						<div className="mb-1">{me.state.confirm}</div>
+						<button type="button" className="btn btn-danger" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
+						<button type="button" className="btn btn-success ml-1" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
+					</div>
+				</Fade>}
 				{ModalComponent && <Modal
 					isOpen={me.state.showModal}
 					style={
@@ -219,7 +214,7 @@ class Action extends Component {
 					</div>
 					<ModalComponent recordId={me.state.recordId} store={me.props.store} grid={me.props.grid} />
 				</Modal>}
-			</span>
+			</div>
 		);
 	}
 };

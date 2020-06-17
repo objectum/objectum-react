@@ -96,10 +96,12 @@ class ModelTree extends Component {
 		return (
 			<div className="bg-white shadow-sm">
 				<Grid {...me.props} id={id} ref={me._refs [id]} label={label} store={me.props.store} model={me.model} tree={true} refresh={me.state.refresh} params={params}>
-					<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-					<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-					<RemoveAction onRemove={me.onRemove} />
-					{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
+					<div className="d-flex">
+						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+						<RemoveAction onRemove={me.onRemove} />
+					</div>
+					{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
 				</Grid>
 			</div>
 		);

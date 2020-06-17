@@ -122,7 +122,7 @@ class Test extends Component {
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />
 					<StringField label="Text" property="text" wysiwyg />
 					<div className="d-flex">
-						<Action label="test" onClick={async ({progress}) => {
+						<Action label="test" confirm onClick={async ({progress}) => {
 							for (let i = 0; i < 5; i ++) {
 								await timeout (1000);
 								progress ({label: "progress", value: i + 1, max: 5});

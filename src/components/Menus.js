@@ -58,10 +58,12 @@ class Menus extends Component {
 			<div className="container">
 				<div className="shadow-sm">
 					<Grid {...me.props} id="menus" ref={me._refs ["menus"]} label="Menus" store={me.props.store} query="objectum.menu" refresh={me.state.refresh}>
-						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-						<RemoveAction onRemove={me.onRemove} />
-						{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
+						<div className="d-flex">
+							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+							<RemoveAction onRemove={me.onRemove} />
+						</div>
+						{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
 					</Grid>
 				</div>
 			</div>

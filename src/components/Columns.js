@@ -148,13 +148,15 @@ class Columns extends Component {
 		
 		return (
 			<Grid id="Columns" store={me.props.store} query="objectum.column" system={true} refresh={me.state.refresh} params={{queryId: me.query}}>
-				<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-				<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-				<RemoveAction onRemove={me.onRemove} />
-				<Action onClick={me.onSynchronize} disabled={me.state.synchronizing}>
-					<i className="fas fa-wrench mr-2" />{me.state.synchronizing ? i18n ("Synchronizing") : i18n ("Synchronize")}
-				</Action>
-				{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
+				<div class="d-flex">
+					<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+					<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+					<RemoveAction onRemove={me.onRemove} />
+					<Action onClick={me.onSynchronize} disabled={me.state.synchronizing}>
+						<i className="fas fa-wrench mr-2" />{me.state.synchronizing ? i18n ("Synchronizing") : i18n ("Synchronize")}
+					</Action>
+				</div>
+				{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
 			</Grid>
 		);
 		
