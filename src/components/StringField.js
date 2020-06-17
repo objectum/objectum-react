@@ -35,25 +35,27 @@ class StringField extends Component {
 	async componentDidMount () {
 		let me = this;
 		
-		if (me.props.wysiwyg && !window.Quill) {
-			await loadCSS (`${me.store.getUrl ()}/public/quill/quill.snow.css`);
-			await loadJS (`${me.store.getUrl ()}/public/quill/quill.js`);
-		}
-		if (document.getElementById (me.id)) {
-			me.quill = new Quill (`#${me.id}`, {
-				theme: "snow"
-			});
-			if (me.state.value) {
-				me.quill.clipboard.dangerouslyPasteHTML (me.state.value);
+		if (me.props.wysiwyg) {
+			if (!window.Quill) {
+				await loadCSS (`${me.store.getUrl ()}/public/quill/quill.snow.css`);
+				await loadJS (`${me.store.getUrl ()}/public/quill/quill.js`);
 			}
-			me.quill.on ("text-change", function (delta, oldDelta, source) {
-				let value = me.quill.root.innerHTML;
-				me.setState ({value});
-				
-				if (me.props.onChange) {
-					me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
+			if (document.getElementById (me.id)) {
+				me.quill = new Quill (`#${me.id}`, {
+					theme: "snow"
+				});
+				if (me.state.value) {
+					me.quill.clipboard.dangerouslyPasteHTML (me.state.value);
 				}
-			});
+				me.quill.on ("text-change", function (delta, oldDelta, source) {
+					let value = me.quill.root.innerHTML;
+					me.setState ({value});
+					
+					if (me.props.onChange) {
+						me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
+					}
+				});
+			}
 		}
 	}
 
