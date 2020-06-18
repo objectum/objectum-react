@@ -40,9 +40,15 @@ function FileInput (props) {
 			}, 1);
 		}
 	} else if (props.value) {
-		file = (
-			<div><a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
-		);
+		if (recordId) {
+			file = (
+				<div><a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a></div>
+			);
+		} else {
+			file = (
+				<div>{props.value}</div>
+			);
+		}
 	}
 	return (
 		<div className={`border p-1 ${props.error ? "border-danger" : ""}`}>
