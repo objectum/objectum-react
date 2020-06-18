@@ -46,6 +46,9 @@ class DateField extends Component {
 			className: `form-control ${addCls}`,
 			dateFormat: "dd.MM.yyyy",
 			selected: me.state.value,
+			showYearDropdown: true,
+			dropdownMode: "select",
+			showMonthDropdown: true,
 			onChange: value => {
 				me.setState ({value});
 				
