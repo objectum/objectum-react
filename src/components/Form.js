@@ -134,6 +134,12 @@ class Form extends Component {
 					state [code] = me.props.record [code];
 				}
 			}
+			// поля исчезли
+			for (let code in me.props.record) {
+				if (!fields [code] && prevProps.record [code] !== me.props.record [code]) {
+					state [code] = me.props.record [code];
+				}
+			}
 			if (!_isEmpty (state)) {
 				me.setState (state);
 			}
