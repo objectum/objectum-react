@@ -205,7 +205,7 @@ class Demo extends Component {
 					version={packageConfig.version}
 					registration
 					siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
-					label="Label"
+					//label="Label"
 					onDisconnect={() => console.log ("disc")}
 /*
 					onRenderAuthInfo={div => {
@@ -222,11 +222,9 @@ class Demo extends Component {
 							<div style={{width: "50em"}}>
 								<Office
 									{...props} store={store} name="objectum-react" cardClassName="p-4 shadow"
-									authorized={me.state.username && me.state.username != "guest"}
+									/*authorized={me.state.username && me.state.username != "guest"}*/
 									siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
-								>
-									authorized menu
-								</Office>
+								/>
 							</div>
 						</div>
 					)} />

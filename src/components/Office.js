@@ -178,6 +178,7 @@ class Office extends Component {
 			if (!me.unmounted) {
 				me.setState ({authorized: true});
 			}
+			return i18n ("Logged in")
 		} catch (err) {
 			if (!me.unmounted) {
 				if (err.message == "401 Unauthenticated") {

@@ -142,5 +142,6 @@
 	"password changed": "пароль изменён",
 	"invalid recaptcha response": "неверный ответ recaptcha",
 	"your name": "ваше имя",
-	"change name": "изменить имя"
+	"change name": "изменить имя",
+	"logged in": "вход выполнен"
 }
