@@ -80,6 +80,8 @@ class FileField extends Component {
 		};
 		if (me.props.image && me.props.image.aspect) {
 			me.state.image = {
+				width: me.props.image.width || 50,
+				height: me.props.image.height || 50,
 				aspect: me.props.image.aspect
 			};
 			me.state.aspect = me.props.image.aspect;
@@ -91,6 +93,8 @@ class FileField extends Component {
 			
 			if (propertyOpts.image) {
 				me.state.image = {
+					width: propertyOpts.image.width || 50,
+					height: propertyOpts.image.height || 50,
 					aspect: propertyOpts.image.aspect
 				};
 				me.state.aspect = propertyOpts.image.aspect;
@@ -142,22 +146,21 @@ class FileField extends Component {
 	}
 	
 	onImageLoaded (image) {
-		this.imageRef = image;
-		this.setState ({image: {width: image.width, height: image.height, aspect: this.state.aspect}});
-		return false;
-	}
-	
-	async makeClientCrop (crop) {
-		let me = this;
+/*
+		let width = image.width;
+		let height = image.width / this.state.aspect;
 		
-		if (me.imageRef && crop.width && crop.height) {
-			const file = await me.getCroppedImg (
-				me.imageRef,
-				crop,
-				me.state.value
-			);
-			me.setState ({file});
+		if (height > image.height) {
+			height = image.height;
+			width = height * this.state.aspect;
 		}
+*/
+		this.imageRef = image;
+/*
+		this.setState ({image: {width, height, aspect: this.state.aspect}});
+
+		return false;
+*/
 	}
 	
 	getCroppedImg (image, crop, fileName) {
@@ -169,7 +172,7 @@ class FileField extends Component {
 		canvas.height = crop.height;
 		
 		const ctx = canvas.getContext ("2d");
-		
+
 		ctx.drawImage (
 			image,
 			crop.x * scaleX,
@@ -193,6 +196,19 @@ class FileField extends Component {
 				resolve (new File ([blob], fileName));
 			}, "image/jpeg");
 		});
+	}
+	
+	async makeClientCrop (crop) {
+		let me = this;
+		
+		if (me.imageRef && crop.width && crop.height) {
+			const file = await me.getCroppedImg (
+				me.imageRef,
+				crop,
+				me.state.value
+			);
+			me.setState ({file});
+		}
 	}
 	
 	onCropComplete (crop) {
