@@ -90,7 +90,10 @@ class FileField extends Component {
 			let propertyOpts = property.getOpts ();
 			
 			if (propertyOpts.image) {
-				me.state.aspect = me.state.image.aspect = propertyOpts.image.aspect;
+				me.state.image = {
+					aspect: propertyOpts.image.aspect
+				};
+				me.state.aspect = propertyOpts.image.aspect;
 			}
 		}
 		me.id = newId ();
