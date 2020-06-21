@@ -67,7 +67,7 @@ class Property extends Component {
 								</div>
 								<div className="form-row">
 									<div className="form-group col-md-6">
-										<StringField property="code" label="Code" disabled={!!me.state.rid} notNull={true} />
+										<StringField property="code" label="Code" disabled={!!me.state.rid} notNull={true} regexp={/[a-z0-9_]/g} />
 									</div>
 									<div className="form-group col-md-6">
 										<NumberField property="order" label="Order" />

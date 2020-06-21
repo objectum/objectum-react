@@ -25,6 +25,9 @@ class StringField extends Component {
 		let me = this;
 		let value = val.target.value;
 		
+		if (me.props.regexp) {
+			value = ((value || "").match (me.props.regexp) || []).join ("");
+		}
 		me.setState ({value});
 		
 		if (me.props.onChange) {
