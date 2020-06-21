@@ -261,11 +261,11 @@ class ObjectumApp extends Component {
 		let me = this;
 		
 		return (
-			<Navbar
+			<Navbar iconsTop={me.props.iconsTop}
 				items={[
-					<BackButton key="back" popLocation={me.popLocation} locations={me.state.locations} />,
+					<BackButton key="back" popLocation={me.popLocation} locations={me.state.locations} iconsTop={me.props.iconsTop} />,
 					...me.menuItems,
-					<LogoutButton key="logout" app={me} />
+					<LogoutButton key="logout" app={me} iconsTop={me.props.iconsTop} />
 				]}
 			/>
 		);

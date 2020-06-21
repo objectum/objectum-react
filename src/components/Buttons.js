@@ -46,7 +46,7 @@ function LogoutButtonSB ({app, size}) {
 	);
 };
 
-function LogoutButton ({app}) {
+function LogoutButton ({app, iconsTop}) {
 	let history = useHistory ();
 	
 	function handleClick () {
@@ -57,8 +57,16 @@ function LogoutButton ({app}) {
 		});
 		history.push ("/");
 	}
+	let content = <span><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</span>;
+	
+	if (iconsTop) {
+		content = <div className="">
+			<div className="text-center"><i className="fas fa-sign-out-alt fa-2x" /></div>
+			<div className="text-center">{i18n ("Logout")}</div>
+		</div>;
+	}
 	return (
-		<button className="btn btn-link nav-item nav-link font-weight-bold text-left" onClick={handleClick}><i className="fas fa-sign-out-alt mr-2" />{i18n ("Logout")}</button>
+		<button className="btn btn-link nav-item nav-link font-weight-bold text-left" onClick={handleClick}>{content}</button>
 	);
 };
 
@@ -80,7 +88,7 @@ function BackButtonSB ({popLocation, locations}) {
 	);
 };
 
-function BackButton ({popLocation, locations, children}) {
+function BackButton ({popLocation, locations, children, iconsTop}) {
 	let history = useHistory ();
 	
 	function handleClick () {
@@ -91,9 +99,17 @@ function BackButton ({popLocation, locations, children}) {
 //		history.push (decodeURI (pathname + hash));
 		history.push (pathname + hash);
 	}
+	let content = <span>{children || <span><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</span>}</span>;
+	
+	if (iconsTop) {
+		content = <div className="">
+			<div className="text-center"><i className="fas fa-arrow-left fa-2x" /></div>
+			<div className="text-center">{i18n ("Back")}</div>
+		</div>;
+	}
 	return (
 		<button className="btn btn-link nav-item nav-link font-weight-bold text-left" disabled={!locations || locations.length < 2} onClick={handleClick}>
-			{children || <span><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</span>}
+			{content}
 		</button>
 	);
 };

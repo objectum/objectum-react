@@ -66,56 +66,23 @@ class Test extends Component {
 		}
 	}
 	
-	report = async () => {
-		let recs = [
-			{
-				s1: "123",
-				s2: "aa"
-			},
-			{
-				s1: "12",
-				s2: "aa"
-			},
-			{
-				s1: "13",
-				s2: "a"
-			}
-		];
-		let rows = [
-			[
-				{text: "Список", style: "border_center", colSpan: 3}
-			],
-			[
-				{text: "Наименование", style: "border"},
-				{text: "Дата", style: "border"},
-				{text: "Стоимость", style: "border"}
-			],
-			...recs.map (rec => {
-				return [
-					{text: rec.s1, style: "border"},
-					{text: rec.s2, style: "border"}
-				];
-			})
-		];
-		await createReport ({
-			store,
-			rows,
-			columns: [40, 10, 10],
-			font: {
-				name: "Arial",
-				size: 10
-			}
-		});
-	}
-	
 	render () {
 		let me = this;
 		
 		return (
 			<div className="container">
-				<Form store={store} rsc="record" mid="item" rid={1027}>
-					<Field property="description" wysiwyg />
-				</Form>
+				<Navbar expand iconsTop items={[
+					{
+						label: "Рецепты",
+						icon: "fas fa-utensils",
+						path: "/recipes"
+					},
+					{
+						label: "Вход",
+						icon: "fas fa-sign-in-alt",
+						path: "/office"
+					}
+				]} />
 				<Form ref="my-form" record={me.state} hideButtons disabled>
 					<DateField property="date" label="Date" notNull={0} showTime />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
