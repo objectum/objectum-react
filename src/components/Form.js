@@ -24,7 +24,7 @@ class Form extends Component {
 		me.onCreate = me.onCreate.bind (me);
 
 		me.state = {
-			_loading: false,
+			_loading: true,
 			_saving: false,
 			_creating: false,
 			_rid: me.props.rid,
@@ -120,7 +120,7 @@ class Form extends Component {
 		me.setState (state);
 	}
 	
-	componentDidUpdate (prevProps) {
+	componentDidUpdate (prevProps, prevState) {
 		let me = this;
 		
 		if (prevProps.record && me.props.record) {
@@ -193,7 +193,7 @@ class Form extends Component {
 			method: "POST",
 			body: formData
 		});
-	};
+	}
 	
 	async onSave () {
 		let me = this;

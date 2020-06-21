@@ -76,16 +76,21 @@ class FileField extends Component {
 		me.state = {
 			rsc: me.props.rsc || "record",
 			code: me.props.property,
-			value: me.props.value,
-			image: me.props.image
+			value: me.props.value
 		};
+		if (me.props.image && me.props.image.aspect) {
+			me.state.image = {
+				aspect: me.props.image.aspect
+			};
+			me.state.aspect = me.props.image.aspect;
+		}
 		if (!me.state.image && me.props.model) {
 			let model = me.props.store.getModel (me.props.model);
 			let property = model.properties [me.props.property];
 			let propertyOpts = property.getOpts ();
 			
 			if (propertyOpts.image) {
-				me.state.image = propertyOpts.image;
+				me.state.aspect = me.state.image.aspect = propertyOpts.image.aspect;
 			}
 		}
 		me.id = newId ();
@@ -135,6 +140,8 @@ class FileField extends Component {
 	
 	onImageLoaded (image) {
 		this.imageRef = image;
+		this.setState ({image: {width: image.width, height: image.height, aspect: this.state.aspect}});
+		return false;
 	}
 	
 	async makeClientCrop (crop) {

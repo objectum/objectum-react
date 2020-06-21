@@ -15,7 +15,7 @@ class Fade extends Component {
 	
 	smoothShow () {
 		let me = this;
-		let opacity = me.state.opacity + 0.02;
+		let opacity = me.state.opacity + 0.04;
 		
 		
 		me.setState ({opacity});
