@@ -85,15 +85,27 @@ class Navbar extends Component {
 		let me = this;
 
 		if (item == "back") {
-			return <BackButton key="back" popLocation={me.props.app && me.props.app.popLocation} locations={me.props.app && me.props.app.state.locations} iconsTop={me.props.iconsTop} />;
+			return (
+				<div key="back" className={me.state.selected == "back" ? "active" : ""} onClick={() => me.setState ({selected: "back"})}>
+					<BackButton popLocation={me.props.app && me.props.app.popLocation} locations={me.props.app && me.props.app.state.locations} iconsTop={me.props.iconsTop} />
+				</div>
+			);
 		}
 		if (item == "backIcon") {
-			return <BackButton key="back" popLocation={me.props.app && me.props.app.popLocation} locations={me.props.app && me.props.app.state.locations} iconsTop={me.props.iconsTop}>
-				<i className="fas fa-arrow-left" />
-			</BackButton>;
+			return (
+				<div key="back" className={me.state.selected == "back" ? "active" : ""} onClick={() => me.setState ({selected: "back"})}>
+					<BackButton key="back" popLocation={me.props.app && me.props.app.popLocation} locations={me.props.app && me.props.app.state.locations} iconsTop={me.props.iconsTop}>
+						<i className="fas fa-arrow-left" />
+					</BackButton>
+				</div>
+			);
 		}
 		if (item == "logout") {
-			return <LogoutButton key="logout" app={me.props.app} iconsTop={me.props.iconsTop} />;
+			return (
+				<div key="logout" className={me.state.selected == "logout" ? "active" : ""} onClick={() => me.setState ({selected: "logout"})}>
+					<LogoutButton app={me.props.app} iconsTop={me.props.iconsTop} />
+				</div>
+			);
 		}
 		if (item && (item.label || item.path)) {
 			if (item.items) {
