@@ -51,6 +51,7 @@ import MenuItems from "./components/MenuItems";
 import Records from "./components/Records";
 import Log from "./components/Log";
 import EditForm from "./components/EditForm";
+import Pagination from "./components/Pagination";
 
 import {i18n, setLocale, getLocale} from "./i18n";
 import {
@@ -133,6 +134,7 @@ export {
 	Records,
 	Log,
 	EditForm,
+	Pagination,
 	i18n,
 	setLocale,
 	getLocale,
@@ -206,6 +208,7 @@ export default {
 	Records,
 	Log,
 	EditForm,
+	Pagination,
 	i18n,
 	setLocale,
 	getLocale,

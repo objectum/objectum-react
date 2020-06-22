@@ -2,7 +2,11 @@ import React, {Component, useState} from "react";
 import {render} from "react-dom";
 import {Link, Route, useHistory} from "react-router-dom";
 import {Store, Record} from "objectum-client";
-import {createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form, StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth} from '../../src'
+import {
+	createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form,
+	StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth,
+	Pagination
+} from '../../src'
 import {pushLocation, timeout, newId} from "../../src";
 import ReactCrop from "react-image-crop";
 
@@ -44,7 +48,8 @@ class Test extends Component {
 		this.state = {
 			text: "1",
 			file: "test.jpg",
-			refresh: false
+			refresh: false,
+			active: 0
 		};
 		this._refs = {"test": React.createRef ()};
 		this.changed = {};
@@ -71,6 +76,7 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<Pagination items={["1", "2", "3", "4"]} active={me.state.active} onChange={(active) => me.setState ({active})} />
 				<Navbar expand iconsTop items={[
 					{
 						label: "Рецепты",
