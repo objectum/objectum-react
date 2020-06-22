@@ -87,8 +87,14 @@ class StringField extends Component {
 		let me = this;
 		let disabled = me.props.disabled;
 		let addCls = me.props.error ? " is-invalid" : "";
-		let cmp = <input type={me.props.secure ? "password" : "text"} className={"form-control" + addCls} id={me.id} value={me.state.value || ""} onChange={me.onChange} disabled={disabled} />;
-		
+		let cmp = <input
+			type={me.props.secure ? "password" : "text"}
+			className={"form-control" + addCls}
+			id={me.id} value={me.state.value || ""}
+			onChange={me.onChange}
+			disabled={disabled}
+			placeholder={me.props.placeholder}
+		/>;
 		if (me.props.textarea) {
 			cmp = (
 				<textarea
@@ -99,6 +105,7 @@ class StringField extends Component {
 					onChange={me.onChange}
 					disabled={disabled}
 					rows={me.props.rows || 5}
+					placeholder={me.props.placeholder}
 				/>
 			);
 		}
