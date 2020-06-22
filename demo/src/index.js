@@ -103,8 +103,14 @@ class Test extends Component {
 							}
 							return "test";
 						}} />
-						<Action label="test value" onClick={() => {
-							me.setState ({refresh: !me.state.refresh, text: "2"});
+						<Action label="test exception" onClick={async () => {
+							await store.startTransaction ("new comment");
+							await store.createRecord ({
+								date: new Date (),
+								user: store.userId,
+								text: "123"
+							});
+							await store.commitTransaction ("new comment");
 						}} />
 					</div>
 				</Form>

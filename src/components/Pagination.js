@@ -27,7 +27,7 @@ class Pagination extends Component {
 			<ul className={me.props.className || "pagination"}>
 				{this.props.items.map ((item, i) => {
 					return (
-						<li className={`page-item ${(i === me.props.active || item === me.props.active) ? "active" : ""}`}>
+						<li key={i} className={`page-item ${(i === me.props.active || item === me.props.active) ? "active" : ""}`}>
 							<button className="page-link" onClick={() => me.onClick (i)}>{item}</button>
 						</li>
 					);
