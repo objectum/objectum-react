@@ -34,7 +34,7 @@ function usePageViews (pushLocation, locations) {
 			locations [locations.length - 1].hash = hash;
 			return;
 		}
-		if (pathname != "/") {
+		//if (pathname != "/") {
 			let needPop = false;
 			
 			if (locations.length) {
@@ -45,7 +45,7 @@ function usePageViews (pushLocation, locations) {
 				}
 			}
 			pushLocation (pathname, hash, needPop);
-		}
+		//}
 	}, [location]);
 };
 
@@ -62,7 +62,7 @@ class ObjectumApp extends Component {
 		
 		me.state = {
 			sidebarDocked: true,
-			locations: [],
+			locations: [{pathname: window.location.pathname, hash: window.location.hash}],
 			name: me.props.name || "Objectum",
 			version: me.props.version || "0.0.1"
 		};

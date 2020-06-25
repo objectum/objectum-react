@@ -158,6 +158,7 @@ textarea {
     position: absolute;
     left: -1px;
     top: 1px;
+    text-align: left;
     min-width: 20em;
     max-width: 40em;
     min-height: 5em;

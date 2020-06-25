@@ -84,6 +84,7 @@ class Office extends Component {
 				state.activationResult = i18n (err.message);
 			}
 			me.setState (state);
+			window.location.hash = "";
 		}
 		if (me.state.recoverId) {
 			let state = {recoverId: ""};
@@ -108,6 +109,7 @@ class Office extends Component {
 				state.recoverResult = i18n (err.message);
 			}
 			me.setState (state);
+			window.location.hash = "";
 		}
 		if (me.loginInput) {
 			me.loginInput.focus ();
