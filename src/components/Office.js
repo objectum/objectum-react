@@ -84,7 +84,11 @@ class Office extends Component {
 				state.activationResult = i18n (err.message);
 			}
 			me.setState (state);
-			window.location.hash = "";
+
+			if (window.history) {
+				let url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+				window.history.pushState ({path: url}, "", url);
+			}
 		}
 		if (me.state.recoverId) {
 			let state = {recoverId: ""};
@@ -109,7 +113,11 @@ class Office extends Component {
 				state.recoverResult = i18n (err.message);
 			}
 			me.setState (state);
-			window.location.hash = "";
+
+			if (window.history) {
+				let url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+				window.history.pushState ({path: url}, "", url);
+			}
 		}
 		if (me.loginInput) {
 			me.loginInput.focus ();
