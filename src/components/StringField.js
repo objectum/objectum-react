@@ -45,6 +45,19 @@ class StringField extends Component {
 			}
 			if (document.getElementById (me.id)) {
 				me.quill = new Quill (`#${me.id}`, {
+					modules: me.props.modules || {
+						toolbar: [
+							["bold", "italic", "underline", "strike"],
+							[{"list": "ordered"}, {"list": "bullet"}, {"script": "sub"}, {"script": "super"}],
+							[{"indent": "-1"}, {"indent": "+1"}],
+							[{"align": []}],
+							[{"header": [1, 2, 3, 4, 5, 6, false]}, {"font": []}],
+							[{"color": []}, {"background": []}],
+							["link", "image", "code"]
+						]
+					},
+					readOnly: me.props.disabled || me.props.readOnly,
+					placeholder: me.props.placeholder,
 					theme: "snow"
 				});
 				if (me.state.value) {
