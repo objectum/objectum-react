@@ -41,7 +41,7 @@ class Menus extends Component {
 		
 		try {
 			await me.props.store.startTransaction ("Removing menu: " + id);
-			await me.props.store.removeRecord (me.state.id);
+			await me.props.store.removeRecord (id);
 			await me.props.store.commitTransaction ();
 		} catch (err) {
 			await me.props.store.rollbackTransaction ();
