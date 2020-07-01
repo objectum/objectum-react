@@ -12,7 +12,12 @@ class Office extends Component {
 		this.state = {
 			loading: true,
 			recover: false,
-			register: false
+			register: false,
+			email: "",
+			name: "",
+			password: "",
+			password2: "",
+			inputError: {}
 		};
 		this.onChange = this.onChange.bind (this);
 		this.onRegister = this.onRegister.bind (this);
@@ -158,7 +163,16 @@ class Office extends Component {
 	async onRegister () {
 		let me = this;
 		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
+		let fields = ["email", "name", "password", "password2", "recaptcha"];
 		
+		for (let i = 0; i < fields.length; i ++) {
+			if (!me.state [fields [i]]) {
+				return me.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
+			}
+		}
+		if (me.state.password != me.state.password2) {
+			return;
+		}
 /*
 		if (!activationHost.endsWith ("/")) {
 			activationHost += "/";
@@ -180,21 +194,28 @@ class Office extends Component {
 	async onLogin () {
 		let me = this;
 		
+		let fields = ["email", "password"];
+		
+		for (let i = 0; i < fields.length; i ++) {
+			if (!me.state [fields [i]]) {
+				return me.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
+			}
+		}
 		try {
 			await me.props.store.auth ({
 				username: me.state.email,
 				password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase ()
 			});
 			if (!me.unmounted) {
-				me.setState ({authorized: true});
+				me.setState ({authorized: true, inputError: {}});
 			}
 			return i18n ("Logged in")
 		} catch (err) {
 			if (!me.unmounted) {
 				if (err.message == "401 Unauthenticated") {
-					me.setState ({error: i18n ("Incorrect e-mail (login) or password")});
+					me.setState ({error: i18n ("Incorrect e-mail (login) or password"), inputError: {}});
 				} else {
-					me.setState ({error: err.message});
+					me.setState ({error: err.message, inputError: {}});
 				}
 			}
 		}
@@ -212,11 +233,22 @@ class Office extends Component {
 		let me = this;
 		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
 		
+		let fields = ["email", "password", "password2"];
+		
+		for (let i = 0; i < fields.length; i ++) {
+			if (!me.state [fields [i]]) {
+				return me.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
+			}
+		}
+		if (me.state.password != me.state.password2) {
+			return;
+		}
 /*
 		if (!activationHost.endsWith ("/")) {
 			activationHost += "/";
 		}
 */
+		me.setState ({inputError: {}});
 		return await me.props.store.remote ({
 			model: "admin",
 			method: "recoverRequest",
@@ -228,6 +260,12 @@ class Office extends Component {
 			text: i18n ("To recover your password, follow the link"),
 			recaptchaRes: me.state.recaptchaRes
 		});
+	}
+	
+	switch ({register, recover}) {
+		let me = this;
+		
+		me.setState ({register, recover, inputError: {}, email: "", name: "", password: "", password2: ""});
 	}
 	
 	render () {
@@ -276,39 +314,43 @@ class Office extends Component {
 					<h3 className="text-center">{i18n ("Password recovery")}</h3>
 					<div className="form-group mt-4">
 						<label htmlFor="email">{i18n ("E-mail")}</label>
-						<input type="email" className="form-control" id="email" onChange={me.onChange} />
+						<input type="email" className="form-control" id="email" value={me.state.email} onChange={me.onChange} />
+						{me.state.inputError ["email"] && <div className="small text-danger">{me.state.inputError ["email"]}</div>}
 					</div>
 					<div className="form-group">
 						<label htmlFor="name">{i18n ("Change name")}</label>
-						<input type="name" className="form-control" id="name" onChange={me.onChange} />
+						<input type="name" className="form-control" id="name" value={me.state.name} onChange={me.onChange} />
 					</div>
 					<div className="form-group">
 						<label htmlFor="password">{i18n ("New password")}</label>
-						<input type="password" className="form-control" id="password" onChange={me.onChange} />
+						<input type="password" className="form-control" id="password" value={me.state.password} onChange={me.onChange} />
+						{me.state.inputError ["password"] && <div className="small text-danger">{me.state.inputError ["password"]}</div>}
 					</div>
 					<div className="form-group">
 						<label htmlFor="password2">{i18n ("Confirm password")}</label>
-						<input type="password" className="form-control" id="password2" onChange={me.onChange} />
+						<input type="password" className="form-control" id="password2" value={me.state.password2} onChange={me.onChange} />
+						{me.state.inputError ["password2"] && <div className="small text-danger">{me.state.inputError ["password2"]}</div>}
 					</div>
-					{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="alert alert-danger" role="alert">
+					{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="small text-danger mb-2">
 						{i18n ("Passwords do not match")}
 					</div>}
 					<div id="g-recaptcha" />
+					{me.state.inputError ["recaptcha"] && <div className="small text-danger">{me.state.inputError ["recaptcha"]}</div>}
 					<div className="text-center">
 						<div className="mt-3">
 							<Action
 								btnClassName="btn btn-primary auth-button px-0"
-								disabled={!me.state.email || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
+								//disabled={!me.state.email || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
 								onClick={me.onRecover}
 							><i className="fas fa-envelope mr-2"/>{i18n ("Restore password")}</Action>
 						</div>
 						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({recover: false})}>
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: false, recover: false})}>
 								<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
 							</button>
 						</div>
 						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({register: true, recover: false})}>
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: true, recover: false})}>
 								<i className="fas fa-key mr-2"/>{i18n ("Registration")}
 							</button>
 						</div>
@@ -321,39 +363,44 @@ class Office extends Component {
 					<h3 className="text-center">{i18n ("Registration")}</h3>
 					<div className="form-group mt-4">
 						<label htmlFor="email">{i18n ("E-mail")}</label>
-						<input type="email" className="form-control" id="email" onChange={me.onChange} />
+						<input type="email" className="form-control" id="email" value={me.state.email} onChange={me.onChange} />
+						{me.state.inputError ["email"] && <div className="small text-danger">{me.state.inputError ["email"]}</div>}
 					</div>
 					<div className="form-group">
 						<label htmlFor="name">{i18n ("Your name")}</label>
-						<input type="name" className="form-control" id="name" onChange={me.onChange} />
+						<input type="name" className="form-control" id="name" value={me.state.name} onChange={me.onChange} />
+						{me.state.inputError ["name"] && <div className="small text-danger">{me.state.inputError ["name"]}</div>}
 					</div>
 					<div className="form-group">
 						<label htmlFor="password">{i18n ("Password")}</label>
-						<input type="password" className="form-control" id="password" onChange={me.onChange} />
+						<input type="password" className="form-control" id="password" value={me.state.password} onChange={me.onChange} />
+						{me.state.inputError ["password"] && <div className="small text-danger">{me.state.inputError ["password"]}</div>}
 					</div>
 					<div className="form-group">
 						<label htmlFor="password2">{i18n ("Confirm password")}</label>
-						<input type="password" className="form-control" id="password2" onChange={me.onChange} />
+						<input type="password" className="form-control" id="password2" value={me.state.password2} onChange={me.onChange} />
+						{me.state.inputError ["password2"] && <div className="small text-danger">{me.state.inputError ["password2"]}</div>}
 					</div>
-					{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="alert alert-danger" role="alert">
+					{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="small text-danger mb-2">
 						{i18n ("Passwords do not match")}
 					</div>}
 					<div id="g-recaptcha" />
+					{me.state.inputError ["recaptcha"] && <div className="small text-danger">{me.state.inputError ["recaptcha"]}</div>}
 					<div className="text-center">
 						<div className="mt-3">
 							<Action
 								btnClassName="btn btn-primary auth-button"
 								onClick={me.onRegister}
-								disabled={!me.state.email || !me.state.name || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
+								//disabled={!me.state.email || !me.state.name || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
 							><i className="fas fa-key mr-2"/>{i18n ("Register")}</Action>
 						</div>
 						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({register: false})}>
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: false, recover: false})}>
 								<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
 							</button>
 						</div>
 						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({recover: true, register: false})}>
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({recover: true, register: false})}>
 								<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
 							</button>
 						</div>
@@ -366,27 +413,29 @@ class Office extends Component {
 					<h3 className="text-center">{i18n ("Sign In")}</h3>
 					<div className="form-group mt-4">
 						<label htmlFor="email">{i18n ("E-mail")}</label>
-						<input type="email" className="form-control" id="email" onChange={me.onChange} ref={input => me.loginInput = input} />
+						<input type="email" className="form-control" id="email" value={me.state.email} onChange={me.onChange} ref={input => me.loginInput = input} />
+						{me.state.inputError ["email"] && <div className="small text-danger">{me.state.inputError ["email"]}</div>}
 					</div>
 					<div className="form-group">
 						<label htmlFor="loginPassword">{i18n ("Password")}</label>
-						<input type="password" className="form-control" id="password" onChange={me.onChange} onKeyDown={me.onKeyDown}/>
+						<input type="password" className="form-control" id="password" value={me.state.password} onChange={me.onChange} onKeyDown={me.onKeyDown}/>
+						{me.state.inputError ["password"] && <div className="small text-danger">{me.state.inputError ["password"]}</div>}
 					</div>
 					<div className="text-center">
 						<div className="mt-4">
 							<Action
 								btnClassName="btn btn-primary auth-button"
-								disabled={!me.state.email || !me.state.password}
+								//disabled={!me.state.email || !me.state.password}
 								onClick={me.onLogin}
 							><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</Action>
 						</div>
 						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({register: true})}>
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: true, recover: false})}>
 								<i className="fas fa-key mr-2"/>{i18n ("Registration")}
 							</button>
 						</div>
 						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.setState ({recover: true})}>
+							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: false, recover: true})}>
 								<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
 							</button>
 						</div>

@@ -148,7 +148,7 @@ class Columns extends Component {
 		
 		return (
 			<Grid id="Columns" store={me.props.store} query="objectum.column" system={true} refresh={me.state.refresh} params={{queryId: me.query}}>
-				<div class="d-flex">
+				<div className="d-flex">
 					<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
 					<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
 					<RemoveAction onRemove={me.onRemove} />
