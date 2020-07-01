@@ -43,6 +43,18 @@ class Cell extends Component {
 			} else
 			if (col.type == 5) {
 				// File
+				let opts = me.props.store.getProperty (col.property).getOpts ();
+				
+				if (me.props.showImages && opts.image && opts.image.resize) {
+					return (
+						<img
+							src={`/files/${me.props.rec.id}-${me.props.col.property}-${value}`}
+							width={opts.image.resize.width}
+							height={opts.image.resize.height}
+							alt={value}
+						/>
+					);
+				}
 				return (
 					<span>
 						<a target="_blank" rel="noopener noreferrer"

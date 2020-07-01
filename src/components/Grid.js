@@ -537,7 +537,7 @@ class Grid extends Component {
 							return;
 						}
 						return (
-							<td key={i + "_" + j} className="align-top"><Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} /></td>
+							<td key={i + "_" + j} className="align-top"><Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} showImages={me.props.showImages} /></td>
 						);
 					})}
 				</tr>
