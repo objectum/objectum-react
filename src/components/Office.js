@@ -51,7 +51,6 @@ class Office extends Component {
 	async componentDidMount () {
 		let me = this;
 
-/*
 		window.onRecaptchaCallback = () => {
 			try {
 				window.grecaptcha.render ("g-recaptcha", {
@@ -64,9 +63,8 @@ class Office extends Component {
 			} catch (err) {
 			}
 		};
-*/
-//		await loadJS ("https://www.google.com/recaptcha/api.js?onload=onRecaptchaCallback&render=explicit");
-		await loadJS ("https://www.google.com/recaptcha/api.js?render=explicit");
+		await loadJS ("https://www.google.com/recaptcha/api.js?onload=onRecaptchaCallback&render=explicit");
+		//await loadJS ("https://www.google.com/recaptcha/api.js?render=explicit");
 		me.setState ({loading: false});
 		
 		if (me.state.activationId) {
@@ -163,7 +161,7 @@ class Office extends Component {
 	async onRegister () {
 		let me = this;
 		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
-		let fields = ["email", "name", "password", "password2", "recaptcha"];
+		let fields = ["email", "name", "password", "password2", "recaptchaRes"];
 		
 		for (let i = 0; i < fields.length; i ++) {
 			if (!me.state [fields [i]]) {
@@ -335,7 +333,7 @@ class Office extends Component {
 						{i18n ("Passwords do not match")}
 					</div>}
 					<div id="g-recaptcha" />
-					{me.state.inputError ["recaptcha"] && <div className="small text-danger">{me.state.inputError ["recaptcha"]}</div>}
+					{me.state.inputError ["recaptchaRes"] && <div className="small text-danger">{me.state.inputError ["recaptchaRes"]}</div>}
 					<div className="text-center">
 						<div className="mt-3">
 							<Action
@@ -385,7 +383,7 @@ class Office extends Component {
 						{i18n ("Passwords do not match")}
 					</div>}
 					<div id="g-recaptcha" />
-					{me.state.inputError ["recaptcha"] && <div className="small text-danger">{me.state.inputError ["recaptcha"]}</div>}
+					{me.state.inputError ["recaptchaRes"] && <div className="small text-danger">{me.state.inputError ["recaptchaRes"]}</div>}
 					<div className="text-center">
 						<div className="mt-3">
 							<Action
