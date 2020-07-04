@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Tooltip, i18n, newId} from "..";
+import {Tooltip, Tree, i18n, newId} from "..";
 import _isEmpty from "lodash.isempty";
 import _filter from "lodash.filter";
 import _keys from "lodash.keys";
@@ -36,6 +36,7 @@ class DictField extends Component {
 		me._refs = {
 			"optionDialog": React.createRef (),
 			"groupDialog": React.createRef (),
+			"treeDialog": React.createRef (),
 			"button": React.createRef ()
 		};
 		me.id = newId ();
@@ -69,13 +70,18 @@ class DictField extends Component {
 		for (let code in m.properties) {
 			let property = m.properties [code];
 			
-			if (property.get ("type") >= 1000 && ((property.code == "group" && !me.props.hasOwnProperty ("groupProperty")) || property.code == me.props.groupProperty)) {
-				let pm = me.props.store.getModel (property.get ("type"));
-				
-				if (pm.isDictionary ()) {
-					me.groupProperty = property;
-					state.groupRecs = await me.props.store.getDict (property.get ("type"));
-					break;
+			if (property.get ("type") >= 1000) {
+				if ((property.code == "group" && !me.props.hasOwnProperty ("groupProperty")) || property.code == me.props.groupProperty) {
+					let pm = me.props.store.getModel (property.get ("type"));
+					
+					if (pm.isDictionary ()) {
+						me.groupProperty = property;
+						state.groupRecs = await me.props.store.getDict (property.get ("type"));
+						break;
+					}
+				}
+				if (property.code == "parent") {
+					state.treeMode = true;
 				}
 			}
 		}
@@ -113,7 +119,7 @@ class DictField extends Component {
 	
 	onDocumentClick (event) {
 		let me = this;
-		let dialog = me._refs ["optionDialog"] || me._refs ["groupDialog"];
+		let dialog = me._refs ["optionDialog"] || me._refs ["groupDialog"] || me._refs ["treeDialog"];
 		
 		if (dialog) {
 			dialog = dialog.current;
@@ -251,6 +257,18 @@ class DictField extends Component {
 		);
 	}
 	
+	renderTree () {
+		let me = this;
+		
+		return (
+			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
+				<div className="dictfield-tree border p-1 bg-white shadow">
+					<Tree recs={me.state.recs} onChoose={({id}) => me.onClick ({target: {id}})} />
+				</div>
+			</div>
+		);
+	}
+	
 	render () {
 		let me = this;
 		let addCls = me.props.error ? " is-invalid" : "";
@@ -293,7 +311,10 @@ class DictField extends Component {
 					</div>
 					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 
-					{me.state.showDialog ? ((me.state.groupRecs && !me.state.group) ? me.renderGroup () : me.renderParameters ()) : <div />}
+					{me.state.showDialog ? (
+						(me.state.groupRecs && !me.state.group) ? me.renderGroup () :
+							(me.state.treeMode ? me.renderTree () : me.renderParameters ())
+					) : <div />}
 				</div>
 			</div>
 		);

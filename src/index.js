@@ -52,6 +52,7 @@ import Records from "./components/Records";
 import Log from "./components/Log";
 import EditForm from "./components/EditForm";
 import Pagination from "./components/Pagination";
+import Tree from "./components/Tree";
 
 import {i18n, setLocale, getLocale} from "./i18n";
 import {
@@ -135,6 +136,7 @@ export {
 	Log,
 	EditForm,
 	Pagination,
+	Tree,
 	i18n,
 	setLocale,
 	getLocale,
@@ -209,6 +211,7 @@ export default {
 	Log,
 	EditForm,
 	Pagination,
+	Tree,
 	i18n,
 	setLocale,
 	getLocale,
