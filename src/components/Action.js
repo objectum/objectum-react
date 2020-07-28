@@ -143,7 +143,7 @@ class Action extends Component {
 		}
 		text = text || i18n ("Processing") + " ...";
 		
-		if (me.state.processing) {
+		if (me.state.processing && !me.state.confirm) {
 			return (
 				<div className="text-primary p-1 mb-1 mx-1">
 					<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />{text}

@@ -95,6 +95,18 @@ class Test extends Component {
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />
 					<StringField label="Text" property="text" wysiwyg />
 					<div className="d-flex">
+						<Action onClick={
+							async (opts) => {
+								if (!await opts.confirm ("Копировать тех.карту в вашу организацию?")) {
+									return;
+								}
+								for (let i = 0; i < 5; i ++) {
+									await timeout (1000);
+									opts.progress ({label: "progress", value: i + 1, max: 5});
+								}
+								return "test";
+							}
+						} selected={true} icon="fas fa-copy" label="Копировать" />
 						<Action label="test" confirm onClick={async ({progress}) => {
 							for (let i = 0; i < 5; i ++) {
 								await timeout (1000);
