@@ -66,7 +66,7 @@ class Model extends Component {
 								</div>
 								<div className="form-row">
 									<div className="form-group col-md-6">
-										<StringField property="code" label="Code" regexp={/[a-z0-9_]/g} />
+										<StringField property="code" label="Code" regexp={/[a-zA-Z0-9_]/g} />
 									</div>
 									<div className="form-group col-md-6">
 										<StringField property="description" label="Description" textarea={true} />
