@@ -55,7 +55,8 @@ class DateField extends Component {
 				if (me.props.onChange) {
 					me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
 				}
-			}
+			},
+			disabled
 		};
 		if (me.props.showTime) {
 			props = {
