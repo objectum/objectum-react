@@ -119,7 +119,8 @@ class EditForm extends Component {
 				value,
 				store: me.props.store,
 				key: i,
-				error: me.state [`${fieldCode}-error`]
+				error: me.state [`${fieldCode}-error`],
+				disabled: cp.disabled || me.props.disabled
 			};
 			return (React.cloneElement (child, props));
 		});
@@ -249,14 +250,14 @@ class EditForm extends Component {
 		} else {
 			return (
 				<div>
-					<button type="button" className="btn btn-primary mb-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving || me.props.disableActions}>
+					{!me.props.hideButtons && <button type="button" className="btn btn-primary mb-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving || me.props.disableActions}>
 						{me.state.saving ?
 							<span>
 								<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}
 							</span> :
 							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
 						}
-					</button>
+					</button>}
 					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
 					{me.renderChildren (me.props.children)}
 				</div>
