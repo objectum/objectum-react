@@ -24,6 +24,7 @@ import SelectField from "./components/SelectField";
 import DictField from "./components/DictField";
 import StringField from "./components/StringField";
 import JsonField from "./components/JsonField";
+import LabelField from "./components/LabelField";
 import Tab from "./components/Tab";
 import Tabs from "./components/Tabs";
 import Types from "./components/Types";
@@ -101,6 +102,7 @@ export {
 	DictField,
 	StringField,
 	JsonField,
+	LabelField,
 	Tab,
 	Tabs,
 	Types,
@@ -176,6 +178,7 @@ export default {
 	DictField,
 	StringField,
 	JsonField,
+	LabelField,
 	Tab,
 	Tabs,
 	Types,

@@ -69,7 +69,7 @@ class JsonField extends Component {
 						let Cmp = o.component;
 						
 						return (
-							<div key={i} className={`col-${me.props.col} ${i ? "mt-1" : ""}`}>
+							<div key={i} className={`col-${o.col || me.props.col} ${i ? "mt-1" : ""}`}>
 								<Cmp label={o.label} property={o.prop} value={me.state [o.prop]} onChange={me.onChange} disabled={me.props.disabled}/>
 							</div>
 						);
