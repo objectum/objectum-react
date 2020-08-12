@@ -198,9 +198,9 @@ class Action extends Component {
 					isOpen={me.state.showModal}
 					style={
 						{
-							content: me.props.modalStyle || {
+							content: me.props.modalStyle || OBJECTUM_APP.sidebar ? {
 								marginLeft: "21em"
-							}
+							} : {}
 						}
 					}
 				>

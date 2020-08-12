@@ -75,6 +75,12 @@ class ObjectumApp extends Component {
 		me.menuItemRecs = [];
 		
 		setLocale (me.props.locale || "en");
+		
+		window.OBJECTUM_APP = {
+			store: me.store,
+			sidebar: me.props.sidebar,
+			locale: me.props.locale
+		};
 	}
 	
 	async componentDidMount () {

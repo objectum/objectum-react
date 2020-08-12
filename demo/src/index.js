@@ -107,13 +107,7 @@ class Test extends Component {
 								return "test";
 							}
 						} selected={true} icon="fas fa-copy" label="Копировать" />
-						<Action label="test" confirm onClick={async ({progress}) => {
-							for (let i = 0; i < 5; i ++) {
-								await timeout (1000);
-								progress ({label: "progress", value: i + 1, max: 5});
-							}
-							return "test";
-						}} />
+						<Action label="test" modalComponent={Loading} />
 						<Action label="test exception" onClick={async () => {
 							await store.startTransaction ("new comment");
 							await store.createRecord ({
@@ -205,6 +199,7 @@ class Demo extends Component {
 */
 					/*onCustomRender={me.onCustomRender}*/
 					onConnect={me.onConnect}
+					sidebar
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 					<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />
