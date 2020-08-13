@@ -143,5 +143,8 @@
 	"invalid recaptcha response": "неверный ответ recaptcha",
 	"your name": "ваше имя",
 	"change name": "изменить имя",
-	"logged in": "вход выполнен"
+	"logged in": "вход выполнен",
+	"sec.": "сек.",
+	"duration": "длительность",
+	"action aborted": "действие прервано"
 }

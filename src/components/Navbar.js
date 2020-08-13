@@ -54,7 +54,7 @@ class Navbar extends Component {
 				<button className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"}`} onClick={() => me.setState ({[key]: !me.state [key]})}>
 					{link}
 				</button>
-				<div className={`dropdown-menu ml-${level} ${me.state [key] ? "d-block" : ""}`}>
+				<div className={`dropdown-menu ml-${level} pr-2 ${me.state [key] ? "d-block" : ""}`}>
 					{_map (item.items, (item, i) => {
 						let key2 = key + "-" + i;
 						

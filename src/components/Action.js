@@ -22,6 +22,7 @@ class Action extends Component {
 		};
 		me.onClick = me.onClick.bind (me);
 		me.onClose = me.onClose.bind (me);
+		me.onCancel = me.onCancel.bind (me);
 	}
 	
 	componentDidMount () {
@@ -42,13 +43,16 @@ class Action extends Component {
 		let me = this;
 		let execute = () => {
 			let handler = me.props.onClick || me.props.onClickSelected;
-			let state = {processing: false};
-			
+			let state = {processing: false, abort: false};
+
 			if (me.props.modalComponent) {
 				me.setState ({showModal: true});
 			} else
 			if (handler) {
-				me.setState ({processing: true, label: "", value: "", max: ""});
+				me.setState ({processing: true, label: "", value: "", max: "", start: new Date (), current: new Date ()});
+				me.intervalId = setInterval (() => {
+					me.setState ({current: new Date ()});
+				}, 200);
 				
 				try {
 					let promise = handler ({
@@ -69,6 +73,11 @@ class Action extends Component {
 							}
 							if (!me.unmounted) {
 								me.setState (state);
+								clearInterval (me.intervalId);
+
+								if (me.props.store) {
+									me.props.store.abort = false;
+								}
 							}
 						}).catch (err => {
 							console.error (err);
@@ -76,6 +85,11 @@ class Action extends Component {
 
 							if (!me.unmounted) {
 								me.setState (state);
+								clearInterval (me.intervalId);
+
+								if (me.props.store) {
+									me.props.store.abort = false;
+								}
 							}
 						});
 					} else {
@@ -84,9 +98,19 @@ class Action extends Component {
 						}
 						if (!me.unmounted) {
 							me.setState (state);
+							clearInterval (me.intervalId);
+
+							if (me.props.store) {
+								me.props.store.abort = false;
+							}
 						}
 					}
 				} catch (err) {
+					clearInterval (me.intervalId);
+
+					if (me.props.store) {
+						me.props.store.abort = false;
+					}
 					console.error (err);
 					state.error = err.message;
 					me.setState (state);
@@ -125,6 +149,9 @@ class Action extends Component {
 		} else {
 			disabled = me.props.disableActions
 		}
+		if (me.state.processing) {
+			disabled = true;
+		}
 		return disabled;
 	}
 	
@@ -132,17 +159,23 @@ class Action extends Component {
 		this.setState ({error: "", result: ""});
 	}
 	
+	onCancel () {
+		this.setState ({abort: true});
+		this.props.store.abortAction ();
+	}
+	
 	render () {
 		let me = this;
-		let text;
+		let progressText;
 		
 		if (me.state.processing) {
-			text = me.state.label ? (me.state.label + ": ") : "";
-			text += me.state.value ? me.state.value : "";
-			text += me.state.max ? (" / " + me.state.max) : "";
+			progressText = me.state.label ? (me.state.label + ": ") : "";
+			progressText += me.state.value ? me.state.value : "";
+			progressText += me.state.max ? (" / " + me.state.max) : "";
 		}
-		text = text || i18n ("Processing") + " ...";
+		progressText = progressText || i18n ("Processing") + " ...";
 		
+/*
 		if (me.state.processing && !me.state.confirm) {
 			return (
 				<div className="text-primary p-1 mb-1 mx-1">
@@ -150,6 +183,7 @@ class Action extends Component {
 				</div>
 			);
 		}
+*/
 		let ModalComponent = me.props.modalComponent;
 		
 		return (
@@ -183,7 +217,12 @@ class Action extends Component {
 */}
 				{me.state.result && <Fade className="popup">
 					<div className="popup-content bg-white shadow text-success p-1">
-						<div className="mb-1">{i18n (me.state.result)}</div>
+						<div className="border p-1">
+							{i18n (me.state.result)}
+						</div>
+						<div className="p-1 my-1 text-info">
+							{i18n ("Duration")}: {((me.state.current.getTime () - me.state.start.getTime ()) / 1000).toFixed (1)} {i18n ("sec.")}
+						</div>
 						<button type="button" className="btn btn-outline-primary btn-sm" onClick={me.onClose}>{i18n ("Close")}</button>
 					</div>
 				</Fade>}
@@ -192,6 +231,19 @@ class Action extends Component {
 						<div className="mb-1">{me.state.confirm}</div>
 						<button type="button" className="btn btn-danger" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
 						<button type="button" className="btn btn-success ml-1" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
+					</div>
+				</Fade>}
+				{me.state.processing && !me.state.confirm && <Fade className="popup">
+					<div className="popup-content bg-white shadow text-primary p-1">
+						<div className="border p-1">
+							<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true"/>{progressText}
+						</div>
+						<div className="p-1 mt-1 text-info">
+							{((me.state.current.getTime () - me.state.start.getTime ()) / 1000).toFixed (1)} {i18n ("sec.")}
+						</div>
+						{me.props.store && <button type="button" className="btn btn-outline-danger btn-sm mt-1" onClick={me.onCancel} disabled={me.state.abort}>
+							{i18n ("Cancel")}
+						</button>}
 					</div>
 				</Fade>}
 				{ModalComponent && <Modal

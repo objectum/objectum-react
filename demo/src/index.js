@@ -96,17 +96,23 @@ class Test extends Component {
 					<StringField label="Text" property="text" wysiwyg />
 					<div className="d-flex">
 						<Action onClick={
+							async ({progress}) => {
+								return await store.remote ({
+									model: "org",
+									method: "test",
+									progress
+								});
+							}
+						} selected={true} icon="fas fa-copy" label="Action 1" store={store} />
+						<Action onClick={
 							async (opts) => {
-								if (!await opts.confirm ("Копировать тех.карту в вашу организацию?")) {
-									return;
-								}
 								for (let i = 0; i < 5; i ++) {
 									await timeout (1000);
 									opts.progress ({label: "progress", value: i + 1, max: 5});
 								}
-								return "test";
+								return "action 2";
 							}
-						} selected={true} icon="fas fa-copy" label="Копировать" />
+						} selected={true} icon="fas fa-copy" label="Action 2" store={store} />
 						<Action label="test" modalComponent={Loading} />
 						<Action label="test exception" onClick={async () => {
 							await store.startTransaction ("new comment");
@@ -161,11 +167,20 @@ class Demo extends Component {
 				<Navbar expand app={app} items={[
 					"back",
 					...app.menuItems,
-					"logout",
-					"logout",
-					"logout",
-					"logout",
-					"logout"
+					{
+						id: "1",
+						label: "Label",
+						icon: "fas fa-check",
+						path: null,
+						items: [
+							{
+								id: "2",
+								label: "Label Label Label Label",
+								icon: "fas fa-check",
+								path: "/test"
+							}
+						]
+					}
 				]} />
 				<div className="bg-secondary p-1">
 					{content}
@@ -197,9 +212,8 @@ class Demo extends Component {
 						return div;
 					}}
 */
-					/*onCustomRender={me.onCustomRender}*/
+					onCustomRender={me.onCustomRender}
 					onConnect={me.onConnect}
-					sidebar
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
 					<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />
