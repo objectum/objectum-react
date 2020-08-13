@@ -54,7 +54,7 @@ class Navbar extends Component {
 				<button className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"}`} onClick={() => me.setState ({[key]: !me.state [key]})}>
 					{link}
 				</button>
-				<div className={`dropdown-menu ml-${level} pr-2 ${me.state [key] ? "d-block" : ""}`}>
+				<div className={`dropdown-menu ml-${level} ${me.state [key] ? "d-block" : ""}`}>
 					{_map (item.items, (item, i) => {
 						let key2 = key + "-" + i;
 						
@@ -62,7 +62,7 @@ class Navbar extends Component {
 							return (
 								<Link
 									key={i}
-									className={me.props.submenuLinkClassName || "dropdown-item nav-item nav-link font-weight-bold text-dark"} to={item.path}
+									className={me.props.submenuLinkClassName || "dropdown-item nav-item nav-link font-weight-bold text-dark pr-2"} to={item.path}
 									onClick={() => me.hideSubmenu ({selected: key2})}
 								>
 									{item.icon ? <i className={`${item.icon} menu-icon mr-2`} /> : null} {i18n (item.label)}

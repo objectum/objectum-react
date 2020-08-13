@@ -175,7 +175,7 @@ class Demo extends Component {
 						items: [
 							{
 								id: "2",
-								label: "Label Label Label Label",
+								label: "Label Label Label Label Label Label",
 								icon: "fas fa-check",
 								path: "/test"
 							}
