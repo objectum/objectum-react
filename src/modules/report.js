@@ -4,7 +4,7 @@
 import {saveAs} from "file-saver";
 import {loadJS, getStore} from "..";
 
-let reportStyles;
+let reportStyles = {};
 
 function createStyles (font) {
 	const border = {
@@ -13,7 +13,7 @@ function createStyles (font) {
 		bottom: {style: "thin"},
 		right: {style: "thin"}
 	};
-	reportStyles = {
+	Object.assign (reportStyles, {
 		"default": {
 			font,
 			alignment: {
@@ -121,7 +121,7 @@ function createStyles (font) {
 				bottom: {style: "thin"}
 			}
 		}
-	};
+	});
 };
 
 function getHiddenCells (rows) {
