@@ -229,6 +229,13 @@ class ModelRecord extends Component {
 				item = <Tag>{item}</Tag>;
 			});
 		}
+		if (!item) {
+			o = React.cloneElement (o, {
+				...me.props,
+				parentModel: model.getPath (),
+				parentId: me.state.rid
+			});
+		}
 		return item || o;
 	}
 	
@@ -316,13 +323,13 @@ class ModelRecord extends Component {
 				
 				newRecordFormNum += result.newRecordFormNum;
 				
-				if ((result.propertyNum && newRecordFormNum < 2) || (result.tableNum && (!result.propertyNum || newRecordFormNum < 2))) {
+//				if ((result.propertyNum && newRecordFormNum < 2) || (result.tableNum && (!result.propertyNum || newRecordFormNum < 2))) {
 					tabs.push (
 						<Tab key={`tab-${level}-${gen ++}`} label={tabName}>
 							{tab}
 						</Tab>
 					);
-				}
+//				}
 			});
 			items.push (
 				<div className="p-1" key={`tabs-${model ? model.id : "n"}-${level}-${gen}`}>

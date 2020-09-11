@@ -76,6 +76,13 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<JsonField
+					property="answer"
+					props={[
+						{prop: "p1", label: "Да", component: StringField}
+					]}
+					{...field.props}
+				/>
 				<Tree recs={[
 					{id: 1, name: "n1.1", parent: null},
 					{id: 2, name: "n1.2", parent: null},
@@ -212,7 +219,9 @@ class Demo extends Component {
 						return div;
 					}}
 */
+/*
 					onCustomRender={me.onCustomRender}
+*/
 					onConnect={me.onConnect}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
