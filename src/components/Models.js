@@ -92,15 +92,16 @@ class Models extends Component {
 						refresh={me.state.refresh}
 						onSelectParent={parent => me.parent = parent}
 						onSelect={me.onSelect}
+						inlineActions
 					>
 						<div className="d-flex">
-							<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-							<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-							<RemoveAction onRemove={me.onRemove} />
+							<Action icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} />
+							<Action icon="fas fa-edit" label={i18n ("Edit")} onClickSelected={me.onEdit} />
+							<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClickSelected={me.onRemove} />
 	{/*
 							<Action onClick={() => me.props.history.push ({pathname: "/schema"})}><i className="fas fa-list-alt mr-2" />{i18n ("Schema")}</Action>
 	*/}
-							<Action onClickSelected={me.onRecords}><i className="fas fa-eye mr-2" />{i18n ("Records")}</Action>
+							<Action icon="fas fa-eye" label={i18n ("Records")} onClickSelected={me.onRecords} />
 						</div>
 						{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
 					</Grid>

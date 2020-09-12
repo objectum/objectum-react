@@ -205,7 +205,8 @@ class ModelList extends Component {
 			label: (m.isDictionary () ? i18n ("Dictionary") : i18n ("List")) + ": " + m.get ("name"),
 			refresh: me.state.refresh,
 			model: me.model,
-			onSelect: me.onSelect
+			onSelect: me.onSelect,
+			inlineActions: true
 		};
 		gridOpts.params = gridOpts.params || {};
 		
