@@ -68,20 +68,15 @@ class MenuItems extends Component {
 		let me = this;
 		
 		return (
-			<div>
-				<div className="row">
-					<div className="col-sm-12">
-						<Grid {...me.props} id="menuItems" ref={me._refs ["menuItems"]} store={me.props.store} query="objectum.menuItem" tree={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}}>
-							<div className="d-flex">
-								<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-								<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-								<RemoveAction onRemove={me.onRemove} />
-							</div>
-							{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
-						</Grid>
+			<div className="p-1">
+				<Grid {...me.props} id="menuItems" ref={me._refs ["menuItems"]} store={me.props.store} query="objectum.menuItem" tree={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}}>
+					<div className="d-flex">
+						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+						<RemoveAction onRemove={me.onRemove} />
 					</div>
-					<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
-				</div>
+					{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
+				</Grid>
 			</div>
 		);
 	}

@@ -51,7 +51,7 @@ class Menu extends Component {
 								<Field property="order" />
 							</Form>
 						</Tab>
-						{me.state.rid &&<Tab key="Tab2" label="Menu items">
+						{me.state.rid && <Tab key="Tab2" label="Menu items">
 							<MenuItems {...me.props} menu={me.state.rid} />
 						</Tab>}
 					</Tabs>

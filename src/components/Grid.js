@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener, timeout, newId, createTooltip, removeTooltip} from "./helper";
+import Action from "./Action";
 import Cell from "./Cell";
 import Filters from "./Filters";
 import _sortBy from "lodash.sortby";
@@ -412,20 +413,9 @@ class Grid extends Component {
 				store: me.props.store
 			};
 			if (child.type.displayName == "Action") {
-/*
-				if (child.props.onClick) {
-					o.onClick = (opts) => {
-						Object.assign (opts, {grid: me, store: me.props.store})
-						
-						if (child.props.selected) {
-							opts.id = me.state.recs [me.state.selected].id;
-						}
-						child.props.onClick (opts);
-					};
-				} else if (child.props.onClickSelected) {
-					o.onClick = (opts) => child.props.onClickSelected (Object.assign (opts, {id: me.state.recs [me.state.selected].id, grid: me, store: me.props.store}));
+				if (me.props.inlineActions && child.props.onClickSelected) {
+					return <div />;
 				}
-*/
 				o.onClick = async (opts) => {
 					Object.assign (opts, {grid: me, store: me.props.store, parentId: me.props.parentId, parentModel: me.props.parentModel})
 					
@@ -499,6 +489,48 @@ class Grid extends Component {
 		return n;
 	}
 	
+	renderInlineActions (children, id) {
+		let me = this;
+		
+		return React.Children.map (children, child => {
+			if (!child || !child.props) {
+				return child;
+			}
+			if (child && child.type && child.type.displayName == "Action") {
+				if (child.props.onClickSelected) {
+					let opts = {...child.props};
+					
+					if (child.props.modalComponent) {
+						opts.recordId = id;
+						opts.grid = me;
+					}
+					return <Tooltip label={child.props.label}>
+						<Action
+							{...opts}
+							store={me.props.store}
+							label=""
+							btnClassName={child.props.btnClassName || `btn ${child.props.label == i18n ("Remove") ? "btn-outline-danger" : "btn-outline-primary"} mr-1`}
+							onClick={async (opts) => {
+								Object.assign (opts, {grid: me, store: me.props.store, parentId: me.props.parentId, parentModel: me.props.parentModel})
+								opts.id = id;
+								
+								return await execute (child.props.onClickSelected, opts);
+							}}
+						/>
+					</Tooltip>;
+				} else {
+					return <div />;
+				}
+			}
+			let o = {};
+			
+			if (child.props.children) {
+				o.children = me.renderInlineActions (child.props.children, id);
+			}
+			return React.cloneElement (child, o);
+		});
+	}
+	
 	renderTableRows () {
 		let me = this;
 		let rows = [];
@@ -531,6 +563,7 @@ class Grid extends Component {
 			}
 			let row = (
 				<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
+					{me.props.inlineActions && <td key={i + "-actions"} className="align-top">{me.renderInlineActions (me.props.children, rec.id)}</td>}
 					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 					{me.state.cols.map ((col, j) => {
 						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
@@ -564,6 +597,7 @@ class Grid extends Component {
 				<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
 					<thead className="bg-info text-white">
 					<tr>
+						{me.props.inlineActions && <th className="align-top">{i18n ("Actions")}</th>}
 						{me.props.tree && <th className="align-top"><i className="far fa-folder-open ml-2" /></th>}
 						{me.state.cols.map ((col, i) => {
 							if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {

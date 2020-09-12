@@ -51,6 +51,9 @@ class Action extends Component {
 			if (handler) {
 				me.setState ({processing: true, label: "", value: "", max: "", start: new Date (), current: new Date ()});
 				me.intervalId = setInterval (() => {
+					if (me.unmounted) {
+						return clearInterval (me.intervalId);
+					}
 					me.setState ({current: new Date ()});
 				}, 200);
 				
@@ -194,7 +197,7 @@ class Action extends Component {
 					onClick={me.onClick}
 					disabled={me.getDisabled ()}
 				>
-					{me.props.icon && <i className={me.props.icon + " mr-2"} />}
+					{me.props.icon && <i className={me.props.icon + (me.props.label ? " mr-2" : "")} />}
 					{me.props.children ? me.props.children : (me.props.label || "")}
 				</button>
 {/*

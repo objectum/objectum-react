@@ -5,7 +5,7 @@ import {Store, Record} from "objectum-client";
 import {
 	createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form,
 	StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth,
-	Pagination, Fade, Tree
+	Pagination, Fade, Tree, JsonField
 } from '../../src'
 import {pushLocation, timeout, newId} from "../../src";
 import ReactCrop from "react-image-crop";
@@ -76,25 +76,6 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<JsonField
-					property="answer"
-					props={[
-						{prop: "p1", label: "Да", component: StringField}
-					]}
-					{...field.props}
-				/>
-				<Tree recs={[
-					{id: 1, name: "n1.1", parent: null},
-					{id: 2, name: "n1.2", parent: null},
-					{id: 3, name: "n1.3", parent: null},
-					{id: 4, name: "n2.1", parent: 2},
-					{id: 5, name: "n2.2", parent: 2},
-					{id: 6, name: "n3.1", parent: 5},
-					{id: 7, name: "n3.1", parent: 1}
-				]} onChoose={({id}) => console.log (id)} />
-				<Form store={store} rsc="record" rid={1021} mid="item" hideButtons>
-					<Field property="category" />
-				</Form>
 				<Form ref="my-form" record={me.state} hideButtons>
 					<StringField label="Text" property="text2" placeholder="123dd" />
 					<DateField property="date" label="Date" notNull={0} showTime />
