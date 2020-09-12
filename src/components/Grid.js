@@ -489,12 +489,13 @@ class Grid extends Component {
 		return n;
 	}
 	
-	renderInlineActions (children, id) {
+	renderInlineActions (children, id, count = 1) {
 		let me = this;
+		let actions = [];
 		
-		return React.Children.map (children, child => {
+		React.Children.forEach (children, child => {
 			if (!child || !child.props) {
-				return child;
+				return;
 			}
 			if (child && child.type && child.type.displayName == "Action") {
 				if (child.props.onClickSelected) {
@@ -504,9 +505,10 @@ class Grid extends Component {
 						opts.recordId = id;
 						opts.grid = me;
 					}
-					return <Tooltip label={child.props.label}>
+					actions.push (<Tooltip label={child.props.label}>
 						<Action
 							{...opts}
+							key={count ++}
 							store={me.props.store}
 							label=""
 							btnClassName={child.props.btnClassName || `btn ${child.props.label == i18n ("Remove") ? "btn-outline-danger" : "btn-outline-primary"} mr-1`}
@@ -517,18 +519,14 @@ class Grid extends Component {
 								return await execute (child.props.onClickSelected, opts);
 							}}
 						/>
-					</Tooltip>;
-				} else {
-					return <div />;
+					</Tooltip>);
 				}
 			}
-			let o = {};
-			
 			if (child.props.children) {
-				o.children = me.renderInlineActions (child.props.children, id);
+				actions = [...actions, ...me.renderInlineActions (child.props.children, id)];
 			}
-			return React.cloneElement (child, o);
 		});
+		return actions;
 	}
 	
 	renderTableRows () {
@@ -563,7 +561,7 @@ class Grid extends Component {
 			}
 			let row = (
 				<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-					{me.props.inlineActions && <td key={i + "-actions"} className="align-top">{me.renderInlineActions (me.props.children, rec.id)}</td>}
+					{me.props.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{me.renderInlineActions (me.props.children, rec.id)}</div></td>}
 					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-primary btn-sm text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 					{me.state.cols.map ((col, j) => {
 						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
