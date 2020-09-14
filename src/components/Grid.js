@@ -505,10 +505,9 @@ class Grid extends Component {
 						opts.recordId = id;
 						opts.grid = me;
 					}
-					actions.push (<Tooltip label={child.props.label}>
+					actions.push (<Tooltip label={child.props.label} key={count ++}>
 						<Action
 							{...opts}
-							key={count ++}
 							store={me.props.store}
 							label=""
 							btnClassName={child.props.btnClassName || `btn ${child.props.label == i18n ("Remove") ? "btn-outline-danger" : "btn-outline-primary"} mr-1`}
@@ -581,6 +580,75 @@ class Grid extends Component {
 		return rows;
 	}
 	
+	getHeaderRows (cols) {
+		let rowNum = (function (cols) {
+			let r = 0;
+			for (let i = 0; i < cols.length; i ++) {
+				let a = cols [i].split (":");
+				if (a.length > r) {
+					r = a.length;
+				};
+			};
+			return r;
+		}) (cols);
+		// init matrix
+		let m = [];
+		
+		for (let i = 0; i < cols.length; i ++) {
+			let a = cols [i].split (":");
+			for (let j = 0; j < a.length; j ++) {
+				a [j] = {text: a[j].trim (), colspan: 1, rowspan: 1};
+			};
+			for (let j = 0, len = rowNum - a.length; j < len; j ++) {
+				a.push ({text: null, colspan: 1, rowspan: 1});
+			};
+			m.push (a);
+		}
+		// merge cols
+		for (let i = 1; i < cols.length; i ++) {
+			for (let j = 0; j < rowNum; j ++) {
+				let ref = m [i - 1][j].hasOwnProperty ('ref') ? m [i - 1][j].ref :  i - 1;
+				if (m [i][j].text != null && m [i][j].text == m [ref][j].text) {
+					m [ref][j].colspan ++;
+					m [i][j].ref = ref;
+				};
+			};
+		}
+		// merge rows
+		for (let i = 0; i < cols.length; i ++) {
+			for (let j = 1; j < rowNum; j ++) {
+				let refR = m [i][j - 1].hasOwnProperty ('refR') ? m [i][j - 1].refR : j - 1;
+				if (m [i][j].text == null) {
+					m [i][refR].rowspan ++;
+					m [i][j].refR = refR;
+				};
+			};
+		}
+		// rows
+		let rows = [];
+		
+		for (let i = 0; i < rowNum; i ++) {
+			let cells = [], index = 1;
+			for (let j = 0; j < cols.length; j ++) {
+				if (m [j][i].hasOwnProperty ('refR')) {
+					index += m [j][i].colspan;
+					continue;
+				};
+				if (!m [j][i].hasOwnProperty ('ref')) {
+					cells.push ({
+						text: m [j][i].text,
+						colspan: m [j][i].colspan,
+						rowspan: m [j][i].rowspan,
+						index: index
+					});
+					index += m [j][i].colspan;
+				};
+			};
+			rows.push (cells);
+		}
+		return rows;
+	}
+	
 	renderTableView () {
 		let me = this;
 		
@@ -590,51 +658,55 @@ class Grid extends Component {
 		if (me.props.onRenderTable) {
 			return me.props.onRenderTable ({grid: me, cols: me.state.cols, colMap: me.colMap, recs: me.state.recs, store: me.props.store});
 		}
+		let rows = me.getHeaderRows (me.state.cols.map (col => col.name));
+		
 		return (
 			<div className="p-1 border-top">
 				<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
 					<thead className="bg-info text-white">
-					<tr>
-						{me.props.inlineActions && <th className="align-top">{i18n ("Actions")}</th>}
-						{me.props.tree && <th className="align-top"><i className="far fa-folder-open ml-2" /></th>}
-						{me.state.cols.map ((col, i) => {
-							if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
-								return;
-							}
-							let cls = "";
-							let f = me.state.filters.find (f => {
-								if (f [0] == col.code) {
-									return true;
+					{rows.map ((row, i) => {
+						return <tr key={i}>
+							{(me.props.inlineActions && !i) ? <th className="align-top" rowSpan={rows.length}>{i18n ("Actions")}</th> : null}
+							{(me.props.tree && !i) ? <th className="align-top" rowSpan={rows.length}><i className="far fa-folder-open ml-2" /></th> : null}
+							{row.map (o => {
+								let col = me.state.cols [o.index - 1];
+								
+								if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
+									return;
 								}
-							});
-							let name = i18n (col.name);
-							
-							if (f) {
-								cls = "font-italic";
-							}
-							let orderClass = "sort";
-							
-							if (col.code === me.state.order [0]) {
-								if (me.state.order [1] == "asc") {
-									orderClass = "sort-up";
-								} else {
-									orderClass = "sort-down";
-								}
-							}
-							return (
-								<th key={i} scope="col" className={cls + " align-top"}>
-									{(me.props.system || me.props.groupCol || !col.model) ?
-										<div>{name}</div> :
-										<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
+								let cls = "";
+								let f = me.state.filters.find (f => {
+									if (f [0] == col.code) {
+										return true;
 									}
-								</th>
-							);
-						})}
-					</tr>
+								});
+								let name = i18n (o.text);
+								
+								if (f) {
+									cls = "font-italic";
+								}
+								let orderClass = "sort";
+								
+								if (col.code === me.state.order [0]) {
+									if (me.state.order [1] == "asc") {
+										orderClass = "sort-up";
+									} else {
+										orderClass = "sort-down";
+									}
+								}
+								return (
+									<th key={o.index} scope="col" className={cls + " align-top"} colSpan={o.colspan} rowSpan={o.rowspan}>
+										{(me.props.system || me.props.groupCol || !col.model || o.colspan > 1) ?
+											<div>{name}</div> :
+											<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
+										}
+									</th>
+								);
+							})}
+						</tr>;
+					})}
 					</thead>
-					<tbody>
-					{me.renderTableRows ()}
-					</tbody>
+					<tbody>{me.renderTableRows ()}</tbody>
 				</table>
 			</div>
 		);
