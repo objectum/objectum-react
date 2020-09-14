@@ -77,6 +77,7 @@ class ModelTree extends Component {
 		let m = me.props.store.getModel (me.model);
 		let label = (m.isDictionary () ? i18n ("Dictionary") : i18n ("List")) + ": " + m.get ("name");
 		let opts = m.getOpts ();
+		let params = {};
 		
 		if (opts.grid && opts.grid.label) {
 			label = opts.grid.label;
@@ -84,25 +85,39 @@ class ModelTree extends Component {
 		if (me.props.hasOwnProperty ("label")) {
 			label = me.props.label;
 		}
-		let params = {};
-		
 		if (m.isTable () && me.props.parentModel && me.props.parentId) {
 			let pm = me.props.store.getModel (me.props.parentModel);
 			
 			params [pm.get ("code")] = me.props.parentId;
 		}
 		let id = me.props.id || `tree-${me.model}`;
+		let gridOpts = {
+			...me.props,
+			id,
+			ref: me._refs [id],
+			label,
+			store: me.props.store,
+			model: me.model,
+			tree: true,
+			refresh: me.state.refresh,
+			params,
+			inlineActions: true
+		};
+		let grid = <Grid {...gridOpts}>
+			<div className="d-flex">
+				<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
+				<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
+				<RemoveAction onRemove={me.onRemove} />
+			</div>
+			{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
+		</Grid>;
 		
+		if (me.model._renderGrid) {
+			grid = me.model._renderGrid ({grid, store: me.props.store});
+		}
 		return (
 			<div className="bg-white shadow-sm">
-				<Grid {...me.props} id={id} ref={me._refs [id]} label={label} store={me.props.store} model={me.model} tree={true} refresh={me.state.refresh} params={params}>
-					<div className="d-flex">
-						<Action onClick={me.onCreate}><i className="fas fa-plus mr-2" />{i18n ("Create")}</Action>
-						<Action onClickSelected={me.onEdit}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</Action>
-						<RemoveAction onRemove={me.onRemove} />
-					</div>
-					{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
-				</Grid>
+				{grid}
 			</div>
 		);
 	}
