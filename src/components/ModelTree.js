@@ -107,7 +107,7 @@ class ModelTree extends Component {
 			<div className="d-flex">
 				<Action onClick={me.onCreate} icon="fas fa-plus" label={i18n ("Create")} />
 				<Action onClickSelected={me.onEdit} icon="fas fa-edit" label={i18n ("Edit")} />
-				<Action onClick={me.onRemove} confirm icon="fas fa-minus" label={i18n ("Remove")} />
+				<Action onClickSelected={me.onRemove} confirm icon="fas fa-minus" label={i18n ("Remove")} />
 			</div>
 			{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
 		</Grid>;
