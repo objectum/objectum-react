@@ -41,8 +41,11 @@ class Grid extends Component {
 			showCols: false,
 			hideCols: [],
 			pageNum: 1,
-			inlineActions: me.props.hasOwnProperty ("inlineActions") ? me.props.inlineActions : true
+			inlineActions: me.props.hasOwnProperty ("inlineActions") ? me.props.inlineActions : true,
 		};
+		if (!me.hasInlineActions (me.props.children)) {
+			me.state.inlineActions = false;
+		}
 		if (me.props.filters && me.props.filters.length) {
 			me.state.showFilters = true;
 			me.state.dockFilters = "top";
@@ -488,6 +491,26 @@ class Grid extends Component {
 			n ++;
 		});
 		return n;
+	}
+	
+	hasInlineActions (children) {
+		let me = this;
+		let has = false;
+		
+		React.Children.forEach (children, child => {
+			if (!child || !child.props) {
+				return;
+			}
+			if (child && child.type && child.type.displayName == "Action" && child.props.onClickSelected) {
+				has = true;
+			}
+			if (child.props.children) {
+				if (me.hasInlineActions (child.props.children)) {
+					has = true;
+				}
+			}
+		});
+		return has;
 	}
 	
 	renderInlineActions (children, id, count = 1) {
