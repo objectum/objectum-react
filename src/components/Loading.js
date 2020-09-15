@@ -13,18 +13,18 @@ class Loading extends Component {
 		if (this.props.container) {
 			return (
 				<div className="container">
-					<div className="mt-2 p-4 border shadow-sm">
-						<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />
-						{i18n ("Loading") + " ..."}
+					<div className="mt-2 p-4 border shadow-sm d-flex">
+						<div className="spinner-border spinner-border-sm mr-2 my-auto" role="status" aria-hidden="true" />
+						<div className="my-auto">{i18n ("Loading") + " ..."}</div>
 					</div>
 				</div>
 			);
 		}
 		return (
-			<span>
-				<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />
-				{i18n ("Loading") + " ..."}
-			</span>
+			<div className="d-flex">
+				<div className="spinner-border spinner-border-sm mr-2 my-auto" role="status" aria-hidden="true" />
+				<div className="my-auto">{i18n ("Loading") + " ..."}</div>
+			</div>
 		);
 	}
 };

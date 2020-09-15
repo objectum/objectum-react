@@ -17,7 +17,7 @@ import ReactCrop from "react-image-crop";
 //import TBrakDishModel from "./models/TBrakDishModel";
 import ItemModel from "./models/ItemModel";
 
-import "../../src/css/bootstrap.css";
+import "../../src/css/bootstrap-site.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 
@@ -187,11 +187,13 @@ class Demo extends Component {
 					store={store}
 					username="admin"
 					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-					_username="guest"
-					_password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
+/*
+					username="guest"
+					password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
+*/
 					name="objectum-react"
 					version={packageConfig.version}
-					registration
+					//registration
 					siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
 					//label="Label"
 					onDisconnect={() => console.log ("disc")}
