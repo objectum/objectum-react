@@ -14,7 +14,6 @@ class Models extends Component {
 		me.onCreate = me.onCreate.bind (me);
 		me.onEdit = me.onEdit.bind (me);
 		me.onRemove = me.onRemove.bind (me);
-		me.onSelect = me.onSelect.bind (me);
 		me.onRecords = me.onRecords.bind (me);
 		me.state = {
 			refresh: false
@@ -62,18 +61,12 @@ class Models extends Component {
 		me.setState (state);
 	}
 	
-	onRecords () {
+	onRecords ({id}) {
 		let me = this;
 		
 		me.props.history.push ({
-			pathname: "/records/" + me.state.model.split (".").join ("_")
+			pathname: "/records/" + me.props.store.getModel (id).getPath ().split (".").join ("_")
 		});
-	}
-	
-	onSelect (id) {
-		if (id) {
-			this.setState ({model: this.props.store.getModel (id).getPath ()});
-		}
 	}
 	
 	render () {
@@ -91,7 +84,6 @@ class Models extends Component {
 						tree={true} system={true}
 						refresh={me.state.refresh}
 						onSelectParent={parent => me.parent = parent}
-						onSelect={me.onSelect}
 						inlineActions
 					>
 						<div className="d-flex">
