@@ -36,7 +36,7 @@ class Roles extends Component {
 		});
 	}
 	
-	async onRemove (id) {
+	async onRemove ({id}) {
 		let me = this;
 		let state = {refresh: !me.state.refresh};
 		
@@ -61,8 +61,8 @@ class Roles extends Component {
 					<Grid {...me.props} id="roles" ref={me._refs ["roles"]} label="Roles" store={me.props.store} query="objectum.role" refresh={me.state.refresh} inlineActions>
 						<div className="d-flex">
 							<Action icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} />
-							<Action icon="fas fa-edit" label={i18n ("Edit")} onClickSelected={me.onEdit} />
-							<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClickSelected={me.onRemove} />
+							<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
+							<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={me.onRemove} selected />
 						</div>
 						{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
 					</Grid>

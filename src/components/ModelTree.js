@@ -52,7 +52,7 @@ class ModelTree extends Component {
 		});
 	}
 	
-	async onRemove (id) {
+	async onRemove ({id}) {
 		let me = this;
 		let state = {refresh: !me.state.refresh};
 		
@@ -106,8 +106,8 @@ class ModelTree extends Component {
 		let grid = <Grid {...gridOpts}>
 			<div className="d-flex">
 				<Action onClick={me.onCreate} icon="fas fa-plus" label={i18n ("Create")} />
-				<Action onClickSelected={me.onEdit} icon="fas fa-edit" label={i18n ("Edit")} />
-				<Action onClickSelected={me.onRemove} confirm icon="fas fa-minus" label={i18n ("Remove")} />
+				<Action onClick={me.onEdit} icon="fas fa-edit" label={i18n ("Edit")} selected />
+				<Action onClick={me.onRemove} confirm icon="fas fa-minus" label={i18n ("Remove")} selected />
 			</div>
 			{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
 		</Grid>;

@@ -61,7 +61,7 @@ class ModelList extends Component {
 		});
 	}
 	
-	async onRemove (id) {
+	async onRemove ({id}) {
 		let me = this;
 		let state = {refresh: !me.state.refresh};
 		
@@ -70,6 +70,7 @@ class ModelList extends Component {
 			await me.props.store.removeRecord (id);
 			await me.props.store.commitTransaction ();
 		} catch (err) {
+			console.error (err);
 			await me.props.store.rollbackTransaction ();
 			
 			state.error = err.message;
@@ -254,8 +255,8 @@ class ModelList extends Component {
 		let grid = <Grid {...gridOpts}>
 			<div className="d-flex">
 				<Action {...me.props} icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} disabled={!me.state.canCreate} />
-				<Action {...me.props} icon="fas fa-edit" label={i18n ("Edit")} onClickSelected={me.onEdit} />
-				<Action {...me.props} icon="fas fa-minus" confirm onClickSelected={me.onRemove} label={i18n ("Remove")} disabled={!me.state.canRemove} />
+				<Action {...me.props} icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
+				<Action {...me.props} icon="fas fa-minus" label={i18n ("Remove")} onClick={me.onRemove} confirm selected disabled={!me.state.canRemove} />
 				{actions}
 			</div>
 			{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}

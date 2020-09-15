@@ -48,7 +48,7 @@ class MenuItems extends Component {
 		});
 	}
 	
-	async onRemove (id) {
+	async onRemove ({id}) {
 		let me = this;
 		let state = {refresh: !me.state.refresh};
 		
@@ -72,8 +72,8 @@ class MenuItems extends Component {
 				<Grid {...me.props} id="menuItems" ref={me._refs ["menuItems"]} store={me.props.store} query="objectum.menuItem" tree={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}} inlineActions>
 					<div className="d-flex">
 						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} />
-						<Action icon="fas fa-edit" label={i18n ("Edit")} onClickSelected={me.onEdit} />
-						<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClickSelected={me.onRemove} />
+						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
+						<Action icon="fas fa-minus" label={i18n ("Remove")} onClickSelected={me.onRemove} confirm selected />
 					</div>
 					{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
 				</Grid>

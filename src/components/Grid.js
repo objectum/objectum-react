@@ -417,7 +417,7 @@ class Grid extends Component {
 				store: me.props.store
 			};
 			if (child.type.displayName == "Action") {
-				if (me.state.inlineActions && child.props.onClickSelected) {
+				if (me.state.inlineActions && (child.props.onClickSelected || child.props.selected)) {
 					return <div />;
 				}
 				o.onClick = async (opts) => {
@@ -501,7 +501,7 @@ class Grid extends Component {
 			if (!child || !child.props) {
 				return;
 			}
-			if (child && child.type && child.type.displayName == "Action" && child.props.onClickSelected) {
+			if (child && child.type && child.type.displayName == "Action" && (child.props.onClickSelected || child.props.selected)) {
 				has = true;
 			}
 			if (child.props.children) {
@@ -522,7 +522,7 @@ class Grid extends Component {
 				return;
 			}
 			if (child && child.type && child.type.displayName == "Action") {
-				if (child.props.onClickSelected) {
+				if (child.props.onClickSelected || child.props.selected) {
 					let opts = {...child.props};
 					
 					if (child.props.modalComponent) {
@@ -539,7 +539,7 @@ class Grid extends Component {
 								Object.assign (opts, {grid: me, store: me.props.store, parentId: me.props.parentId, parentModel: me.props.parentModel})
 								opts.id = id;
 								
-								return await execute (child.props.onClickSelected, opts);
+								return await execute (child.props.onClickSelected || child.props.onClick, opts);
 							}}
 						/>
 					</Tooltip>);

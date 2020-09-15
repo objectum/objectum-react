@@ -41,7 +41,7 @@ class Columns extends Component {
 		});
 	}
 	
-	async onRemove (id) {
+	async onRemove ({id}) {
 		let me = this;
 		let state = {refresh: !me.state.refresh};
 		
@@ -150,8 +150,8 @@ class Columns extends Component {
 			<Grid id="Columns" store={me.props.store} query="objectum.column" system={true} refresh={me.state.refresh} params={{queryId: me.query}} inlineActions>
 				<div className="d-flex">
 					<Action icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} />
-					<Action icon="fas fa-edit" label={i18n ("Edit")} onClickSelected={me.onEdit} />
-					<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClickSelected={me.onRemove} />
+					<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
+					<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={me.onRemove} selected />
 					<Action onClick={me.onSynchronize} disabled={me.state.synchronizing}>
 						<i className="fas fa-wrench mr-2" />{me.state.synchronizing ? i18n ("Synchronizing") : i18n ("Synchronize")}
 					</Action>
