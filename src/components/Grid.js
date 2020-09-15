@@ -40,7 +40,8 @@ class Grid extends Component {
 			imageRecs: [],
 			showCols: false,
 			hideCols: [],
-			pageNum: 1
+			pageNum: 1,
+			inlineActions: me.props.hasOwnProperty ("inlineActions") ? me.props.hasOwnProperty.inlineActions : true
 		};
 		if (me.props.filters && me.props.filters.length) {
 			me.state.showFilters = true;
@@ -413,7 +414,7 @@ class Grid extends Component {
 				store: me.props.store
 			};
 			if (child.type.displayName == "Action") {
-				if (me.props.inlineActions && child.props.onClickSelected) {
+				if (me.state.inlineActions && child.props.onClickSelected) {
 					return <div />;
 				}
 				o.onClick = async (opts) => {
@@ -560,7 +561,7 @@ class Grid extends Component {
 			}
 			let row = (
 				<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-					{me.props.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{me.renderInlineActions (me.props.children, rec.id)}</div></td>}
+					{me.state.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{me.renderInlineActions (me.props.children, rec.id)}</div></td>}
 					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-primary text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 					{me.state.cols.map ((col, j) => {
 						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
@@ -666,7 +667,7 @@ class Grid extends Component {
 					<thead className="bg-info text-white">
 					{rows.map ((row, i) => {
 						return <tr key={i}>
-							{(me.props.inlineActions && !i) ? <th className="align-top" rowSpan={rows.length}>{i18n ("Actions")}</th> : null}
+							{(me.state.inlineActions && !i) ? <th className="align-top" rowSpan={rows.length}>{i18n ("Actions")}</th> : null}
 							{(me.props.tree && !i) ? <th className="align-top" rowSpan={rows.length}><i className="far fa-folder-open ml-2" /></th> : null}
 							{row.map (o => {
 								let col = me.state.cols [o.index - 1];
