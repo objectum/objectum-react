@@ -41,7 +41,7 @@ class Grid extends Component {
 			showCols: false,
 			hideCols: [],
 			pageNum: 1,
-			inlineActions: me.props.hasOwnProperty ("inlineActions") ? me.props.hasOwnProperty.inlineActions : true
+			inlineActions: me.props.hasOwnProperty ("inlineActions") ? me.props.inlineActions : true
 		};
 		if (me.props.filters && me.props.filters.length) {
 			me.state.showFilters = true;
@@ -584,12 +584,14 @@ class Grid extends Component {
 	getHeaderRows (cols) {
 		let rowNum = (function (cols) {
 			let r = 0;
+			
 			for (let i = 0; i < cols.length; i ++) {
 				let a = cols [i].split (":");
+				
 				if (a.length > r) {
 					r = a.length;
-				};
-			};
+				}
+			}
 			return r;
 		}) (cols);
 		// init matrix
@@ -597,44 +599,48 @@ class Grid extends Component {
 		
 		for (let i = 0; i < cols.length; i ++) {
 			let a = cols [i].split (":");
+			
 			for (let j = 0; j < a.length; j ++) {
-				a [j] = {text: a[j].trim (), colspan: 1, rowspan: 1};
-			};
+				a [j] = {text: a [j].trim (), colspan: 1, rowspan: 1};
+			}
 			for (let j = 0, len = rowNum - a.length; j < len; j ++) {
 				a.push ({text: null, colspan: 1, rowspan: 1});
-			};
+			}
 			m.push (a);
 		}
 		// merge cols
 		for (let i = 1; i < cols.length; i ++) {
 			for (let j = 0; j < rowNum; j ++) {
 				let ref = m [i - 1][j].hasOwnProperty ('ref') ? m [i - 1][j].ref :  i - 1;
+				
 				if (m [i][j].text != null && m [i][j].text == m [ref][j].text) {
 					m [ref][j].colspan ++;
 					m [i][j].ref = ref;
-				};
-			};
+				}
+			}
 		}
 		// merge rows
 		for (let i = 0; i < cols.length; i ++) {
 			for (let j = 1; j < rowNum; j ++) {
 				let refR = m [i][j - 1].hasOwnProperty ('refR') ? m [i][j - 1].refR : j - 1;
+				
 				if (m [i][j].text == null) {
 					m [i][refR].rowspan ++;
 					m [i][j].refR = refR;
-				};
-			};
+				}
+			}
 		}
 		// rows
 		let rows = [];
 		
 		for (let i = 0; i < rowNum; i ++) {
 			let cells = [], index = 1;
+			
 			for (let j = 0; j < cols.length; j ++) {
 				if (m [j][i].hasOwnProperty ('refR')) {
 					index += m [j][i].colspan;
 					continue;
-				};
+				}
 				if (!m [j][i].hasOwnProperty ('ref')) {
 					cells.push ({
 						text: m [j][i].text,
@@ -643,8 +649,8 @@ class Grid extends Component {
 						index: index
 					});
 					index += m [j][i].colspan;
-				};
-			};
+				}
+			}
 			rows.push (cells);
 		}
 		return rows;
@@ -660,7 +666,7 @@ class Grid extends Component {
 			return me.props.onRenderTable ({grid: me, cols: me.state.cols, colMap: me.colMap, recs: me.state.recs, store: me.props.store});
 		}
 		let rows = me.getHeaderRows (me.state.cols.map (col => col.name));
-		
+
 		return (
 			<div className="p-1 border-top">
 				<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
@@ -673,7 +679,10 @@ class Grid extends Component {
 								let col = me.state.cols [o.index - 1];
 								
 								if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
-									return;
+									if (o.colspan == 1) {
+										return;
+									}
+									o.colspan --;
 								}
 								let cls = "";
 								let f = me.state.filters.find (f => {
