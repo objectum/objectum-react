@@ -23,9 +23,12 @@ class Navbar extends Component {
 		if (me.props.items && me.props.items.length) {
 			me.state.path = me.props.items [0].path;
 		}
+		me._refs = {
+			"nav": React.createRef (),
+		}
 	}
 	
-	hideSubmenu (state) {
+	hideSubmenu (state = {}) {
 		let me = this;
 		
 		_each (me.state, (v, a) => {
@@ -34,6 +37,23 @@ class Navbar extends Component {
 			}
 		});
 		me.setState (state);
+	}
+	
+	onDocumentClick = (event) => {
+		let me = this;
+		let cmp = me._refs ["nav"].current;
+		
+		if (cmp && !cmp.contains (event.target)) {
+			me.hideSubmenu ();
+		}
+	}
+	
+	componentDidMount () {
+		document.addEventListener ("mousedown", this.onDocumentClick)
+	}
+	
+	componentWillUnmount () {
+		document.removeEventListener ("mousedown", this.onDocumentClick);
 	}
 	
 	renderSubmenu (item, key, level) {
@@ -51,7 +71,7 @@ class Navbar extends Component {
 		}
 		return (
 			<div key={key} className="nav-item dropdown">
-				<button className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"}`} onClick={() => me.setState ({[key]: !me.state [key]})}>
+				<button className={`${me.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"}`} onClick={() => me.hideSubmenu ({[key]: !me.state [key]})}>
 					{link}
 				</button>
 				<div className={`dropdown-menu shadow-sm ml-${level} ${me.state [key] ? "d-block" : ""}`}>
@@ -140,7 +160,7 @@ class Navbar extends Component {
 		let me = this;
 		
 		return (
-			<nav className={me.props.className || `navbar ${!me.props.expand ? "navbar-expand-md" : "navbar-expand"} navbar-dark bg-primary`}>
+			<nav className={me.props.className || `navbar ${!me.props.expand ? "navbar-expand-md" : "navbar-expand"} navbar-dark bg-primary`} ref={me._refs ["nav"]}>
 				{!me.props.expand && <button
 					className="navbar-toggler" type="button"
 					onClick={() => me.setState ({isVisible: !me.state.isVisible})}

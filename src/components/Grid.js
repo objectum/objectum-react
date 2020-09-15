@@ -181,9 +181,7 @@ class Grid extends Component {
 	}
 	
 	onRowClick (row) {
-		if (!this.props.inlineActions) {
-			setHash (this, {[this.props.id]: {selected: row}});
-		}
+		setHash (this, {[this.props.id]: {selected: row}});
 	}
 	
 	onFolderClick (id) {
