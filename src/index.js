@@ -57,6 +57,14 @@ import Tree from "./components/Tree";
 
 import {i18n, setLocale, getLocale} from "./i18n";
 import {
+	HomeButtonSB,
+	HomeButton,
+	LogoutButtonSB,
+	LogoutButton,
+	BackButtonSB,
+	BackButton
+} from "./components/Buttons";
+import {
 	getHash,
 	setHash,
 	addHashListener,
@@ -112,6 +120,12 @@ export {
 	Column,
 	Columns,
 	Queries,
+	HomeButtonSB,
+	HomeButton,
+	LogoutButtonSB,
+	LogoutButton,
+	BackButtonSB,
+	BackButton,
 	getHash,
 	setHash,
 	addHashListener,
@@ -188,6 +202,12 @@ export default {
 	Column,
 	Columns,
 	Queries,
+	HomeButtonSB,
+	HomeButton,
+	LogoutButtonSB,
+	LogoutButton,
+	BackButtonSB,
+	BackButton,
 	getHash,
 	setHash,
 	addHashListener,
