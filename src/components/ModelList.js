@@ -188,10 +188,12 @@ class ModelList extends Component {
 			let record = await me.props.store.getRecord (id);
 			
 			if (record._accessDelete) {
-				me.setState ({canRemove: await record._accessDelete ()});
+				me.setState ({selected: id, canRemove: await record._accessDelete ()});
 			} else {
-				me.setState ({canRemove: true});
+				me.setState ({selected: id, canRemove: true});
 			}
+		} else {
+			me.setState ({selected: id});
 		}
 		if (me.props.onSelect) {
 			me.props.onSelect (id);

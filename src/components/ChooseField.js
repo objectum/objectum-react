@@ -88,7 +88,13 @@ class ChooseField extends Component {
 		let value = "";
 		
 		if (selected !== null) {
-			value = (cmp.recs || cmp.state.recs) [selected].id;
+			let recs = cmp.recs || cmp.state.recs;
+			
+			if (recs) {
+				value = recs [selected].id;
+			} else {
+				value = selected;
+			}
 		}
 		me.setState ({value, visible: false});
 		me.updateName (value);
