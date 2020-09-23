@@ -256,7 +256,7 @@ class ModelList extends Component {
 			<div className="d-flex">
 				<Action {...me.props} icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} disabled={!me.state.canCreate} />
 				<Action {...me.props} icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
-				<Action {...me.props} icon="fas fa-minus" label={i18n ("Remove")} onClick={me.onRemove} confirm selected disabled={gridOpts.inlineActions ? false : !me.state.canRemove} />
+				<Action {...me.props} icon="fas fa-minus" label={i18n ("Remove")} onClick={me.onRemove} confirm selected disabled={!me.state.canRemove} />
 				{actions}
 			</div>
 			{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
