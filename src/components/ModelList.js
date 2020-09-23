@@ -193,6 +193,9 @@ class ModelList extends Component {
 				me.setState ({canRemove: true});
 			}
 		}
+		if (me.props.onSelect) {
+			me.props.onSelect (id);
+		}
 	}
 	
 	render () {
