@@ -76,6 +76,7 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
+				<SelectField label="Label" sm recs={[{id: 1, name: "item 1"}, {id: 2, name: "item 2"}]} />
 				<Form ref="my-form" record={me.state} hideButtons>
 					<StringField label="Text" property="text2" placeholder="123dd" />
 					<DateField property="date" label="Date" notNull={0} showTime />
