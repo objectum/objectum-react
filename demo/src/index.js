@@ -76,10 +76,10 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<SelectField label="Label" sm recs={[{id: 1, name: "item 1"}, {id: 2, name: "item 2"}]} />
-				<StringField label="Text" property="text2" value="04:45" time />
+				<Form store={store} rsc="record" rid={1023} mid="item">
+					<Field property="start" />
+				</Form>
 				<Form ref="my-form" record={me.state} hideButtons onChange={opts => console.log (opts)} defaults={{text2: "04:45"}}>
-					<StringField label="Text" property="text2" placeholder="123dd" time />
 					<DateField property="date" label="Date" notNull={0} showTime />
 					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
 					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />

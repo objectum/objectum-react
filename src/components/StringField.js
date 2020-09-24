@@ -163,7 +163,7 @@ class StringField extends Component {
 			cmp = (
 				<div className="d-flex">
 					<select
-						className="custom-select" style={{width: "4em"}}
+						className="custom-select" style={{width: "5em"}}
 						value={hour}
 						onChange={val => this.onChangeTime ({hour: val.target.value})}
 					>
@@ -172,7 +172,7 @@ class StringField extends Component {
 						})}
 					</select>
 					<select
-						className="custom-select" style={{width: "4em"}}
+						className="custom-select" style={{width: "5em"}}
 						value={minute}
 						onChange={val => this.onChangeTime ({minute: val.target.value})}
 					>
