@@ -35,6 +35,19 @@ class StringField extends Component {
 		}
 	}
 	
+	onChangeTime = ({hour, minute}) => {
+		hour = hour || this.state.hour || "00";
+		minute = minute || this.state.minute || "00";
+		
+		if (hour) {
+			this.setState ({hour});
+		}
+		if (minute) {
+			this.setState ({minute});
+		}
+		this.onChange ({target: {value: `${hour}:${minute}`}});
+	}
+	
 	async componentDidMount () {
 		let me = this;
 		
@@ -125,6 +138,49 @@ class StringField extends Component {
 		if (me.props.wysiwyg) {
 			cmp = (
 				<div className="border p-1" id={me.id} />
+			);
+		}
+		if (me.props.time) {
+			console.log (me.state.value, me.props);
+			let hours = [], minutes = [];
+			
+			for (let i = 0; i < 60; i ++) {
+				if (i < 24) {
+					hours.push (String (i).padStart (2, "0"));
+				}
+				minutes.push (String (i).padStart (2, "0"));
+			}
+			let hour = "", minute = "";
+			
+			if (me.state.value) {
+				let tokens = me.state.value.split (":");
+				
+				if (tokens.length == 2) {
+					hour = tokens [0];
+					minute = tokens [1];
+				}
+			}
+			cmp = (
+				<div className="d-flex">
+					<select
+						className="custom-select" style={{width: "4em"}}
+						value={hour}
+						onChange={val => this.onChangeTime ({hour: val.target.value})}
+					>
+						{hours.map ((v, i) => {
+							return <option key={i} value={v}>{v}</option>;
+						})}
+					</select>
+					<select
+						className="custom-select" style={{width: "4em"}}
+						value={minute}
+						onChange={val => this.onChangeTime ({minute: val.target.value})}
+					>
+						{minutes.map ((v, i) => {
+							return <option key={i} value={v}>{v}</option>;
+						})}
+					</select>
+				</div>
 			);
 		}
 		return (
