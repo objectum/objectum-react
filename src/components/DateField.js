@@ -52,6 +52,7 @@ class DateField extends Component {
 			onChange: value => {
 				me.setState ({value});
 				
+				console.log (value);
 				if (me.props.onChange) {
 					me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
 				}
