@@ -69,10 +69,15 @@ class Log extends Component {
 					</thead>
 					<tbody>
 					{me.state.recs.map ((rec, i) => {
+						let value = rec.value || "";
+						
+						if (value && typeof (value) == "object" && value.getMonth) {
+							value = value.toLocaleString ();
+						}
 						return (
 							<tr key={i}>
 								<td key={"date-" + i}>{getTimestampString (rec.date)}</td>
-								<td key={"value-" + i}>{rec.value || ""}</td>
+								<td key={"value-" + i}>{value}</td>
 								<td key={"description-" + i}>{rec.description || ""}</td>
 								<td key={"remote_addr-" + i}>{rec.remote_addr || ""}</td>
 								<td key={"user-" + i}>{`${rec.login || "admin"}${rec.user_id ? ` (${rec.user_id})`: ""}`}</td>
