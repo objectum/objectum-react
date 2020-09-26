@@ -48,9 +48,9 @@ class Tree extends Component {
 							</div>
 							<div className="dictfield-option" onClick={() => {
 								if (me.props.onChoose) {
-									me.props.onChoose ({id: rec.id});
+									me.props.onChoose ({id: rec.id, rec});
 								}
-							}}>{rec.name}</div>
+							}}>{rec.getLabel ? rec.getLabel () : rec.name}</div>
 						</div>
 					);
 					if (rec.childs.length && me.state ["opened-" + rec.id]) {

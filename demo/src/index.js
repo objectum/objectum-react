@@ -76,45 +76,11 @@ class Test extends Component {
 		
 		return (
 			<div className="container">
-				<Form store={store} rsc="record" rid={1023} mid="item">
-					<Field property="start" />
-				</Form>
-				<Form ref="my-form" record={me.state} hideButtons onChange={opts => console.log (opts)} defaults={{text2: "04:45"}}>
-					<DateField property="date" label="Date" notNull={0} showTime />
-					<FileField property="file" label="Скан" propertyId={123} recordId={456} />
-					<BooleanField property="bb" label="Даю согласие на обработку своих персональных данных в порядке, установленном Федеральным законом от 27 июля 2006 г №152-ФЗ «О персональных данных» (Собрание законодательства Российской Федерации, 2006, № 31, ст. 3451)" />
-					<StringField label="Text" property="text" wysiwyg />
-					<div className="d-flex">
-						<Action onClick={
-							async ({progress}) => {
-								return await store.remote ({
-									model: "org",
-									method: "test",
-									progress
-								});
-							}
-						} selected={true} icon="fas fa-copy" label="Action 1" store={store} />
-						<Action onClick={
-							async (opts) => {
-								for (let i = 0; i < 5; i ++) {
-									await timeout (1000);
-									opts.progress ({label: "progress", value: i + 1, max: 5});
-								}
-								return "action 2";
-							}
-						} selected={true} icon="fas fa-copy" label="Action 2" store={store} />
-						<Action label="test" modalComponent={Loading} />
-						<Action label="test exception" onClick={async () => {
-							await store.startTransaction ("new comment");
-							await store.createRecord ({
-								date: new Date (),
-								user: store.userId,
-								text: "123"
-							});
-							await store.commitTransaction ("new comment");
-						}} />
-					</div>
-				</Form>
+				<DictField label="DictField" value={2} recs={[
+					{id: 1, name: "Item 1"},
+					{id: 2, name: "Item 2"},
+					{id: 3, name: "Item 3", parent: 2}
+				]} tree />
 			</div>
 		);
 	}

@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {StringField, Form, Tab, Tabs, Columns, ChooseField, Queries} from "..";
 import {getHash, goRidLocation, i18n} from "..";
+import DictField from "./DictField";
 
 class Query extends Component {
 	constructor (props) {
@@ -50,9 +51,15 @@ class Query extends Component {
 										<StringField property="name" label="Name" />
 									</div>
 									<div className="form-group col-md-6">
+{/*
 										<ChooseField
 											property="parent" label="Parent" disabled={!!me.state.rid} rsc="query" value={me.state.parent}
 											choose={{cmp: Queries, ref: "queries"}}
+										/>
+*/}
+										<DictField
+											property="parent" label="Parent" disabled={!!me.state.rid} value={me.state.parent}
+											recs={me.props.store.getQueryRecords ()} tree
 										/>
 									</div>
 								</div>

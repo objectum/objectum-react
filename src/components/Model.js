@@ -3,8 +3,7 @@
 
 import React, {Component} from "react";
 import StringField from "./StringField";
-import ChooseField from "./ChooseField";
-import Models from "./Models";
+import DictField from "./DictField";
 import Form from "./Form";
 import Tab from "./Tab";
 import Tabs from "./Tabs";
@@ -58,9 +57,15 @@ class Model extends Component {
 										<StringField property="name" label="Name" />
 									</div>
 									<div className="form-group col-md-6">
+{/*
 										<ChooseField
 											property="parent" label="Parent" rsc="model" disabled={!!me.state.rid} value={me.state.parent}
 											choose={{cmp: Models, ref: "models"}}
+										/>
+*/}
+										<DictField
+											property="parent" label="Parent" disabled={!!me.state.rid} value={me.state.parent}
+											recs={me.props.store.getModelRecords ()} tree
 										/>
 									</div>
 								</div>

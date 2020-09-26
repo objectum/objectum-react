@@ -29,10 +29,13 @@ class DictField extends Component {
 			recs: me.props.records || me.props.recs || [],
 			groupRecs: null,
 			group: null,
-			filter: ""
+			filter: "",
+			treeMode: me.props.tree
 		};
-		me.model = me.props.store.getModel (me.props.model);
-		me.property = me.model.properties [me.props.property];
+		if (me.props.model) {
+			me.model = me.props.store.getModel (me.props.model);
+			me.property = me.model.properties [me.props.property];
+		}
 		me._refs = {
 			"optionDialog": React.createRef (),
 			"groupDialog": React.createRef (),
@@ -61,27 +64,41 @@ class DictField extends Component {
 			state.recs = await me.props.store.getDict (me.property.get ("type"));
 		}
 		if (me.state.value) {
-			let record = await me.props.store.getRecord (me.state.value);
-
-			state.label = record.getLabel ();
-		}
-		let m = me.props.store.getModel (me.property.get ("type"));
-		
-		for (let code in m.properties) {
-			let property = m.properties [code];
-			
-			if (property.get ("type") >= 1000) {
-				if ((property.code == "group" && !me.props.hasOwnProperty ("groupProperty")) || property.code == me.props.groupProperty) {
-					let pm = me.props.store.getModel (property.get ("type"));
-					
-					if (pm.isDictionary ()) {
-						me.groupProperty = property;
-						state.groupRecs = await me.props.store.getDict (property.get ("type"));
-						break;
+			if (me.model) {
+				let record = await me.props.store.getRecord (me.state.value);
+				
+				state.label = record.getLabel ();
+			} else {
+				let rec = me.state.recs.find (rec => rec.id == me.state.value);
+				
+				if (rec) {
+					if (rec.getLabel) {
+						state.label = rec.getLabel ();
+					} else {
+						state.label = rec.name;
 					}
 				}
-				if (property.code == "parent") {
-					state.treeMode = true;
+			}
+		}
+		if (me.props.model) {
+			let m = me.props.store.getModel (me.property.get ("type"));
+			
+			for (let code in m.properties) {
+				let property = m.properties [code];
+				
+				if (property.get ("type") >= 1000) {
+					if ((property.code == "group" && !me.props.hasOwnProperty ("groupProperty")) || property.code == me.props.groupProperty) {
+						let pm = me.props.store.getModel (property.get ("type"));
+						
+						if (pm.isDictionary ()) {
+							me.groupProperty = property;
+							state.groupRecs = await me.props.store.getDict (property.get ("type"));
+							break;
+						}
+					}
+					if (property.code == "parent") {
+						state.treeMode = true;
+					}
 				}
 			}
 		}
@@ -97,10 +114,20 @@ class DictField extends Component {
 			state.value = me.props.value;
 			state.label = "";
 			
-			if (me.props.value) {
+			if (me.props.value && me.model) {
 				let record = await me.props.store.getRecord (me.props.value);
 				
 				state.label = record.getLabel ();
+			} else {
+				let rec = me.state.recs.find (rec => rec.id == me.state.value);
+				
+				if (rec) {
+					if (rec.getLabel) {
+						state.label = rec.getLabel ();
+					} else {
+						state.label = rec.name;
+					}
+				}
 			}
 		}
 		let recs = me.props.recs || me.props.records;
@@ -166,9 +193,21 @@ class DictField extends Component {
 			filter: "",
 			group: null
 		};
-		let record = await me.props.store.getRecord (value);
-		
-		state.label = record.getLabel ();
+		if (me.model) {
+			let record = await me.props.store.getRecord (value);
+			
+			state.label = record.getLabel ();
+		} else {
+			let rec = me.state.recs.find (rec => rec.id == value);
+			
+			if (rec) {
+				if (rec.getLabel) {
+					state.label = rec.getLabel ();
+				} else {
+					state.label = rec.name;
+				}
+			}
+		}
 		me.setState (state);
 		
 		if (me.props.onChange) {
@@ -263,7 +302,7 @@ class DictField extends Component {
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
 				<div className="dictfield-tree border p-1 bg-white shadow">
-					<Tree recs={me.state.recs} onChoose={({id}) => me.onClick ({target: {id}})} />
+					<Tree recs={me.state.recs} onChoose={({id, name}) => me.onClick ({target: {id, name}})} />
 				</div>
 			</div>
 		);

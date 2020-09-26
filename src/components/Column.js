@@ -55,7 +55,7 @@ class Column extends Component {
 									</div>
 									<div className="form-group col-md-6">
 										<ChooseField
-											property="query" label="Query" disabled={!!me.state.rid} rsc="query" value={me.state.query}
+											property="query" label="Query" disabled rsc="query" value={me.state.query}
 											choose={{cmp: Queries, ref: "queries"}}
 										/>
 									</div>

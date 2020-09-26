@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Field, Form, Tab, Tabs, Menus, MenuItems, ChooseField} from "..";
+import {Field, Form, Tab, Tabs, Menus, MenuItems, ChooseField, DictField} from "..";
 import {getHash, goRidLocation, i18n} from "..";
 
 class MenuItem extends Component {
@@ -17,7 +17,8 @@ class MenuItem extends Component {
 			rid: rid == "new" ? null : rid,
 			label: "",
 			menu: hash.opts.menu,
-			parent: hash.opts.parent
+			parent: hash.opts.parent,
+			itemRecords: []
 		};
 		me.onChange = me.onChange.bind (me);
 		me.onCreate = me.onCreate.bind (me);
@@ -29,12 +30,20 @@ class MenuItem extends Component {
 	
 	async componentDidMount () {
 		let me = this;
+		let state = {};
 		
 		if (me.state.rid) {
 			let o = await me.props.store.getRecord (me.state.rid);
 			
-			me.setState ({label: o.getLabel ()});
+			state.label = o.getLabel ();
 		}
+		state.itemRecords = await me.props.store.getRecords ({
+			model: "objectum.menuItem",
+			filters: [
+				["menu", "=", me.state.menu]
+			]
+		});
+		me.setState (state);
 	}
 	
 	async onCreate (rid) {
@@ -56,13 +65,19 @@ class MenuItem extends Component {
 							<Form key="form1" store={me.props.store} rsc="record" rid={me.state.rid} mid="objectum.menuItem" onChange={me.onChange} onCreate={me.onCreate}>
 								<ChooseField
 									label="Menu"
-									property="menu" disabled={true} rsc="record" value={me.state.menu}
+									property="menu" disabled rsc="record" value={me.state.menu}
 									choose={{cmp: Menus, ref: "menus"}}
 								/>
+{/*
 								<ChooseField
 									label="Parent"
 									property="parent" rsc="record" value={me.state.parent}
 									choose={{cmp: MenuItems, ref: "menuItems", menu: me.state.menu}}
+								/>
+*/}
+								<DictField
+									property="parent" label="Parent"
+									recs={me.state.itemRecords} tree
 								/>
 								<Field property="name" />
 								<Field property="order" />

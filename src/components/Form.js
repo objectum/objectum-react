@@ -30,6 +30,9 @@ class Form extends Component {
 			_rid: me.props.rid,
 			_showLog: false
 		};
+		if (me.props.values) {
+			Object.assign (me.state, me.props.values);
+		}
 	}
 	
 	getValues (children) {
@@ -122,10 +125,10 @@ class Form extends Component {
 	
 	componentDidUpdate (prevProps, prevState) {
 		let me = this;
+		let state = {};
 		
 		if (prevProps.record && me.props.record) {
 			let fields = me.getFields (me.props.children);
-			let state = {};
 			
 			me.record = me.props.record;
 			
@@ -140,9 +143,16 @@ class Form extends Component {
 					state [code] = me.props.record [code];
 				}
 			}
-			if (!_isEmpty (state)) {
-				me.setState (state);
+		}
+		if (me.props.values) {
+			for (let code in me.props.values) {
+				if (!prevProps.values || me.props.values [code] != prevProps.values [code]) {
+					state [code] = me.props.values [code];
+				}
 			}
+		}
+		if (!_isEmpty (state)) {
+			me.setState (state);
 		}
 	}
 	

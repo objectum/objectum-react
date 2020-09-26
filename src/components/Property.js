@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {StringField, NumberField, BooleanField, SelectField, ChooseField} from "..";
+import {StringField, NumberField, BooleanField, DictField, SelectField, ChooseField} from "..";
 import {Types, Form, Tab, Tabs, Models, getHash, goRidLocation, i18n} from "..";
 
 class Property extends Component {
@@ -30,7 +30,15 @@ class Property extends Component {
 	}
 
 	onChange ({property, value}) {
-		this.setState ({[property]: value});
+		let state = {[property]: value};
+		
+		if (property == "type" && value >= 1000) {
+			let m = this.props.store.getModel (value);
+			
+			state.name = m.name;
+			state.code = m.code;
+		}
+		this.setState (state);
 	}
 	
 	onCreate (rid) {
@@ -53,7 +61,12 @@ class Property extends Component {
 				<div className="shadow-sm">
 					<Tabs key="propertyTabs" id="propertyTabs" label={i18n ("Property") + ": " + me.state.label}>
 						<Tab key="Tab1" label="Information">
-							<Form key="form1" store={me.props.store} rsc="property" rid={me.state.rid} onChange={me.onChange} onCreate={me.onCreate}>
+							<Form
+								key="form1" store={me.props.store}
+								rsc="property" rid={me.state.rid}
+								onChange={me.onChange} onCreate={me.onCreate}
+								values={{name: me.state.name, code: me.state.code}}
+							>
 								<div className="form-row">
 									<div className="form-group col-md-6">
 										<StringField property="name" label="Name" notNull={true} />
@@ -75,9 +88,15 @@ class Property extends Component {
 								</div>
 								<div className="form-row">
 									<div className="form-group col-md-6">
+{/*
 										<ChooseField
 											property="type" label="Type" disabled={!!me.state.rid} rsc="model" notNull={true}
 											choose={{cmp: Types, ref: "types"}}
+										/>
+*/}
+										<DictField
+											property="type" label="Type" disabled={!!me.state.rid} notNull={true}
+											recs={me.props.store.getModelRecords (true)} tree
 										/>
 									</div>
 									<div className="form-group col-md-6">
