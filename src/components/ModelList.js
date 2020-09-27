@@ -19,6 +19,7 @@ class ModelList extends Component {
 			actions: [],
 			canCreate: false,
 			canRemove: false,
+			removeControlled: true,
 			_grid: {}
 		};
 		me.regModel = me.props.store.getRegistered (me.model) || {};
@@ -188,9 +189,9 @@ class ModelList extends Component {
 			let record = await me.props.store.getRecord (id);
 			
 			if (record._accessDelete) {
-				me.setState ({selected: id, canRemove: await record._accessDelete ()});
+				me.setState ({selected: id, canRemove: await record._accessDelete (), removeControlled: true});
 			} else {
-				me.setState ({selected: id, canRemove: true});
+				me.setState ({selected: id, canRemove: true, removeControlled: false});
 			}
 		} else {
 			me.setState ({selected: id});
@@ -261,7 +262,8 @@ class ModelList extends Component {
 			<div className="d-flex">
 				<Action {...me.props} icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} disabled={!me.state.canCreate} />
 				<Action {...me.props} icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
-				<Action {...me.props} icon="fas fa-minus" label={i18n ("Remove")} onClick={me.onRemove} confirm selected disabled={!me.state.canRemove} />
+				<Action {...me.props} icon="fas fa-minus" label={i18n ("Remove")} onClick={me.onRemove}
+						confirm selected disabled={!me.state.canRemove} disabledControlled={me.state.removeControlled} />
 				{actions}
 			</div>
 			{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}

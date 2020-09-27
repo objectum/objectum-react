@@ -513,7 +513,7 @@ class Grid extends Component {
 		return has;
 	}
 	
-	renderInlineActions (children, id, count = 1) {
+	renderInlineActions (children, id, rowIdx, count = 1) {
 		let me = this;
 		let actions = [];
 		
@@ -528,6 +528,9 @@ class Grid extends Component {
 					if (child.props.modalComponent) {
 						opts.recordId = id;
 						opts.grid = me;
+					}
+					if (me.state.selected != rowIdx && child.props.disabledControlled) {
+						opts.disabled = true;
 					}
 					actions.push (<Tooltip label={child.props.label} key={count ++}>
 						<Action
@@ -546,7 +549,7 @@ class Grid extends Component {
 				}
 			}
 			if (child.props.children) {
-				actions = [...actions, ...me.renderInlineActions (child.props.children, id)];
+				actions = [...actions, ...me.renderInlineActions (child.props.children, id, rowIdx)];
 			}
 		});
 		return actions;
@@ -584,7 +587,7 @@ class Grid extends Component {
 			}
 			let row = (
 				<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-					{me.state.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{me.renderInlineActions (me.props.children, rec.id)}</div></td>}
+					{me.state.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{me.renderInlineActions (me.props.children, rec.id, i)}</div></td>}
 					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-primary text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 					{me.state.cols.map ((col, j) => {
 						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {

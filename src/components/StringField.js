@@ -141,7 +141,6 @@ class StringField extends Component {
 			);
 		}
 		if (me.props.time) {
-			console.log (me.state.value, me.props);
 			let hours = [], minutes = [];
 			
 			for (let i = 0; i < 60; i ++) {
