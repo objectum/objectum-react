@@ -219,6 +219,7 @@ class Form extends Component {
 		let state = {_saving: false};
 		let values = me.getValues (me.props.children);
 		
+		console.log (values);
 		try {
 			for (let code in values) {
 				let value = values [code];
