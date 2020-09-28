@@ -5,7 +5,7 @@ import {Store, Record} from "objectum-client";
 import {
 	createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form,
 	StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth,
-	Pagination, Fade, Tree, JsonField
+	Pagination, Fade, Tree, JsonField, Panel
 } from '../../src'
 import {pushLocation, timeout, newId} from "../../src";
 import ReactCrop from "react-image-crop";
@@ -72,15 +72,20 @@ class Test extends Component {
 	}
 	
 	render () {
-		let me = this;
-		
 		return (
 			<div className="container">
-				<DictField label="DictField" value={2} recs={[
-					{id: 1, name: "Item 1"},
-					{id: 2, name: "Item 2"},
-					{id: 3, name: "Item 3", parent: 2}
-				]} tree />
+				<Panel label="Title" collapsible expanded>
+					<Panel label="Title" collapsible expanded>
+						<Panel label="Title" icon="fas fa-plus" collapsible expanded>
+							111
+						</Panel>
+					</Panel>
+					<DictField label="DictField" value={2} recs={[
+						{id: 1, name: "Item 1"},
+						{id: 2, name: "Item 2"},
+						{id: 3, name: "Item 3", parent: 2}
+					]} tree />
+				</Panel>
 			</div>
 		);
 	}
