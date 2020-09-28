@@ -83,6 +83,7 @@ import {
 	createReport,
 	reportStyles
 } from "./modules/report";
+import mediator from "./modules/mediator";
 
 export {
 	Action,
@@ -164,7 +165,8 @@ export {
 	getTimestampString,
 	createReport,
 	reportStyles,
-	getStore
+	getStore,
+	mediator
 };
 
 export default {
@@ -247,5 +249,6 @@ export default {
 	getTimestampString,
 	createReport,
 	reportStyles,
-	getStore
+	getStore,
+	mediator
 };

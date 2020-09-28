@@ -22,6 +22,7 @@ import {
 	BackButton
 } from "./Buttons";
 import {setStore} from "../modules/common";
+import mediator from "../modules/mediator";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
@@ -67,6 +68,7 @@ class ObjectumApp extends Component {
 			version: me.props.version || "0.0.1"
 		};
 		setStore (me.props.store);
+		mediator.init ({store: me.props.store});
 		me.store = me.props.store;
 		me.onConnect = me.onConnect.bind (me);
 		me.onClickMenu = me.onClickMenu.bind (me);
