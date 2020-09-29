@@ -145,9 +145,9 @@ export {
 	Navbar,
 	Fade,
 	Office,
-/*
-	Schema,
-*/
+	/*
+		Schema,
+	*/
 	MenuItems,
 	MenuItem,
 	Records,
@@ -168,7 +168,6 @@ export {
 	getStore,
 	mediator
 };
-
 export default {
 	Action,
 	Auth,
@@ -229,9 +228,9 @@ export default {
 	Navbar,
 	Fade,
 	Office,
-/*
-	Schema,
-*/
+	/*
+		Schema,
+	*/
 	MenuItems,
 	MenuItem,
 	Records,

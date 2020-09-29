@@ -21,7 +21,7 @@ class Panel extends Component {
 			opts.className += " select-tab";
 			opts.onClick= () => this.setState ({expanded: !this.state.expanded});
 		}
-		return <div className="border shadow-sm">
+		return <div className={"border shadow-sm " + (this.props.className || "")}>
 			<div {...opts}>
 				{this.props.collapsible && <i className={`fas ${this.state.expanded ? "fa-chevron-down" : "fa-chevron-up"} ml-2`} />}
 				{this.props.icon && <i className={`${this.props.icon} ml-2`} />}

@@ -1,16 +1,11 @@
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 
-let store;
 let data = {};
 let value = {};
 let record = {};
 let records = {};
 let listeners = {};
-
-function init (opts) {
-	store = opts.store;
-};
 
 async function set (a, v, opts) {
 	value [a] = v;
@@ -46,26 +41,22 @@ function callListeners (e, opts) {
 };
 
 export default {
-	init,
 	data,
 	records,
 	record,
 	set,
 	get,
 	value,
-	store,
 	addListener,
 	removeListener
 };
 export {
-	init,
 	data,
 	records,
 	record,
 	set,
 	get,
 	value,
-	store,
 	addListener,
 	removeListener
 };
