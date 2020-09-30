@@ -593,8 +593,13 @@ class Grid extends Component {
 						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
 							return;
 						}
+						let cell = <Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} showImages={me.props.showImages} />;
+						
+						if (me.props.onRenderCell) {
+							cell = me.props.onRenderCell ({cell, col, rec});
+						}
 						return (
-							<td key={i + "_" + j} className="align-top"><Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} showImages={me.props.showImages} /></td>
+							<td key={i + "_" + j} className="align-top">{cell}</td>
 						);
 					})}
 				</tr>
