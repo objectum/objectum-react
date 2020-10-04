@@ -74,6 +74,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<DateField label="DateField" />
 				<Panel label="Title" collapsible expanded>
 					<Panel label="Title" collapsible expanded>
 						<Panel label="Title" icon="fas fa-plus" collapsible expanded>

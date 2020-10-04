@@ -36,6 +36,15 @@
 .filter-name-field {
     min-width: 15em;
 }
+.date-selector-wrapper {
+    position: relative;
+}
+.date-selector-content {
+    position: absolute;
+    left: -1px;
+    top: 2px;
+    z-index: 1000;
+}
 .dictfield {
     min-width: 11em;
 }

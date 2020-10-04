@@ -8,6 +8,7 @@ import Properties from "./components/Properties";
 import Models from "./components/Models";
 import Confirm from "./components/Confirm";
 import DateField from "./components/DateField";
+import DateSelector from "./components/DateSelector";
 import Field from "./components/Field";
 import FileField from "./components/FileField";
 import Form from "./components/Form";
@@ -96,6 +97,7 @@ export {
 	Models,
 	Confirm,
 	DateField,
+	DateSelector,
 	Field,
 	FileField,
 	Form,
@@ -179,6 +181,7 @@ export default {
 	Models,
 	Confirm,
 	DateField,
+	DateSelector,
 	Field,
 	FileField,
 	Form,
