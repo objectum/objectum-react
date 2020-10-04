@@ -159,7 +159,7 @@ class DateSelector extends Component {
 	}
 	
 	render () {
-		return <div className="" style={{width: "20em"}}>
+		return <div className="">
 			<div className="d-flex justify-content-between">
 				<button
 					className="btn btn-link"
@@ -171,6 +171,7 @@ class DateSelector extends Component {
 					<div>
 						<select
 							className="custom-select"
+							style={{width: "10em"}}
 							value={this.state.localValue.getMonth ()}
 							onChange={val => this.setState ({localValue: new Date (this.state.localValue.setMonth (val.target.value))})}
 						>
@@ -182,6 +183,7 @@ class DateSelector extends Component {
 					<div className="ml-1">
 						<select
 							className="custom-select"
+							style={{width: "7em"}}
 							value={this.state.localValue.getFullYear ()}
 							onChange={val => this.setState ({localValue: new Date (this.state.localValue.setFullYear (val.target.value))})}
 						>
