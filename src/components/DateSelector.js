@@ -159,7 +159,7 @@ class DateSelector extends Component {
 	}
 	
 	render () {
-		return <div className="" style={{width: "18em"}}>
+		return <div className="" style={{width: "20em"}}>
 			<div className="d-flex justify-content-between">
 				<button
 					className="btn btn-link"
