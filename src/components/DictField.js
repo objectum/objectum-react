@@ -243,19 +243,21 @@ class DictField extends Component {
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
 				<div className="dictfield-filter border p-1 bg-white shadow">
+{/*
 					<div className="mb-1">{i18n ("Select parameter")}</div>
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
+*/}
+					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
 				</div>
 				<div className="dictfield-params border p-1 bg-white shadow">
 					<ul className="list-group">
-						{recs.map (rec => {
+						{recs.map ((rec, i) => {
 							let label = `${rec.name} (id: ${rec.id})`;
 							
 							if (rec.getLabel) {
 								label = rec.getLabel ();
 							}
 							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={rec.id} onClick={me.onClick}>{label}</li>
+								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={me.onClick}>{label}</li>
 							);
 						})}
 					</ul>
@@ -271,12 +273,14 @@ class DictField extends Component {
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["groupDialog"]}>
 				<div className="dictfield-filter border p-1 bg-white shadow">
+{/*
 					<div className="mb-1">{`${i18n ("Select")}: ${me.groupProperty.get ("name")}`}</div>
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter") + " ..."} />
+*/}
+					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
 				</div>
 				<div className="dictfield-params border p-1 bg-white shadow">
 					<ul className="list-group">
-						{recs.map (rec => {
+						{recs.map ((rec, i) => {
 							let label = rec.name;
 							
 							if (rec.getLabel) {
@@ -287,7 +291,7 @@ class DictField extends Component {
 							label += ` (${i18n ("Amount")}: ${num})`;
 							
 							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={rec.id} onClick={me.onGroupClick}>{label}</li>
+								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={me.onGroupClick}>{label}</li>
 							);
 						})}
 					</ul>

@@ -161,7 +161,7 @@ class DateField extends Component {
 				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 
 				{this.state.showDateSelector ? <div className="date-selector-wrapper" ref={this._refs ["content"]}>
-					<div className="date-selector-content bg-white border shadow-sm">
+					<div className="date-selector-content bg-white border shadow">
 						<DateSelector
 							value={this.state.value}
 							showTime={this.props.showTime}

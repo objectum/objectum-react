@@ -56,13 +56,13 @@
     left: -1px;
     top: 2px;
     width: 33em;
-    height: 6em;
+    height: 3em;
     z-index: 1000;
 }
 .dictfield-params {
     position: absolute;
     left: -1px;
-    top: 6em;
+    top: 3em;
     width: 33em;
     min-height: 5em;
     max-height: 25em;
