@@ -51,6 +51,16 @@
 .dictfield-dialog {
     position: relative;
 }
+.dictfield-selector {
+    position: absolute;
+    left: -1px;
+    top: 2px;
+    width: 33em;
+    min-height: 5em;
+    max-height: 30em;
+    z-index: 1000;
+    overflow: auto;
+}
 .dictfield-filter {
     position: absolute;
     left: -1px;

@@ -242,13 +242,10 @@ class DictField extends Component {
 		}
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
-				<div className="dictfield-filter border p-1 bg-white shadow">
-{/*
-					<div className="mb-1">{i18n ("Select parameter")}</div>
-*/}
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
-				</div>
-				<div className="dictfield-params border p-1 bg-white shadow">
+				<div className="dictfield-selector border bg-white shadow">
+					<div className="sticky-top p-1 bg-white border-bottom">
+						<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
+					</div>
 					<ul className="list-group">
 						{recs.map ((rec, i) => {
 							let label = `${rec.name} (id: ${rec.id})`;
@@ -262,6 +259,26 @@ class DictField extends Component {
 						})}
 					</ul>
 				</div>
+{/*
+				<div className="dictfield-filter border p-1 bg-white shadow">
+					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
+				</div>
+				<div className="dictfield-params border p-1 bg-white shadow">
+					<div className="sticky-top p-1 bg-white">111</div>
+					<ul className="list-group">
+						{recs.map ((rec, i) => {
+							let label = `${rec.name} (id: ${rec.id})`;
+							
+							if (rec.getLabel) {
+								label = rec.getLabel ();
+							}
+							return (
+								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={me.onClick}>{label}</li>
+							);
+						})}
+					</ul>
+				</div>
+*/}
 			</div>
 		);
 	}
@@ -272,10 +289,30 @@ class DictField extends Component {
 		
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["groupDialog"]}>
-				<div className="dictfield-filter border p-1 bg-white shadow">
+				<div className="dictfield-selector border bg-white shadow">
+					<div className="sticky-top p-1 bg-white border-bottom">
+						<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
+					</div>
+					<ul className="list-group">
+						{recs.map ((rec, i) => {
+							let label = rec.name;
+							
+							if (rec.getLabel) {
+								label = rec.getLabel ();
+							}
+							let num = _filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
+							
+							label += ` (${i18n ("Amount")}: ${num})`;
+							
+							return (
+								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={me.onGroupClick}>{label}</li>
+							);
+						})}
+					</ul>
+				</div>
+				
 {/*
-					<div className="mb-1">{`${i18n ("Select")}: ${me.groupProperty.get ("name")}`}</div>
-*/}
+				<div className="dictfield-filter border p-1 bg-white shadow">
 					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
 				</div>
 				<div className="dictfield-params border p-1 bg-white shadow">
@@ -296,6 +333,7 @@ class DictField extends Component {
 						})}
 					</ul>
 				</div>
+*/}
 			</div>
 		);
 	}
