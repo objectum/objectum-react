@@ -204,7 +204,7 @@ class DateSelector extends Component {
 				<table className="table table-sm border-bottom">
 					<thead>
 					<tr>
-						{this.state.days.map ((day, i) => <th key={i} className={i > 4 ? "text-danger" : ""}>{day}</th>)}
+						{this.state.days.map ((day, i) => <th key={i} className={`text-center ${i > 4 ? "text-danger" : ""}`}>{day}</th>)}
 					</tr>
 					</thead>
 					<tbody>
