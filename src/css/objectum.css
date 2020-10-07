@@ -55,8 +55,9 @@
     position: absolute;
     left: -1px;
     top: 2px;
-    width: 33em;
-    min-height: 5em;
+    min-width: 16em;
+    max-width: 40em;
+    min-height: 4em;
     max-height: 30em;
     z-index: 1000;
     overflow: auto;
