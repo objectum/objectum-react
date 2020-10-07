@@ -243,9 +243,9 @@ class DictField extends Component {
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
 				<div className="dictfield-selector border bg-white shadow">
-					<div className="sticky-top p-1 bg-white border-bottom">
+					{recs.length > 10 && <div className="sticky-top p-1 bg-white border-bottom">
 						<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
-					</div>
+					</div>}
 					<ul className="list-group">
 						{recs.map ((rec, i) => {
 							let label = `${rec.name} (id: ${rec.id})`;
@@ -290,9 +290,9 @@ class DictField extends Component {
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["groupDialog"]}>
 				<div className="dictfield-selector border bg-white shadow">
-					<div className="sticky-top p-1 bg-white border-bottom">
+					{recs.length > 10 && <div className="sticky-top p-1 bg-white border-bottom">
 						<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
-					</div>
+					</div>}
 					<ul className="list-group">
 						{recs.map ((rec, i) => {
 							let label = rec.name;
