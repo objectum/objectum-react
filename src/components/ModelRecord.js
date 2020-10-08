@@ -377,7 +377,7 @@ class ModelRecord extends Component {
 						<strong className="pl-2">{label + ": " + me.state.label}</strong>
 					</div>
 					<div className="border shadow-sm">
-						{me.renderLayout (regModel._layout ({store: me.props.store}), m)}
+						{me.renderLayout (regModel._layout ({store: me.props.store, id: me.state.rid}), m)}
 					</div>
 				</div>
 			);
