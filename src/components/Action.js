@@ -18,25 +18,47 @@ class Action extends Component {
 			value: "",
 			max: "",
 			showModal: false,
+			showPopup: false,
 			recordId: me.props.recordId
 		};
 		me.onClick = me.onClick.bind (me);
 		me.onClose = me.onClose.bind (me);
 		me.onCancel = me.onCancel.bind (me);
+		me._refs = {
+			"confirm": React.createRef (),
+			"popup": React.createRef ()
+		};
+	}
+	
+	onDocumentClick = (event) => {
+		if (this.state.confirm && !this._refs ["confirm"].current.contains (event.target)) {
+			this.confirm (false);
+		}
+		if (this.state.showPopup && !this._refs ["popup"].current.contains (event.target)) {
+			this.setState ({showPopup: false});
+		}
 	}
 	
 	componentDidMount () {
 		Modal.setAppElement ("body");
+		document.addEventListener ("mousedown", this.onDocumentClick)
 	}
 	
-	componentDidUpdate (prevProps) {
+	componentDidUpdate (prevProps, prevState) {
 		if (prevProps.recordId != this.props.recordId) {
 			this.setState ({recordId: this.props.recordId});
+		}
+		if (this.state.confirm && !prevState.confirm) {
+			this._refs ["confirm"].current.scrollIntoView ();
+		}
+		if (this.state.showPopup && !prevState.showPopup) {
+			this._refs ["popup"].current.scrollIntoView ();
 		}
 	}
 	
 	componentWillUnmount () {
 		this.unmounted = true;
+		document.removeEventListener ("mousedown", this.onDocumentClick);
 	}
 	
 	async onClick () {
@@ -44,7 +66,10 @@ class Action extends Component {
 		let execute = () => {
 			let handler = me.props.onClick || me.props.onClickSelected;
 			let state = {processing: false, abort: false};
-
+			
+			if (me.props.popupComponent) {
+				me.setState ({showPopup: true});
+			} else
 			if (me.props.modalComponent) {
 				me.setState ({showModal: true});
 			} else
@@ -188,6 +213,7 @@ class Action extends Component {
 		}
 */
 		let ModalComponent = me.props.modalComponent;
+		let PopupComponent = me.props.popupComponent;
 		
 		return (
 			<div className={me.props.className}>
@@ -230,7 +256,7 @@ class Action extends Component {
 					</div>
 				</Fade>}
 				{me.state.confirm && <Fade className="popup">
-					<div className="popup-content bg-white shadow text-danger p-1">
+					<div className="popup-content bg-white shadow text-danger p-1 mb-1" ref={me._refs ["confirm"]}>
 						<div className="mb-1">{me.state.confirm}</div>
 						<button type="button" className="btn btn-danger" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
 						<button type="button" className="btn btn-success ml-1" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
@@ -247,6 +273,11 @@ class Action extends Component {
 						{me.props.store && <button type="button" className="btn btn-outline-danger btn-sm mt-1" onClick={me.onCancel} disabled={me.state.abort}>
 							{i18n ("Cancel")}
 						</button>}
+					</div>
+				</Fade>}
+				{this.state.showPopup && <Fade className="popup">
+					<div className="popup-component bg-white shadow p-1 mb-1" ref={me._refs ["popup"]}>
+						<PopupComponent recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
 					</div>
 				</Fade>}
 				{ModalComponent && <Modal

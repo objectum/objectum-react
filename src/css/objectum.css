@@ -183,6 +183,7 @@ textarea {
 }
 .popup {
     position: relative;
+    z-index: 1000;
 }
 .popup-content {
     position: absolute;
@@ -195,4 +196,12 @@ textarea {
     max-height: 20em;
     z-index: 1000;
     overflow: auto;
+}
+.popup-component {
+    position: absolute;
+    left: -1px;
+    top: 1px;
+    min-width: 10em;
+    min-height: 5em;
+    z-index: 1000;
 }

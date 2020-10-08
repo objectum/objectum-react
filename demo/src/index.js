@@ -39,6 +39,12 @@ function HomeButton (props) {
 	);
 };
 
+class Cmp extends Component {
+	render () {
+		return <div>123</div>;
+	}
+};
+
 class Test extends Component {
 	constructor (props) {
 		super (props);
@@ -74,6 +80,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<Action label="Action" popupComponent={Cmp} />
 				<DictField label="Dict" recs={[
 					{id: 1, name: "1"},
 					{id: 2, name: "2"},
