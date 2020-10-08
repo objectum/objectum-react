@@ -149,7 +149,7 @@ class DateField extends Component {
 				{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 				<input
 					type="text"
-					className={`form-control ${this.props.error ? "is-invalid" : ""} datefield`}
+					className={`${this.props.inputClassName || "form-control"} ${this.props.sm ? "form-control-sm" : ""} ${this.props.error ? "is-invalid" : ""} datefield`}
 					id={this.id}
 					value={this.state.localValue}
 					onChange={this.onChange}
