@@ -435,7 +435,7 @@ class Grid extends Component {
 				if ((child.props.selected || child.props.onClickSelected) && me.state.selected === null) {
 					o.disabled = true;
 				}
-				if (child.props.modalComponent && me.state.recs [me.state.selected]) {
+				if ((child.props.modalComponent || child.props.popupComponent) && me.state.recs [me.state.selected]) {
 					o.recordId = me.state.recs [me.state.selected].id;
 					o.grid = me;
 				}
@@ -525,7 +525,7 @@ class Grid extends Component {
 				if (child.props.onClickSelected || child.props.selected) {
 					let opts = {...child.props};
 					
-					if (child.props.modalComponent) {
+					if (child.props.modalComponent || child.props.popupComponent) {
 						opts.recordId = id;
 						opts.grid = me;
 					}
