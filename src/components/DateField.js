@@ -156,6 +156,8 @@ class DateField extends Component {
 					disabled={this.props.disabled}
 					onFocus={this.onFocus}
 					ref={this._refs ["input"]}
+					maxLength={this.props.showTime ? 18 : 11}
+					style={{width: `calc(${this.props.showTime ? 18 : 11}ch + 15px)`}}
 				/>
 				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 

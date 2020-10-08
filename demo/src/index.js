@@ -17,7 +17,7 @@ import ReactCrop from "react-image-crop";
 //import TBrakDishModel from "./models/TBrakDishModel";
 import ItemModel from "./models/ItemModel";
 
-import "../../src/css/bootstrap-site.css";
+import "../../src/css/bootstrap.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 
@@ -91,6 +91,16 @@ class Test extends Component {
 					{id: 13, name: "13"},
 					{id: 14, name: "14"}
 				]} />
+				<input
+					type="text"
+					className="form-control"
+					maxLength={10}
+					value="1234567890"
+					style={{
+						width: 'calc(10ch + 15px)',
+						padding: '0 5px'
+					}}
+				/>
 				<DateField label="DateField" value={new Date ()} />
 				<Panel label="Title" collapsible expanded>
 					<Panel label="Title" collapsible expanded>
