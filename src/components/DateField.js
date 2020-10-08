@@ -5,6 +5,19 @@ class DateField extends Component {
 	constructor (props) {
 		super (props);
 		
+		this.state = Object.assign ({
+			rsc: this.props.rsc || "record",
+			code: this.props.property
+		}, this.getValues ());
+		
+		this._refs = {
+			"input": React.createRef (),
+			"content": React.createRef ()
+		}
+		this.id = newId ();
+	}
+	
+	getValues () {
 		let value = this.props.value;
 		
 		if (value && typeof (value) == "string") {
@@ -13,34 +26,20 @@ class DateField extends Component {
 		let localValue = "";
 		
 		if (value) {
+			if (!this.props.showTime) {
+				value.setHours (0);
+				value.setMinutes (0);
+				value.setSeconds (0);
+				value.setMilliseconds (0);
+			}
 			localValue = getTimestampString (value);
 		}
-		this.state = {
-			rsc: this.props.rsc || "record",
-			code: this.props.property,
-			value,
-			localValue
-		};
-		this._refs = {
-			"input": React.createRef (),
-			"content": React.createRef ()
-		}
-		this.id = newId ();
+		return {value, localValue};
 	}
 	
 	componentDidUpdate (prevProps) {
 		if (prevProps.value !== this.props.value) {
-			let value = this.props.value;
-			
-			if (value && typeof (value) == "string") {
-				value = new Date (value);
-			}
-			let localValue = "";
-			
-			if (value) {
-				localValue = getTimestampString (value);
-			}
-			this.setState ({value, localValue});
+			this.setState (this.getValues ());
 		}
 	}
 

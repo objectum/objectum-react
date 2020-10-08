@@ -91,7 +91,7 @@ class Test extends Component {
 					{id: 13, name: "13"},
 					{id: 14, name: "14"}
 				]} />
-				<DateField label="DateField" />
+				<DateField label="DateField" value={new Date ()} />
 				<Panel label="Title" collapsible expanded>
 					<Panel label="Title" collapsible expanded>
 						<Panel label="Title" icon="fas fa-plus" collapsible expanded>
