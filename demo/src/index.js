@@ -80,7 +80,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<StringField label="String" regexp={/^[0-9]{6}$/} exampleValue="123456" value="123456" onChange={({value}) => console.log (value)} />
+				<StringField label="String" regexp={"/^[0-9]{6}$/"} exampleValue="123456" value="123456" onChange={({value}) => console.log (value)} />
 				<Action label="Action" popupComponent={Cmp} />
 				<DictField label="Dict" recs={[
 					{id: 1, name: "1"},

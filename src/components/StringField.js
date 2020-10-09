@@ -15,8 +15,12 @@ class StringField extends Component {
 		me.state = {
 			rsc: me.props.rsc || "record",
 			code: me.props.property,
-			value: me.props.value === null ? "" : me.props.value
+			value: me.props.value === null ? "" : me.props.value,
+			regexp: me.props.regexp
 		};
+		if (me.state.regexp && typeof (me.state.regexp) == "string") {
+			me.state.regexp = eval (me.state.regexp);
+		}
 		me.state.lastValidValue = me.state.value;
 		me.store = getStore ();
 		me.id = "stringfield-" + newId ();
@@ -34,7 +38,7 @@ class StringField extends Component {
 		}
 */
 		
-		if (me.props.regexp && !me.props.regexp.test (value)) {
+		if (me.state.regexp && !me.state.regexp.test (value)) {
 			valid = false;
 		} else {
 			state.lastValidValue = value;
@@ -120,7 +124,7 @@ class StringField extends Component {
 	}
 	
 	onBlur = () => {
-		if (this.props.regexp && this.state.value && !this.props.regexp.test (this.state.value)) {
+		if (this.state.regexp && this.state.value && !this.state.regexp.test (this.state.value)) {
 			this.setState ({value: this.state.lastValidValue});
 		}
 	}
@@ -131,7 +135,7 @@ class StringField extends Component {
 		let valid = true;
 		let error = me.props.error;
 
-		if (me.props.regexp && me.state.value && !me.props.regexp.test (me.state.value)) {
+		if (me.state.regexp && me.state.value && !me.state.regexp.test (me.state.value)) {
 			valid = false;
 			error = i18n ("Invalid value");
 			
