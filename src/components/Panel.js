@@ -21,13 +21,15 @@ class Panel extends Component {
 			opts.className += " select-tab";
 			opts.onClick= () => this.setState ({expanded: !this.state.expanded});
 		}
-		return <div className={"border shadow-sm " + (this.props.className || "")}>
-			<div {...opts}>
-				{this.props.collapsible && <i className={`fas ${this.state.expanded ? "fa-chevron-down" : "fa-chevron-up"} ml-2`} />}
-				{this.props.icon && <i className={`${this.props.icon} ml-2`} />}
-				<strong className="ml-2">{i18n (this.props.label) || ""}</strong>
+		return <div className={this.props.className}>
+			<div className="border shadow-sm">
+				<div {...opts}>
+					{this.props.collapsible && <i className={`fas ${this.state.expanded ? "fa-chevron-down" : "fa-chevron-up"} ml-2`} />}
+					{this.props.icon && <i className={`${this.props.icon} ml-2`} />}
+					<strong className="ml-2">{i18n (this.props.label) || ""}</strong>
+				</div>
+				{this.state.expanded && <div className="p-1">{this.props.children}</div>}
 			</div>
-			{this.state.expanded && <div className="p-1">{this.props.children}</div>}
 		</div>;
 	}
 };

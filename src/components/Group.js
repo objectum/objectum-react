@@ -21,7 +21,7 @@ class Group extends Component {
 			opts.className += " select-tab";
 			opts.onClick= () => this.setState ({expanded: !this.state.expanded});
 		}
-		return <div className="">
+		return <div className={this.props.className}>
 			<div className="d-flex" style={{height: "2em"}}>
 				<div className="border-top border-left h-50 mt-auto"  style={{width: "2em"}} />
 				<div {...opts}>
