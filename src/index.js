@@ -56,6 +56,7 @@ import EditForm from "./components/EditForm";
 import Pagination from "./components/Pagination";
 import Tree from "./components/Tree";
 import Panel from "./components/Panel";
+import Group from "./components/Group";
 
 import {i18n, setLocale, getLocale} from "./i18n";
 import {
@@ -158,6 +159,7 @@ export {
 	Pagination,
 	Tree,
 	Panel,
+	Group,
 	i18n,
 	setLocale,
 	getLocale,
@@ -242,6 +244,7 @@ export default {
 	Pagination,
 	Tree,
 	Panel,
+	Group,
 	i18n,
 	setLocale,
 	getLocale,

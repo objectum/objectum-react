@@ -5,7 +5,7 @@ import {Store, Record} from "objectum-client";
 import {
 	createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form,
 	StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth,
-	Pagination, Fade, Tree, JsonField, Panel
+	Pagination, Fade, Tree, JsonField, Panel, Group
 } from '../../src'
 import {pushLocation, timeout, newId} from "../../src";
 import ReactCrop from "react-image-crop";
@@ -17,7 +17,7 @@ import ReactCrop from "react-image-crop";
 //import TBrakDishModel from "./models/TBrakDishModel";
 import ItemModel from "./models/ItemModel";
 
-import "../../src/css/bootstrap.css";
+import "../../src/css/bootstrap-green.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
 
@@ -109,7 +109,7 @@ class Test extends Component {
 					}}
 				/>
 				<DateField label="DateField" value={new Date ()} />
-				<Panel label="Title" collapsible expanded>
+				<Group label="Title" collapsible expanded>
 					<Panel label="Title" collapsible expanded>
 						<Panel label="Title" icon="fas fa-plus" collapsible expanded>
 							111
@@ -120,7 +120,7 @@ class Test extends Component {
 						{id: 2, name: "Item 2"},
 						{id: 3, name: "Item 3", parent: 2}
 					]} tree />
-				</Panel>
+				</Group>
 			</div>
 		);
 	}
