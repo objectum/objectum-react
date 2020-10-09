@@ -26,7 +26,8 @@ class Action extends Component {
 		me.onCancel = me.onCancel.bind (me);
 		me._refs = {
 			"confirm": React.createRef (),
-			"popup": React.createRef ()
+			"popup": React.createRef (),
+			"button": React.createRef ()
 		};
 	}
 	
@@ -34,7 +35,7 @@ class Action extends Component {
 		if (this.state.confirm && !this._refs ["confirm"].current.contains (event.target)) {
 			this.confirm (false);
 		}
-		if (this.state.showPopup && !this._refs ["popup"].current.contains (event.target)) {
+		if (this.state.showPopup && !this._refs ["popup"].current.contains (event.target) && !this._refs ["button"].current.contains (event.target)) {
 			this.setState ({showPopup: false});
 		}
 	}
@@ -222,6 +223,7 @@ class Action extends Component {
 					className={me.props.btnClassName || "btn btn-primary btn-labeled mr-1 mb-1"}
 					onClick={me.onClick}
 					disabled={me.getDisabled ()}
+					ref={this._refs ["button"]}
 				>
 					{me.props.icon && <i className={me.props.icon + (me.props.label ? " mr-2" : "")} />}
 					{me.props.children ? me.props.children : (me.props.label || "")}
