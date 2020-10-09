@@ -80,6 +80,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<StringField label="String" regexp={/^[0-9]{6}$/} exampleValue="123456" value="123456" onChange={({value}) => console.log (value)} />
 				<Action label="Action" popupComponent={Cmp} />
 				<DictField label="Dict" recs={[
 					{id: 1, name: "1"},
@@ -98,16 +99,6 @@ class Test extends Component {
 					{id: 13, name: "13"},
 					{id: 14, name: "14"}
 				]} />
-				<input
-					type="text"
-					className="form-control"
-					maxLength={10}
-					value="1234567890"
-					style={{
-						width: 'calc(10ch + 15px)',
-						padding: '0 5px'
-					}}
-				/>
 				<DateField label="DateField" value={new Date ()} />
 				<Group label="Title" collapsible expanded>
 					<Panel label="Title" collapsible expanded>

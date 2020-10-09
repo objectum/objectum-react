@@ -17,6 +17,7 @@ class StringField extends Component {
 			code: me.props.property,
 			value: me.props.value === null ? "" : me.props.value
 		};
+		me.state.lastValidValue = me.state.value;
 		me.store = getStore ();
 		me.id = "stringfield-" + newId ();
 	}
@@ -24,15 +25,24 @@ class StringField extends Component {
 	onChange (val) {
 		let me = this;
 		let value = val.target.value;
+		let valid = true;
+		let state = {value};
 		
+/*
 		if (me.props.regexp) {
 			value = ((value || "").match (me.props.regexp) || []).join ("");
 		}
-		me.setState ({value});
+*/
 		
-		if (me.props.onChange) {
+		if (me.props.regexp && !me.props.regexp.test (value)) {
+			valid = false;
+		} else {
+			state.lastValidValue = value;
+		}
+		if (me.props.onChange && valid) {
 			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
 		}
+		me.setState (state);
 	}
 	
 	onChangeTime = ({hour, minute}) => {
@@ -109,15 +119,34 @@ class StringField extends Component {
 		}
 	}
 	
+	onBlur = () => {
+		if (this.props.regexp && this.state.value && !this.props.regexp.test (this.state.value)) {
+			this.setState ({value: this.state.lastValidValue});
+		}
+	}
+	
 	render () {
 		let me = this;
 		let disabled = me.props.disabled;
-		let addCls = me.props.error ? " is-invalid" : "";
+		let valid = true;
+		let error = me.props.error;
+
+		if (me.props.regexp && me.state.value && !me.props.regexp.test (me.state.value)) {
+			valid = false;
+			error = i18n ("Invalid value");
+			
+			if (me.props.exampleValue) {
+				error += `. ${i18n ("Example")}: ${me.props.exampleValue}`;
+			}
+		}
+		let addCls = (error || !valid) ? " is-invalid" : "";
+
 		let cmp = <input
 			type={me.props.secure ? "password" : "text"}
 			className={"form-control" + addCls}
 			id={me.id} value={me.state.value || ""}
 			onChange={me.onChange}
+			onBlur={me.onBlur}
 			disabled={disabled}
 			placeholder={me.props.placeholder}
 		/>;
@@ -183,10 +212,10 @@ class StringField extends Component {
 			);
 		}
 		return (
-			<div className={(me.props.label || me.props.error) ? "form-group stringfield" : "stringfield"}>
+			<div className={(me.props.label || error) ? "form-group stringfield" : "stringfield"}>
 				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 				{cmp}
-				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
+				{error && <div className="invalid-feedback">{error}</div>}
 			</div>
 		);
 	}
