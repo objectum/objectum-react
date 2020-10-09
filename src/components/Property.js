@@ -80,7 +80,7 @@ class Property extends Component {
 								</div>
 								<div className="form-row">
 									<div className="form-group col-md-6">
-										<StringField property="code" label="Code" disabled={!!me.state.rid} notNull={true} regexp={/[a-zA-Z0-9_]/g} />
+										<StringField property="code" label="Code" disabled={!!me.state.rid} notNull={true} regexp={/^[a-zA-Z0-9_]+$/} />
 									</div>
 									<div className="form-group col-md-6">
 										<NumberField property="order" label="Order" />
