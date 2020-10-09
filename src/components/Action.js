@@ -68,7 +68,7 @@ class Action extends Component {
 			let state = {processing: false, abort: false};
 			
 			if (me.props.popupComponent) {
-				me.setState ({showPopup: true});
+				me.setState ({showPopup: !this.state.showPopup});
 			} else
 			if (me.props.modalComponent) {
 				me.setState ({showModal: true});
