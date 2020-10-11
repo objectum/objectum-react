@@ -35,9 +35,11 @@ class Action extends Component {
 		if (this.state.confirm && !this._refs ["confirm"].current.contains (event.target)) {
 			this.confirm (false);
 		}
+/*
 		if (this.state.showPopup && !this._refs ["popup"].current.contains (event.target) && !this._refs ["button"].current.contains (event.target)) {
 			this.setState ({showPopup: false});
 		}
+*/
 	}
 	
 	componentDidMount () {
@@ -279,6 +281,12 @@ class Action extends Component {
 				</Fade>}
 				{this.state.showPopup && <Fade className="popup">
 					<div className="popup-component bg-white shadow p-1 mb-1" ref={me._refs ["popup"]}>
+						<div className="mb-2 border-bottom d-flex justify-content-end">
+							<button
+								type="button" className="btn btn-link btn-sm"
+								onClick={() => me.setState ({showPopup: false})}
+							>{i18n ("Close")}</button>
+						</div>
 						<PopupComponent recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
 					</div>
 				</Fade>}
@@ -292,13 +300,11 @@ class Action extends Component {
 						}
 					}
 				>
-					<div className="pb-2 mb-3 border-bottom">
+					<div className="mb-2 pb-2 border-bottom d-flex justify-content-end">
 						<button
-							type="button" className="btn btn-link"
+							type="button" className="btn btn-link btn-sm"
 							onClick={() => me.setState ({showModal: false})}
-						>
-							<i className="fas fa-window-close fa-lg mr-2" /><span className="text-dark">{i18n ("Close")}</span>
-						</button>
+						>{i18n ("Close")}</button>
 					</div>
 					<ModalComponent recordId={me.state.recordId} store={me.props.store} grid={me.props.grid} />
 				</Modal>}

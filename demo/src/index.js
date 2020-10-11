@@ -41,7 +41,7 @@ function HomeButton (props) {
 
 class Cmp extends Component {
 	render () {
-		return <div>123</div>;
+		return <div>123456789  </div>;
 	}
 };
 

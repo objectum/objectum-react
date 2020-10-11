@@ -201,7 +201,7 @@ textarea {
     position: absolute;
     left: -1px;
     top: 1px;
-    min-width: 10em;
+    min-width: 15em;
     min-height: 5em;
     z-index: 1000;
 }
