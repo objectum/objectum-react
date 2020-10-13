@@ -172,5 +172,6 @@
 	"sat": "сб",
 	"sun": "вс",
 	"invalid value": "неправильное значение",
-	"example": "пример"
+	"example": "пример",
+	"import css": "импорт css"
 }
