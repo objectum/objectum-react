@@ -45,6 +45,7 @@ import Tooltip from "./components/Tooltip";
 import Navbar from "./components/Navbar";
 import Fade from "./components/Fade";
 import Office from "./components/Office";
+import ImportCSS from "./components/ImportCSS";
 /*
 import Schema from "./components/Schema";
 */
@@ -148,6 +149,7 @@ export {
 	Navbar,
 	Fade,
 	Office,
+	ImportCSS,
 	/*
 		Schema,
 	*/
@@ -233,6 +235,7 @@ export default {
 	Navbar,
 	Fade,
 	Office,
+	ImportCSS,
 	/*
 		Schema,
 	*/
