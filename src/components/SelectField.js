@@ -109,7 +109,7 @@ class SelectField extends Component {
 		if (prevProps.value !== this.props.value) {
 			state.value = this.props.value;
 			
-			let rec = (state.recs ? state.recs : this.state.recs).find (rec => rec.id == this.state.value);
+			let rec = (state.recs ? state.recs : this.state.recs).find (rec => rec.id == state.value);
 			
 			if (rec) {
 				if (rec.getLabel) {
