@@ -82,14 +82,44 @@ class Test extends Component {
 			<div className="container">
 				<StringField label="String" regexp={"/^[0-9]{6}$/"} exampleValue="123456" value="123456" onChange={({value}) => console.log (value)} />
 				<Action label="Action" popupComponent={Cmp} />
-				<DictField label="Dict" recs={[
+				<select
+					className="form-control custom-select"
+					style={{width: "30em"}}
+					value={this.state.selectValue}
+					onChange={val => {
+						this.setState ({selectValue: val.target.value});
+						console.log (val.target.value);
+					}}
+				>
+					{[{id: "1", name: "1"}, {id: "2", name: "2"}].map ((rec, i) => {
+						return (
+							<option value={rec.id} key={i}>{rec.name}</option>
+						);
+					})}
+				</select>
+				<DictField label="Dict" notNull records={[
 					{id: 1, name: "1"},
 					{id: 2, name: "2"},
 					{id: 3, name: "3"},
 					{id: 4, name: "4"},
 					{id: 5, name: "5"},
 					{id: 6, name: "6"},
+					{id: 7, name: "7"},
+					{id: 8, name: "8"},
+					{id: 9, name: "9"},
+					{id: 10, name: "10"},
+					{id: 11, name: "11"},
+					{id: 12, name: "12"},
+					{id: 13, name: "13"},
+					{id: 14, name: "14"}
+				]} />
+				<SelectField label="Select" records={[
 					{id: 1, name: "1"},
+					{id: 2, name: "2"},
+					{id: 3, name: "3"},
+					{id: 4, name: "4"},
+					{id: 5, name: "5"},
+					{id: 6, name: "6"},
 					{id: 7, name: "7"},
 					{id: 8, name: "8"},
 					{id: 9, name: "9"},

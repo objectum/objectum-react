@@ -40,7 +40,8 @@ class DictField extends Component {
 			"optionDialog": React.createRef (),
 			"groupDialog": React.createRef (),
 			"treeDialog": React.createRef (),
-			"button": React.createRef ()
+			"button": React.createRef (),
+			"inputDiv": React.createRef ()
 		};
 		me.id = newId ();
 	}
@@ -151,7 +152,10 @@ class DictField extends Component {
 		if (dialog) {
 			dialog = dialog.current;
 		}
-		if (dialog && !dialog.contains (event.target) && me._refs ["button"].current && !me._refs ["button"].current.contains (event.target)) {
+		if (dialog && !dialog.contains (event.target) &&
+			me._refs ["button"].current && !me._refs ["button"].current.contains (event.target) &&
+			me._refs ["inputDiv"].current && !me._refs ["inputDiv"].current.contains (event.target)
+		) {
 			me.setState ({
 				showDialog: false,
 				filter: "",
@@ -243,7 +247,7 @@ class DictField extends Component {
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
 				<div className="dictfield-selector border bg-white shadow">
-					{recs.length > 10 && <div className="sticky-top p-1 bg-white border-bottom">
+					{(recs.length > 10 || me.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
 						<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
 					</div>}
 					<ul className="list-group">
@@ -290,7 +294,7 @@ class DictField extends Component {
 		return (
 			<div className="dictfield-dialog text-left" ref={me._refs ["groupDialog"]}>
 				<div className="dictfield-selector border bg-white shadow">
-					{recs.length > 10 && <div className="sticky-top p-1 bg-white border-bottom">
+					{(recs.length > 10 || me.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
 						<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
 					</div>}
 					<ul className="list-group">
@@ -364,27 +368,29 @@ class DictField extends Component {
 								type="button"
 								className="btn btn-link btn-sm p-1"
 								onClick={me.onShowDialog}
-								style={{height: "100%", width: "27px"}}
+								style={{height: "100%", width: "2.5em"}}
+								ref={me._refs ["button"]}
 							>
-								<i className="fas fa-edit" ref={me._refs ["button"]} />
+								<i className="fas fa-edit" />
 							</button></Tooltip>
 						</div>}
 						<Tooltip label={me.state.label}>
-							<input
-								type="text"
-								className={`form-control ${addCls} ${me.props.disabled ? "" : " dictfield-input"}`}
-								id={me.id}
-								value={me.state.label}
-								onChange={() => {}}
-								disabled={true}
-							/>
+							<div onClick={me.onShowDialog} ref={me._refs ["inputDiv"]}>
+								<input
+									type="text"
+									className={`form-control ${addCls} ${me.props.disabled ? "" : " dictfield-input"}`}
+									id={me.id}
+									value={me.state.label}
+									disabled
+								/>
+							</div>
 						</Tooltip>
 						{!me.props.disabled && <div className="border border-left-0 rounded-right">
 							<Tooltip label={i18n ("Clear")}><button
 								type="button"
 								className="btn btn-link btn-sm p-1"
 								onClick={me.onClear}
-								style={{height: "100%", width: "27px"}}
+								style={{height: "100%", width: "2.5em"}}
 							>
 								<i className="fas fa-times" />
 							</button></Tooltip>
