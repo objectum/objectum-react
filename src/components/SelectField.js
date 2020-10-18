@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {i18n, newId, Tooltip} from "..";
+import _isEmpty from "lodash.isempty";
 
 /*
 class SelectField extends Component {
@@ -98,8 +99,28 @@ class SelectField extends Component {
 	}
 	
 	componentDidUpdate (prevProps) {
+		let state = {};
+		
+		let recs = this.props.records || this.props.recs || [];
+		
+		if (this.state.recs.length !== recs.length) {
+			state.recs = recs;
+		}
 		if (prevProps.value !== this.props.value) {
-			this.setState ({value: this.props.value});
+			state.value = this.props.value;
+			
+			let rec = (state.recs ? state.recs : this.state.recs).find (rec => rec.id == this.state.value);
+			
+			if (rec) {
+				if (rec.getLabel) {
+					state.label = rec.getLabel ();
+				} else {
+					state.label = rec.name;
+				}
+			}
+		}
+		if (!_isEmpty (state)) {
+			this.setState (state);
 		}
 	}
 	
