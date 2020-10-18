@@ -25,7 +25,7 @@ class Group extends Component {
 			<div className="d-flex" style={{height: "2em"}}>
 				<div className="border-top border-left h-50 mt-auto"  style={{width: "2em"}} />
 				<div {...opts}>
-					{this.props.collapsible && <i className={`far ${this.state.expanded ? "fa-caret-square-down" : "fa-caret-square-up"} ml-2 my-auto`} />}
+					{this.props.collapsible && <i className={`far ${this.state.expanded ? "fa-caret-square-down" : "fa-caret-square-up"} ml-2 my-auto text-primary`} />}
 					<div className="mx-2">{i18n (this.props.label) || ""}</div>
 				</div>
 				<div className="border-top border-right w-100 h-50 mt-auto" />

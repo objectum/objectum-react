@@ -378,7 +378,7 @@ class DictField extends Component {
 							<div onClick={me.onShowDialog} ref={me._refs ["inputDiv"]}>
 								<input
 									type="text"
-									className={`form-control ${addCls} ${me.props.disabled ? "" : " dictfield-input"}`}
+									className={`form-control bg-white dictfield-option ${addCls} ${me.props.disabled ? "" : " dictfield-input"}`}
 									id={me.id}
 									value={me.state.label}
 									disabled

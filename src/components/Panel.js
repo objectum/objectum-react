@@ -24,7 +24,7 @@ class Panel extends Component {
 		return <div className={this.props.className}>
 			<div className="border shadow-sm">
 				<div {...opts}>
-					{this.props.collapsible && <i className={`fas ${this.state.expanded ? "fa-chevron-down" : "fa-chevron-up"} ml-2`} />}
+					{this.props.collapsible && <i className={`fas ${this.state.expanded ? "fa-caret-square-down" : "fa-caret-square-up"} ml-2 text-primary`} />}
 					{this.props.icon && <i className={`${this.props.icon} ml-2`} />}
 					<strong className="ml-2">{i18n (this.props.label) || ""}</strong>
 				</div>

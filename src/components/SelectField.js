@@ -219,7 +219,7 @@ class SelectField extends Component {
 							<div onClick={this.onShowDialog} ref={this._refs ["inputDiv"]}>
 								<input
 									type="text"
-									className={`form-control ${addCls} ${this.props.disabled ? "" : " dictfield-input"}`}
+									className={`form-control bg-white dictfield-option ${addCls} ${this.props.disabled ? "" : " dictfield-input"}`}
 									id={this.id}
 									value={this.state.label}
 									disabled
