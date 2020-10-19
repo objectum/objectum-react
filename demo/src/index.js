@@ -137,7 +137,7 @@ class Test extends Component {
 					{id: 13, name: "13"},
 					{id: 14, name: "14"}
 				]} />
-				<div className="">
+				<div className="p-1 border bg-secondary">
 					<SelectField sm records={this.state.recs} value={this.state.value} />
 				</div>
 				<DateField label="DateField" value={new Date ()} />

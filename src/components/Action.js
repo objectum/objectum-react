@@ -287,7 +287,7 @@ class Action extends Component {
 								onClick={() => me.setState ({showPopup: false})}
 							>{i18n ("Close")}</button>
 						</div>
-						<PopupComponent recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
+						<PopupComponent {...this.props} recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
 					</div>
 				</Fade>}
 				{ModalComponent && <Modal

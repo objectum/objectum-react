@@ -225,7 +225,7 @@ class SelectField extends Component {
 				<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
 					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 					<div className="d-flex dictfield">
-						{!this.props.disabled && <div className="border border-right-0 rounded-left">
+						{!this.props.disabled && <div className="border border-right-0 rounded-left bg-white">
 							<Tooltip label={i18n ("Choose")}><button
 								type="button"
 								className="btn btn-link btn-sm p-1"
