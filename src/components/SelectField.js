@@ -204,7 +204,7 @@ class SelectField extends Component {
 						/>
 					</div>}
 					<ul className="list-group">
-						{recs.map ((rec, i) => {
+						{!recs.length ? <div className="p-3">{i18n ("No parameters")}</div> : recs.map ((rec, i) => {
 							let label = `${rec.name} (id: ${rec.id})`;
 							
 							if (rec.getLabel) {

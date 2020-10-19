@@ -856,73 +856,68 @@ class Grid extends Component {
 		} else {
 			return (
 				<div className="border-top p-1">
-					<div className="btn-toolbar" role="toolbar">
-						<div className="btn-group mr-1" role="group">
-							<Tooltip label={i18n ("First page")}>
-								<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onFirst}>
-									<i className="fas fa-angle-double-left"/>
-								</button>
-							</Tooltip>
-							<Tooltip label={i18n ("Previous page")}>
-								<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onPrev}>
-									<i className="fas fa-angle-left"/>
-								</button>
-							</Tooltip>
-						</div>
-						<div className="objectum-5em">
-							<div className="input-group mr-1">
-								<Tooltip label={i18n ("Page")}>
-									<input type="number" className="form-control form-control-sm" id="page" value={me.state.page} min="1" max={me.state.pageNum} onChange={me.onChange} />
-								</Tooltip>
-							</div>
-						</div>
-						<div className="btn-group mr-1" role="group">
-							<Tooltip label={i18n ("Next page")}>
-								<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext}>
-									<i className="fas fa-angle-right"/>
-								</button>
-							</Tooltip>
-							<Tooltip label={i18n ("Last page")}>
-								<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast}>
-									<i className="fas fa-angle-double-right"/>
-								</button>
-							</Tooltip>
-							<span data-tip={i18n ("Refresh")}>
-									{me.state.loading ?
-										<span className="spinner-border objectum-spinner text-primary mt-1 mx-1" role="status" aria-hidden="true"/> :
-										<Tooltip label={i18n ("Refresh")}>
-											<button type="button" className="btn btn-link btn-sm" onClick={() => me.setState ({refresh: ! me.state.refresh})}>
-												<i className="fas fa-sync"/>
-											</button>
-										</Tooltip>
-									}
-								</span>
-							{! me.props.system && <Tooltip label={i18n ("Filters")}><button type="button" className="btn btn-link btn-sm" onClick={me.onShowFilters}>
-								<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} data-tip={i18n ("Filters")}/>
-							</button></Tooltip>}
-							{! me.props.system && <Tooltip label={i18n ("Columns")}><button type="button" className="btn btn-link btn-sm" onClick={me.onShowCols} data-tip={i18n ("Columns")}>
-								<i className={`fas fa-eye ${me.state.showCols ? "border-bottom border-primary" : ""}`}/>
-							</button></Tooltip>}
-							{! me.props.system && me.props.editable && <Tooltip label={i18n ("Edit mode")}><button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode}>
-								<i className={`fas fa-edit ${me.state.mode == "edit" ? "border-bottom border-primary" : ""}`} />
-							</button></Tooltip>}
-							{me.props.card && <Tooltip label={i18n ("Images mode")}><button type="button" className="btn btn-link btn-sm" onClick={me.onImageMode} data-tip={i18n ("Images mode")}>
-								<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`}/>
-							</button></Tooltip>}
-						</div>
-						<div className="objectum-5em">
-							<div className="input-group">
-								<Tooltip label={i18n ("Records on page")}>
-									<select className="custom-select custom-select-sm" value={me.state.pageRecs} id="pageRecs" onChange={me.onChange}>
-										<option value="10">10</option>
-										<option value="20">20</option>
-										<option value="30">30</option>
-										<option value="40">40</option>
-										<option value="50">50</option>
-									</select>
-								</Tooltip>
-							</div>
-						</div>
+					<div className="d-flex">
+						<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onFirst} title={i18n ("First page")}>
+							<i className="fas fa-angle-double-left"/>
+						</button>
+						<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onPrev} title={i18n ("Previous page")}>
+							<i className="fas fa-angle-left"/>
+						</button>
+						<input
+							type="number"
+							className="form-control form-control-sm"
+							value={me.state.page}
+							min="1"
+							max={me.state.pageNum}
+							onChange={me.onChange}
+							id="page"
+							title={i18n ("Page")}
+							style={{width: "5em"}}
+						/>
+						<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext} title={i18n ("Next page")}>
+							<i className="fas fa-angle-right"/>
+						</button>
+						<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast} title={i18n ("Last page")}>
+							<i className="fas fa-angle-double-right"/>
+						</button>
+						<button
+							type="button"
+							className="btn btn-link btn-sm"
+							onClick={() => me.setState ({refresh: ! me.state.refresh})}
+							title={i18n ("Refresh")}
+							disabled={me.state.loading}
+						>
+							{me.state.loading ?
+								<span className="spinner-border spinner-border-sm text-primary" /> :
+								<i className="fas fa-sync"/>
+							}
+						</button>
+						{!me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onShowFilters} title={i18n ("Filters")}>
+							<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} />
+						</button>}
+						{!me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onShowCols} title={i18n ("Columns")}>
+							<i className={`fas fa-eye ${me.state.showCols ? "border-bottom border-primary" : ""}`} />
+						</button>}
+						{!me.props.system && me.props.editable && <button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode} title={i18n ("Edit mode")}>
+							<i className={`fas fa-edit ${me.state.mode == "edit" ? "border-bottom border-primary" : ""}`} />
+						</button>}
+						{me.props.card && <button type="button" className="btn btn-link btn-sm" onClick={me.onImageMode} data-tip={i18n ("Images mode")} title={i18n ("Images mode")}>
+							<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`} />
+						</button>}
+						<select
+							className="custom-select custom-select-sm"
+							value={me.state.pageRecs}
+							id="pageRecs"
+							onChange={me.onChange}
+							title={i18n ("Records on page")}
+							style={{width: "5em"}}
+						>
+							<option value="10">10</option>
+							<option value="20">20</option>
+							<option value="30">30</option>
+							<option value="40">40</option>
+							<option value="50">50</option>
+						</select>
 					</div>
 					<div>
 						<small className="text-muted ml-1">

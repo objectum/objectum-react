@@ -139,6 +139,7 @@ class Test extends Component {
 						{id: 14, name: "14"}
 					]} />
 				</div>
+				<SelectField label="Label" records={[]} />
 				<SelectField label="Label" records={this.state.recs} value={this.state.value} />
 				<div className="p-1 border bg-secondary" style={{width: "5em"}}>
 					<SelectField records={this.state.recs} value={this.state.value} />

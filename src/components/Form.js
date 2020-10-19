@@ -551,7 +551,7 @@ class Form extends Component {
 				{me.state._rid && !me.props.hideButtons && <div className="actions p-1 border-bottom">
 					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving || me.props.disableActions}>
 						{me.state._saving ?
-							<span><span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
+							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
 							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
 						}
 					</button>
@@ -569,7 +569,7 @@ class Form extends Component {
 				{!me.state._rid && !me.props.hideButtons && <div className="mt-1 actions border-top p-1">
 					<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state._creating}>
 						{me.state._creating ?
-							<span><span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
+							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
 							<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>
 						}
 					</button>

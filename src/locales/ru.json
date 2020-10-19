@@ -174,5 +174,6 @@
 	"sun": "вс",
 	"invalid value": "неправильное значение",
 	"example": "пример",
-	"import css": "импорт css"
+	"import css": "импорт css",
+	"no parameters": "параметры отсутствуют"
 }

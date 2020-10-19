@@ -253,7 +253,7 @@ class EditForm extends Component {
 					{!me.props.hideButtons && <button type="button" className="btn btn-primary mb-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving || me.props.disableActions}>
 						{me.state.saving ?
 							<span>
-								<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}
+								<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}
 							</span> :
 							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
 						}

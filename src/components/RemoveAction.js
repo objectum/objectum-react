@@ -30,7 +30,7 @@ class RemoveAction extends Component {
 		if (me.state.removing) {
 			return (
 				<span className="text-danger ml-3 mr-1 mb-1">
-					<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />{i18n ("Removing") + " ..."}
+					<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true" />{i18n ("Removing") + " ..."}
 				</span>
 			);
 		}

@@ -206,15 +206,6 @@ class Action extends Component {
 		}
 		progressText = progressText || i18n ("Processing") + " ...";
 		
-/*
-		if (me.state.processing && !me.state.confirm) {
-			return (
-				<div className="text-primary p-1 mb-1 mx-1">
-					<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true" />{text}
-				</div>
-			);
-		}
-*/
 		let ModalComponent = me.props.modalComponent;
 		let PopupComponent = me.props.popupComponent;
 		
@@ -230,24 +221,12 @@ class Action extends Component {
 					{me.props.icon && <i className={me.props.icon + (me.props.label ? " mr-2" : "")} />}
 					{me.props.children ? me.props.children : (me.props.label || "")}
 				</button>
-{/*
-				{me.state.error && <span>
-					<span className="text-danger ml-1">{me.state.error}</span>
-					<button type="button" className="btn btn-outline-primary btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
-				</span>}
-*/}
 				{me.state.error && <Fade className="popup">
 					<div className="popup-content bg-white shadow text-danger p-1">
 						<div className="mb-1">{i18n (me.state.error)}</div>
 						<button type="button" className="btn btn-outline-primary btn-sm" onClick={me.onClose}>{i18n ("Close")}</button>
 					</div>
 				</Fade>}
-{/*
-				{me.state.result && <span>
-					<span className="text-success ml-1">{i18n (me.state.result)}</span>
-					<button type="button" className="btn btn-outline-primary btn-sm mx-1" onClick={me.onClose}>{i18n ("Close")}</button>
-				</span>}
-*/}
 				{me.state.result && <Fade className="popup">
 					<div className="popup-content bg-white shadow text-success p-1">
 						<div className="border p-1">
@@ -269,7 +248,7 @@ class Action extends Component {
 				{me.state.processing && !me.state.confirm && <Fade className="popup">
 					<div className="popup-content bg-white shadow text-primary p-1">
 						<div className="border p-1">
-							<span className="spinner-border objectum-spinner mr-2" role="status" aria-hidden="true"/>{progressText}
+							<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{progressText}
 						</div>
 						<div className="p-1 mt-1 text-info">
 							{((me.state.current.getTime () - me.state.start.getTime ()) / 1000).toFixed (1)} {i18n ("sec.")}
