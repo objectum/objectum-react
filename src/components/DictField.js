@@ -174,6 +174,9 @@ class DictField extends Component {
 	onShowDialog () {
 		let me = this;
 		
+		if (this.props.disabled) {
+			return;
+		}
 		if (me.state.showDialog) {
 			return me.setState ({
 				showDialog: false,
@@ -362,6 +365,7 @@ class DictField extends Component {
 			<div>
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+{/*
 					<div className="d-flex dictfield">
 						{!me.props.disabled && <div className="border border-right-0 rounded-left bg-white">
 							<Tooltip label={i18n ("Choose")}><button
@@ -394,6 +398,40 @@ class DictField extends Component {
 							>
 								<i className="fas fa-times" />
 							</button></Tooltip>
+						</div>}
+					</div>
+*/}
+					<div className="input-group dictfield">
+						{!me.props.disabled && <div className="input-group-prepend">
+							<button
+								type="button"
+								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
+								onClick={me.onShowDialog}
+								ref={me._refs ["button"]}
+								title={i18n ("Choose")}
+							>
+								<i className="fas fa-edit" />
+							</button>
+						</div>}
+						<input
+							type="text"
+							className={`form-control bg-white dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${me.props.disabled ? "" : " dictfield-input"}`}
+							id={me.id}
+							value={me.state.label}
+							title={this.state.label}
+							onClick={this.onShowDialog}
+							ref={this._refs ["inputDiv"]}
+							readOnly
+						/>
+						{!me.props.disabled && <div className="input-group-append">
+							<button
+								type="button"
+								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
+								onClick={me.onClear}
+								title={i18n ("Clear")}
+							>
+								<i className="fas fa-times" />
+							</button>
 						</div>}
 					</div>
 					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}

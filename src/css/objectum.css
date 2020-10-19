@@ -48,6 +48,9 @@
 .dictfield {
     min-width: 11em;
 }
+.selectfield {
+    min-width: 8em;
+}
 .dictfield-dialog {
     position: relative;
 }

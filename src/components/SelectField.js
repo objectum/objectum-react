@@ -137,6 +137,9 @@ class SelectField extends Component {
 	}
 	
 	onShowDialog = () => {
+		if (this.props.disabled) {
+			return;
+		}
 		if (this.state.showDialog) {
 			return this.setState ({
 				showDialog: false,
@@ -224,6 +227,7 @@ class SelectField extends Component {
 			<div>
 				<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
 					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+{/*
 					<div className="d-flex dictfield">
 						{!this.props.disabled && <div className="border border-right-0 rounded-left bg-white">
 							<Tooltip label={i18n ("Choose")}><button
@@ -247,6 +251,30 @@ class SelectField extends Component {
 								/>
 							</div>
 						</Tooltip>
+					</div>
+*/}
+					<div className="input-group selectfield">
+						{!this.props.disabled && <div className="input-group-prepend">
+							<button
+								type="button"
+								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
+								onClick={this.onShowDialog}
+								ref={this._refs ["button"]}
+								title={i18n ("Choose")}
+							>
+								<i className="fas fa-edit" />
+							</button>
+						</div>}
+						<input
+							type="text"
+							className={`form-control bg-white dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.props.disabled ? "" : " dictfield-input"}`}
+							id={this.id}
+							value={this.state.label}
+							title={this.state.label}
+							onClick={this.onShowDialog}
+							ref={this._refs ["inputDiv"]}
+							readOnly
+						/>
 					</div>
 					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 					{this.state.showDialog && this.renderParameters ()}
