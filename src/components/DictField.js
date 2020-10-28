@@ -153,7 +153,7 @@ class DictField extends Component {
 			dialog = dialog.current;
 		}
 		if (dialog && !dialog.contains (event.target) &&
-			me._refs ["button"].current && !me._refs ["button"].current.contains (event.target) &&
+			//me._refs ["button"].current && !me._refs ["button"].current.contains (event.target) &&
 			me._refs ["inputDiv"].current && !me._refs ["inputDiv"].current.contains (event.target)
 		) {
 			me.setState ({
@@ -402,6 +402,7 @@ class DictField extends Component {
 					</div>
 */}
 					<div className="input-group dictfield">
+{/*
 						{!me.props.disabled && <div className="input-group-prepend">
 							<button
 								type="button"
@@ -413,9 +414,10 @@ class DictField extends Component {
 								<i className="fas fa-edit" />
 							</button>
 						</div>}
+*/}
 						<input
 							type="text"
-							className={`form-control bg-white dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${me.props.disabled ? "" : " dictfield-input"}`}
+							className={`form-control ${this.props.disabled ? "" : "bg-white"} border-primary dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${me.props.disabled ? "" : " dictfield-input"}`}
 							id={me.id}
 							value={me.state.label}
 							title={this.state.label}

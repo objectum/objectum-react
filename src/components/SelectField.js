@@ -126,7 +126,7 @@ class SelectField extends Component {
 	
 	onDocumentClick = (event) => {
 		if (this._refs ["dialog"] && this._refs ["dialog"].current && !this._refs ["dialog"].current.contains (event.target) &&
-			this._refs ["button"].current && !this._refs ["button"].current.contains (event.target) &&
+			//this._refs ["button"].current && !this._refs ["button"].current.contains (event.target) &&
 			this._refs ["inputDiv"].current && !this._refs ["inputDiv"].current.contains (event.target)
 		) {
 			this.setState ({
@@ -254,6 +254,7 @@ class SelectField extends Component {
 					</div>
 */}
 					<div className="input-group selectfield">
+{/*
 						{!this.props.disabled && <div className="input-group-prepend">
 							<button
 								type="button"
@@ -265,9 +266,10 @@ class SelectField extends Component {
 								<i className="fas fa-edit" />
 							</button>
 						</div>}
+*/}
 						<input
 							type="text"
-							className={`form-control bg-white dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.props.disabled ? "" : " dictfield-input"}`}
+							className={`form-control ${this.props.disabled ? "" : "bg-white"} border-primary dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.props.disabled ? "" : " dictfield-input"}`}
 							id={this.id}
 							value={this.state.label}
 							title={this.state.label}
