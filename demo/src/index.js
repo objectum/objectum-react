@@ -105,7 +105,7 @@ class Test extends Component {
 		return (
 			<div className="container">
 				<StringField label="String" regexp={"/^[0-9]{6}$/"} exampleValue="123456" value="123456" onChange={({value}) => console.log (value)} />
-				<Action label="Action" popupComponent={Cmp} />
+				<Action label="Action" modalComponent={Cmp} />
 				<select
 					className="form-control custom-select"
 					style={{width: "30em"}}

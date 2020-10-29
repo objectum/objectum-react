@@ -425,7 +425,7 @@ class DictField extends Component {
 							ref={this._refs ["inputDiv"]}
 							readOnly
 						/>
-						{!me.props.disabled && <div className="input-group-append">
+						{!me.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
 							<button
 								type="button"
 								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
