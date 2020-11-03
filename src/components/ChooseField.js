@@ -163,38 +163,28 @@ class ChooseField extends Component {
 			<div>
 				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
 					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-					<div className="choosefield d-flex">
-						<div className="border border-right-0 rounded-left">
-							<Tooltip label={i18n ("Choose")}><button
+					
+					<div className="input-group dictfield">
+						<input
+							type="text"
+							className={`form-control ${this.props.disabled ? "" : "bg-white"} border-primary dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${me.props.disabled ? "" : " dictfield-input"}`}
+							id={me.id}
+							value={me.state.name}
+							title={this.state.name}
+							onClick={this.onVisible}
+							ref={this._refs ["inputDiv"]}
+							readOnly
+						/>
+						{!me.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
+							<button
 								type="button"
-								className="btn btn-link btn-sm p-1"
-								onClick={me.onVisible}
-								style={{height: "100%", width: "27px"}}
-							>
-								<i className="fas fa-edit" />
-							</button></Tooltip>
-						</div>
-						<Tooltip label={me.state.name}>
-							<input
-								type="text"
-								className={"form-control dictfield-input " + addCls}
-								id={me.id}
-								value={me.state.name}
-								onChange={() => {}}
-								disabled={true}
-								title={me.state.name}
-							/>
-						</Tooltip>
-						<div className="border border-left-0 rounded-right">
-							<Tooltip label={i18n ("Clear")}><button
-								type="button"
-								className="btn btn-link btn-sm p-1"
+								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
 								onClick={me.onClear}
-								style={{height: "100%", width: "27px"}}
+								title={i18n ("Clear")}
 							>
 								<i className="fas fa-times" />
-							</button></Tooltip>
-						</div>
+							</button>
+						</div>}
 					</div>
 					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 				</div>

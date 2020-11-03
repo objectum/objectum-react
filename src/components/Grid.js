@@ -910,7 +910,7 @@ class Grid extends Component {
 							id="pageRecs"
 							onChange={me.onChange}
 							title={i18n ("Records on page")}
-							style={{width: "5em"}}
+							style={{width: "6em"}}
 						>
 							<option value="10">10</option>
 							<option value="20">20</option>

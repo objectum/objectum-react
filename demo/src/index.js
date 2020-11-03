@@ -5,7 +5,7 @@ import {Store, Record} from "objectum-client";
 import {
 	createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form,
 	StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth,
-	Pagination, Fade, Tree, JsonField, Panel, Group
+	Pagination, Fade, Tree, JsonField, Panel, Group, Models
 } from '../../src'
 import {pushLocation, timeout, newId} from "../../src";
 import ReactCrop from "react-image-crop";
@@ -104,6 +104,13 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<ChooseField
+					store={store}
+					property="model" label="Model" rsc="model"
+					choose={{cmp: Models, ref: "models"}}
+					disabled
+					value={1007}
+				/>
 				<StringField label="String" regexp={"/^[0-9]{6}$/"} exampleValue="123456" value="123456" onChange={({value}) => console.log (value)} />
 				<Action label="Action" modalComponent={Cmp} />
 				<select
