@@ -417,7 +417,7 @@ class DictField extends Component {
 */}
 						<input
 							type="text"
-							className={`form-control ${this.props.disabled ? "" : "bg-white"} border-primary dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${me.props.disabled ? "" : " dictfield-input"}`}
+							className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
 							id={me.id}
 							value={me.state.label}
 							title={this.state.label}

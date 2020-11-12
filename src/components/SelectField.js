@@ -269,7 +269,7 @@ class SelectField extends Component {
 */}
 						<input
 							type="text"
-							className={`form-control ${this.props.disabled ? "" : "bg-white"} border-primary dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.props.disabled ? "" : " dictfield-input"}`}
+							className={`form-control ${this.props.disabled ? "" : "bg-white dictfield-input border-primary"} rounded dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
 							id={this.id}
 							value={this.state.label}
 							title={this.state.label}

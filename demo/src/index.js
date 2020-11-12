@@ -108,8 +108,8 @@ class Test extends Component {
 					store={store}
 					property="model" label="Model" rsc="model"
 					choose={{cmp: Models, ref: "models"}}
-					disabled
 					value={1007}
+					disabled
 				/>
 				<StringField label="String" regexp={"/^[0-9]{6}$/"} exampleValue="123456" value="123456" onChange={({value}) => console.log (value)} />
 				<Action label="Action" modalComponent={Cmp} />
@@ -129,7 +129,7 @@ class Test extends Component {
 					})}
 				</select>
 				<div className="p-1 border bg-secondary" style={{width: "5em"}}>
-					<DictField sm label="Dict" notNull records={[
+					<DictField sm label="Dict" disabled notNull records={[
 						{id: 1, name: "1"},
 						{id: 2, name: "2"},
 						{id: 3, name: "3"},
@@ -147,7 +147,7 @@ class Test extends Component {
 					]} />
 				</div>
 				<SelectField label="Label" records={[]} />
-				<SelectField label="Label" records={this.state.recs} value={this.state.value} />
+				<SelectField label="Label" disabled records={this.state.recs} value={this.state.value} />
 				<div className="p-1 border bg-secondary" style={{width: "5em"}}>
 					<SelectField records={this.state.recs} value={this.state.value} />
 				</div>
