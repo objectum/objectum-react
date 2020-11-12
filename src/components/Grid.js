@@ -12,7 +12,6 @@ import _map from "lodash.map";
 import {i18n} from "./../i18n";
 import GridColumns from "./GridColumns";
 import TableForm from "./TableForm";
-import Tooltip from "./Tooltip";
 import Fade from "./Fade";
 import {execute} from "objectum-client";
 
@@ -532,11 +531,12 @@ class Grid extends Component {
 					if (me.state.selected != rowIdx && child.props.disabledControlled) {
 						opts.disabled = true;
 					}
-					actions.push (<Tooltip label={child.props.label} key={count ++}>
+					actions.push (
 						<Action
 							{...opts}
 							store={me.props.store}
 							label=""
+							title={child.props.label}
 							btnClassName={child.props.btnClassName || `btn ${child.props.label == i18n ("Remove") ? "btn-outline-danger" : "btn-outline-primary"} mr-1`}
 							onClick={async (opts) => {
 								Object.assign (opts, {grid: me, store: me.props.store, parentId: me.props.parentId, parentModel: me.props.parentModel})
@@ -545,7 +545,7 @@ class Grid extends Component {
 								return await execute (child.props.onClickSelected || child.props.onClick, opts);
 							}}
 						/>
-					</Tooltip>);
+					);
 				}
 			}
 			if (child.props.children) {

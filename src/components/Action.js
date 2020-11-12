@@ -217,6 +217,7 @@ class Action extends Component {
 					onClick={me.onClick}
 					disabled={me.getDisabled ()}
 					ref={this._refs ["button"]}
+					title={this.props.title}
 				>
 					{me.props.icon && <i className={me.props.icon + (me.props.label ? " mr-2" : "")} />}
 					{me.props.children ? me.props.children : (me.props.label || "")}
