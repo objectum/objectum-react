@@ -220,6 +220,16 @@ class SelectField extends Component {
 		);
 	}
 	
+	onClear = () => {
+		let me = this;
+		
+		me.setState ({value: null, label: ""});
+		
+		if (me.props.onChange) {
+			me.props.onChange ({...me.props, code: me.state.code, value: null, id: me.props.id});
+		}
+	}
+	
 	render () {
 		let addCls = this.props.error ? " is-invalid" : "";
 		
@@ -269,7 +279,7 @@ class SelectField extends Component {
 */}
 						<input
 							type="text"
-							className={`form-control ${this.props.disabled ? "" : "bg-white dictfield-input border-primary"} rounded dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
+							className={`form-control ${(this.props.disabled || this.props.notNull) ? "rounded" : "rounded-left"} ${this.props.disabled ? "" : "bg-white dictfield-input border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
 							id={this.id}
 							value={this.state.label}
 							title={this.state.label}
@@ -277,6 +287,16 @@ class SelectField extends Component {
 							ref={this._refs ["inputDiv"]}
 							readOnly
 						/>
+						{!this.props.disabled && !this.props.notNull && <div className="input-group-append" style={{zIndex: 0}}>
+							<button
+								type="button"
+								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
+								onClick={this.onClear}
+								title={i18n ("Clear")}
+							>
+								<i className="fas fa-times" />
+							</button>
+						</div>}
 					</div>
 					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 					{this.state.showDialog && this.renderParameters ()}
