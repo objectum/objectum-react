@@ -367,6 +367,14 @@ class Form extends Component {
 			} else {
 				state [`${code}-error`] = "";
 			}
+			if (valid && field.props.onValidate) {
+				let result = field.props.onValidate ();
+				
+				if (result) {
+					state [`${code}-error`] = result;
+					valid = false;
+				}
+			}
 		}
 		if (!valid) {
 			state._error = i18n ("Form contains errors");
