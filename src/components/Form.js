@@ -368,7 +368,7 @@ class Form extends Component {
 				state [`${code}-error`] = "";
 			}
 			if (valid && field.props.onValidate) {
-				let result = field.props.onValidate ();
+				let result = field.props.onValidate ({value: me.state [code], form: this});
 				
 				if (result) {
 					state [`${code}-error`] = result;
