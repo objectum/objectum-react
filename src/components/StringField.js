@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {loadCSS, loadJS, i18n, getLocale, newId, getStore} from "..";
+import _isEmpty from "lodash.isempty";
 
 class StringField extends Component {
 	constructor (props) {
@@ -103,10 +104,21 @@ class StringField extends Component {
 	}
 
 	async componentDidUpdate (prevProps) {
-		let me = this;
+		let state = {};
 		
-		if (prevProps.value !== me.props.value) {
-			me.setState ({value: me.props.value === null ? "" : me.props.value});
+		if (prevProps.value !== this.props.value) {
+			state.value = this.props.value === null ? "" : this.props.value;
+		}
+		if (prevProps.regexp !== this.props.regexp) {
+			let regexp = this.props.regexp;
+			
+			if (regexp && typeof (regexp) == "string") {
+				regexp = eval (regexp);
+			}
+			state.regexp = regexp;
+		}
+		if (!_isEmpty (state)) {
+			this.setState (state);
 		}
 	}
 	
