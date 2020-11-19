@@ -376,6 +376,21 @@ class Form extends Component {
 				}
 			}
 		}
+		if (this.props.onValidate) {
+			let values = {}, errors = {};
+			
+			for (let code in fields) {
+				values [code] = this.state [code];
+			}
+			this.props.onValidate ({form: this, values, errors});
+			
+			if (_isEmpty (errors)) {
+				for (let code in errors) {
+					state [`${code}-error`] = errors [code];
+				}
+				valid = false;
+			}
+		}
 		if (!valid) {
 			state._error = i18n ("Form contains errors");
 			me.setState (state);
