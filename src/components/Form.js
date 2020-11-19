@@ -350,52 +350,46 @@ class Form extends Component {
 	
 	isValid () {
 		let me = this;
-		let valid = true;
 		let fields = me.getFields (me.props.children);
-		let state = {};
+		let state = {}, errors = {};
+		let values = {};
 		
+		for (let code in fields) {
+			values [code] = this.state [code];
+		}
 		for (let code in fields) {
 			let field = fields [code];
 			let notNull = field.props.notNull;
+			
+			state [`${code}-error`] = "";
 			
 			if (me.model && me.model.properties [code] && me.model.properties [code].notNull) {
 				notNull = true;
 			}
 			if (notNull && (!me.state.hasOwnProperty (code) || me.state [code] === "" || me.state [code] === null || me.state [code] === undefined)) {
-				state [`${code}-error`] = i18n ("Please enter value");
-				valid = false;
-			} else {
-				state [`${code}-error`] = "";
+				errors [code] = i18n ("Please enter value");
 			}
-			if (valid && field.props.onValidate) {
-				let result = field.props.onValidate ({value: me.state [code], form: this});
+			if (field.props.onValidate) {
+				let result = field.props.onValidate ({value: me.state [code], values, errors, form: this});
 				
 				if (result) {
-					state [`${code}-error`] = result;
-					valid = false;
+					errors [code] = result;
 				}
 			}
 		}
 		if (this.props.onValidate) {
-			let values = {}, errors = {};
-			
-			for (let code in fields) {
-				values [code] = this.state [code];
-			}
 			this.props.onValidate ({form: this, values, errors});
-			
-			if (_isEmpty (errors)) {
-				for (let code in errors) {
-					state [`${code}-error`] = errors [code];
-				}
-				valid = false;
-			}
 		}
-		if (!valid) {
+		if (!_isEmpty (errors)) {
+			for (let code in errors) {
+				state [`${code}-error`] = errors [code];
+			}
 			state._error = i18n ("Form contains errors");
 			me.setState (state);
+			
+			return false;
 		}
-		return valid;
+		return true;
 	}
 	
 	isChanged () {
