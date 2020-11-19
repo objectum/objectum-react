@@ -28,6 +28,9 @@ function FileInput (props) {
 	if (props.image) {
 		opts.accept = "image/*";
 	}
+	if (props.accept) {
+		opts.accept = props.accept;
+	}
 	const {acceptedFiles, getRootProps, getInputProps} = useDropzone (opts);
 	let file;
 	
@@ -229,6 +232,7 @@ class FileField extends Component {
 					id={me.id} onFile={me.onFile} value={me.state.value} store={me.props.store}
 					record={me.props.record} model={me.props.model} property={me.props.property} propertyId={me.props.propertyId} recordId={me.props.recordId}
 					image={me.state.image} error={me.props.error} disabled={me.props.disabled}
+					accept={me.props.accept}
 				/>
 				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
 				{me.state.src && <Modal
