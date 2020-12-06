@@ -156,6 +156,7 @@ class StringField extends Component {
 			}
 		}
 		let addCls = (error || !valid) ? " is-invalid" : "";
+		//let addCls = (error || !valid) ? " border-danger" : "";
 
 		let cmp = <input
 			type={me.props.secure ? "password" : "text"}

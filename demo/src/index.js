@@ -111,7 +111,9 @@ class Test extends Component {
 					value={1007}
 					disabled
 				/>
-				<StringField label="String" regexp={"/^[0-9]{6}$/"} exampleValue="123456" value="123456" onChange={({value}) => console.log (value)} />
+				<Form store={store} rsc="record" rid={14197} mid="item">
+					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
+				</Form>
 				<Action label="Action" modalComponent={Cmp} />
 				<select
 					className="form-control custom-select"
@@ -253,9 +255,7 @@ class Demo extends Component {
 						return div;
 					}}
 */
-/*
 					onCustomRender={me.onCustomRender}
-*/
 					onConnect={me.onConnect}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />

@@ -107,12 +107,13 @@ class Form extends Component {
 				
 				if (me.record) {
 					state [code] = me.record [code] === null ? "" : me.record [code];
-				} else
-				if (field.props.hasOwnProperty ("value")) {
-					state [code] = field.props.value;
-					
-					if (me.props.defaults && me.props.defaults.hasOwnProperty (code)) {
-						state [code] = me.props.defaults [code];
+				} else {
+					if (field.props.hasOwnProperty ("value")) {
+						state [code] = field.props.value;
+					} else {
+						if (me.props.defaults && me.props.defaults.hasOwnProperty (code)) {
+							state [code] = me.props.defaults [code];
+						}
 					}
 				}
 			}
