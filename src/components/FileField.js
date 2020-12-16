@@ -161,7 +161,6 @@ class FileField extends Component {
 		this.imageRef = image;
 /*
 		this.setState ({image: {width, height, aspect: this.state.aspect}});
-
 		return false;
 */
 	}
@@ -252,7 +251,7 @@ class FileField extends Component {
 							<i className="fas fa-check fa-lg mr-2" />Ok
 						</button>
 					</div>
-					<div>
+					<div className="">
 						<ReactCrop
 							src={me.state.src}
 							crop={me.state.image}
