@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Action from "./Action";
+import Return from "./Return";
 import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
@@ -344,13 +344,6 @@ class ModelRecord extends Component {
 		return items;
 	}
 	
-	onBack = () => {
-		let {pathname, hash} = this.props.app.state.locations [this.props.app.state.locations.length - 2];
-		
-		this.props.app.popLocation ();
-		this.props.history.push (pathname + hash);
-	}
-	
 	render () {
 		let me = this;
 		let m = me.props.store.getModel (me.state.model);
@@ -381,7 +374,7 @@ class ModelRecord extends Component {
 		if (regModel._layout) {
 			let form = (
 				<div className="container">
-					<Action btnClassName="btn btn-link ml-0 pl-0 mr-1 mb-1" label={i18n ("Return")} icon="fas fa-arrow-left" onClick={this.onBack} />
+					<Return {...this.props} />
 					<div className="text-white bg-info py-1">
 						<strong className="pl-2">{label + ": " + me.state.label}</strong>
 					</div>
@@ -422,7 +415,7 @@ class ModelRecord extends Component {
 		}
 		form = (
 			<div className="container">
-				<Action btnClassName="btn btn-link ml-0 pl-0 mr-1 mb-1" label={i18n ("Return")} icon="fas fa-arrow-left" onClick={this.onBack} />
+				<Return {...this.props} />
 				<div className="border shadow-sm">
 					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 						<Tab key={`tab1-${me.state.model}`} label="Information">

@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {DictField, Field, Form, Tab, Tabs} from "..";
+import {DictField, Field, Form, Tab, Tabs, Return} from "..";
 import {goRidLocation, i18n} from "..";
 
 class User extends Component {
@@ -42,6 +42,7 @@ class User extends Component {
 		
 		return (
 			<div className="container">
+				<Return {...this.props} />
 				<div className="shadow-sm border">
 					<Tabs key="tabs" id="tabs" label={i18n ("User") + ": " + me.state.label}>
 						<Tab key="Tab1" label="Information">

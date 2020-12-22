@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {StringField, NumberField, BooleanField, DictField, SelectField, ChooseField} from "..";
+import {StringField, NumberField, BooleanField, DictField, SelectField, ChooseField, Return} from "..";
 import {Types, Form, Tab, Tabs, Models, getHash, goRidLocation, i18n} from "..";
 
 class Property extends Component {
@@ -58,6 +58,7 @@ class Property extends Component {
 		];
 		return (
 			<div className="container">
+				<Return {...this.props} />
 				<div className="shadow-sm">
 					<Tabs key="propertyTabs" id="propertyTabs" label={i18n ("Property") + ": " + me.state.label}>
 						<Tab key="Tab1" label="Information">

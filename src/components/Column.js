@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {StringField, NumberField, SelectField, Form, Tab, Tabs, ChooseField, Queries} from "..";
+import {StringField, NumberField, SelectField, Form, Tab, Tabs, ChooseField, Queries, Return} from "..";
 import {getHash, goRidLocation, i18n} from "..";
 
 class Column extends Component {
@@ -45,6 +45,7 @@ class Column extends Component {
 		];
 		return (
 			<div className="container">
+				<Return {...this.props} />
 				<div className="shadow-sm border">
 					<Tabs key="tabs" id="tabs" label={i18n ("Column") + ": " + me.state.label}>
 						<Tab key="Tab1" label="Information">

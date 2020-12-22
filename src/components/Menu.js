@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Field, Form, Tab, Tabs, MenuItems} from "..";
+import {Field, Form, Tab, Tabs, MenuItems, Return} from "..";
 import {goRidLocation, i18n} from "..";
 
 class Menu extends Component {
@@ -42,6 +42,7 @@ class Menu extends Component {
 		
 		return (
 			<div className="container">
+				<Return {...this.props} />
 				<div className="shadow-sm border">
 					<Tabs key="tabs" id="tabs" label={i18n ("Menu") + ": " + me.state.label}>
 						<Tab key="tab-1" label="Information">

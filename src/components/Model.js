@@ -10,6 +10,7 @@ import Tabs from "./Tabs";
 import Properties from "./Properties";
 import JsonEditor from "./JsonEditor";
 import BooleanField from "./BooleanField";
+import Return from "./Return";
 import {getHash, goRidLocation} from "..";
 import {i18n} from "./../i18n";
 
@@ -48,6 +49,7 @@ class Model extends Component {
 
 		return (
 			<div className="container">
+				<Return {...this.props} />
 				<div className="shadow-sm border">
 					<Tabs {...me.props} key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + me.state.label}>
 						<Tab key="tab1" label="Information">

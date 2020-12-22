@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {StringField, Form, Tab, Tabs, Columns, ChooseField, Queries} from "..";
+import {StringField, Form, Tab, Tabs, Columns, ChooseField, Queries, Return} from "..";
 import {getHash, goRidLocation, i18n} from "..";
 import DictField from "./DictField";
 
@@ -42,6 +42,7 @@ class Query extends Component {
 		
 		return (
 			<div className="container">
+				<Return {...this.props} />
 				<div className="shadow-sm border">
 					<Tabs key="tabs" id="tabs" label={i18n ("Query") + ": " + me.state.label}>
 						<Tab key="Tab1" label="Information">
