@@ -381,7 +381,7 @@ class ModelRecord extends Component {
 		if (regModel._layout) {
 			let form = (
 				<div className="container">
-					<Action btnClassName="btn btn-link mr-1 mb-1" label={i18n ("Return")} icon="fas fa-arrow-left" onClick={this.onBack} />
+					<Action btnClassName="btn btn-link ml-0 pl-0 mr-1 mb-1" label={i18n ("Return")} icon="fas fa-arrow-left" onClick={this.onBack} />
 					<div className="text-white bg-info py-1">
 						<strong className="pl-2">{label + ": " + me.state.label}</strong>
 					</div>
@@ -422,7 +422,7 @@ class ModelRecord extends Component {
 		}
 		form = (
 			<div className="container">
-				<Action btnClassName="btn btn-link mr-1 mb-1" label={i18n ("Return")} icon="fas fa-arrow-left" onClick={this.onBack} />
+				<Action btnClassName="btn btn-link ml-0 pl-0 mr-1 mb-1" label={i18n ("Return")} icon="fas fa-arrow-left" onClick={this.onBack} />
 				<div className="border shadow-sm">
 					<Tabs key={`tabs-${me.state.model}`} id={`tabs-${me.state.model}`} label={label + ": " + me.state.label}>
 						<Tab key={`tab1-${me.state.model}`} label="Information">
