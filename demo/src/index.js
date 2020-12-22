@@ -104,6 +104,12 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<Fade>12344</Fade>
+				<div className="bg-white border border-danger p-2" style={{width: "110%", left: "-5%", position: "relative"}}>
+					<div className="bg-white border border-danger p-2 fade-in" style={{left: "0px", top: "2px", position: "absolute"}}>
+						111
+					</div>
+				</div>
 				<ChooseField
 					store={store}
 					property="model" label="Model" rsc="model"

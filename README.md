@@ -28,14 +28,32 @@ npm install --save objectum-react
     * [NumberField](#number_field)
     * [BooleanField](#boolean_field)  
     * [DateField](#date_field)  
-    * [ChooseField](#choose_field)  
-    * [FileField](#file_field)  
+    * [FileField](#file_field)
+    * [ChooseField](#choose_field)
+    * [DictField](#dict_field)
     * [SelectField](#select_field)
     * [JsonField](#json_field)
     * [JsonEditor](#json_editor)
 * [Tooltip](#tooltip)  
 * [Fade](#fade)  
-* [Action](#action)  
+* [Action](#action)
+* ModelList
+* Loading  
+* Navbar
+* Office
+* Pagination
+* Panel
+* Group
+* Tree  
+* Model helpers
+    * _renderGrid
+    * _layout
+    * _renderForm
+    * static _renderField
+    * _renderField
+* property JSON options
+    * textarea
+    * showTime
 
 <a name="objectum_app" />
 
@@ -104,13 +122,12 @@ props:
 * **id**: - used in url hash navigation
 * **ref**: - used in ChooseField.choose.ref
 * **label**: - label of grid
-* **query**: - query
-* **model**: - model
+* **query, model**: - query or model for data reading
 * **pageRecs**: recs on page
-* **refresh**: *boolean* - change for refresh grid 
+* **refresh** - change for refresh grid 
 
 ```html
-<Grid id="roles" ref="roles" label="Roles" store={this.props.store} query="objectum.role" refresh={this.state.refresh} />
+<Grid id="roles" ref="roles" label="Roles" store={store} query="objectum.role" refresh={this.state.refresh} />
 ```
 Query "objectum.role":
 ```sql
@@ -144,7 +161,7 @@ props:
 * **onSelectParent**: *function* - event listener 
 
 ```html
-<Grid id="menuItems" ref="menuItems" label="Menu items" store={this.props.store} query="objectum.class" refresh={this.state.refresh} tree onSelectParent={parent => this.parent = parent}>
+<Grid id="menuItems" ref="menuItems" label="Menu items" store={store} query="objectum.class" refresh={this.state.refresh} tree onSelectParent={parent => this.parent = parent} />
 ```
 ```sql
 {"data": "begin"}
@@ -194,9 +211,11 @@ offset {"param": "offset"}
 ### Form
 props:
 * **store** - objectum store 
-* **rsc** - objectum resource 
+* **rsc** - objectum resource (record, model, property, query, column) 
 * **rid** - resource id
 * **mid** - model id. Used with resource "record"
+* **defaults** - default values for creating record
+* **record** - instead rsc, rid, mid
 
 ```js
 class User extends Component {
@@ -209,14 +228,19 @@ class User extends Component {
             rid: rid == "new" ? null : rid
         };
     }
+	
+	onCreate = (rid) => {
+		this.setState ({rid});
+		goRidLocation (this.props, rid);
+	}
     
     render () {
         return (
-            <Form store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.user">
+            <Form store={store} rsc="record" rid={this.state.rid} mid="objectum.user" onCreate={this.onCreate}>
                 <Field property="name" />
                 <Field property="login" />
                 <Field property="password" />
-                <Field property="role" dict={true} />
+                <Field property="role" dict />
                 <Field property="file" />
             </Form>
         );
@@ -230,10 +254,10 @@ class User extends Component {
 ```html
 <Tabs id="tabs">
     <Tab label="Main info">
-        <Form />
+        ...
     </Tab>
     <Tab label="Additional">
-        <Form />
+        ...
     </Tab>
 </Tabs>
 ```
@@ -247,7 +271,15 @@ class User extends Component {
 ### Field
 Component selects objectum field by type.
 props:
-* **type**: *number* - objectum model id
+* **type**: *number* - objectum type id
+
+Objectum types:
+* 1 - string
+* 2 - number
+* 3 - timestamp (date)
+* 4 - boolean
+* 5 - file
+* 1000 - ... - models
 
 Common props for all fields:
 * **property**: *string* - resource property
@@ -292,30 +324,30 @@ Boolean field. Type id: 4
 props:
 * **store** - objectum store
 * **record** - record
-* **model** - record model
+* **model** - model
 
 <a name="choose_field" />
 
 ### ChooseField
-Field for selecting value. Type id: >= 1000  
-From query:
+Field for selecting value.  
+From component:
 ```html
-<ChooseField property="type" label="Type" rsc="record" value={this.state.type} choose={{cmp: ItemTypes, ref: "d.item.type"}} />
+<ChooseField property="type" choose={{cmp: ItemTypes, ref: "d.item.type"}} />
 ```
 From model:
 ```html
-<ChooseField property="type" label="Type" rsc="record" value={this.state.type} choose={{model: "d.item.type"}} />
+<ChooseField property="type" choose={{model: "d.item.type"}} />
 ```
 
 <a name="select_field" />
 
 ### SelectField
-Field for selecting from list (dictionary). Type id: >= 1000
+Field for selecting from list (dictionary).
 ```js
 let recs = [{id: 1, name: "Item 1"}, {id: 2, name: "Item 2"}];
 ```
 ```html
-<SelectField property="type" label="Type" recs={recs} />
+<SelectField property="type" recs={recs} />
 ```
 
 <a name="json_field" />
@@ -371,6 +403,7 @@ Action is a button. Helps with:
 * Shows confirmation before execute
 * Shows progress (client and server methods)
 * Shows result
+* User can stop execution
 
 Simple:
 ```html
@@ -386,16 +419,12 @@ Confirmation, progress, result:
 ```html
 <Action
     label="My action"
-    confirm={true}
-    onClick={async ({store, progress, confirm}) => {
+    confirm
+    onClick={async ({store, progress}) => {
         for (let i = 0; i < 10; i ++) {
             progress ({label: "My label", value: i + 1, max: 10});
         }
-        if (await confirm ("Are you sure?")) {
-            return "My result 1";
-        } else {
-            return "My result 2";
-        } 
+        return "My result";
     }}
 />
 ```
