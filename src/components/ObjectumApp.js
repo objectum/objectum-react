@@ -294,7 +294,7 @@ class ObjectumApp extends Component {
 			<Route key="objectum-11" path="/menus" render={props => <Menus {...props} store={me.store} />} />,
 			<Route key="objectum-12" path="/menu/:rid" render={props => <Menu {...props} store={me.store} />} />,
 			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={me.store} />} />,
-			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={me.store} />} />,
+			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={me.store} app={me} />} />,
 			<Route key="objectum-17" path="/import_css" render={props => <ImportCSS {...props} />} />,
 /*
 			<Route key="objectum-18" path="/schema" render={props => <Schema {...props} store={me.store} />} />,
