@@ -261,7 +261,8 @@ class Demo extends Component {
 						return div;
 					}}
 */
-					onCustomRender={me.onCustomRender}
+					/*onCustomRender={me.onCustomRender}*/
+					sidebar
 					onConnect={me.onConnect}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />

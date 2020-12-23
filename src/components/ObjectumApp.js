@@ -212,11 +212,11 @@ class ObjectumApp extends Component {
 					
 					items.push (
 						<tr key={`menu-${parent}-${i}`}>
-							<td>
+							<td className="fade-in">
 								<button className={`btn btn-link pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
 									{renderIcon (rec.icon, `icon-${parent}-${i}`)}
 									<span className="text-dark">{i18n (rec.name)}</span>
-									<i key={`open-${parent}-${i}`} className={`fas ${opened ? "fa-angle-up" : "fa-angle-down"} ml-2`} />
+									<i key={`open-${parent}-${i}`} className={`fas ${opened ? "fa-angle-up rotate-180-1" : `fa-angle-down ${me.state.hasOwnProperty (`open-${parent}-${i}`) ? "rotate-180-2" : ""}`} ml-2`} />
 								</button>
 							</td>
 						</tr>
