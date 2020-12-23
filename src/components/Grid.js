@@ -516,7 +516,7 @@ class Grid extends Component {
 		let me = this;
 		let actions = [];
 		
-		React.Children.forEach (children, child => {
+		React.Children.forEach (children, (child, i) => {
 			if (!child || !child.props) {
 				return;
 			}
@@ -534,6 +534,7 @@ class Grid extends Component {
 					actions.push (
 						<Action
 							{...opts}
+							key={`${id}-${i}`}
 							store={me.props.store}
 							label=""
 							title={child.props.label}
