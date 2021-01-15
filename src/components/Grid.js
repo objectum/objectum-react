@@ -538,7 +538,7 @@ class Grid extends Component {
 							store={me.props.store}
 							label=""
 							title={child.props.label}
-							btnClassName={child.props.btnClassName || `btn ${child.props.label == i18n ("Remove") ? "btn-outline-danger" : "btn-outline-primary"} mr-1`}
+							btnClassName={child.props.btnClassName || `btn btn-sm ${child.props.label == i18n ("Remove") ? "btn-outline-danger" : "btn-outline-primary"} mr-1`}
 							onClick={async (opts) => {
 								Object.assign (opts, {grid: me, store: me.props.store, parentId: me.props.parentId, parentModel: me.props.parentModel})
 								opts.id = id;
