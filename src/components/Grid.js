@@ -589,7 +589,7 @@ class Grid extends Component {
 			let row = (
 				<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
 					{me.state.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{me.renderInlineActions (me.props.children, rec.id, i)}</div></td>}
-					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-primary text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
+					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-sm btn-primary text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 					{me.state.cols.map ((col, j) => {
 						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
 							return;
