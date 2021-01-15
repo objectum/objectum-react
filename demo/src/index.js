@@ -172,6 +172,7 @@ class Test extends Component {
 						{id: 3, name: "Item 3", parent: 2}
 					]} tree />
 				</Group>
+				<div className="mt-1"><Grid store={store} query="item" /></div>
 			</div>
 		);
 	}

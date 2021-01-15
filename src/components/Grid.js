@@ -688,7 +688,7 @@ class Grid extends Component {
 		return rows;
 	}
 	
-	renderTableView () {
+	renderTableView ({gridChildren}) {
 		let me = this;
 		
 		if (!me.state.cols.length) {
@@ -700,7 +700,7 @@ class Grid extends Component {
 		let rows = me.getHeaderRows (me.state.cols.map (col => col.name));
 
 		return (
-			<div className="p-1 border-top">
+			<div className={`p-1 ${gridChildren ? "border-top" : ""}`}>
 				<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
 					<thead className="bg-info text-white">
 					{rows.map ((row, i) => {
@@ -962,7 +962,7 @@ class Grid extends Component {
 					
 					{me.state.showFilters && me.state.dockFilters == "top" && me.state.mode != "edit" && filters}
 					
-					{me.state.mode == "images" ? me.renderCardView () : (me.state.mode == "edit" ? me.renderEditView () : me.renderTableView ())}
+					{me.state.mode == "images" ? me.renderCardView () : (me.state.mode == "edit" ? me.renderEditView () : me.renderTableView ({gridChildren}))}
 					
 					{me.state.showFilters && me.state.dockFilters == "bottom" && me.state.mode != "edit" && filters}
 					
