@@ -182,7 +182,7 @@ function getHiddenCells (rows) {
 	return result;
 };
 
-async function createReport ({rows, columns, height = {}, font, worksheetName, worksheetOpts}) {
+async function createReport ({rows, columns, height = {}, font, worksheetName, worksheetOpts, filename}) {
 	if (!window.ExcelJS) {
 		await loadJS (`${getStore ().getUrl ()}/public/exceljs.js`);
 	}
@@ -245,7 +245,7 @@ async function createReport ({rows, columns, height = {}, font, worksheetName, w
 	}
 	const buf = await wb.xlsx.writeBuffer ();
 	
-	saveAs (new Blob ([buf]), "report.xlsx")
+	saveAs (new Blob ([buf]), filename || "report.xlsx")
 };
 
 export {
