@@ -460,16 +460,16 @@ class Grid extends Component {
 		return (
 			<div className="p-1 border-top">
 				<nav aria-label="breadcrumb">
-					<ol className="breadcrumb">
+					<ol className="breadcrumb m-0 p-1">
 						<li className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
-							<button type="button" className="btn btn-link btn-sm" onClick={() => me.onFolderClick (null)} disabled={!active}><i className="fas fa-home" /></button>
+							<button type="button" className="btn btn-link btn-sm p-0" onClick={() => me.onFolderClick (null)} disabled={!active}><i className="fas fa-home" /></button>
 						</li>
 						{me.position.map ((rec, i) => {
 							active = i < me.position.length - 1;
 							
 							return (
 								<li key={i} className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
-									<button type="button" className="btn btn-link btn-sm" onClick={() => me.onFolderClick (rec.id)} disabled={!active}>{rec.name || "-"}</button>
+									<button type="button" className="btn btn-link btn-sm p-0" onClick={() => me.onFolderClick (rec.id)} disabled={!active}>{rec.name || "-"}</button>
 								</li>
 							);
 						})}
