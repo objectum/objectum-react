@@ -156,23 +156,6 @@ class Test extends Component {
 				</div>
 				<SelectField label="Label" records={[]} />
 				<SelectField label="Label" records={this.state.recs} value={this.state.value} notNull />
-				<div className="p-1 border bg-secondary" style={{width: "5em"}}>
-					<SelectField records={this.state.recs} value={this.state.value} />
-				</div>
-				<DateField label="DateField" value={new Date ()} />
-				<Group label="Title" collapsible expanded>
-					<Panel label="Title" collapsible expanded>
-						<Panel label="Title" icon="fas fa-plus" collapsible expanded>
-							111
-						</Panel>
-					</Panel>
-					<DictField label="DictField" value={2} recs={[
-						{id: 1, name: "Item 1"},
-						{id: 2, name: "Item 2"},
-						{id: 3, name: "Item 3", parent: 2}
-					]} tree />
-				</Group>
-				<div className="mt-1"><Grid store={store} query="item" /></div>
 			</div>
 		);
 	}
