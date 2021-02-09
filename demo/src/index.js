@@ -184,6 +184,7 @@ class Demo extends Component {
 		this.setState ({
 			username: store.username
 		});
+		window.store = store;
 	}
 	
 	onCustomRender ({content, app, location}) {
