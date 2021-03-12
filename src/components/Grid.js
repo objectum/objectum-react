@@ -489,6 +489,9 @@ class Grid extends Component {
 			}
 			n ++;
 		});
+		if (this.state.inlineActions) {
+			n ++;
+		}
 		return n;
 	}
 	
