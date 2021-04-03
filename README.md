@@ -15,7 +15,7 @@ Install:
 npm install --save objectum-react
 ```
 
-## [Documentation](http://objectum.org)
+## [Documentation](http://objectum.org/objectum-react)
 
 ## Author
 
