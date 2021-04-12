@@ -53,8 +53,8 @@ class Property extends Component {
 		let me = this;
 		let removeRuleRecs = [
 			{id: "set null", name: "Set null"},
-			{id: "cascade", name: "Cascade"},
-			{id: "no action", name: "No action"}
+			{id: "cascade", name: "Cascade"}
+			//{id: "no action", name: "No action"}
 		];
 		return (
 			<div className="container">

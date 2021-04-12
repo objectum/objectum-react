@@ -1,9 +1,9 @@
 {
 	"name": "objectum-react",
-	"version": "1.2.108",
+	"version": "1.2.109",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
-	"module": "es/index.js",
+	"module": "src/index.js",
 	"files": [
 		"css",
 		"es",
@@ -57,7 +57,7 @@
 		"lodash.sortby": "^4.7.0",
 		"lodash.uniq": "^4.5.0",
 		"lodash.values": "^4.3.0",
-		"objectum-client": "^1.2.15",
+		"objectum-client": "^1.2.17",
 		"react-device-detect": "^1.13.1",
 		"react-dropzone": "^10.2.2",
 		"react-image-crop": "^8.6.2",
