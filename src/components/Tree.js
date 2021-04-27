@@ -70,7 +70,7 @@ export default class Tree extends Component {
 			<Fade>
 				{recs.map ((rec, i) => {
 					let v = this.highlightText (rec.getLabel ? rec.getLabel () : rec.name);
-					let node = <div key={i} className="p-1 d-flex" style={{marginLeft: level + "em", height: "2em"}}>
+					let node = <div key={i} className="p-1 d-flex" style={{marginLeft: level + "em", marginBottom: "0.125em"}}>
 						<div style={{width: "2em"}}>{rec.childs.length ?
 							<button className="btn btn-link btn-sm p-0" onClick={() => this.setState ({["opened-" + rec.id]: !this.state ["opened-" + rec.id]})}>
 								<i className={`fa-lg fas ${this.state ["opened-" + rec.id] ? "fa-folder-open" : "fa-folder"} mr-1`} />

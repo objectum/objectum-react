@@ -4,8 +4,6 @@
 import React, {Component} from "react";
 import {Tree, i18n, newId} from "..";
 import _isEmpty from "lodash.isempty";
-import _filter from "lodash.filter";
-import _keys from "lodash.keys";
 
 export default class DictField extends Component {
 	constructor (props) {
@@ -45,8 +43,8 @@ export default class DictField extends Component {
 		let state = {
 			label: ""
 		};
-		if (!this.state.records.length && !(this.props.recs || this.props.records)) {
-			state.records = await this.props.store.getDict (this.property.get ("type"));
+		if (!this.state.records.length) {
+			state.records = this.props.recs || this.props.records || (await this.props.store.getDict (this.property.get ("type")));
 		}
 		state.label = await this.getValueLabel (this.state.value);
 		
@@ -188,10 +186,6 @@ export default class DictField extends Component {
 		}
 	}
 	
-	onGroupClick = (val) => {
-		this.setState ({group: val.target.id});
-	}
-	
 	filter (inRecords) {
 		let map = {}, filteredMap = {};
 
@@ -215,65 +209,6 @@ export default class DictField extends Component {
 		return inRecords.filter (record => filteredMap [record.id]);
 	}
 
-	renderParameters () {
-		let recs = this.filter (this.state.recs);
-		
-		if (this.state.group) {
-			recs = recs.filter (rec => rec [this.groupProperty.code] == this.state.group);
-		}
-		return (
-			<div className="dictfield-dialog text-left" ref={this._refs ["optionDialog"]}>
-				<div className="dictfield-selector border bg-white shadow">
-					{(recs.length > 10 || this.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
-						<input type="text" className="form-control" value={this.state.filter} onChange={this.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
-					</div>}
-					<ul className="list-group">
-						{recs.map ((rec, i) => {
-							let label = `${rec.name} (id: ${rec.id})`;
-							
-							if (rec.getLabel) {
-								label = rec.getLabel ();
-							}
-							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={this.onClick}>{label}</li>
-							);
-						})}
-					</ul>
-				</div>
-			</div>
-		);
-	}
-	
-	renderGroup () {
-		let recs = this.filter (this.state.groupRecs);
-		
-		return (
-			<div className="dictfield-dialog text-left" ref={this._refs ["groupDialog"]}>
-				<div className="dictfield-selector border bg-white shadow">
-					{(recs.length > 10 || this.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
-						<input type="text" className="form-control" value={this.state.filter} onChange={this.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
-					</div>}
-					<ul className="list-group">
-						{recs.map ((rec, i) => {
-							let label = rec.name;
-							
-							if (rec.getLabel) {
-								label = rec.getLabel ();
-							}
-							let num = _filter (this.state.recs, {[this.groupProperty.get ("code")]: rec.id}).length;
-							
-							label += ` (${i18n ("Amount")}: ${num})`;
-							
-							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={this.onGroupClick}>{label}</li>
-							);
-						})}
-					</ul>
-				</div>
-			</div>
-		);
-	}
-	
 	renderTree () {
 		let records = this.filter (this.state.records);
 		let opened = [];

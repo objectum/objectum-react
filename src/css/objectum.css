@@ -87,7 +87,7 @@
     position: absolute;
     left: -1px;
     top: 2px;
-    width: 33em;
+    min-width: 33em;
     min-height: 5em;
     max-height: 25em;
     z-index: 1000;
