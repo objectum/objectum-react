@@ -67,10 +67,10 @@ class Test extends Component {
 		this.setState ({
 			recs: [
 				{id: 1, name: "1"},
-				{id: 2, name: "2"},
-				{id: 3, name: "3"},
-				{id: 4, name: "4"},
-				{id: 5, name: "5555 6 7 8 9 0"},
+				{id: 2, name: "2", getLabel: () => "2 (id: 2)"},
+				{id: 3, name: "3", parent: 2},
+				{id: 4, name: "4", parent: 3},
+				{id: 5, name: "5555 6 7 8 9 0", parent: 4},
 				{id: 6, name: "6"},
 				{id: 7, name: "7"},
 				{id: 8, name: "8"},
@@ -136,26 +136,12 @@ class Test extends Component {
 						);
 					})}
 				</select>
-				<div className="p-1 border bg-secondary" style={{width: "5em"}}>
-					<DictField sm label="Dict" disabled notNull records={[
-						{id: 1, name: "1"},
-						{id: 2, name: "2"},
-						{id: 3, name: "3"},
-						{id: 4, name: "4"},
-						{id: 5, name: "5"},
-						{id: 6, name: "6"},
-						{id: 7, name: "7"},
-						{id: 8, name: "8"},
-						{id: 9, name: "9"},
-						{id: 10, name: "10"},
-						{id: 11, name: "11"},
-						{id: 12, name: "12"},
-						{id: 13, name: "13"},
-						{id: 14, name: "14"}
-					]} />
+				<div className="p-1 border" style={{width: "15em"}}>
+					<DictField label="Dict" notNull records={this.state.recs} />
 				</div>
-				<SelectField label="Label" records={[]} />
-				<SelectField label="Label" records={this.state.recs} value={this.state.value} notNull />
+				<div className="mt-1 border" style={{width: "20em"}}>
+					<Tree recs={this.state.recs} onChoose={({id}) => alert (id)} />
+				</div>
 			</div>
 		);
 	}

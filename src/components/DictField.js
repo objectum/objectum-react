@@ -2,98 +2,73 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Tooltip, Tree, i18n, newId} from "..";
+import {Tree, i18n, newId} from "..";
 import _isEmpty from "lodash.isempty";
 import _filter from "lodash.filter";
 import _keys from "lodash.keys";
 
-class DictField extends Component {
+export default class DictField extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.onClear = me.onClear.bind (me);
-		me.onFilter = me.onFilter.bind (me);
-		me.onClick = me.onClick.bind (me);
-		me.onGroupClick = me.onGroupClick.bind (me);
-		me.onDocumentClick = me.onDocumentClick.bind (me);
-		me.onShowDialog = me.onShowDialog.bind (me);
-
-		me.state = {
-			rsc: me.props.rsc || "record",
-			code: me.props.property,
-			value: me.props.value === null ? "" : me.props.value,
+		this.state = {
+			code: this.props.property,
+			value: this.props.value === null ? "" : this.props.value,
 			label: "",
 			showDialog: false,
-			recs: me.props.records || me.props.recs || [],
-			groupRecs: null,
-			group: null,
-			filter: "",
-			treeMode: me.props.tree
+			records: this.props.records || this.props.recs || [],
+			filter: ""
 		};
-		if (me.props.model) {
-			me.model = me.props.store.getModel (me.props.model);
-			me.property = me.model.properties [me.props.property];
+		if (this.props.model) {
+			this.model = this.props.store.getModel (this.props.model);
+			this.property = this.model.properties [this.props.property];
 		}
-		me._refs = {
+		this._refs = {
 			"optionDialog": React.createRef (),
 			"groupDialog": React.createRef (),
 			"treeDialog": React.createRef (),
 			"button": React.createRef (),
 			"inputDiv": React.createRef ()
 		};
-		me.id = newId ();
+		this.id = newId ();
 	}
 	
-	onClear () {
-		let me = this;
-		
-		me.setState ({value: null, label: ""});
+	onClear = () => {
+		this.setState ({value: null, label: ""});
 
-		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value: null, id: me.props.id});
+		if (this.props.onChange) {
+			this.props.onChange ({...this.props, code: this.state.code, value: null, id: this.props.id});
 		}
 	}
 	
 	async componentDidMount () {
-		let me = this;
 		let state = {
 			label: ""
 		};
-		if (!me.state.recs.length && !(me.props.recs || me.props.records)) {
-			state.recs = await me.props.store.getDict (me.property.get ("type"));
+		if (!this.state.records.length && !(this.props.recs || this.props.records)) {
+			state.records = await this.props.store.getDict (this.property.get ("type"));
 		}
-		if (me.state.value) {
-			if (me.model) {
-				let record = await me.props.store.getRecord (me.state.value);
-				
-				state.label = record.getLabel ();
-			} else {
-				let rec = me.state.recs.find (rec => rec.id == me.state.value);
-				
-				if (rec) {
-					if (rec.getLabel) {
-						state.label = rec.getLabel ();
-					} else {
-						state.label = rec.name;
-					}
-				}
-			}
-		}
-		if (me.props.model) {
-			let m = me.props.store.getModel (me.property.get ("type"));
+		state.label = await this.getValueLabel (this.state.value);
+		
+		if (this.props.model) {
+			let m = this.props.store.getModel (this.property.get ("type"));
 			
 			for (let code in m.properties) {
 				let property = m.properties [code];
 				
 				if (property.get ("type") >= 1000) {
-					if ((property.code == "group" && !me.props.hasOwnProperty ("groupProperty")) || property.code == me.props.groupProperty) {
-						let pm = me.props.store.getModel (property.get ("type"));
+					if ((property.code == "group" && !this.props.hasOwnProperty ("groupProperty")) || property.code == this.props.groupProperty) {
+						let pm = this.props.store.getModel (property.get ("type"));
 						
 						if (pm.isDictionary ()) {
-							me.groupProperty = property;
-							state.groupRecs = await me.props.store.getDict (property.get ("type"));
+							this.groupProperty = property;
+							
+							let groupRecords = await this.props.store.getDict (property.get ("type"));
+							let records = state.records || this.state.records;
+							
+							groupRecords.forEach (groupRecord => groupRecord.unselectable = true);
+							records.forEach (record => record.parent = record [property.code]);
+							state.records = [...groupRecords, ...records];
 							break;
 						}
 					}
@@ -103,41 +78,24 @@ class DictField extends Component {
 				}
 			}
 		}
-		document.addEventListener ("mousedown", me.onDocumentClick)
-		me.setState (state);
+		document.addEventListener ("mousedown", this.onDocumentClick)
+		this.setState (state);
 	}
 	
 	async componentDidUpdate (prevProps) {
-		let me = this;
 		let state = {};
 		
-		if (prevProps.value !== me.props.value) {
-			state.value = me.props.value;
-			state.label = "";
-			
-			if (me.props.value && me.model) {
-				let record = await me.props.store.getRecord (me.props.value);
-				
-				state.label = record.getLabel ();
-			} else {
-				let rec = me.state.recs.find (rec => rec.id == me.state.value);
-				
-				if (rec) {
-					if (rec.getLabel) {
-						state.label = rec.getLabel ();
-					} else {
-						state.label = rec.name;
-					}
-				}
-			}
+		if (prevProps.value !== this.props.value) {
+			state.value = this.props.value;
+			state.label = await this.getValueLabel (this.props.value);
 		}
-		let recs = me.props.recs || me.props.records;
+		let records = this.props.recs || this.props.records;
 		
-		if (recs && _keys (recs).join () != _keys (me.state.recs).join ()) {
-			state.recs = recs;
+		if (records && records.map (record => record.id).join () != this.state.records.map (record => record.id).join ()) {
+			state.records = records;
 		}
 		if (!_isEmpty (state)) {
-			me.setState (state);
+			this.setState (state);
 		}
 	}
 	
@@ -145,18 +103,37 @@ class DictField extends Component {
 		document.removeEventListener ("mousedown", this.onDocumentClick);
 	}
 	
-	onDocumentClick (event) {
-		let me = this;
-		let dialog = me._refs ["optionDialog"] || me._refs ["groupDialog"] || me._refs ["treeDialog"];
+	async getValueLabel (value) {
+		let label = "";
+		
+		if (value && this.model) {
+			let record = await this.props.store.getRecord (value);
+			
+			label = record.getLabel ();
+		} else {
+			let record = this.state.records.find (record => record.id == value);
+			
+			if (record) {
+				if (record.getLabel) {
+					label = record.getLabel ();
+				} else {
+					label = record.name;
+				}
+			}
+		}
+		return label;
+	}
+	
+	onDocumentClick = event => {
+		let dialog = this._refs ["optionDialog"] || this._refs ["groupDialog"] || this._refs ["treeDialog"];
 		
 		if (dialog) {
 			dialog = dialog.current;
 		}
 		if (dialog && !dialog.contains (event.target) &&
-			//me._refs ["button"].current && !me._refs ["button"].current.contains (event.target) &&
-			me._refs ["inputDiv"].current && !me._refs ["inputDiv"].current.contains (event.target)
+			this._refs ["inputDiv"].current && !this._refs ["inputDiv"].current.contains (event.target)
 		) {
-			me.setState ({
+			this.setState ({
 				showDialog: false,
 				filter: "",
 				group: null
@@ -164,31 +141,34 @@ class DictField extends Component {
 		}
 	}
 	
-	onFilter (val) {
-		let me = this;
+	onFilter = val => {
 		let v = val.target.value;
 		
-		me.setState ({filter: v});
+		if (!this.state.filter && this.state.label) {
+			if (v.length > this.state.label.length) {
+				v = v.substr (this.state.label.length);
+			} else {
+				v = "";
+			}
+		}
+		this.setState ({filter: v});
 	}
 	
-	onShowDialog () {
-		let me = this;
-		
+	onShowDialog = () => {
 		if (this.props.disabled) {
 			return;
 		}
-		if (me.state.showDialog) {
-			return me.setState ({
+		if (this.state.showDialog) {
+			return this.setState ({
 				showDialog: false,
 				filter: "",
 				group: null
 			});
 		}
-		me.setState ({showDialog: true});
+		this.setState ({showDialog: true});
 	}
 	
-	async onClick (val) {
-		let me = this;
+	onClick = async (val) => {
 		let value = val.target.id;
 		
 		if (!isNaN (value)) {
@@ -198,60 +178,54 @@ class DictField extends Component {
 			showDialog: false,
 			value,
 			filter: "",
-			group: null
+			group: null,
+			label: await this.getValueLabel (value)
 		};
-		if (me.model) {
-			let record = await me.props.store.getRecord (value);
-			
-			state.label = record.getLabel ();
-		} else {
-			let rec = me.state.recs.find (rec => rec.id == value);
-			
-			if (rec) {
-				if (rec.getLabel) {
-					state.label = rec.getLabel ();
-				} else {
-					state.label = rec.name;
-				}
-			}
-		}
-		me.setState (state);
+		this.setState (state);
 		
-		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
+		if (this.props.onChange) {
+			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 		}
 	}
 	
-	onGroupClick (val) {
-		let me = this;
-		me.setState ({group: val.target.id});
+	onGroupClick = (val) => {
+		this.setState ({group: val.target.id});
 	}
 	
-	filter (inRecs) {
-		let me = this;
-		let recs = [];
+	filter (inRecords) {
+		let map = {}, filteredMap = {};
+
+		inRecords.forEach (record => map [record.id] = record);
 		
-		inRecs.forEach (rec => {
-			if (me.state.filter && (rec.name.toLowerCase () || "").indexOf (me.state.filter.toLowerCase ()) == -1) {
+		let collectParents = (parent) => {
+			if (!parent) {
 				return;
 			}
-			recs.push (rec);
+			filteredMap [parent] = true;
+			let record = map [parent];
+			collectParents (record.parent);
+		};
+		inRecords.forEach (record => {
+			if (this.state.filter && (record.name.toLowerCase () || "").indexOf (this.state.filter.toLowerCase ()) == -1) {
+				return;
+			}
+			filteredMap [record.id] = true;
+			collectParents (record.parent);
 		});
-		return recs;
+		return inRecords.filter (record => filteredMap [record.id]);
 	}
 
 	renderParameters () {
-		let me = this;
-		let recs = me.filter (me.state.recs);
+		let recs = this.filter (this.state.recs);
 		
-		if (me.state.group) {
-			recs = recs.filter (rec => rec [me.groupProperty.code] == me.state.group);
+		if (this.state.group) {
+			recs = recs.filter (rec => rec [this.groupProperty.code] == this.state.group);
 		}
 		return (
-			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
+			<div className="dictfield-dialog text-left" ref={this._refs ["optionDialog"]}>
 				<div className="dictfield-selector border bg-white shadow">
-					{(recs.length > 10 || me.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
-						<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
+					{(recs.length > 10 || this.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
+						<input type="text" className="form-control" value={this.state.filter} onChange={this.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
 					</div>}
 					<ul className="list-group">
 						{recs.map ((rec, i) => {
@@ -261,44 +235,23 @@ class DictField extends Component {
 								label = rec.getLabel ();
 							}
 							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={me.onClick}>{label}</li>
+								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={this.onClick}>{label}</li>
 							);
 						})}
 					</ul>
 				</div>
-{/*
-				<div className="dictfield-filter border p-1 bg-white shadow">
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter parameters") + " ..."} />
-				</div>
-				<div className="dictfield-params border p-1 bg-white shadow">
-					<div className="sticky-top p-1 bg-white">111</div>
-					<ul className="list-group">
-						{recs.map ((rec, i) => {
-							let label = `${rec.name} (id: ${rec.id})`;
-							
-							if (rec.getLabel) {
-								label = rec.getLabel ();
-							}
-							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={me.onClick}>{label}</li>
-							);
-						})}
-					</ul>
-				</div>
-*/}
 			</div>
 		);
 	}
 	
 	renderGroup () {
-		let me = this;
-		let recs = me.filter (me.state.groupRecs);
+		let recs = this.filter (this.state.groupRecs);
 		
 		return (
-			<div className="dictfield-dialog text-left" ref={me._refs ["groupDialog"]}>
+			<div className="dictfield-dialog text-left" ref={this._refs ["groupDialog"]}>
 				<div className="dictfield-selector border bg-white shadow">
-					{(recs.length > 10 || me.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
-						<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
+					{(recs.length > 10 || this.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
+						<input type="text" className="form-control" value={this.state.filter} onChange={this.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
 					</div>}
 					<ul className="list-group">
 						{recs.map ((rec, i) => {
@@ -307,146 +260,69 @@ class DictField extends Component {
 							if (rec.getLabel) {
 								label = rec.getLabel ();
 							}
-							let num = _filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
+							let num = _filter (this.state.recs, {[this.groupProperty.get ("code")]: rec.id}).length;
 							
 							label += ` (${i18n ("Amount")}: ${num})`;
 							
 							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={me.onGroupClick}>{label}</li>
+								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={this.onGroupClick}>{label}</li>
 							);
 						})}
 					</ul>
 				</div>
-				
-{/*
-				<div className="dictfield-filter border p-1 bg-white shadow">
-					<input type="text" className="form-control" value={me.state.filter} onChange={me.onFilter} placeholder={i18n ("Filter groups") + " ..."} />
-				</div>
-				<div className="dictfield-params border p-1 bg-white shadow">
-					<ul className="list-group">
-						{recs.map ((rec, i) => {
-							let label = rec.name;
-							
-							if (rec.getLabel) {
-								label = rec.getLabel ();
-							}
-							let num = _filter (me.state.recs, {[me.groupProperty.get ("code")]: rec.id}).length;
-							
-							label += ` (${i18n ("Amount")}: ${num})`;
-							
-							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={me.onGroupClick}>{label}</li>
-							);
-						})}
-					</ul>
-				</div>
-*/}
 			</div>
 		);
 	}
 	
 	renderTree () {
-		let me = this;
+		let records = this.filter (this.state.records);
+		let opened = [];
 		
-		return (
-			<div className="dictfield-dialog text-left" ref={me._refs ["optionDialog"]}>
-				<div className="dictfield-tree border p-1 bg-white shadow">
-					<Tree recs={me.state.recs} onChoose={({id, name}) => me.onClick ({target: {id, name}})} />
-				</div>
+		if (this.state.filter) {
+			opened = records.map (record => record.id);
+		}
+		return <div className="dictfield-dialog text-left" ref={this._refs ["optionDialog"]}>
+			<div className="dictfield-tree border p-1 bg-white shadow">
+				<Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})} />
 			</div>
-		);
+		</div>;
 	}
 	
 	render () {
-		let me = this;
-		let addCls = me.props.error ? " is-invalid" : "";
+		let addCls = this.props.error ? " is-invalid" : "";
 		
 		return (
 			<div>
-				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
-					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-{/*
-					<div className="d-flex dictfield">
-						{!me.props.disabled && <div className="border border-right-0 rounded-left bg-white">
-							<Tooltip label={i18n ("Choose")}><button
-								type="button"
-								className="btn btn-link btn-sm p-1"
-								onClick={me.onShowDialog}
-								style={{height: "100%", width: "2.5em"}}
-								ref={me._refs ["button"]}
-							>
-								<i className="fas fa-edit" />
-							</button></Tooltip>
-						</div>}
-						<Tooltip label={me.state.label}>
-							<div onClick={me.onShowDialog} ref={me._refs ["inputDiv"]}>
-								<input
-									type="text"
-									className={`form-control bg-white dictfield-option ${addCls} ${me.props.disabled ? "" : " dictfield-input"}`}
-									id={me.id}
-									value={me.state.label}
-									disabled
-								/>
-							</div>
-						</Tooltip>
-						{!me.props.disabled && <div className="border border-left-0 rounded-right bg-white">
-							<Tooltip label={i18n ("Clear")}><button
-								type="button"
-								className="btn btn-link btn-sm p-1"
-								onClick={me.onClear}
-								style={{height: "100%", width: "2.5em"}}
-							>
-								<i className="fas fa-times" />
-							</button></Tooltip>
-						</div>}
-					</div>
-*/}
+				<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
+					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 					<div className="input-group dictfield">
-{/*
-						{!me.props.disabled && <div className="input-group-prepend">
-							<button
-								type="button"
-								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
-								onClick={me.onShowDialog}
-								ref={me._refs ["button"]}
-								title={i18n ("Choose")}
-							>
-								<i className="fas fa-edit" />
-							</button>
-						</div>}
-*/}
 						<input
 							type="text"
-							className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
-							id={me.id}
-							value={me.state.label}
+							className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.state.filter ? "text-warning" : ""}`}
+							id={this.id}
 							title={this.state.label}
+							value={this.state.filter || this.state.label}
+							onChange={this.onFilter}
 							onClick={this.onShowDialog}
 							ref={this._refs ["inputDiv"]}
-							readOnly
+							readOnly={!!this.props.disabled}
 						/>
-						{!me.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
+						{!this.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
 							<button
 								type="button"
 								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
-								onClick={me.onClear}
+								onClick={this.onClear}
 								title={i18n ("Clear")}
 							>
 								<i className="fas fa-times" />
 							</button>
 						</div>}
 					</div>
-					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
-
-					{me.state.showDialog ? (
-						(me.state.groupRecs && !me.state.group) ? me.renderGroup () :
-							(me.state.treeMode ? me.renderTree () : me.renderParameters ())
-					) : <div />}
+					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+					{this.state.showDialog ? this.renderTree () : <div />}
 				</div>
 			</div>
 		);
 	}
 };
 DictField.displayName = "DictField";
-
-export default DictField;
