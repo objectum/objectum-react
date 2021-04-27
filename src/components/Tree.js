@@ -56,50 +56,67 @@ export default class Tree extends Component {
 	}
 	
 	highlightText (v) {
-		if (this.props.highlightText && v.indexOf (this.props.highlightText) > -1) {
-			let tokens = v.split (this.props.highlightText);
-			v = tokens.join (`<span class="text-warning">${this.props.highlightText}</span>`);
+		if (this.props.highlightText) {
+			let idx = (v || "").toLowerCase ().indexOf (this.props.highlightText.toLowerCase ());
+			
+			if (idx > -1) {
+				v = `${v.substr (0, idx)}<span class="text-warning">${v.substr (idx, this.props.highlightText.length)}</span>${v.substr (idx + this.props.highlightText.length)}`;
+			}
 		}
 		return v;
 	}
 	
 	renderNodes (parent, level = 0) {
 		let recs = this.state.map [parent].childs;
+		let items = [];
 		
-		return (
-			<Fade>
-				{recs.map ((rec, i) => {
-					let v = this.highlightText (rec.getLabel ? rec.getLabel () : rec.name);
-					let node = <div key={i} className="p-1 d-flex" style={{marginLeft: level + "em", marginBottom: "0.125em"}}>
-						<div style={{width: "2em"}}>{rec.childs.length ?
-							<button className="btn btn-link btn-sm p-0" onClick={() => this.setState ({["opened-" + rec.id]: !this.state ["opened-" + rec.id]})}>
-								<i className={`fa-lg fas ${this.state ["opened-" + rec.id] ? "fa-folder-open" : "fa-folder"} mr-1`} />
-							</button> : null}
-						</div>
-						<div className="dictfield-option" onClick={() => {
-							if (this.props.onChoose) {
-								this.props.onChoose ({id: rec.id, rec});
-							}
-						}} dangerouslySetInnerHTML={{__html: v}} />
-					</div>;
-					
-					if (rec.childs.length && this.state ["opened-" + rec.id]) {
-						return (
-							<div key={i}>
-								{node}
-								{this.renderNodes (rec.id, level + 1)}
-							</div>
-						);
-					} else {
-						return node;
-					}
-				})}
-			</Fade>
-		);
+		recs.forEach ((rec, i) => {
+			let v = this.highlightText (rec.getLabel ? rec.getLabel () : rec.name);
+			let td = [];
+			
+			for (let i = 0; i < level; i ++) {
+				td.push (<td key={i} width="1em"><img height={1} width="2em"/></td>);
+			}
+			td.push (<td key="button" width="1em">{rec.childs.length ?
+				<button className="btn btn-link btn-sm p-0" onClick={() => this.setState ({["opened-" + rec.id]: !this.state ["opened-" + rec.id]})}>
+					<i className={`fa-lg fas ${this.state ["opened-" + rec.id] ? "fa-folder-open" : "fa-folder"} mr-1`} />
+				</button> : <img height={1} width="2em"/>}
+			</td>);
+			td.push (<td key="value" colSpan={this.levelNum - level}><div className="dictfield-option" onClick={() => {
+				if (this.props.onChoose) {
+					this.props.onChoose ({id: rec.id, rec});
+				}
+			}} dangerouslySetInnerHTML={{__html: v}} /></td>);
+			
+			let node = <tr key={rec.id}>{td}</tr>;
+			
+			if (rec.childs.length && this.state ["opened-" + rec.id]) {
+				items = [...items, node, ...this.renderNodes (rec.id, level + 1)];
+			} else {
+				items.push (node);
+			}
+		});
+		return items;
+	}
+	
+	calcLevelNum (parent = 0, level = 1) {
+		if (!parent) {
+			this.levelNum = 1;
+		}
+		if (this.levelNum < level) {
+			this.levelNum = level;
+		}
+		this.state.map [parent].childs.forEach (rec => {
+			if (rec.childs.length) {
+				this.calcLevelNum (rec.id, level + 1);
+			}
+		});
 	}
 	
 	render () {
-		return this.renderNodes (0);
+		this.calcLevelNum ();
+		console.log (this.levelNum);
+		return <table className="table table-sm table-striped"><tbody>{this.renderNodes (0)}</tbody></table>;
 	}
 };
 Tree.displayName = "Tree";

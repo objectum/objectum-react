@@ -4,28 +4,21 @@
 import React, {Component} from "react";
 import {Tree, i18n, newId} from "..";
 import _isEmpty from "lodash.isempty";
+import _defaults from "lodash.defaults";
 
 export default class DictField extends Component {
 	constructor (props) {
 		super (props);
 		
 		this.state = {
-			code: this.props.property,
-			value: this.props.value === null ? "" : this.props.value,
-			label: "",
+			loading: true,
 			showDialog: false,
-			records: this.props.records || this.props.recs || [],
-			filter: ""
+			filter: "",
+			value: null,
+			label: ""
 		};
-		if (this.props.model) {
-			this.model = this.props.store.getModel (this.props.model);
-			this.property = this.model.properties [this.props.property];
-		}
 		this._refs = {
-			"optionDialog": React.createRef (),
-			"groupDialog": React.createRef (),
 			"treeDialog": React.createRef (),
-			"button": React.createRef (),
 			"inputDiv": React.createRef ()
 		};
 		this.id = newId ();
@@ -39,17 +32,30 @@ export default class DictField extends Component {
 		}
 	}
 	
-	async componentDidMount () {
-		let state = {
-			label: ""
-		};
-		if (!this.state.records.length) {
-			state.records = this.props.recs || this.props.records || (await this.props.store.getDict (this.property.get ("type")));
-		}
-		state.label = await this.getValueLabel (this.state.value);
+	updateState = async (prevProps = {}) => {
+		let state = {};
+		let getValue = (a) => state.hasOwnProperty (a) ? state [a] : this.state [a];
 		
-		if (this.props.model) {
-			let m = this.props.store.getModel (this.property.get ("type"));
+		if (this.props.model && this.props.model !== prevProps.model) {
+			state.model = this.props.store.getModel (this.props.model);
+		}
+		if (this.props.property && this.props.property !== prevProps.property) {
+			state.code = this.props.property;
+			
+			if (getValue ("model")) {
+				state.property = getValue ("model").properties [this.props.property];
+			}
+		}
+		let records = this.props.recs || this.props.records;
+		
+		if (records && (!getValue ("records") || records.map (record => record.id).join () != getValue ("records").map (record => record.id).join ())) {
+			state.records = records;
+		}
+		if (state.model || state.property) {
+			if (!state.records) {
+				state.records = await this.props.store.getDict (getValue ("property").get ("type"));
+			}
+			let m = this.props.store.getModel (getValue ("property").get ("type"));
 			
 			for (let code in m.properties) {
 				let property = m.properties [code];
@@ -59,10 +65,8 @@ export default class DictField extends Component {
 						let pm = this.props.store.getModel (property.get ("type"));
 						
 						if (pm.isDictionary ()) {
-							this.groupProperty = property;
-							
 							let groupRecords = await this.props.store.getDict (property.get ("type"));
-							let records = state.records || this.state.records;
+							let records = getValue ("records");
 							
 							groupRecords.forEach (groupRecord => groupRecord.unselectable = true);
 							records.forEach (record => record.parent = record [property.code]);
@@ -70,46 +74,43 @@ export default class DictField extends Component {
 							break;
 						}
 					}
-					if (property.code == "parent") {
-						state.treeMode = true;
-					}
 				}
 			}
 		}
-		document.addEventListener ("mousedown", this.onDocumentClick)
-		this.setState (state);
-	}
-	
-	async componentDidUpdate (prevProps) {
-		let state = {};
-		
-		if (prevProps.value !== this.props.value) {
+		if (this.props.hasOwnProperty ("value") && this.props.value !== prevProps.value) {
 			state.value = this.props.value;
-			state.label = await this.getValueLabel (this.props.value);
+			state.label = await this.getValueLabel ({value: this.props.value, model: getValue ("model"), records: getValue ("records")});
 		}
-		let records = this.props.recs || this.props.records;
-		
-		if (records && records.map (record => record.id).join () != this.state.records.map (record => record.id).join ()) {
-			state.records = records;
+		if (this.state.loading) {
+			state.loading = false;
 		}
 		if (!_isEmpty (state)) {
 			this.setState (state);
 		}
 	}
 	
+	async componentDidMount () {
+		await this.updateState ();
+		document.addEventListener ("mousedown", this.onDocumentClick)
+	}
+	
+	async componentDidUpdate (prevProps) {
+		await this.updateState (prevProps);
+	}
+	
 	componentWillUnmount () {
 		document.removeEventListener ("mousedown", this.onDocumentClick);
 	}
 	
-	async getValueLabel (value) {
+	async getValueLabel ({value, model, records}) {
 		let label = "";
 		
-		if (value && this.model) {
+		if (value && model) {
 			let record = await this.props.store.getRecord (value);
 			
 			label = record.getLabel ();
 		} else {
-			let record = this.state.records.find (record => record.id == value);
+			let record = records.find (record => record.id == value);
 			
 			if (record) {
 				if (record.getLabel) {
@@ -123,7 +124,7 @@ export default class DictField extends Component {
 	}
 	
 	onDocumentClick = event => {
-		let dialog = this._refs ["optionDialog"] || this._refs ["groupDialog"] || this._refs ["treeDialog"];
+		let dialog = this._refs ["treeDialog"];
 		
 		if (dialog) {
 			dialog = dialog.current;
@@ -133,8 +134,7 @@ export default class DictField extends Component {
 		) {
 			this.setState ({
 				showDialog: false,
-				filter: "",
-				group: null
+				filter: ""
 			});
 		}
 	}
@@ -159,8 +159,7 @@ export default class DictField extends Component {
 		if (this.state.showDialog) {
 			return this.setState ({
 				showDialog: false,
-				filter: "",
-				group: null
+				filter: ""
 			});
 		}
 		this.setState ({showDialog: true});
@@ -176,8 +175,7 @@ export default class DictField extends Component {
 			showDialog: false,
 			value,
 			filter: "",
-			group: null,
-			label: await this.getValueLabel (value)
+			label: await this.getValueLabel ({value, model: this.state.model, records: this.state.records})
 		};
 		this.setState (state);
 		
@@ -216,7 +214,7 @@ export default class DictField extends Component {
 		if (this.state.filter) {
 			opened = records.map (record => record.id);
 		}
-		return <div className="dictfield-dialog text-left" ref={this._refs ["optionDialog"]}>
+		return <div className="dictfield-dialog text-left" ref={this._refs ["treeDialog"]}>
 			<div className="dictfield-tree border p-1 bg-white shadow">
 				<Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})} />
 			</div>
@@ -224,6 +222,9 @@ export default class DictField extends Component {
 	}
 	
 	render () {
+		if (this.state.loading) {
+			return null;
+		}
 		let addCls = this.props.error ? " is-invalid" : "";
 		
 		return (
