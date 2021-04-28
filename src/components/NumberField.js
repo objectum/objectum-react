@@ -4,60 +4,72 @@
 import React, {Component} from "react";
 import {i18n, newId} from "..";
 
-class NumberField extends Component {
+export default class NumberField extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.onChange = me.onChange.bind (me);
-		me.state = {
-			rsc: me.props.rsc || "record",
-			code: me.props.property,
-			value: (me.props.value === null || me.props.value === undefined) ? "" : me.props.value
+		this.state = {
+			rsc: this.props.rsc || "record",
+			code: this.props.property,
+			value: (this.props.value === null || this.props.value === undefined) ? "" : this.props.value
 		};
-		me.id = newId ();
+		this.id = newId ();
 	}
 	
-	onChange (val) {
-		let me = this;
-		let value = val.target.value;
+	onChange = (val) => {
+		let value = (val.target.value || "").match (/[0123456789.-]+/g) || "";
 		
-		me.setState ({value});
-
-		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
+		if (value) {
+			value = value [0];
+			
+			if (value.indexOf ("-") > -1) {
+				value = `-${value.split ("-").join ("")}`;
+			}
+			let idx = value.indexOf (".");
+			
+			if (idx > -1) {
+				value = value.split (".").join ("");
+				value = `${value.substr (0, idx)}.${value.substr (idx)}`;
+			}
+			let n = Number (value);
+			
+			if (this.props.min && n < this.props.min) {
+				value = this.props.min;
+			}
+			if (this.props.max && n < this.props.max) {
+				value = this.props.max;
+			}
+		}
+		this.setState ({value});
+		
+		if (this.props.onChange) {
+			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 		}
 	}
 	
 	async componentDidUpdate (prevProps) {
-		let me = this;
-		
-		if (prevProps.value !== me.props.value) {
-			me.setState ({value: me.props.value === null || me.props.value === undefined ? "" : me.props.value});
+		if (prevProps.value !== this.props.value) {
+			this.setState ({value: this.props.value === null || this.props.value === undefined ? "" : this.props.value});
 		}
 	}
 	
 	render () {
-		let me = this;
-		let disabled = me.props.disabled;
-		let addCls = me.props.error ? "is-invalid" : "";
+		let disabled = this.props.disabled;
+		let addCls = this.props.error ? "is-invalid" : "";
 		
-		if (me.props.label || me.props.error) {
+		if (this.props.label || this.props.error) {
 			return (
 				<div className="form-group">
-					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-					<input type="number" className={`form-control ${addCls} numberfield`} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled} min={me.props.min} max={me.props.max} />
-					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
+					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+					<input type="text" className={`form-control ${addCls} numberfield`} id={this.id} value={this.state.value} onChange={this.onChange} disabled={disabled} />
+					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 				</div>
 			);
 		} else {
 			return (
-				<input type="number" className="form-control numberfield" value={me.state.value} onChange={me.onChange} disabled={disabled} min={me.props.min} max={me.props.max} />
+				<input type="text" className="form-control numberfield" value={this.state.value} onChange={this.onChange} disabled={disabled} />
 			);
 		}
 	}
 };
 NumberField.displayName = "NumberField";
-
-export default NumberField;

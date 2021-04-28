@@ -2,8 +2,6 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Fade} from "../index";
-import _keys from "lodash.keys";
 import _isEmpty from "lodash.isempty";
 
 export default class Tree extends Component {
@@ -66,27 +64,66 @@ export default class Tree extends Component {
 		return v;
 	}
 	
+	check (id, checked) {
+		let state = {};
+		let process = (id) => {
+			state [`checked-${id}`] = checked;
+			this.checkedNodes = this.checkedNodes || [];
+			
+			if (checked) {
+				if (this.checkedNodes.indexOf (id) == -1) {
+					this.checkedNodes.push (id);
+				}
+			} else {
+				let idx = this.checkedNodes.indexOf (id);
+				
+				if (idx > -1) {
+					this.checkedNodes.splice (idx, 1);
+				}
+			}
+			if (this.state [`opened-${id}`]) {
+				let recs = this.state.map [id].childs;
+				recs.forEach (rec => process (rec.id));
+			}
+		};
+		process (id);
+		this.setState (state);
+		
+		if (this.props.onCheck) {
+			this.props.onCheck ({checkedNodes: this.checkedNodes});
+		}
+	}
+	
 	renderNodes (parent, level = 0) {
 		let recs = this.state.map [parent].childs;
 		let items = [];
 		
-		recs.forEach ((rec, i) => {
+		recs.forEach (rec => {
 			let v = this.highlightText (rec.getLabel ? rec.getLabel () : rec.name);
 			let td = [];
 			
 			for (let i = 0; i < level; i ++) {
-				td.push (<td key={i} width="1em"><img height={1} width="2em"/></td>);
+				td.push (<td key={i} />);
 			}
-			td.push (<td key="button" width="1em">{rec.childs.length ?
-				<button className="btn btn-link btn-sm p-0" onClick={() => this.setState ({["opened-" + rec.id]: !this.state ["opened-" + rec.id]})}>
-					<i className={`fa-lg fas ${this.state ["opened-" + rec.id] ? "fa-folder-open" : "fa-folder"} mr-1`} />
-				</button> : <img height={1} width="2em"/>}
+			td.push (<td key="button" style={{width: "2.5em", paddingRight: 0}}>{rec.childs.length ?
+				<div className="d-flex align-items-center">
+					<button className="btn btn-link btn-sm p-0" onClick={() => this.setState ({["opened-" + rec.id]: !this.state ["opened-" + rec.id]})}>
+						<i className={`fa-lg fas ${this.state ["opened-" + rec.id] ? "fa-folder-open" : "fa-folder"} mr-1`} />
+					</button>
+				</div> : null}
 			</td>);
-			td.push (<td key="value" colSpan={this.levelNum - level}><div className="dictfield-option" onClick={() => {
-				if (this.props.onChoose) {
-					this.props.onChoose ({id: rec.id, rec});
-				}
-			}} dangerouslySetInnerHTML={{__html: v}} /></td>);
+			td.push (<td key="value" colSpan={this.levelNum - level} style={{paddingLeft: 0}}>
+				<div className="d-flex align-items-center">
+					{this.props.selectMulti && <input type="checkbox" className="mr-1" checked={this.state [`checked-${rec.id}`] || false} onChange={val => {
+						this.check (rec.id, val.target.checked);
+					}} />}
+					<div className="dictfield-option" onClick={() => {
+						if (this.props.onChoose) {
+							this.props.onChoose ({id: rec.id, rec});
+						}
+					}} dangerouslySetInnerHTML={{__html: v}} />
+				</div>
+			</td>);
 			
 			let node = <tr key={rec.id}>{td}</tr>;
 			
@@ -115,7 +152,6 @@ export default class Tree extends Component {
 	
 	render () {
 		this.calcLevelNum ();
-		console.log (this.levelNum);
 		return <table className="table table-sm table-striped"><tbody>{this.renderNodes (0)}</tbody></table>;
 	}
 };

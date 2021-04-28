@@ -1,86 +1,169 @@
 import React, {Component} from "react";
 import Action from "./Action";
-import Confirm from "./Confirm";
 import Grid from "./Grid";
-import RemoveAction from "./RemoveAction";
-import {i18n} from "./../i18n";
+import Tree from "./Tree";
+import DictField from "./DictField";
+import {i18n} from "../i18n";
 
-class MenuItems extends Component {
+class ImportItems extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.menu = me.props.menu;
-		me.onCreate = me.onCreate.bind (me);
-		me.onEdit = me.onEdit.bind (me);
-		me.onRemove = me.onRemove.bind (me);
-		me.state = {
-			parent: null,
-			refresh: false
+		this.state = {
+			loading: true,
+			checkedNodes: []
 		};
-		me._refs = {"menuItems": React.createRef ()};
 	}
 	
-	onCreate () {
-		let me = this;
-		
-		me.props.history.push ({
-			pathname: "/menu_item/new#" + JSON.stringify ({
-				opts: {
-					menu: me.menu,
-					parent: me.state.parent
-				}
+	async componentDidMount () {
+		this.setState ({
+			loading: false,
+			records: await this.props.store.getRecs ({
+				model: "objectum.menuItem",
+				filters: [
+					["menu", "=", this.props.srcMenu]
+				]
 			})
 		});
 	}
 	
-	onEdit ({id}) {
-		let me = this;
-		
-		me.props.history.push ({
-			pathname: "/menu_item/" + id + "#" + JSON.stringify ({
-				opts: {
-					menu: me.menu,
-					parent: me.state.parent
-				}
-			})
-		});
+	onCheck = ({checkedNodes}) => {
+		this.setState ({checkedNodes});
 	}
 	
-	async onRemove ({id}) {
-		let me = this;
-		let state = {refresh: !me.state.refresh};
+	onImport = async ({progress}) => {
+		let srcRecords = await this.props.store.getRecords ({
+			model: "objectum.menuItem",
+			filters: [
+				["id", "in", this.state.checkedNodes]
+			]
+		});
+		let model = this.props.store.getModel ("objectum.menuItem");
+		let map = {};
 		
 		try {
-			await me.props.store.startTransaction ("Removing menu item: " + id);
-			await me.props.store.removeRecord (id);
-			await me.props.store.commitTransaction ();
-		} catch (err) {
-			await me.props.store.rollbackTransaction ();
+			await this.props.store.startTransaction ("Importing menu items");
 			
-			state.error = err.message;
+			for (let i = 0; i < srcRecords.length; i ++) {
+				let srcRecord = srcRecords [i];
+				let data = {_model: "objectum.menuItem"};
+				
+				for (let code in model.properties) {
+					data [code] = srcRecord [code];
+				}
+				data.menu = this.props.menu;
+				data.parent = null;
+				
+				let record = await this.props.store.createRecord (data);
+				
+				map [srcRecord.id] = record;
+				
+				progress ({value: i + 1, max: srcRecords.length});
+			}
+			for (let i = 0; i < srcRecords.length; i ++) {
+				let srcRecord = srcRecords [i];
+				
+				if (srcRecord.parent && map [srcRecord.parent]) {
+					map [srcRecord.id].parent = map [srcRecord.parent].id;
+					await map [srcRecord.id].sync ();
+				}
+			}
+			await this.props.store.commitTransaction ();
+		} catch (err) {
+			await this.props.store.rollbackTransaction ();
+			throw err;
 		}
-		me.setState (state);
+		this.props.onComplete ();
 	}
 	
 	render () {
-		let me = this;
+		if (this.state.loading) {
+			return null;
+		}
+		return <div style={{minWidth: "30em"}}>
+			<Tree records={this.state.records} selectMulti onCheck={this.onCheck} />
+			<Action label={i18n ("Import selected menu items")} onClick={this.onImport} disabled={!this.state.checkedNodes.length} />
+		</div>
+	}
+};
+
+export default class MenuItems extends Component {
+	constructor (props) {
+		super (props);
 		
-		return (
-			<div className="p-1">
-				<Grid {...me.props} id="menuItems" ref={me._refs ["menuItems"]} store={me.props.store} query="objectum.menuItem" tree={true} refresh={me.state.refresh} onSelectParent={parent => me.parent = parent} params={{menu: me.menu}} inlineActions>
-					<div className="d-flex">
-						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} />
-						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
-						<Action icon="fas fa-minus" label={i18n ("Remove")} onClickSelected={me.onRemove} confirm selected />
-					</div>
-					{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
-				</Grid>
-			</div>
-		);
+		this.menu = this.props.menu;
+		this.state = {
+			parent: null,
+			refresh: false,
+			menuRecords: []
+		};
+		this._refs = {"menuItems": React.createRef ()};
+	}
+	
+	async componentDidMount () {
+		this.setState ({
+			menuRecords: await this.props.store.getRecs ({
+				model: "objectum.menu",
+				filters: [
+					["id", "<>", this.menu]
+				]
+			})
+		});
+	}
+	
+	onCreate = () => {
+		this.props.history.push ({
+			pathname: "/menu_item/new#" + JSON.stringify ({
+				opts: {
+					menu: this.menu,
+					parent: this.state.parent
+				}
+			})
+		});
+	}
+	
+	onEdit = ({id}) => {
+		this.props.history.push ({
+			pathname: "/menu_item/" + id + "#" + JSON.stringify ({
+				opts: {
+					menu: this.menu,
+					parent: this.state.parent
+				}
+			})
+		});
+	}
+	
+	onRemove = async ({id}) => {
+		let state = {refresh: !this.state.refresh};
+		
+		try {
+			await this.props.store.startTransaction ("Removing menu item: " + id);
+			await this.props.store.removeRecord (id);
+			await this.props.store.commitTransaction ();
+		} catch (err) {
+			await this.props.store.rollbackTransaction ();
+			throw err;
+		}
+		this.setState (state);
+	}
+	
+	render () {
+		return <div className="p-1">
+			<Grid {...this.props} id="menuItems" ref={this._refs ["menuItems"]} store={this.props.store} query="objectum.menuItem" tree={true} refresh={this.state.refresh} onSelectParent={parent => this.parent = parent} params={{menu: this.menu}} inlineActions>
+				<div className="d-flex">
+					<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
+					<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
+					<Action icon="fas fa-minus" label={i18n ("Remove")} onClick={this.onRemove} confirm selected />
+					<Action
+						icon="fas fa-file-import" label={i18n ("Import from another menu")}
+						menu={this.menu} srcMenu={this.state.menu}
+						popupComponent={ImportItems} disabled={!this.state.menu}
+						onComplete={() => this.setState ({refresh: !this.state.refresh})}
+					/>
+					<DictField recs={this.state.menuRecords} onChange={({value}) => this.setState ({menu: value})} />
+				</div>
+			</Grid>
+		</div>;
 	}
 };
 MenuItems.displayName = "MenuItems";
-
-export default MenuItems;

@@ -87,9 +87,10 @@
     position: absolute;
     left: -1px;
     top: 2px;
-    min-width: 33em;
+    min-width: 35em;
     min-height: 5em;
-    max-height: 35em;
+    max-height: 45em;
+    white-space: nowrap;
     z-index: 1000;
     overflow: auto;
 }

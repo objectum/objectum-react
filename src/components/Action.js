@@ -208,6 +208,7 @@ class Action extends Component {
 		
 		let ModalComponent = me.props.modalComponent;
 		let PopupComponent = me.props.popupComponent;
+		let duration = (me.state.current && me.state.start) ? ((me.state.current.getTime () - me.state.start.getTime ()) / 1000) : 0;
 		
 		return (
 			<div className={me.props.className}>
@@ -233,10 +234,10 @@ class Action extends Component {
 						<div className="border p-1">
 							{i18n (me.state.result)}
 						</div>
-						<div className="p-1 my-1 text-info">
-							{i18n ("Duration")}: {((me.state.current.getTime () - me.state.start.getTime ()) / 1000).toFixed (1)} {i18n ("sec.")}
-						</div>
-						<button type="button" className="btn btn-outline-primary btn-sm" onClick={me.onClose}>{i18n ("Close")}</button>
+						{duration > 2 ? <div className="p-1 my-1 text-info">
+							{i18n ("Duration")}: {duration.toFixed (1)} {i18n ("sec.")}
+						</div> : null}
+						<button type="button" className="btn btn-outline-primary btn-sm mt-1" onClick={me.onClose}>{i18n ("Close")}</button>
 					</div>
 				</Fade>}
 				{me.state.confirm && <Fade className="popup">
@@ -251,9 +252,9 @@ class Action extends Component {
 						<div className="border p-1">
 							<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{progressText}
 						</div>
-						<div className="p-1 mt-1 text-info">
-							{((me.state.current.getTime () - me.state.start.getTime ()) / 1000).toFixed (1)} {i18n ("sec.")}
-						</div>
+						{duration > 2 ? <div className="p-1 mt-1 text-info">
+							{duration.toFixed (1)} {i18n ("sec.")}
+						</div> : null}
 						{me.props.store && <button type="button" className="btn btn-outline-danger btn-sm mt-1" onClick={me.onCancel} disabled={me.state.abort}>
 							{i18n ("Cancel")}
 						</button>}

@@ -121,6 +121,12 @@ class Test extends Component {
 					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
 				</Form>
 				<Action label="Action" modalComponent={Cmp} />
+				<Action label="Action2" onClick={async () => {
+					for (let i = 0; i < 2; i ++) {
+						await timeout (1000);
+					}
+					return "ok";
+				}} />
 				<select
 					className="form-control custom-select"
 					style={{width: "30em"}}
@@ -140,7 +146,7 @@ class Test extends Component {
 					<DictField label="Dict" notNull records={this.state.recs} />
 				</div>
 				<div className="mt-1 border" style={{width: "20em"}}>
-					<Tree recs={this.state.recs} onChoose={({id}) => alert (id)} />
+					<Tree recs={this.state.recs} selectMulti onCheck={({checkedNodes}) => console.log (checkedNodes)} />
 				</div>
 			</div>
 		);

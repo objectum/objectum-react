@@ -175,5 +175,8 @@
 	"invalid value": "неправильное значение",
 	"example": "пример",
 	"import css": "импорт css",
-	"no parameters": "параметры отсутствуют"
+	"no parameters": "параметры отсутствуют",
+	"import from another menu": "импортировать из другого меню",
+	"menu contains items": "меню содержит пункты",
+	"import selected menu items": "импортировать выбранные пункты меню"
 }
