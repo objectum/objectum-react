@@ -5,49 +5,38 @@ import React, {Component} from "react";
 import {loadCSS, loadJS, i18n, getLocale, newId, getStore} from "..";
 import _isEmpty from "lodash.isempty";
 
-class StringField extends Component {
+export default class StringField extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.onChange = me.onChange.bind (me);
-
-		me.state = {
-			rsc: me.props.rsc || "record",
-			code: me.props.property,
-			value: me.props.value === null ? "" : me.props.value,
-			regexp: me.props.regexp
+		this.state = {
+			rsc: this.props.rsc || "record",
+			code: this.props.property,
+			value: this.props.value === null ? "" : this.props.value,
+			regexp: this.props.regexp
 		};
-		if (me.state.regexp && typeof (me.state.regexp) == "string") {
-			me.state.regexp = eval (me.state.regexp);
+		if (this.state.regexp && typeof (this.state.regexp) == "string") {
+			this.state.regexp = eval (this.state.regexp);
 		}
-		me.state.lastValidValue = me.state.value;
-		me.store = getStore ();
-		me.id = "stringfield-" + newId ();
+		this.state.lastValidValue = this.state.value;
+		this.store = getStore ();
+		this.id = "stringfield-" + newId ();
 	}
 	
-	onChange (val) {
-		let me = this;
+	onChange = (val) => {
 		let value = val.target.value;
 		let valid = true;
 		let state = {value};
 		
-/*
-		if (me.props.regexp) {
-			value = ((value || "").match (me.props.regexp) || []).join ("");
-		}
-*/
-		
-		if (me.state.regexp && !me.state.regexp.test (value)) {
+		if (this.state.regexp && !this.state.regexp.test (value)) {
 			valid = false;
 		} else {
 			state.lastValidValue = value;
 		}
-		if (me.props.onChange && valid) {
-			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
+		if (this.props.onChange && valid) {
+			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 	
 	onChangeTime = ({hour, minute}) => {
@@ -64,16 +53,14 @@ class StringField extends Component {
 	}
 	
 	async componentDidMount () {
-		let me = this;
-		
-		if (me.props.wysiwyg) {
+		if (this.props.wysiwyg) {
 			if (!window.Quill) {
-				await loadCSS (`${me.store.getUrl ()}/public/quill/quill.snow.css`);
-				await loadJS (`${me.store.getUrl ()}/public/quill/quill.js`);
+				await loadCSS (`${this.store.getUrl ()}/public/quill/quill.snow.css`);
+				await loadJS (`${this.store.getUrl ()}/public/quill/quill.js`);
 			}
-			if (document.getElementById (me.id)) {
-				me.quill = new Quill (`#${me.id}`, {
-					modules: me.props.modules || {
+			if (document.getElementById (this.id)) {
+				this.quill = new Quill (`#${this.id}`, {
+					modules: this.props.modules || {
 						toolbar: [
 							["bold", "italic", "underline", "strike"],
 							[{"list": "ordered"}, {"list": "bullet"}, {"script": "sub"}, {"script": "super"}],
@@ -84,19 +71,19 @@ class StringField extends Component {
 							["link", "image", "code"]
 						]
 					},
-					readOnly: me.props.disabled || me.props.readOnly,
-					placeholder: me.props.placeholder,
+					readOnly: this.props.disabled || this.props.readOnly,
+					placeholder: this.props.placeholder,
 					theme: "snow"
 				});
-				if (me.state.value) {
-					me.quill.clipboard.dangerouslyPasteHTML (me.state.value);
+				if (this.state.value) {
+					this.quill.clipboard.dangerouslyPasteHTML (this.state.value);
 				}
-				me.quill.on ("text-change", function (delta, oldDelta, source) {
-					let value = me.quill.root.innerHTML;
-					me.setState ({value});
+				this.quill.on ("text-change", function (delta, oldDelta, source) {
+					let value = this.quill.root.innerHTML;
+					this.setState ({value});
 					
-					if (me.props.onChange) {
-						me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
+					if (this.props.onChange) {
+						this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 					}
 				});
 			}
@@ -142,51 +129,45 @@ class StringField extends Component {
 	}
 	
 	render () {
-		let me = this;
-		let disabled = me.props.disabled;
+		let disabled = this.props.disabled;
 		let valid = true;
-		let error = me.props.error;
+		let error = this.props.error;
 
-		if (me.state.regexp && me.state.value && !me.state.regexp.test (me.state.value)) {
+		if (this.state.regexp && this.state.value && !this.state.regexp.test (this.state.value)) {
 			valid = false;
 			error = i18n ("Invalid value");
 			
-			if (me.props.exampleValue) {
-				error += `. ${i18n ("Example")}: ${me.props.exampleValue}`;
+			if (this.props.exampleValue) {
+				error += `. ${i18n ("Example")}: ${this.props.exampleValue}`;
 			}
 		}
 		let addCls = (error || !valid) ? " is-invalid" : "";
-		//let addCls = (error || !valid) ? " border-danger" : "";
 
 		let cmp = <input
-			type={me.props.secure ? "password" : "text"}
+			type={this.props.secure ? "password" : "text"}
 			className={"form-control" + addCls}
-			id={me.id} value={me.state.value || ""}
-			onChange={me.onChange}
-			onBlur={me.onBlur}
+			id={this.id} value={this.state.value || ""}
+			onChange={this.onChange}
+			onBlur={this.onBlur}
 			disabled={disabled}
-			placeholder={me.props.placeholder}
+			placeholder={this.props.placeholder}
 		/>;
-		if (me.props.textarea) {
-			cmp = (
-				<textarea
-					className={`form-control${addCls} ${me.props.monospace ? "text-monospace" : ""}`}
-					id={me.id}
-					value={me.state.value || ""}
-					onKeyDown={me.onKeyDown}
-					onChange={me.onChange}
-					disabled={disabled}
-					rows={me.props.rows || 5}
-					placeholder={me.props.placeholder}
-				/>
-			);
+		if (this.props.textarea) {
+			cmp = <textarea
+				className={`form-control${addCls} ${this.props.monospace ? "text-monospace" : ""}`}
+				id={this.id}
+				value={this.state.value || ""}
+				onKeyDown={this.onKeyDown}
+				onChange={this.onChange}
+				disabled={disabled}
+				rows={this.props.rows || 5}
+				placeholder={this.props.placeholder}
+			/>;
 		}
-		if (me.props.wysiwyg) {
-			cmp = (
-				<div className="border p-1" id={me.id} />
-			);
+		if (this.props.wysiwyg) {
+			cmp = <div className="border p-1" id={this.id} />;
 		}
-		if (me.props.time) {
+		if (this.props.time) {
 			let hours = [], minutes = [];
 			
 			for (let i = 0; i < 60; i ++) {
@@ -197,46 +178,40 @@ class StringField extends Component {
 			}
 			let hour = "", minute = "";
 			
-			if (me.state.value) {
-				let tokens = me.state.value.split (":");
+			if (this.state.value) {
+				let tokens = this.state.value.split (":");
 				
 				if (tokens.length == 2) {
 					hour = tokens [0];
 					minute = tokens [1];
 				}
 			}
-			cmp = (
-				<div className="d-flex">
-					<select
-						className="custom-select" style={{width: "5em"}}
-						value={hour}
-						onChange={val => this.onChangeTime ({hour: val.target.value})}
-					>
-						{hours.map ((v, i) => {
-							return <option key={i} value={v}>{v}</option>;
-						})}
-					</select>
-					<select
-						className="custom-select" style={{width: "5em"}}
-						value={minute}
-						onChange={val => this.onChangeTime ({minute: val.target.value})}
-					>
-						{minutes.map ((v, i) => {
-							return <option key={i} value={v}>{v}</option>;
-						})}
-					</select>
-				</div>
-			);
+			cmp = <div className="d-flex">
+				<select
+					className="custom-select" style={{width: "5em"}}
+					value={hour}
+					onChange={val => this.onChangeTime ({hour: val.target.value})}
+				>
+					{hours.map ((v, i) => {
+						return <option key={i} value={v}>{v}</option>;
+					})}
+				</select>
+				<select
+					className="custom-select" style={{width: "5em"}}
+					value={minute}
+					onChange={val => this.onChangeTime ({minute: val.target.value})}
+				>
+					{minutes.map ((v, i) => {
+						return <option key={i} value={v}>{v}</option>;
+					})}
+				</select>
+			</div>;
 		}
-		return (
-			<div className={(me.props.label || error) ? "form-group stringfield" : "stringfield"}>
-				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-				{cmp}
-				{error && <div className="invalid-feedback">{error}</div>}
-			</div>
-		);
+		return <div className={(this.props.label || error) ? "form-group stringfield" : "stringfield"}>
+			{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+			{cmp}
+			{error && <div className="invalid-feedback">{error}</div>}
+		</div>;
 	}
 };
 StringField.displayName = "StringField";
-
-export default StringField;

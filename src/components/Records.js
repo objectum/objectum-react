@@ -3,45 +3,38 @@ import Action from "./Action";
 import Grid from "./Grid";
 import {i18n} from "./../i18n";
 
-class Records extends Component {
+export default class Records extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.model = me.props.model || me.props.match.params.model.split ("#")[0];
-		
-		me.onEdit = me.onEdit.bind (me);
-		me.onRemove = me.onRemove.bind (me);
-		me.state = {
+		this.model = this.props.model || this.props.match.params.model.split ("#")[0];
+		this.state = {
 			refresh: false
 		};
 	}
 	
-	onEdit ({id}) {
-		let me = this;
+	onEdit = ({id}) => {
 		let opts = {
-			model: me.model
+			model: this.model
 		};
-		me.props.history.push ({
+		this.props.history.push ({
 			pathname: "/model_record/" + id + "#" + JSON.stringify ({opts})
 		});
 	}
 	
-	async onRemove ({id}) {
-		let me = this;
-		let state = {refresh: !me.state.refresh};
+	onRemove = async ({id}) => {
+		let state = {refresh: !this.state.refresh};
 		
 		try {
-			await me.props.store.startTransaction ("Removing record: " + id);
-			await me.props.store.removeRecord (id);
-			await me.props.store.commitTransaction ();
+			await this.props.store.startTransaction ("Removing record: " + id);
+			await this.props.store.removeRecord (id);
+			await this.props.store.commitTransaction ();
 		} catch (err) {
-			await me.props.store.rollbackTransaction ();
+			await this.props.store.rollbackTransaction ();
 			
 			state.error = err.message;
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 	
 	componentDidUpdate () {
@@ -49,35 +42,29 @@ class Records extends Component {
 	}
 	
 	render () {
-		let me = this;
-		
-		if (me.props.store.username != "admin") {
+		if (this.props.store.username != "admin") {
 			return (<div />);
 		}
-		let m = me.props.store.getModel (me.model);
+		let m = this.props.store.getModel (this.model);
 		let gridOpts = {
-			...me.props,
-			id: me.props.id || `records-${me.model}`,
-			ref: me.props.id || `records-${me.model}`,
-			store: me.props.store,
+			...this.props,
+			id: this.props.id || `records-${this.model}`,
+			ref: this.props.id || `records-${this.model}`,
+			store: this.props.store,
 			label: i18n ("Records") + ": " + m.get ("name"),
-			refresh: me.state.refresh,
-			model: me.model,
+			refresh: this.state.refresh,
+			model: this.model,
 			editable: true
 		};
-		return (
-			<div>
-				{me.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</span>}
-				<Grid {...gridOpts} inlineActions>
-					<div className="d-flex">
-						<Action {...me.props} onClickSelected={me.onEdit} icon="fas fa-edit" label={i18n ("Edit")} />
-						<Action {...me.props} confirm onClickSelected={me.onRemove} icon="fas fa-minus" label={i18n ("Remove")} />
-					</div>
-				</Grid>
-			</div>
-		);
+		return <div>
+			{this.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</span>}
+			<Grid {...gridOpts} inlineActions>
+				<div className="d-flex">
+					<Action {...this.props} onClickSelected={this.onEdit} icon="fas fa-edit" label={i18n ("Edit")} />
+					<Action {...this.props} confirm onClickSelected={this.onRemove} icon="fas fa-minus" label={i18n ("Remove")} />
+				</div>
+			</Grid>
+		</div>;
 	}
 };
 Records.displayName = "Records";
-
-export default Records;

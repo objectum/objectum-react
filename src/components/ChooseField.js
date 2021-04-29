@@ -5,20 +5,16 @@ import React, {Component} from "react";
 import Modal from "react-modal";
 import {Grid, Tooltip, i18n, newId} from "..";
 
-class ChooseField extends Component {
+export default class ChooseField extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		let choose = me.props.choose || {};
+		let choose = this.props.choose || {};
 		
-		me.onClear = me.onClear.bind (me);
-		me.onChoose = me.onChoose.bind (me);
-		me.onVisible = me.onVisible.bind (me);
-		me.state = {
-			rsc: me.props.rsc || "record",
-			code: me.props.property,
-			value: me.props.value,
+		this.state = {
+			rsc: this.props.rsc || "record",
+			code: this.props.property,
+			value: this.props.value,
 			visible: false,
 			name: "",
 			cmp: choose.cmp,
@@ -26,63 +22,57 @@ class ChooseField extends Component {
 			ref: choose.query ? "list" : choose.ref
 		};
 		if (!choose.ref && choose.cmp && choose.cmp.displayName == "ModelList") {
-			me.state.ref = "list";
+			this.state.ref = "list";
 		}
-		if (!me.props.disabled) {
-			if (!choose.query && !choose.model && (!me.state.cmp || !me.state.ref)) {
-				me.state.invalid = true;
+		if (!this.props.disabled) {
+			if (!choose.query && !choose.model && (!this.state.cmp || !this.state.ref)) {
+				this.state.invalid = true;
 			}
 		}
-		me._refs = {
+		this._refs = {
 			"component": React.createRef (),
 			"list": React.createRef ()
 		};
-		me.id = newId ();
+		this.id = newId ();
 	}
 	
 	async updateName (value) {
-		let me = this;
 		let name = "";
 		
 		if (value) {
-			let o = await me.props.store.getRsc (me.state.rsc, value);
+			let o = await this.props.store.getRsc (this.state.rsc, value);
 			
 			name = o.getLabel ();
 		}
-		if (!me.unmounted) {
-			me.setState ({name});
+		if (!this.unmounted) {
+			this.setState ({name});
 		}
 	}
 	
-	onVisible () {
-		let me = this;
-		
-		me.setState ({visible: !me.state.visible});
+	onVisible = () => {
+		this.setState ({visible: !this.state.visible});
 	}
 	
-	onClear () {
-		let me = this;
+	onClear = () => {
+		this.setState ({value: null, name: ""});
 		
-		me.setState ({value: null, name: ""});
-		
-		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value: null, id: me.props.id});
+		if (this.props.onChange) {
+			this.props.onChange ({...this.props, code: this.state.code, value: null, id: this.props.id});
 		}
 	}
 	
-	onChoose () {
-		let me = this;
-		let cmp = me._refs ["list"].current;
+	onChoose = () => {
+		let cmp = this._refs ["list"].current;
 		
-		if (me.props.choose.cmp) {
-			if (me._refs ["component"].current._refs) {
-				cmp = me._refs ["component"].current._refs [me.state.ref].current;
+		if (this.props.choose.cmp) {
+			if (this._refs ["component"].current._refs) {
+				cmp = this._refs ["component"].current._refs [this.state.ref].current;
 			} else {
-				cmp = me._refs ["component"].current.refs [me.state.ref];
+				cmp = this._refs ["component"].current.refs [this.state.ref];
 			}
 		}
 		if (!cmp) {
-			throw new Error (`not found choose.ref: ${me.state.ref}`);
+			throw new Error (`not found choose.ref: ${this.state.ref}`);
 		}
 		let selected = cmp.state.selected;
 		let value = "";
@@ -96,18 +86,16 @@ class ChooseField extends Component {
 				value = selected;
 			}
 		}
-		me.setState ({value, visible: false});
-		me.updateName (value);
+		this.setState ({value, visible: false});
+		this.updateName (value);
 
-		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
+		if (this.props.onChange) {
+			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 		}
 	}
 	
 	async componentDidMount () {
-		let me = this;
-		
-		await me.updateName (me.state.value);
+		await this.updateName (this.state.value);
 		Modal.setAppElement ("body");
 	}
 	
@@ -116,80 +104,77 @@ class ChooseField extends Component {
 	}
 	
 	async componentDidUpdate (prevProps) {
-		let me = this;
-		
-		if (prevProps.value !== me.props.value) {
-			me.setState ({value: me.props.value});
-			await me.updateName (me.props.value);
+		if (prevProps.value !== this.props.value) {
+			this.setState ({value: this.props.value});
+			await this.updateName (this.props.value);
 		}
 	}
 	
 	render () {
-		let me = this;
-		let disabled = me.props.disabled;
-		let addCls = me.props.error ? " is-invalid" : "";
+		let disabled = this.props.disabled;
+		let addCls = this.props.error ? " is-invalid" : "";
 		
-		if (me.state.invalid) {
+		if (this.state.invalid) {
 			return (
 				<div className="form-group">
-					<label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
+					<label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
 					<div className="alert alert-danger">"choose: cmp, ref" or "choose: query" or "choose: model" not exist</div>
 				</div>
 			);
 		}
-		if (me.props.disabled) {
+		if (this.props.disabled) {
 			return (
 				<div className="form-group">
-					<label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
-					<Tooltip label={me.state.name}>
-						<input type="text" className={"form-control" + addCls} id={me.id} value={me.state.name} disabled={true}/>
+					<label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
+					<Tooltip label={this.state.name}>
+						<input type="text" className={"form-control" + addCls} id={this.id} value={this.state.name} disabled={true}/>
 					</Tooltip>
 				</div>
 			)
 		}
-		let ChooseComponent = me.state.cmp;
+		let ChooseComponent = this.state.cmp;
 		let props = {
-			...me.props, addCls, disabled, value: me.state.value, localHash: true
+			...this.props, addCls, disabled, value: this.state.value, localHash: true
 		};
 		let gridId = "list";
 		
-		if (me.props.choose.query) {
-			gridId = "list-" + me.props.choose.query;
+		if (this.props.choose.query) {
+			gridId = "list-" + this.props.choose.query;
 		}
-		if (me.props.choose.model) {
-			gridId = "list-" + me.props.choose.model;
+		if (this.props.choose.model) {
+			gridId = "list-" + this.props.choose.model;
 		}
 		return (
 			<div>
-				<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
-					{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+				<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
+					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 					
 					<div className="input-group dictfield">
 						<input
 							type="text"
 							className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
-							id={me.id}
-							value={me.state.name}
+							id={this.id}
+							value={this.state.name}
 							title={this.state.name}
 							onClick={this.onVisible}
 							ref={this._refs ["inputDiv"]}
 							readOnly
 						/>
-						{!me.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
+						{!this.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
 							<button
 								type="button"
 								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
-								onClick={me.onClear}
+								onClick={this.onClear}
 								title={i18n ("Clear")}
 							>
 								<i className="fas fa-times" />
 							</button>
 						</div>}
 					</div>
-					{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
+					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 				</div>
 				<Modal
-					isOpen={me.state.visible}
+					isOpen={this.state.visible}
 					style={
 						document.documentElement.clientWidth > 1000 ? {
 							content: {
@@ -200,17 +185,17 @@ class ChooseField extends Component {
 				>
 					<div className="row">
 						<div className="col-md mb-1">
-							<button type="button" className="btn btn-primary mr-1" onClick={me.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
-							<button type="button" className="btn btn-primary" onClick={() => me.setState ({visible: !me.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
+							<button type="button" className="btn btn-primary mr-1" onClick={this.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
+							<button type="button" className="btn btn-primary" onClick={() => this.setState ({visible: !this.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
 						</div>
 					</div>
-					{me.props.choose.cmp ?
-						<ChooseComponent {...props} {...me.props.choose} ref={me._refs ["component"]} disableActions={true}/> :
+					{this.props.choose.cmp ?
+						<ChooseComponent {...props} {...this.props.choose} ref={this._refs ["component"]} disableActions={true}/> :
 						<Grid
 							id={gridId}
-							ref={me._refs ["list"]}
-							store={me.props.store}
-							{...me.props.choose}
+							ref={this._refs ["list"]}
+							store={this.props.store}
+							{...this.props.choose}
 						/>
 					}
 				</Modal>
@@ -219,5 +204,3 @@ class ChooseField extends Component {
 	}
 };
 ChooseField.displayName = "ChooseField";
-
-export default ChooseField;

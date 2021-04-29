@@ -5,85 +5,67 @@ import React, {Component} from "react";
 import Grid from "./Grid";
 import Action from "./Action";
 import Confirm from "./Confirm";
-import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
 
-class Properties extends Component {
+export default class Properties extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me ["model"] = me.props ["model"];
-		me.onCreate = me.onCreate.bind (me);
-		me.onEdit = me.onEdit.bind (me);
-		me.onRemove = me.onRemove.bind (me);
-		me.state = {
+		this ["model"] = this.props ["model"];
+		this.state = {
 			refresh: false
 		};
 	}
 	
-	onCreate () {
-		let me = this;
-		
-		me.props.history.push ({
+	onCreate = () => {
+		this.props.history.push ({
 			pathname: "/property/new#" + JSON.stringify ({
 				opts: {
-					model: me ["model"]
+					model: this ["model"]
 				}
 			})
 		});
 	}
 	
-	onEdit ({id}) {
-		let me = this;
-		
-		me.props.history.push ({
+	onEdit = ({id}) => {
+		this.props.history.push ({
 			pathname: "/property/" + id + "#" + JSON.stringify ({
 				opts: {
-					model: me ["model"]
+					model: this ["model"]
 				}
 			})
 		});
 	}
 	
-	async onRemove ({id}) {
-		let me = this;
-		let state = {refresh: !me.state.refresh};
+	onRemove = async ({id}) => {
+		let state = {refresh: !this.state.refresh};
 		
 		try {
-			await me.props.store.startTransaction ("Removing property: " + id);
-			await me.props.store.removeProperty (id);
-			await me.props.store.commitTransaction ();
+			await this.props.store.startTransaction ("Removing property: " + id);
+			await this.props.store.removeProperty (id);
+			await this.props.store.commitTransaction ();
 		} catch (err) {
-			await me.props.store.rollbackTransaction ();
+			await this.props.store.rollbackTransaction ();
 			
 			state.error = err.message;
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 	
 	render () {
-		let me = this;
-		
-		return (
-			<div className="row">
-				<div className="col-sm-12">
-					<Grid id="properties" store={me.props.store} query="objectum.property" system={true} refresh={me.state.refresh} params={{modelId: me.model}} inlineActions>
-						<div className="d-flex">
-							<Action icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} />
-							<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
-							<Action icon="fas fa-minus" label={i18n ("Remove")} onClick={me.onRemove} confirm selected />
-						</div>
-						{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
-					</Grid>
-				</div>
-				<Confirm label="Are you sure?" visible={me.state.removeConfirm} onClick={me.onRemove} />
+		return <div className="row">
+			<div className="col-sm-12">
+				<Grid id="properties" store={this.props.store} query="objectum.property" system={true} refresh={this.state.refresh} params={{modelId: this.model}} inlineActions>
+					<div className="d-flex">
+						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
+						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
+						<Action icon="fas fa-minus" label={i18n ("Remove")} onClick={this.onRemove} confirm selected />
+					</div>
+					{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
+				</Grid>
 			</div>
-		);
-		
+			<Confirm label="Are you sure?" visible={this.state.removeConfirm} onClick={this.onRemove} />
+		</div>;
 	}
 };
 Properties.displayName = "Properties";
-
-export default Properties;

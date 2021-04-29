@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {i18n} from "../i18n";
 
-class DateSelector extends Component {
+export default class DateSelector extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -217,5 +217,3 @@ class DateSelector extends Component {
 	}
 };
 DateSelector.displayName = "DateSelector";
-
-export default DateSelector;

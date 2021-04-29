@@ -1,57 +1,45 @@
 import React, {Component} from "react";
 import {i18n, newId} from "..";
 
-class BooleanField extends Component {
+export default class BooleanField extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.onChange = me.onChange.bind (me);
-		
-		me.state = {
-			rsc: me.props.rsc || "record",
-			code: me.props.property,
-			value: me.props.value || ""
+		this.state = {
+			rsc: this.props.rsc || "record",
+			code: this.props.property,
+			value: this.props.value || ""
 		};
-		me.id = newId ();
+		this.id = newId ();
 	}
 	
-	onChange (val) {
-		let me = this;
+	onChange = (val) => {
 		let value = val.target.checked;
 		
-		me.setState ({value});
+		this.setState ({value});
 
-		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
+		if (this.props.onChange) {
+			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 		}
 	}
 	
 	async componentDidUpdate (prevProps) {
-		let me = this;
-		
-		if (prevProps.value !== me.props.value) {
-			me.setState ({value: me.props.value || ""});
+		if (prevProps.value !== this.props.value) {
+			this.setState ({value: this.props.value || ""});
 		}
 	}
 	
 	render () {
-		let me = this;
-		let disabled = me.props.disabled;
-		let addCls = me.props.error ? "is-invalid" : "";
+		let disabled = this.props.disabled;
+		let addCls = this.props.error ? "is-invalid" : "";
 		
-		return (
-			<div className="form-check mb-2">
-				<input type="checkbox" className={`form-check-input ${addCls}`} id={me.id} checked={me.state.value} onChange={me.onChange} disabled={disabled} />
-				<label className="form-check-label booleanfield" htmlFor={me.id}>
-					{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}
-				</label>
-				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
-			</div>
-		);
+		return <div className="form-check mb-2">
+			<input type="checkbox" className={`form-check-input ${addCls}`} id={this.id} checked={this.state.value} onChange={this.onChange} disabled={disabled} />
+			<label className="form-check-label booleanfield" htmlFor={this.id}>
+				{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}
+			</label>
+			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+		</div>;
 	}
 };
 BooleanField.displayName = "BooleanField";
-
-export default BooleanField;

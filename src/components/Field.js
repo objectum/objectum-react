@@ -10,7 +10,7 @@ import DictField from "./DictField";
 import ChooseField from "./ChooseField";
 import FileField from "./FileField";
 
-class Field extends Component {
+export default class Field extends Component {
 	render () {
 		let props = this.props;
 		let type = props.type;
@@ -41,5 +41,3 @@ class Field extends Component {
 	}
 };
 Field.displayName = "Field";
-
-export default Field;

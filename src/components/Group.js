@@ -4,7 +4,7 @@
 import React, {Component} from "react";
 import {i18n} from "../i18n";
 
-class Group extends Component {
+export default class Group extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -37,5 +37,3 @@ class Group extends Component {
 	}
 };
 Group.displayName = "Group";
-
-export default Group;

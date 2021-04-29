@@ -5,7 +5,7 @@ import React, {Component} from "react";
 import {Action, i18n, loadJS} from "..";
 import crypto from "crypto";
 
-class Office extends Component {
+export default class Office extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -19,12 +19,6 @@ class Office extends Component {
 			password2: "",
 			inputError: {}
 		};
-		this.onChange = this.onChange.bind (this);
-		this.onRegister = this.onRegister.bind (this);
-		this.onLogin = this.onLogin.bind (this);
-		this.onKeyDown = this.onKeyDown.bind (this);
-		this.onRecover = this.onRecover.bind (this);
-
 		let search = document.location.search.substr (1);
 
 		if (search.startsWith ("activationId=")) {
@@ -49,14 +43,12 @@ class Office extends Component {
 	}
 	
 	async componentDidMount () {
-		let me = this;
-
 		window.onRecaptchaCallback = () => {
 			try {
 				window.grecaptcha.render ("g-recaptcha", {
-					sitekey: me.props.siteKey,
+					sitekey: this.props.siteKey,
 					callback: (res) => {
-						me.setState ({recaptchaRes: res})
+						this.setState ({recaptchaRes: res})
 					},
 					theme: "light"
 				});
@@ -64,66 +56,53 @@ class Office extends Component {
 			}
 		};
 		await loadJS ("https://www.google.com/recaptcha/api.js?onload=onRecaptchaCallback&render=explicit");
-		//await loadJS ("https://www.google.com/recaptcha/api.js?render=explicit");
-		me.setState ({loading: false});
+		this.setState ({loading: false});
 		
-		if (me.state.activationId) {
+		if (this.state.activationId) {
 			let state = {activationId: ""};
 			
 			try {
-				let result = await me.props.store.remote ({
+				await this.props.store.remote ({
 					model: "admin",
 					method: "activation",
-					activationId: me.state.activationId
+					activationId: this.state.activationId
 				});
-/*
-				await me.props.store.auth ({
-					username: result.login,
-					password: result.password
-				});
-*/
 				state.activationResult = i18n ("Account activated");
 			} catch (err) {
 				state.activationResult = i18n (err.message);
 			}
-			me.setState (state);
+			this.setState (state);
 
 			if (window.history) {
 				let url = window.location.protocol + "//" + window.location.host + window.location.pathname;
 				window.history.pushState ({path: url}, "", url);
 			}
 		}
-		if (me.state.recoverId) {
+		if (this.state.recoverId) {
 			let state = {recoverId: ""};
 			
 			try {
-				/*let result = */await me.props.store.remote ({
+				await this.props.store.remote ({
 					model: "admin",
 					method: "recover",
-					recoverId: me.state.recoverId,
-					email: me.state.email,
-					newPassword: me.state.newPassword,
-					newName: me.state.newName
+					recoverId: this.state.recoverId,
+					email: this.state.email,
+					newPassword: this.state.newPassword,
+					newName: this.state.newName
 				});
-/*
-				await me.props.store.auth ({
-					username: result.login,
-					password: me.state.newPassword
-				});
-*/
 				state.recoverResult = i18n ("Password changed");
 			} catch (err) {
 				state.recoverResult = i18n (err.message);
 			}
-			me.setState (state);
+			this.setState (state);
 
 			if (window.history) {
 				let url = window.location.protocol + "//" + window.location.host + window.location.pathname;
 				window.history.pushState ({path: url}, "", url);
 			}
 		}
-		if (me.loginInput) {
-			me.loginInput.focus ();
+		if (this.loginInput) {
+			this.loginInput.focus ();
 		}
 	}
 	
@@ -147,308 +126,267 @@ class Office extends Component {
 		this.unmounted = true;
 	}
 	
-	onChange (val) {
-		let me = this;
+	onChange = (val) => {
 		let id = val.target.id;
 		let value = val.target.value;
 		
 		if (id == "email") {
 			value = value.trim ().toLowerCase ();
 		}
-		me.setState ({[id]: value});
+		this.setState ({[id]: value});
 	}
 	
-	async onRegister () {
-		let me = this;
+	onRegister = async () => {
 		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
 		let fields = ["email", "name", "password", "password2", "recaptchaRes"];
 		
 		for (let i = 0; i < fields.length; i ++) {
-			if (!me.state [fields [i]]) {
-				return me.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
+			if (!this.state [fields [i]]) {
+				return this.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
 			}
 		}
-		if (me.state.password != me.state.password2) {
+		if (this.state.password != this.state.password2) {
 			return;
 		}
-/*
-		if (!activationHost.endsWith ("/")) {
-			activationHost += "/";
-		}
-*/
-		return await me.props.store.remote ({
+		return await this.props.store.remote ({
 			model: "admin",
 			method: "register",
 			activationHost,
-			email: me.state.email,
-			password: crypto.createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase (),
-			name: me.state.name,
-			subject: i18n ("User registration") + ": " + me.props.name,
+			email: this.state.email,
+			password: crypto.createHash ("sha1").update (this.state.password).digest ("hex").toUpperCase (),
+			name: this.state.name,
+			subject: i18n ("User registration") + ": " + this.props.name,
 			text: i18n ("To activate your account, follow the link"),
-			recaptchaRes: me.state.recaptchaRes
+			recaptchaRes: this.state.recaptchaRes
 		});
 	}
 	
-	async onLogin () {
-		let me = this;
-		
+	onLogin = async () => {
 		let fields = ["email", "password"];
 		
 		for (let i = 0; i < fields.length; i ++) {
-			if (!me.state [fields [i]]) {
-				return me.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
+			if (!this.state [fields [i]]) {
+				return this.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
 			}
 		}
 		try {
-			await me.props.store.auth ({
-				username: me.state.email,
-				password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase ()
+			await this.props.store.auth ({
+				username: this.state.email,
+				password: require ("crypto").createHash ("sha1").update (this.state.password).digest ("hex").toUpperCase ()
 			});
-			if (!me.unmounted) {
-				me.setState ({authorized: true, inputError: {}});
+			if (!this.unmounted) {
+				this.setState ({authorized: true, inputError: {}});
 			}
 			return i18n ("Logged in")
 		} catch (err) {
-			if (!me.unmounted) {
+			if (!this.unmounted) {
 				if (err.message == "401 Unauthenticated") {
-					me.setState ({error: i18n ("Incorrect e-mail (login) or password"), inputError: {}});
+					this.setState ({error: i18n ("Incorrect e-mail (login) or password"), inputError: {}});
 				} else {
-					me.setState ({error: err.message, inputError: {}});
+					this.setState ({error: err.message, inputError: {}});
 				}
 			}
 		}
 	}
 	
-	async onKeyDown (e) {
-		let me = this;
-		
-		if (e.key === "Enter" && me.state.email && me.state.password) {
-			await me.onLogin ();
+	onKeyDown = async (e) => {
+		if (e.key === "Enter" && this.state.email && this.state.password) {
+			await this.onLogin ();
 		}
 	}
 	
-	async onRecover () {
-		let me = this;
+	onRecover = async () => {
 		let activationHost = document.location.protocol + "//" + document.location.host + document.location.pathname;
 		
 		let fields = ["email", "password", "password2"];
 		
 		for (let i = 0; i < fields.length; i ++) {
-			if (!me.state [fields [i]]) {
-				return me.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
+			if (!this.state [fields [i]]) {
+				return this.setState ({inputError: {[fields [i]]: i18n ("Please enter value")}});
 			}
 		}
-		if (me.state.password != me.state.password2) {
+		if (this.state.password != this.state.password2) {
 			return;
 		}
-/*
-		if (!activationHost.endsWith ("/")) {
-			activationHost += "/";
-		}
-*/
-		me.setState ({inputError: {}});
-		return await me.props.store.remote ({
+		this.setState ({inputError: {}});
+		return await this.props.store.remote ({
 			model: "admin",
 			method: "recoverRequest",
 			activationHost,
-			email: me.state.email,
-			name: me.state.name || undefined,
-			password: require ("crypto").createHash ("sha1").update (me.state.password).digest ("hex").toUpperCase (),
-			subject: i18n ("Password recovery") + ": " + me.props.name,
+			email: this.state.email,
+			name: this.state.name || undefined,
+			password: require ("crypto").createHash ("sha1").update (this.state.password).digest ("hex").toUpperCase (),
+			subject: i18n ("Password recovery") + ": " + this.props.name,
 			text: i18n ("To recover your password, follow the link"),
-			recaptchaRes: me.state.recaptchaRes
+			recaptchaRes: this.state.recaptchaRes
 		});
 	}
 	
 	switch ({register, recover}) {
-		let me = this;
-		
-		me.setState ({register, recover, inputError: {}, email: "", name: "", password: "", password2: ""});
+		this.setState ({register, recover, inputError: {}, email: "", name: "", password: "", password2: ""});
 	}
 	
 	render () {
-		let me = this;
 		let content;
 		
-		if (me.props.authorized || me.state.authorized) {
-			content = me.props.children;
-		} else if (me.state.activationId) {
-			content = (
-				<div className={me.props.cardClassName || "p-3 shadow"}>
-					{i18n ("Account activation") + " ..."}
+		if (this.props.authorized || this.state.authorized) {
+			content = this.props.children;
+		} else if (this.state.activationId) {
+			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+				{i18n ("Account activation") + " ..."}
+			</div>;
+		} else if (this.state.recoverId) {
+			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+				{i18n ("Password recovery") + " ..."}
+			</div>;
+		} else if (this.state.activationResult) {
+			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+				<div className="mb-2">
+					{this.state.activationResult}
 				</div>
-			);
-		} else if (me.state.recoverId) {
-			content = (
-				<div className={me.props.cardClassName || "p-3 shadow"}>
-					{i18n ("Password recovery") + " ..."}
+				<Action
+					onClick={() => this.setState ({activationResult: ""})}
+				><i className="fas fa-check mr-2"/>Ok</Action>
+			</div>;
+		} else if (this.state.recoverResult) {
+			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+				<div className="mb-2">
+					{this.state.recoverResult}
 				</div>
-			);
-		} else if (me.state.activationResult) {
-			content = (
-				<div className={me.props.cardClassName || "p-3 shadow"}>
-					<div className="mb-2">
-						{me.state.activationResult}
-					</div>
-					<Action
-						onClick={() => me.setState ({activationResult: ""})}
-					><i className="fas fa-check mr-2"/>Ok</Action>
+				<Action
+					onClick={() => this.setState ({recoverResult: ""})}
+				><i className="fas fa-check mr-2"/>Ok</Action>
+			</div>;
+		} else if (this.state.recover) {
+			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+				<h3 className="text-center">{i18n ("Password recovery")}</h3>
+				<div className="form-group mt-4">
+					<label htmlFor="email">{i18n ("E-mail")}</label>
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} />
+					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
 				</div>
-			);
-		} else if (me.state.recoverResult) {
-			content = (
-				<div className={me.props.cardClassName || "p-3 shadow"}>
-					<div className="mb-2">
-						{me.state.recoverResult}
-					</div>
-					<Action
-						onClick={() => me.setState ({recoverResult: ""})}
-					><i className="fas fa-check mr-2"/>Ok</Action>
+				<div className="form-group">
+					<label htmlFor="name">{i18n ("Change name")}</label>
+					<input type="name" className="form-control" id="name" value={this.state.name} onChange={this.onChange} />
 				</div>
-			);
-		} else if (me.state.recover) {
-			content = (
-				<div className={me.props.cardClassName || "p-3 shadow"}>
-					<h3 className="text-center">{i18n ("Password recovery")}</h3>
-					<div className="form-group mt-4">
-						<label htmlFor="email">{i18n ("E-mail")}</label>
-						<input type="email" className="form-control" id="email" value={me.state.email} onChange={me.onChange} />
-						{me.state.inputError ["email"] && <div className="small text-danger">{me.state.inputError ["email"]}</div>}
+				<div className="form-group">
+					<label htmlFor="password">{i18n ("New password")}</label>
+					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} />
+					{this.state.inputError ["password"] && <div className="small text-danger">{this.state.inputError ["password"]}</div>}
+				</div>
+				<div className="form-group">
+					<label htmlFor="password2">{i18n ("Confirm password")}</label>
+					<input type="password" className="form-control" id="password2" value={this.state.password2} onChange={this.onChange} />
+					{this.state.inputError ["password2"] && <div className="small text-danger">{this.state.inputError ["password2"]}</div>}
+				</div>
+				{this.state.password && this.state.password2 && this.state.password != this.state.password2 && <div className="small text-danger mb-2">
+					{i18n ("Passwords do not match")}
+				</div>}
+				<div id="g-recaptcha" />
+				{this.state.inputError ["recaptchaRes"] && <div className="small text-danger">{this.state.inputError ["recaptchaRes"]}</div>}
+				<div className="text-center">
+					<div className="mt-3">
+						<Action
+							btnClassName="btn btn-primary auth-button px-0"
+							onClick={this.onRecover}
+						><i className="fas fa-envelope mr-2"/>{i18n ("Restore password")}</Action>
 					</div>
-					<div className="form-group">
-						<label htmlFor="name">{i18n ("Change name")}</label>
-						<input type="name" className="form-control" id="name" value={me.state.name} onChange={me.onChange} />
+					<div className="mt-3">
+						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: false, recover: false})}>
+							<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
+						</button>
 					</div>
-					<div className="form-group">
-						<label htmlFor="password">{i18n ("New password")}</label>
-						<input type="password" className="form-control" id="password" value={me.state.password} onChange={me.onChange} />
-						{me.state.inputError ["password"] && <div className="small text-danger">{me.state.inputError ["password"]}</div>}
-					</div>
-					<div className="form-group">
-						<label htmlFor="password2">{i18n ("Confirm password")}</label>
-						<input type="password" className="form-control" id="password2" value={me.state.password2} onChange={me.onChange} />
-						{me.state.inputError ["password2"] && <div className="small text-danger">{me.state.inputError ["password2"]}</div>}
-					</div>
-					{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="small text-danger mb-2">
-						{i18n ("Passwords do not match")}
-					</div>}
-					<div id="g-recaptcha" />
-					{me.state.inputError ["recaptchaRes"] && <div className="small text-danger">{me.state.inputError ["recaptchaRes"]}</div>}
-					<div className="text-center">
-						<div className="mt-3">
-							<Action
-								btnClassName="btn btn-primary auth-button px-0"
-								//disabled={!me.state.email || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
-								onClick={me.onRecover}
-							><i className="fas fa-envelope mr-2"/>{i18n ("Restore password")}</Action>
-						</div>
-						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: false, recover: false})}>
-								<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
-							</button>
-						</div>
-						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: true, recover: false})}>
-								<i className="fas fa-key mr-2"/>{i18n ("Registration")}
-							</button>
-						</div>
+					<div className="mt-3">
+						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: true, recover: false})}>
+							<i className="fas fa-key mr-2"/>{i18n ("Registration")}
+						</button>
 					</div>
 				</div>
-			);
-		} else if (me.state.register) {
-			content = (
-				<div className={me.props.cardClassName || "p-3 shadow"}>
-					<h3 className="text-center">{i18n ("Registration")}</h3>
-					<div className="form-group mt-4">
-						<label htmlFor="email">{i18n ("E-mail")}</label>
-						<input type="email" className="form-control" id="email" value={me.state.email} onChange={me.onChange} />
-						{me.state.inputError ["email"] && <div className="small text-danger">{me.state.inputError ["email"]}</div>}
+			</div>;
+		} else if (this.state.register) {
+			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+				<h3 className="text-center">{i18n ("Registration")}</h3>
+				<div className="form-group mt-4">
+					<label htmlFor="email">{i18n ("E-mail")}</label>
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} />
+					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
+				</div>
+				<div className="form-group">
+					<label htmlFor="name">{i18n ("Your name")}</label>
+					<input type="name" className="form-control" id="name" value={this.state.name} onChange={this.onChange} />
+					{this.state.inputError ["name"] && <div className="small text-danger">{this.state.inputError ["name"]}</div>}
+				</div>
+				<div className="form-group">
+					<label htmlFor="password">{i18n ("Password")}</label>
+					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} />
+					{this.state.inputError ["password"] && <div className="small text-danger">{this.state.inputError ["password"]}</div>}
+				</div>
+				<div className="form-group">
+					<label htmlFor="password2">{i18n ("Confirm password")}</label>
+					<input type="password" className="form-control" id="password2" value={this.state.password2} onChange={this.onChange} />
+					{this.state.inputError ["password2"] && <div className="small text-danger">{this.state.inputError ["password2"]}</div>}
+				</div>
+				{this.state.password && this.state.password2 && this.state.password != this.state.password2 && <div className="small text-danger mb-2">
+					{i18n ("Passwords do not match")}
+				</div>}
+				<div id="g-recaptcha" />
+				{this.state.inputError ["recaptchaRes"] && <div className="small text-danger">{this.state.inputError ["recaptchaRes"]}</div>}
+				<div className="text-center">
+					<div className="mt-3">
+						<Action
+							btnClassName="btn btn-primary auth-button"
+							onClick={this.onRegister}
+						><i className="fas fa-key mr-2"/>{i18n ("Register")}</Action>
 					</div>
-					<div className="form-group">
-						<label htmlFor="name">{i18n ("Your name")}</label>
-						<input type="name" className="form-control" id="name" value={me.state.name} onChange={me.onChange} />
-						{me.state.inputError ["name"] && <div className="small text-danger">{me.state.inputError ["name"]}</div>}
+					<div className="mt-3">
+						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: false, recover: false})}>
+							<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
+						</button>
 					</div>
-					<div className="form-group">
-						<label htmlFor="password">{i18n ("Password")}</label>
-						<input type="password" className="form-control" id="password" value={me.state.password} onChange={me.onChange} />
-						{me.state.inputError ["password"] && <div className="small text-danger">{me.state.inputError ["password"]}</div>}
-					</div>
-					<div className="form-group">
-						<label htmlFor="password2">{i18n ("Confirm password")}</label>
-						<input type="password" className="form-control" id="password2" value={me.state.password2} onChange={me.onChange} />
-						{me.state.inputError ["password2"] && <div className="small text-danger">{me.state.inputError ["password2"]}</div>}
-					</div>
-					{me.state.password && me.state.password2 && me.state.password != me.state.password2 && <div className="small text-danger mb-2">
-						{i18n ("Passwords do not match")}
-					</div>}
-					<div id="g-recaptcha" />
-					{me.state.inputError ["recaptchaRes"] && <div className="small text-danger">{me.state.inputError ["recaptchaRes"]}</div>}
-					<div className="text-center">
-						<div className="mt-3">
-							<Action
-								btnClassName="btn btn-primary auth-button"
-								onClick={me.onRegister}
-								//disabled={!me.state.email || !me.state.name || !me.state.password || !me.state.password2 || me.state.password != me.state.password2 || !me.state.recaptchaRes}
-							><i className="fas fa-key mr-2"/>{i18n ("Register")}</Action>
-						</div>
-						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: false, recover: false})}>
-								<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
-							</button>
-						</div>
-						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({recover: true, register: false})}>
-								<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
-							</button>
-						</div>
+					<div className="mt-3">
+						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({recover: true, register: false})}>
+							<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
+						</button>
 					</div>
 				</div>
-			);
+			</div>;
 		} else {
-			content = (
-				<div className={me.props.cardClassName || "p-3 shadow"}>
-					<h3 className="text-center">{i18n ("Sign In")}</h3>
-					<div className="form-group mt-4">
-						<label htmlFor="email">{i18n ("E-mail")}</label>
-						<input type="email" className="form-control" id="email" value={me.state.email} onChange={me.onChange} ref={input => me.loginInput = input} />
-						{me.state.inputError ["email"] && <div className="small text-danger">{me.state.inputError ["email"]}</div>}
-					</div>
-					<div className="form-group">
-						<label htmlFor="loginPassword">{i18n ("Password")}</label>
-						<input type="password" className="form-control" id="password" value={me.state.password} onChange={me.onChange} onKeyDown={me.onKeyDown}/>
-						{me.state.inputError ["password"] && <div className="small text-danger">{me.state.inputError ["password"]}</div>}
-					</div>
-					<div className="text-center">
-						<div className="mt-4">
-							<Action
-								btnClassName="btn btn-primary auth-button"
-								//disabled={!me.state.email || !me.state.password}
-								onClick={me.onLogin}
-							><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</Action>
-						</div>
-						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: true, recover: false})}>
-								<i className="fas fa-key mr-2"/>{i18n ("Registration")}
-							</button>
-						</div>
-						<div className="mt-3">
-							<button className="btn btn-outline-primary px-0 auth-button" onClick={() => me.switch ({register: false, recover: true})}>
-								<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
-							</button>
-						</div>
-					</div>
-					{me.state.error && <div className="mt-3 alert alert-danger" role="alert">
-						{me.state.error}
-					</div>}
+			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+				<h3 className="text-center">{i18n ("Sign In")}</h3>
+				<div className="form-group mt-4">
+					<label htmlFor="email">{i18n ("E-mail")}</label>
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} ref={input => this.loginInput = input} />
+					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
 				</div>
-			);
+				<div className="form-group">
+					<label htmlFor="loginPassword">{i18n ("Password")}</label>
+					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} onKeyDown={this.onKeyDown}/>
+					{this.state.inputError ["password"] && <div className="small text-danger">{this.state.inputError ["password"]}</div>}
+				</div>
+				<div className="text-center">
+					<div className="mt-4">
+						<Action
+							btnClassName="btn btn-primary auth-button"
+							onClick={this.onLogin}
+						><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</Action>
+					</div>
+					<div className="mt-3">
+						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: true, recover: false})}>
+							<i className="fas fa-key mr-2"/>{i18n ("Registration")}
+						</button>
+					</div>
+					<div className="mt-3">
+						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: false, recover: true})}>
+							<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
+						</button>
+					</div>
+				</div>
+				{this.state.error && <div className="mt-3 alert alert-danger" role="alert">
+					{this.state.error}
+				</div>}
+			</div>;
 		}
-		return (
-			<div className={me.props.className || "m-auto"} style={{width: me.props.width || "352px"}}>{content}</div>
-		);
+		return <div className={this.props.className || "m-auto"} style={{width: this.props.width || "352px"}}>{content}</div>;
 	}
 };
 Office.displayName = "Office";
-
-export default Office;

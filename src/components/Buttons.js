@@ -78,7 +78,6 @@ function BackButtonSB ({popLocation, locations}) {
 		
 		popLocation ();
 
-//		history.push (decodeURI (pathname + hash));
 		history.push (pathname + hash);
 	}
 	return (
@@ -96,7 +95,6 @@ function BackButton ({popLocation, locations, children, iconsTop}) {
 		
 		popLocation ();
 
-//		history.push (decodeURI (pathname + hash));
 		history.push (pathname + hash);
 	}
 	let content = <span>{children || <span><i className="fas fa-arrow-left mr-2" />{i18n ("Back")}</span>}</span>;

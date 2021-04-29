@@ -14,97 +14,76 @@ import Return from "./Return";
 import {getHash, goRidLocation} from "..";
 import {i18n} from "./../i18n";
 
-class Model extends Component {
+export default class Model extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		let rid = me.props.match.params.rid.split ("#")[0];
+		let rid = this.props.match.params.rid.split ("#")[0];
 		let hash = getHash ();
 		
-		me.state = {
+		this.state = {
 			rid: rid == "new" ? null : rid,
 			label: "",
 			parent: hash.opts.parent,
 			refresh: false
 		};
-		if (me.state.rid) {
-			let o = me.props.store.getModel (me.state.rid);
+		if (this.state.rid) {
+			let o = this.props.store.getModel (this.state.rid);
 			
-			me.state.label = o.getLabel ();
+			this.state.label = o.getLabel ();
 		}
-		me.onCreate = me.onCreate.bind (me);
 	}
 	
-	onCreate (rid) {
-		let me = this;
-		let o = me.props.store.getModel (rid);
-		
-		me.setState ({rid, label: o.getLabel ()});
-		goRidLocation (me.props, rid);
+	onCreate = (rid) => {
+		let o = this.props.store.getModel (rid);
+		this.setState ({rid, label: o.getLabel ()});
+		goRidLocation (this.props, rid);
 	}
 	
 	render () {
-		let me = this;
-
-		return (
-			<div className="container">
-				<Return {...this.props} />
-				<div className="shadow-sm border">
-					<Tabs {...me.props} key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + me.state.label}>
-						<Tab key="tab1" label="Information">
-							<Form key="form1" store={me.props.store} rsc="model" rid={me.state.rid} onCreate={me.onCreate}>
-								<div className="form-row">
-									<div className="form-group col-md-6">
-										<StringField property="name" label="Name" />
-									</div>
-									<div className="form-group col-md-6">
-{/*
-										<ChooseField
-											property="parent" label="Parent" rsc="model" disabled={!!me.state.rid} value={me.state.parent}
-											choose={{cmp: Models, ref: "models"}}
-										/>
-*/}
-										<DictField
-											property="parent" label="Parent" disabled={!!me.state.rid} value={me.state.parent}
-											recs={me.props.store.getModelRecords ()} tree
-										/>
-									</div>
+		return <div className="container">
+			<Return {...this.props} />
+			<div className="shadow-sm border">
+				<Tabs {...this.props} key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + this.state.label}>
+					<Tab key="tab1" label="Information">
+						<Form key="form1" store={this.props.store} rsc="model" rid={this.state.rid} onCreate={this.onCreate}>
+							<div className="form-row">
+								<div className="form-group col-md-6">
+									<StringField property="name" label="Name" />
 								</div>
-								<div className="form-row">
-									<div className="form-group col-md-6">
-										<StringField property="code" label="Code" regexp={/^[a-zA-Z0-9_]+$/} />
-									</div>
-									<div className="form-group col-md-6">
-										<StringField property="description" label="Description" textarea={true} />
-									</div>
+								<div className="form-group col-md-6">
+									<DictField
+										property="parent" label="Parent" disabled={!!this.state.rid} value={this.state.parent}
+										recs={this.props.store.getModelRecords ()} tree
+									/>
 								</div>
-								<div className="form-row">
-									<div className="form-group col-md-6">
-										<BooleanField property="unlogged" label="Unlogged" />
-									</div>
+							</div>
+							<div className="form-row">
+								<div className="form-group col-md-6">
+									<StringField property="code" label="Code" regexp={/^[a-zA-Z0-9_]+$/} />
 								</div>
-								<div className="form-row">
-									<div className="form-group col-md-12">
-										<JsonEditor property="opts" label="Options" />
-									</div>
+								<div className="form-group col-md-6">
+									<StringField property="description" label="Description" textarea={true} />
 								</div>
-							</Form>
-						</Tab>
-						{me.state.rid &&
-						<Tab key="Tab2" label="Properties">
-							<div className="p-1"><Properties {...me.props} model={me.state.rid} /></div>
-						</Tab>
-						}
-{/*
-						<Tab label="test" path="/queries" />
-*/}
-					</Tabs>
-				</div>
+							</div>
+							<div className="form-row">
+								<div className="form-group col-md-6">
+									<BooleanField property="unlogged" label="Unlogged" />
+								</div>
+							</div>
+							<div className="form-row">
+								<div className="form-group col-md-12">
+									<JsonEditor property="opts" label="Options" />
+								</div>
+							</div>
+						</Form>
+					</Tab>
+					{this.state.rid && <Tab key="Tab2" label="Properties">
+						<div className="p-1"><Properties {...this.props} model={this.state.rid} /></div>
+					</Tab>}
+				</Tabs>
 			</div>
-		);
+		</div>;
 	}
 };
 Model.displayName = "Model";
-
-export default Model;

@@ -4,7 +4,7 @@
 import React, {Component} from "react";
 import {i18n, newId} from "..";
 
-class LabelField extends Component {
+export default class LabelField extends Component {
 	constructor (props) {
 		super (props);
 
@@ -12,13 +12,9 @@ class LabelField extends Component {
 	}
 	
 	render () {
-		return (
-			<div className={this.props.className}>
-				{this.props.label && i18n (this.props.label)}
-			</div>
-		);
+		return <div className={this.props.className}>
+			{this.props.label && i18n (this.props.label)}
+		</div>;
 	}
 };
 LabelField.displayName = "LabelField";
-
-export default LabelField;

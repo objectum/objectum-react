@@ -58,17 +58,13 @@ export default class NumberField extends Component {
 		let addCls = this.props.error ? "is-invalid" : "";
 		
 		if (this.props.label || this.props.error) {
-			return (
-				<div className="form-group">
-					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-					<input type="text" className={`form-control ${addCls} numberfield`} id={this.id} value={this.state.value} onChange={this.onChange} disabled={disabled} />
-					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
-				</div>
-			);
+			return <div className="form-group">
+				{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+				<input type="text" className={`form-control ${addCls} numberfield`} id={this.id} value={this.state.value} onChange={this.onChange} disabled={disabled} />
+				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+			</div>;
 		} else {
-			return (
-				<input type="text" className="form-control numberfield" value={this.state.value} onChange={this.onChange} disabled={disabled} />
-			);
+			return <input type="text" className="form-control numberfield" value={this.state.value} onChange={this.onChange} disabled={disabled} />;
 		}
 	}
 };

@@ -1,71 +1,60 @@
 import React, {Component} from "react";
 import Action from "./Action";
-import Confirm from "./Confirm";
 import Grid from "./Grid";
-import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
 
-class ModelTree extends Component {
+export default class ModelTree extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.model = me.props.model || me.props.match.params.model.split ("#")[0];
-		
-		me.onCreate = me.onCreate.bind (me);
-		me.onEdit = me.onEdit.bind (me);
-		me.onRemove = me.onRemove.bind (me);
-		me.state = {
+		this.model = this.props.model || this.props.match.params.model.split ("#")[0];
+		this.state = {
 			refresh: false
 		};
-		let id = me.props.id || `tree-${me.model}`;
+		let id = this.props.id || `tree-${this.model}`;
 		
-		me._refs = {[id]: React.createRef ()};
+		this._refs = {[id]: React.createRef ()};
 	}
 	
-	onCreate () {
-		let me = this;
+	onCreate = () => {
 		let opts = {
-			model: me.model
+			model: this.model
 		};
-		if (me.props.parentModel) {
-			opts.parentModel = me.props.parentModel;
-			opts.parentId = me.props.parentId;
+		if (this.props.parentModel) {
+			opts.parentModel = this.props.parentModel;
+			opts.parentId = this.props.parentId;
 		}
-		me.props.history.push ({
+		this.props.history.push ({
 			pathname: "/model_record/new#" + JSON.stringify ({opts})
 		});
 	}
 	
-	onEdit ({id}) {
-		let me = this;
+	onEdit = ({id}) => {
 		let opts = {
-			model: me.model
+			model: this.model
 		};
-		if (me.props.parentModel) {
-			opts.parentModel = me.props.parentModel;
-			opts.parentId = me.props.parentId;
+		if (this.props.parentModel) {
+			opts.parentModel = this.props.parentModel;
+			opts.parentId = this.props.parentId;
 		}
-		me.props.history.push ({
+		this.props.history.push ({
 			pathname: "/model_record/" + id + "#" + JSON.stringify ({opts})
 		});
 	}
 	
-	async onRemove ({id}) {
-		let me = this;
-		let state = {refresh: !me.state.refresh};
+	onRemove = async ({id}) => {
+		let state = {refresh: !this.state.refresh};
 		
 		try {
-			await me.props.store.startTransaction ("Removing record: " + id);
-			await me.props.store.removeRecord (id);
-			await me.props.store.commitTransaction ();
+			await this.props.store.startTransaction ("Removing record: " + id);
+			await this.props.store.removeRecord (id);
+			await this.props.store.commitTransaction ();
 		} catch (err) {
-			await me.props.store.rollbackTransaction ();
+			await this.props.store.rollbackTransaction ();
 			
 			state.error = err.message;
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 
 	componentDidUpdate () {
@@ -73,8 +62,7 @@ class ModelTree extends Component {
 	}
 	
 	render () {
-		let me = this;
-		let m = me.props.store.getModel (me.model);
+		let m = this.props.store.getModel (this.model);
 		let label = (m.isDictionary () ? i18n ("Dictionary") : i18n ("List")) + ": " + m.get ("name");
 		let opts = m.getOpts ();
 		let params = {};
@@ -82,46 +70,42 @@ class ModelTree extends Component {
 		if (opts.grid && opts.grid.label) {
 			label = opts.grid.label;
 		}
-		if (me.props.hasOwnProperty ("label")) {
-			label = me.props.label;
+		if (this.props.hasOwnProperty ("label")) {
+			label = this.props.label;
 		}
-		if (m.isTable () && me.props.parentModel && me.props.parentId) {
-			let pm = me.props.store.getModel (me.props.parentModel);
+		if (m.isTable () && this.props.parentModel && this.props.parentId) {
+			let pm = this.props.store.getModel (this.props.parentModel);
 			
-			params [pm.get ("code")] = me.props.parentId;
+			params [pm.get ("code")] = this.props.parentId;
 		}
-		let id = me.props.id || `tree-${me.model}`;
+		let id = this.props.id || `tree-${this.model}`;
 		let gridOpts = {
-			...me.props,
+			...this.props,
 			id,
-			ref: me._refs [id],
+			ref: this._refs [id],
 			label,
-			store: me.props.store,
-			model: me.model,
+			store: this.props.store,
+			model: this.model,
 			tree: true,
-			refresh: me.state.refresh,
+			refresh: this.state.refresh,
 			params,
 			inlineActions: true
 		};
 		let grid = <Grid {...gridOpts}>
 			<div className="d-flex">
-				<Action onClick={me.onCreate} icon="fas fa-plus" label={i18n ("Create")} />
-				<Action onClick={me.onEdit} icon="fas fa-edit" label={i18n ("Edit")} selected />
-				<Action onClick={me.onRemove} confirm icon="fas fa-minus" label={i18n ("Remove")} selected />
+				<Action onClick={this.onCreate} icon="fas fa-plus" label={i18n ("Create")} />
+				<Action onClick={this.onEdit} icon="fas fa-edit" label={i18n ("Edit")} selected />
+				<Action onClick={this.onRemove} confirm icon="fas fa-minus" label={i18n ("Remove")} selected />
 			</div>
-			{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
+			{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
 		</Grid>;
 		
-		if (me.model._renderGrid) {
-			grid = me.model._renderGrid ({grid, store: me.props.store});
+		if (this.model._renderGrid) {
+			grid = this.model._renderGrid ({grid, store: this.props.store});
 		}
-		return (
-			<div className="bg-white shadow-sm">
-				{grid}
-			</div>
-		);
+		return <div className="bg-white shadow-sm">
+			{grid}
+		</div>;
 	}
 };
 ModelTree.displayName = "ModelTree";
-
-export default ModelTree;

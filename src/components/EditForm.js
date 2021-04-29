@@ -9,24 +9,18 @@ import _isNumber from "lodash.isnumber";
 import _map from "lodash.map";
 import _uniq from "lodash.uniq";
 
-class EditForm extends Component {
+export default class EditForm extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.onChange = me.onChange.bind (me);
-		me.onSave = me.onSave.bind (me);
-		
-		me.state = {
+		this.state = {
 			loading: false,
 			saving: false
 		};
-		me.recordMap = {};
+		this.recordMap = {};
 	}
 	
 	getFields (children) {
-		let me = this;
 		let fields = [];
 		
 		React.Children.forEach (children, child => {
@@ -39,111 +33,103 @@ class EditForm extends Component {
 				fields.push (child);
 			} else
 			if (cp.children) {
-				fields = [...fields, ...me.getFields (cp.children)];
+				fields = [...fields, ...this.getFields (cp.children)];
 			}
 		});
 		return fields;
 	}
 	
-	onChange ({rid, property, value}) {
-		let me = this;
-		
-		me.setState ({
+	onChange = ({rid, property, value}) => {
+		this.setState ({
 			[`${rid}-${property}`]: value
 		});
 	}
 	
 	async load () {
-		let me = this;
 		let state = {loading: false};
 		
 		try {
-			me.setState ({loading: true});
+			this.setState ({loading: true});
 			await timeout ();
 			
-			me.recordMap = {};
+			this.recordMap = {};
 			
-			let fields = me.getFields (me.props.children);
+			let fields = this.getFields (this.props.children);
 			let ids = _uniq (_map (fields, f => f.props.rid));
-			let promises = _map (ids, id => me.props.store.getRecord (id));
+			let promises = _map (ids, id => this.props.store.getRecord (id));
 			let records = await Promise.all (promises);
 			
-			records.forEach (record => me.recordMap [record.id] = record);
-			fields.forEach (field => state [`${field.props.rid}-${field.props.property}`] = me.recordMap [field.props.rid][field.props.property]);
+			records.forEach (record => this.recordMap [record.id] = record);
+			fields.forEach (field => state [`${field.props.rid}-${field.props.property}`] = this.recordMap [field.props.rid][field.props.property]);
 		} catch (err) {
 			state.error = err.message;
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 	
-	componentDidMount () {
-		this.load ();
+	async componentDidMount () {
+		await this.load ();
 	}
 	
-	componentDidUpdate (prevProps) {
-		let me = this;
-		
-		if (prevProps.refresh != me.props.refresh) {
-			me.load ();
+	async componentDidUpdate (prevProps) {
+		if (prevProps.refresh != this.props.refresh) {
+			await this.load ();
 		}
 	}
 	
 	renderChildren (children) {
-		let me = this;
-		
 		return React.Children.map (children, (child, i) => {
 			let cp = child.props;
 			
 			if (!cp || !cp.property || !cp.rid) {
 				if (cp && cp.children) {
 					return React.cloneElement (child, {
-						children: me.renderChildren (cp.children)
+						children: this.renderChildren (cp.children)
 					});
 				} else {
 					return child;
 				}
 			}
-			if (!me.recordMap [cp.rid]) {
+			if (!this.recordMap [cp.rid]) {
 				return <div key={newId ()} />;
 			}
-			let record = me.recordMap [cp.rid];
-			let model = me.props.store.getModel (record._model);
+			let record = this.recordMap [cp.rid];
+			let model = this.props.store.getModel (record._model);
 			let fieldCode = `${cp.rid}-${cp.property}`;
-			let value = me.state [fieldCode] || cp.value || "";
+			let value = this.state [fieldCode] || cp.value || "";
 			let props = {
 				...cp,
 				rsc: "record",
 				type: model.properties [cp.property].type,
 				model: model.getPath (),
-				onChange: me.onChange,
+				onChange: this.onChange,
 				value,
-				store: me.props.store,
+				store: this.props.store,
 				key: i,
-				error: me.state [`${fieldCode}-error`],
-				disabled: cp.disabled || me.props.disabled
+				error: this.state [`${fieldCode}-error`],
+				disabled: cp.disabled || this.props.disabled
 			};
 			return (React.cloneElement (child, props));
 		});
 	}
 	
 	isValid () {
-		let me = this;
 		let valid = true;
-		let fields = me.getFields (me.props.children);
+		let fields = this.getFields (this.props.children);
 		let state = {};
 		
 		fields.forEach (field => {
 			let fp = field.props;
 			let fieldCode = `${fp.rid}-${fp.property}`;
 			let notNull = fp.notNull;
-			let record = me.recordMap [fp.rid];
-			let model = me.props.store.getModel (record._model);
+			let record = this.recordMap [fp.rid];
+			let model = this.props.store.getModel (record._model);
 			let property = model.properties [fp.property];
 			
 			if (property && property.notNull) {
 				notNull = true;
 			}
-			if (notNull && (!me.state.hasOwnProperty (fieldCode) || me.state [fieldCode] === "" || me.state [fieldCode] === null)) {
+			if (notNull && (!this.state.hasOwnProperty (fieldCode) || this.state [fieldCode] === "" || this.state [fieldCode] === null)) {
 				state [`${fieldCode}-error`] = i18n ("Please enter value");
 				valid = false;
 			} else {
@@ -152,21 +138,20 @@ class EditForm extends Component {
 		});
 		if (!valid) {
 			state.error = i18n ("Form contains errors");
-			me.setState (state);
+			this.setState (state);
 		}
 		return valid;
 	}
 	
 	isChanged () {
-		let me = this;
 		let changed = false;
-		let fields = me.getFields (me.props.children);
+		let fields = this.getFields (this.props.children);
 		
 		fields.forEach (field => {
 			let fp = field.props;
 			let fieldCode = `${fp.rid}-${fp.property}`;
-			let stateValue = me.state [fieldCode];
-			let recordValue = me.recordMap [fp.rid] && me.recordMap [fp.rid][fp.property];
+			let stateValue = this.state [fieldCode];
+			let recordValue = this.recordMap [fp.rid] && this.recordMap [fp.rid][fp.property];
 			
 			if (stateValue === "" || stateValue === undefined) {
 				stateValue = null;
@@ -178,35 +163,33 @@ class EditForm extends Component {
 				stateValue = Number (stateValue);
 				recordValue = Number (recordValue);
 			}
-			if (me.state.hasOwnProperty (fieldCode) && stateValue !== recordValue) {
+			if (this.state.hasOwnProperty (fieldCode) && stateValue !== recordValue) {
 				changed = true;
 			}
 		});
 		return changed;
 	}
 	
-	async onSave () {
-		let me = this;
-		
-		if (!me.isValid ()) {
+	onSave = async () => {
+		if (!this.isValid ()) {
 			return;
 		}
-		me.setState ({saving: true});
+		this.setState ({saving: true});
 		
 		await timeout (100);
-		await me.props.store.startTransaction (`Saving EditForm`);
+		await this.props.store.startTransaction (`Saving EditForm`);
 		
 		let state = {saving: false};
-		let fields = me.getFields (me.props.children);
+		let fields = this.getFields (this.props.children);
 		
 		try {
 			for (let i = 0; i < fields.length; i ++) {
 				let fp = fields [i].props;
 				let fieldCode = `${fp.rid}-${fp.property}`;
-				let record = me.recordMap [fp.rid];
+				let record = this.recordMap [fp.rid];
 				
-				if (me.state.hasOwnProperty (fieldCode)) {
-					let value = me.state [fieldCode];
+				if (this.state.hasOwnProperty (fieldCode)) {
+					let value = this.state [fieldCode];
 					
 					if (value === "") {
 						value = null;
@@ -214,57 +197,49 @@ class EditForm extends Component {
 					record [fp.property] = value;
 				}
 			}
-			for (let id in me.recordMap) {
-				await me.recordMap [id].sync ();
+			for (let id in this.recordMap) {
+				await this.recordMap [id].sync ();
 			}
-			await me.props.store.commitTransaction ();
+			await this.props.store.commitTransaction ();
 			
 			for (let i = 0; i < fields.length; i ++) {
 				let fp = fields [i].props;
 				let fieldCode = `${fp.rid}-${fp.property}`;
-				let record = await me.props.store.getRecord (fp.rid);
+				let record = await this.props.store.getRecord (fp.rid);
 				
 				state [fieldCode] = record [fp.property];
 			}
 			state.error = "";
 			
-			if (me.props.onSave) {
-				me.props.onSave ();
+			if (this.props.onSave) {
+				this.props.onSave ();
 			}
 		} catch (err) {
-			await me.props.store.rollbackTransaction ();
+			await this.props.store.rollbackTransaction ();
 			state.error = err.message;
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 	
 	render () {
-		let me = this;
-
-		if (me.state.loading) {
-			return (
-				<div className="alert alert-light text-primary" role="alert">
-					<Loading />
-				</div>
-			);
+		if (this.state.loading) {
+			return <div className="alert alert-light text-primary" role="alert">
+				<Loading />
+			</div>;
 		} else {
-			return (
-				<div>
-					{!me.props.hideButtons && <button type="button" className="btn btn-primary mb-1" onClick={me.onSave} disabled={!me.isChanged () || me.state.saving || me.props.disableActions}>
-						{me.state.saving ?
-							<span>
-								<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}
-							</span> :
-							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
-						}
-					</button>}
-					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-					{me.renderChildren (me.props.children)}
-				</div>
-			);
+			return <div>
+				{!this.props.hideButtons && <button type="button" className="btn btn-primary mb-1" onClick={this.onSave} disabled={!this.isChanged () || this.state.saving || this.props.disableActions}>
+					{this.state.saving ?
+						<span>
+							<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}
+						</span> :
+						<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
+					}
+				</button>}
+				{this.state.error && <div className="alert alert-danger" role="alert">{this.state.error}</div>}
+				{this.renderChildren (this.props.children)}
+			</div>;
 		}
 	}
 }
 EditForm.displayName = "EditForm";
-
-export default EditForm;

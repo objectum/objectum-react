@@ -1,80 +1,66 @@
 import React, {Component} from "react";
 import Grid from "./Grid";
 import Action from "./Action";
-import Confirm from "./Confirm";
-import RemoveAction from "./RemoveAction";
 import {i18n} from "./../i18n";
 
-class Columns extends Component {
+export default class Columns extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.query = me.props.query;
-		me.onCreate = me.onCreate.bind (me);
-		me.onEdit = me.onEdit.bind (me);
-		me.onRemove = me.onRemove.bind (me);
-		me.onSynchronize = me.onSynchronize.bind (me);
-		me.state = {
+		this.query = this.props.query;
+		this.state = {
 			refresh: false
 		};
 	}
 	
-	onCreate () {
-		let me = this;
-
-		me.props.history.push ({
+	onCreate = () => {
+		this.props.history.push ({
 			pathname: "/column/new#" + JSON.stringify ({
 				opts: {
-					query: me.query
+					query: this.query
 				}
 			})
 		});
 	}
 	
-	onEdit ({id}) {
-		let me = this;
-		
-		me.props.history.push ({
+	onEdit = ({id}) => {
+		this.props.history.push ({
 			pathname: "/column/" + id
 		});
 	}
 	
-	async onRemove ({id}) {
-		let me = this;
-		let state = {refresh: !me.state.refresh};
+	onRemove = async ({id}) => {
+		let state = {refresh: !this.state.refresh};
 		
 		try {
-			await me.props.store.startTransaction ("Removing column: " + id);
-			await me.props.store.removeColumn (id);
-			await me.props.store.commitTransaction ();
+			await this.props.store.startTransaction ("Removing column: " + id);
+			await this.props.store.removeColumn (id);
+			await this.props.store.commitTransaction ();
 		} catch (err) {
-			await me.props.store.rollbackTransaction ();
+			await this.props.store.rollbackTransaction ();
 			
 			state.error = err.message;
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 
-	async onSynchronize () {
-		let me = this;
-		let state = {synchronizing: false, refresh: !me.state.refresh};
+	onSynchronize = async () => {
+		let state = {synchronizing: false, refresh: !this.state.refresh};
 		
 		try {
-			me.setState ({synchronizing: true});
+			this.setState ({synchronizing: true});
 			
-			await me.props.store.startTransaction ("Synchronize columns");
+			await this.props.store.startTransaction ("Synchronize columns");
 			
-			let query = me.props.store.getQuery (me.query);
+			let query = this.props.store.getQuery (this.query);
 			
 			if (!query.get ("query")) {
 				return;
 			}
 			// remove duplicates
-			let columnResult = await me.props.store.getData ({
+			let columnResult = await this.props.store.getData ({
 				query: "objectum.column",
-				queryId: me.query,
+				queryId: this.query,
 				offset: 0, limit: 1000
 			});
 			let columnRecs = columnResult.recs;
@@ -84,12 +70,12 @@ class Columns extends Component {
 				let rec = columnRecs [i];
 				
 				if (columnMap [rec.code]) {
-					await me.props.store.removeColumn (rec.id);
+					await this.props.store.removeColumn (rec.id);
 				}
-				columnMap [rec.code] = me.props.store.getColumn (rec.id);
+				columnMap [rec.code] = this.props.store.getColumn (rec.id);
 			}
 			// create columns
-			let queryResult = await me.props.store.getData ({
+			let queryResult = await this.props.store.getData ({
 				query: query.getPath (),
 				getColumns: true
 			});
@@ -112,11 +98,11 @@ class Columns extends Component {
 					let name = col.name;
 					
 					if (idCol && idCol.model && col.model && col.model != idCol.model) {
-						let model = me.props.store.getModel (col.model);
+						let model = this.props.store.getModel (col.model);
 						
 						name = `${model.name}: ${name}`;
 					}
-					column = await me.props.store.createColumn ({
+					column = await this.props.store.createColumn ({
 						query: query.getPath (),
 						name,
 						code: col.code,
@@ -132,36 +118,29 @@ class Columns extends Component {
 				let col = colMap [column.get ("code")];
 				
 				if (!col) {
-					await me.props.store.removeColumn (column.get ("id"));
+					await this.props.store.removeColumn (column.get ("id"));
 				}
 			}
-			await me.props.store.commitTransaction ();
+			await this.props.store.commitTransaction ();
 		} catch (err) {
 			state.error = err.message;
-			await me.props.store.rollbackTransaction ();
+			await this.props.store.rollbackTransaction ();
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 	
 	render () {
-		let me = this;
-		
-		return (
-			<Grid id="Columns" store={me.props.store} query="objectum.column" system={true} refresh={me.state.refresh} params={{queryId: me.query}} inlineActions>
-				<div className="d-flex">
-					<Action icon="fas fa-plus" label={i18n ("Create")} onClick={me.onCreate} />
-					<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={me.onEdit} selected />
-					<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={me.onRemove} selected />
-					<Action onClick={me.onSynchronize} disabled={me.state.synchronizing}>
-						<i className="fas fa-wrench mr-2" />{me.state.synchronizing ? i18n ("Synchronizing") : i18n ("Synchronize")}
-					</Action>
-				</div>
-				{me.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${me.state.error}`}</div>}
-			</Grid>
-		);
-		
+		return <Grid id="Columns" store={this.props.store} query="objectum.column" system={true} refresh={this.state.refresh} params={{queryId: this.query}} inlineActions>
+			<div className="d-flex">
+				<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
+				<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
+				<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
+				<Action onClick={this.onSynchronize} disabled={this.state.synchronizing}>
+					<i className="fas fa-wrench mr-2" />{this.state.synchronizing ? i18n ("Synchronizing") : i18n ("Synchronize")}
+				</Action>
+			</div>
+			{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
+		</Grid>;
 	}
 };
 Columns.displayName = "Columns";
-
-export default Columns;

@@ -22,7 +22,6 @@ import {
 	BackButton
 } from "./Buttons";
 import {setStore} from "../modules/common";
-import mediator from "../modules/mediator";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
@@ -35,18 +34,16 @@ function usePageViews (pushLocation, locations) {
 			locations [locations.length - 1].hash = hash;
 			return;
 		}
-		//if (pathname != "/") {
-			let needPop = false;
+		let needPop = false;
+		
+		if (locations.length) {
+			let tokens = locations [locations.length - 1].pathname.split ("/");
 			
-			if (locations.length) {
-				let tokens = locations [locations.length - 1].pathname.split ("/");
-				
-				if (tokens [tokens.length - 1] == "new") {
-					needPop = true;
-				}
+			if (tokens [tokens.length - 1] == "new") {
+				needPop = true;
 			}
-			pushLocation (pathname, hash, needPop);
-		//}
+		}
+		pushLocation (pathname, hash, needPop);
 	}, [location]);
 };
 
@@ -55,56 +52,48 @@ function PageViews ({pushLocation, locations}) {
 	return null;
 };
 
-class ObjectumApp extends Component {
+export default class ObjectumApp extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.state = {
+		this.state = {
 			sidebarDocked: true,
 			locations: [{pathname: window.location.pathname, hash: window.location.hash}],
-			name: me.props.name || "Objectum",
-			version: me.props.version || "0.0.1"
+			name: this.props.name || "Objectum",
+			version: this.props.version || "0.0.1"
 		};
-		setStore (me.props.store);
-		me.store = me.props.store;
-		me.onConnect = me.onConnect.bind (me);
-		me.onClickMenu = me.onClickMenu.bind (me);
-		me.pushLocation = me.pushLocation.bind (me);
-		me.popLocation = me.popLocation.bind (me);
-		me.menuItemRecs = [];
+		setStore (this.props.store);
+		this.store = this.props.store;
+		this.menuItemRecs = [];
 		
-		setLocale (me.props.locale || "en");
+		setLocale (this.props.locale || "en");
 		
 		window.OBJECTUM_APP = {
-			store: me.store,
-			sidebar: me.props.sidebar,
-			locale: me.props.locale
+			store: this.store,
+			sidebar: this.props.sidebar,
+			locale: this.props.locale
 		};
 	}
 	
 	async componentDidMount () {
-		let me = this;
+		this.store.addListener ("connect", this.onConnect);
+		this.store.addListener ("disconnect", this.onDisconnect);
 		
-		me.store.addListener ("connect", me.onConnect);
-		me.store.addListener ("disconnect", me.onDisconnect);
-		
-		if (me.props.username && me.props.password) {
+		if (this.props.username && this.props.password) {
 			try {
-				await me.store.auth ({
-					username: me.props.username,
-					password: me.props.password
+				await this.store.auth ({
+					username: this.props.username,
+					password: this.props.password
 				});
 			} catch (err) {
 				console.error (err);
-				me.setState ({error: err.message});
+				this.setState ({error: err.message});
 			}
 		} else
-		if (me.store.getSessionId ()) {
-			await me.onConnect ({
-				sid: me.store.getSessionId (),
-				menuId: me.store.getMenuId ()
+		if (this.store.getSessionId ()) {
+			await this.onConnect ({
+				sid: this.store.getSessionId (),
+				menuId: this.store.getMenuId ()
 			});
 		}
 	}
@@ -114,66 +103,51 @@ class ObjectumApp extends Component {
 		this.store.removeListener ("disconnect", this.onConnect);
 	}
 	
-	async onConnect (opts) {
-		let me = this;
+	onConnect = async (opts) => {
 		let menuId = opts.menuId;
 		let state = {sid: opts.sessionId};
 		
-//		if (!me.props.onCustomRender) {
-			me.setState ({loading: true});
+		this.setState ({loading: true});
+		
+		if (menuId) {
+			let result = await this.store.getData ({
+				query: "objectum.userMenuItems",
+				menu: menuId
+			});
+			this.menuItemRecs = result.recs;
 			
-/*
-			if (menuId == "admin") {
-				let menuResult = await me.store.getData ({
-					query: "objectum.menu"
-				});
-				for (let i = 0; i < menuResult.recs.length; i ++) {
-					if (menuResult.recs [i].code == "admin") {
-						menuId = menuResult.recs [i].id;
-						break;
+			let items = [];
+			let addItems = (items, recs) => {
+				recs.forEach (rec => {
+					let item = {
+						id: rec.id,
+						label: rec.name,
+						icon: rec.icon,
+						path: rec.path
+					};
+					items.push (item);
+					
+					let childs = _filter (this.menuItemRecs, {parent: rec.id});
+					
+					if (childs.length) {
+						item.items = [];
+						addItems (item.items, childs);
 					}
-				}
-			}
-*/
-			if (menuId) {
-				let result = await me.store.getData ({
-					query: "objectum.userMenuItems",
-					menu: menuId
 				});
-				me.menuItemRecs = result.recs;
-				
-				let items = [];
-				let addItems = (items, recs) => {
-					recs.forEach (rec => {
-						let item = {
-							id: rec.id,
-							label: rec.name,
-							icon: rec.icon,
-							path: rec.path
-						};
-						items.push (item);
-						
-						let childs = _filter (me.menuItemRecs, {parent: rec.id});
-						
-						if (childs.length) {
-							item.items = [];
-							addItems (item.items, childs);
-						}
-					});
-				};
-				addItems (items, _filter (me.menuItemRecs, {parent: null}));
-				
-				me.menuItems = items;
-			} else {
-				me.menuItemRecs = [];
-				me.menuItems = [];
-			}
-			state.loading = false;
-//		}
-		if (me.props.onConnect) {
-			await execute (me.props.onConnect);
+			};
+			addItems (items, _filter (this.menuItemRecs, {parent: null}));
+			
+			this.menuItems = items;
+		} else {
+			this.menuItemRecs = [];
+			this.menuItems = [];
 		}
-		me.setState (state);
+		state.loading = false;
+
+		if (this.props.onConnect) {
+			await execute (this.props.onConnect);
+		}
+		this.setState (state);
 	}
 	
 	onDisconnect = async () => {
@@ -182,15 +156,11 @@ class ObjectumApp extends Component {
 		}
 	}
 	
-	onClickMenu (key) {
-		let me = this;
-		
-		me.setState ({[key]: !me.state [key]});
+	onClickMenu = (key) => {
+		this.setState ({[key]: !this.state [key]});
 	}
 	
 	renderMenu (size) {
-		let me = this;
-		
 		function renderIcon (icon, key) {
 			if (icon) {
 				return (<span key={key} className={`${icon} ${size} menu-icon mr-1 align-middle`} />);
@@ -199,24 +169,22 @@ class ObjectumApp extends Component {
 			}
 		};
 		let items = [];
-		
-		function renderItems (parent, level) {
-			let recs = me.menuItemRecs.filter (rec => rec.parent == parent);
+		let renderItems = (parent, level) => {
+			let recs = this.menuItemRecs.filter (rec => rec.parent == parent);
 			
 			recs.forEach ((rec, i) => {
-				let childRecs = me.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
-				//let selected = (rec.path || "").split ("#")[0] == document.location.pathname;
+				let childRecs = this.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
 				
 				if (childRecs.length) {
-					let opened = me.state [`open-${parent}-${i}`];
+					let opened = this.state [`open-${parent}-${i}`];
 					
 					items.push (
 						<tr key={`menu-${parent}-${i}`}>
 							<td className="fade-in">
-								<button className={`btn btn-link pl-3 ml-${level * 2}`} onClick={() => me.onClickMenu (`open-${parent}-${i}`)}>
+								<button className={`btn btn-link pl-3 ml-${level * 2}`} onClick={() => this.onClickMenu (`open-${parent}-${i}`)}>
 									{renderIcon (rec.icon, `icon-${parent}-${i}`)}
 									<span className="text-dark">{i18n (rec.name)}</span>
-									<i key={`open-${parent}-${i}`} className={`fas ${opened ? "fa-angle-up rotate-180-1" : `fa-angle-down ${me.state.hasOwnProperty (`open-${parent}-${i}`) ? "rotate-180-2" : ""}`} ml-2`} />
+									<i key={`open-${parent}-${i}`} className={`fas ${opened ? "fa-angle-up rotate-180-1" : `fa-angle-down ${this.state.hasOwnProperty (`open-${parent}-${i}`) ? "rotate-180-2" : ""}`} ml-2`} />
 								</button>
 							</td>
 						</tr>
@@ -226,13 +194,13 @@ class ObjectumApp extends Component {
 					}
 				} else {
 					let key = `menu-${parent}-${i}`;
-					let selected = me.state.selectedItem == key;
+					let selected = this.state.selectedItem == key;
 					
 					items.push (
 						<tr key={key}><td className={selected ? "bg-primary" : ""}>
 							<Link className={`nav-link text-nowrap ml-${level * 2} ${selected ? "text-white" : ""}`}
 								  to={rec.path}
-								  onClick={() => me.setState ({selectedItem: key})}
+								  onClick={() => this.setState ({selectedItem: key})}
 							>
 								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
 								<span className={selected ? "text-white" : "text-dark"}>{i18n (rec.name)}</span>
@@ -249,13 +217,13 @@ class ObjectumApp extends Component {
 				<tbody>
 				{items}
 				<tr><td>
-					<LogoutButtonSB app={me} size={size} />
+					<LogoutButtonSB app={this} size={size} />
 				</td></tr>
 				</tbody>
 			</table>
 		);
-		if (me.props.onRenderSidebar) {
-			menu = me.props.onRenderSidebar (menu);
+		if (this.props.onRenderSidebar) {
+			menu = this.props.onRenderSidebar (menu);
 		}
 		return (
 			<div className="menu">
@@ -265,46 +233,38 @@ class ObjectumApp extends Component {
 	}
 	
 	renderMenu2 () {
-		let me = this;
-		
-		return (
-			<Navbar iconsTop={me.props.iconsTop}
-				items={[
-					<BackButton key="back" popLocation={me.popLocation} locations={me.state.locations} iconsTop={me.props.iconsTop} />,
-					...me.menuItems,
-					<LogoutButton key="logout" app={me} iconsTop={me.props.iconsTop} />
-				]}
-			/>
-		);
+		return <Navbar iconsTop={this.props.iconsTop}
+			items={[
+				<BackButton key="back" popLocation={this.popLocation} locations={this.state.locations} iconsTop={this.props.iconsTop} />,
+				...this.menuItems,
+				<LogoutButton key="logout" app={this} iconsTop={this.props.iconsTop} />
+			]}
+		/>;
 	}
 	
 	renderRoutes () {
-		let me = this;
 		let items = [
-			<Route key="objectum-1" path="/queries" render={props => <Queries {...props} store={me.store} />} />,
-			<Route key="objectum-2" path="/query/:rid" render={props => <Query {...props} store={me.store} app={me} />} />,
-			<Route key="objectum-3" path="/column/:rid" render={props => <Column {...props} store={me.store} app={me} />} />,
-			<Route key="objectum-4" path="/models" render={props => <Models {...props} store={me.store} />} />,
-			<Route key="objectum-5" path="/model/:rid" render={props => <Model {...props} store={me.store} app={me} />} />,
-			<Route key="objectum-6" path="/property/:rid" render={props => <Property {...props} store={me.store} app={me} />} />,
-			<Route key="objectum-7" path="/roles" render={props => <Roles {...props} store={me.store} />} />,
-			<Route key="objectum-8" path="/role/:rid" render={props => <Role {...props} store={me.store} app={me} />} />,
-			<Route key="objectum-9" path="/users" render={props => <Users {...props} store={me.store} />} />,
-			<Route key="objectum-10" path="/user/:rid" render={props => <User {...props} store={me.store} app={me} />} />,
-			<Route key="objectum-11" path="/menus" render={props => <Menus {...props} store={me.store} />} />,
-			<Route key="objectum-12" path="/menu/:rid" render={props => <Menu {...props} store={me.store} app={me} />} />,
-			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={me.store} app={me} />} />,
-			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={me.store} app={me} />} />,
+			<Route key="objectum-1" path="/queries" render={props => <Queries {...props} store={this.store} />} />,
+			<Route key="objectum-2" path="/query/:rid" render={props => <Query {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-3" path="/column/:rid" render={props => <Column {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-4" path="/models" render={props => <Models {...props} store={this.store} />} />,
+			<Route key="objectum-5" path="/model/:rid" render={props => <Model {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-6" path="/property/:rid" render={props => <Property {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-7" path="/roles" render={props => <Roles {...props} store={this.store} />} />,
+			<Route key="objectum-8" path="/role/:rid" render={props => <Role {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-9" path="/users" render={props => <Users {...props} store={this.store} />} />,
+			<Route key="objectum-10" path="/user/:rid" render={props => <User {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-11" path="/menus" render={props => <Menus {...props} store={this.store} />} />,
+			<Route key="objectum-12" path="/menu/:rid" render={props => <Menu {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={this.store} app={this} />} />,
 			<Route key="objectum-17" path="/import_css" render={props => <ImportCSS {...props} />} />,
-/*
-			<Route key="objectum-18" path="/schema" render={props => <Schema {...props} store={me.store} />} />,
-*/
 		];
 		let SearchRoutes = (children) => {
 			React.Children.forEach (children, (child, i) => {
 				if (child && child.props) {
 					if (child && child.type && child.type.displayName == "ObjectumRoute") {
-						items.push (<Route key={`route-${i}`} {...child.props} app={me} />);
+						items.push (<Route key={`route-${i}`} {...child.props} app={this} />);
 					}
 					if (child.props.children) {
 						SearchRoutes (child.props.children);
@@ -312,194 +272,166 @@ class ObjectumApp extends Component {
 				}
 			});
 		};
-		SearchRoutes (me.props.children);
+		SearchRoutes (this.props.children);
 		
 		let model = {}, parent = {};
 		
-		_each (me.store.map ["model"], m => {
+		_each (this.store.map ["model"], m => {
 			model [m.getPath ()] = true;
 			parent [m.get ("parent")] = true;
 		});
 		_each (_keys (model), path => {
-			let m = me.store.getModel (path);
+			let m = this.store.getModel (path);
 			
 			if (parent [m.get ("id")]) {
 				return;
 			}
-			items.push (
-				<Route
-					key={`model-list-${path}`}
-					path={`/model_list/${path.split (".").join ("_")}`}
-					render={props => <div className="container">
-						<div className="bg-white shadow-sm">
-							<ModelList {...props} store={me.store} model={path} />
-						</div>
-					</div>}
-				/>
-			);
-			items.push (
-				<Route
-					key={`model-tree-${path}`}
-					path={`/model_tree/${path.split (".").join ("_")}`}
-					render={props => <div className="container">
-						<div className="bg-white shadow-sm">
-							<ModelTree {...props} store={me.store} model={path} />
-						</div>
-					</div>}
-				/>
-			);
-			items.push (
-				<Route
-					key={`records-${path}`}
-					path={`/records/${path.split (".").join ("_")}`}
-					render={props => <div className="container">
-						<div className="bg-white shadow-sm">
-							<Records {...props} store={me.store} model={path} />
-						</div>
-					</div>}
-				/>
-			);
+			items.push (<Route
+				key={`model-list-${path}`}
+				path={`/model_list/${path.split (".").join ("_")}`}
+				render={props => <div className="container">
+					<div className="bg-white shadow-sm">
+						<ModelList {...props} store={this.store} model={path} />
+					</div>
+				</div>}
+			/>);
+			items.push (<Route
+				key={`model-tree-${path}`}
+				path={`/model_tree/${path.split (".").join ("_")}`}
+				render={props => <div className="container">
+					<div className="bg-white shadow-sm">
+						<ModelTree {...props} store={this.store} model={path} />
+					</div>
+				</div>}
+			/>);
+			items.push (<Route
+				key={`records-${path}`}
+				path={`/records/${path.split (".").join ("_")}`}
+				render={props => <div className="container">
+					<div className="bg-white shadow-sm">
+						<Records {...props} store={this.store} model={path} />
+					</div>
+				</div>}
+			/>);
 		});
 		return items;
 	}
 	
-	pushLocation (pathname, hash, needPop) {
-		let me = this;
-		let locations = [...me.state.locations];
+	pushLocation = (pathname, hash, needPop) => {
+		let locations = [...this.state.locations];
 		
 		if (needPop) {
 			locations.splice (locations.length - 1, 1);
 		}
-		me.setState ({locations: [...locations, {pathname, hash}]});
+		this.setState ({locations: [...locations, {pathname, hash}]});
 	}
 	
-	popLocation () {
-		let me = this;
-		let locations = [...me.state.locations];
+	popLocation = () => {
+		let locations = [...this.state.locations];
 		let l = locations.splice (locations.length - 1, 1);
 		
-		me.setState ({locations});
+		this.setState ({locations});
 		return l;
 	}
 	
 	render () {
-		let me = this;
-		
-		if (me.state.error) {
-			return (
-				<div className="container">
-					<div className="alert alert-danger mt-1" role="alert">
-						{me.state.error}
-					</div>
+		if (this.state.error) {
+			return <div className="container">
+				<div className="alert alert-danger mt-1" role="alert">
+					{this.state.error}
 				</div>
-			);
+			</div>;
 		}
-		if (me.state.loading) {
+		if (this.state.loading) {
 			return <Loading container />
 		}
-/*
-		if (me.props.username && me.props.password && !me.state.sid) {
-			return (<div/>);
-		}
-*/
 		let content;
 		
-		if (me.state.sid) {
-			if (me.props.onCustomRender) {
-				content = me.renderRoutes ();
-				content = me.props.onCustomRender ({content, app: me, location: me.state.locations.length ? me.state.locations [me.state.locations.length - 1]: {}});
+		if (this.state.sid) {
+			if (this.props.onCustomRender) {
+				content = this.renderRoutes ();
+				content = this.props.onCustomRender ({content, app: this, location: this.state.locations.length ? this.state.locations [this.state.locations.length - 1]: {}});
 			}
 			if (!content) {
-				if (me.props.sidebar) {
-					content = (
-						<div>
-							<Sidebar
-								sidebar={me.renderMenu (me.props.menuIconSize || "fa-2x")}
-								open={false}
-								docked={me.state.sidebarDocked}
-								sidebarClassName="bg-white border-right"
-								shadow={false}
-							>
-								<Fade>
-									<div className="bg-white shadow-sm header border-bottom py-1 form-inline">
-										<button className="btn btn-link" onClick={
-											() => {
-												me.setState ({sidebarDocked: !me.state.sidebarDocked});
-											}
-										}>
-											<i className="fas fa-bars mr-2"/><span className="text-dark">{i18n ("Menu")}</span>
-										</button>
-										
-										<HomeButtonSB />
-										<BackButtonSB popLocation={me.popLocation} locations={me.state.locations}/>
-										
-										<span
-											className="ml-3 font-weight-bold">{`${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`}</span>
-									</div>
-								</Fade>
-								
-								<div className="objectum-content">
-									{me.renderRoutes ()}
+				if (this.props.sidebar) {
+					content = <div>
+						<Sidebar
+							sidebar={this.renderMenu (this.props.menuIconSize || "fa-2x")}
+							open={false}
+							docked={this.state.sidebarDocked}
+							sidebarClassName="bg-white border-right"
+							shadow={false}
+						>
+							<Fade>
+								<div className="bg-white shadow-sm header border-bottom py-1 form-inline">
+									<button className="btn btn-link" onClick={
+										() => {
+											this.setState ({sidebarDocked: !this.state.sidebarDocked});
+										}
+									}>
+										<i className="fas fa-bars mr-2"/><span className="text-dark">{i18n ("Menu")}</span>
+									</button>
+									
+									<HomeButtonSB />
+									<BackButtonSB popLocation={this.popLocation} locations={this.state.locations}/>
+									
+									<span
+										className="ml-3 font-weight-bold">{`${this.state.name || "Objectum"} (${i18n ("version")}: ${this.state.version}, ${i18n ("user")}: ${this.store.username})`}</span>
 								</div>
-							</Sidebar>
-						</div>
-					);
-				} else {
-					let label = me.props.label || `${me.state.name || "Objectum"} (${i18n ("version")}: ${me.state.version}, ${i18n ("user")}: ${me.store.username})`;
-					
-					content = (
-						<Fade>
-							<Navbar className="navbar navbar-expand navbar-dark bg-dark" linkClassName="nav-item nav-link" items={[
-								<HomeButton><strong>{label}</strong></HomeButton>,
-							]} />
-							{me.renderMenu2 ()}
+							</Fade>
+							
 							<div className="objectum-content">
-								{me.renderRoutes ()}
+								{this.renderRoutes ()}
 							</div>
-						</Fade>
-					);
+						</Sidebar>
+					</div>;
+				} else {
+					let label = this.props.label || `${this.state.name || "Objectum"} (${i18n ("version")}: ${this.state.version}, ${i18n ("user")}: ${this.store.username})`;
+					
+					content = <Fade>
+						<Navbar className="navbar navbar-expand navbar-dark bg-dark" linkClassName="nav-item nav-link" items={[
+							<HomeButton><strong>{label}</strong></HomeButton>,
+						]} />
+						{this.renderMenu2 ()}
+						<div className="objectum-content">
+							{this.renderRoutes ()}
+						</div>
+					</Fade>;
 				}
 			}
-			return (
-				<div>
-					<Router>
-						<PageViews pushLocation={me.pushLocation} locations={me.state.locations} />
-						{content}
-					</Router>
-				</div>
-			);
+			return <div>
+				<Router>
+					<PageViews pushLocation={this.pushLocation} locations={this.state.locations} />
+					{content}
+				</Router>
+			</div>;
 		} else {
-			content = me.props.registration ?
+			content = this.props.registration ?
 				<Fade className="my-5">
-					<Office {...me.props} name={me.state.name} version={me.state.version} />
+					<Office {...this.props} name={this.state.name} version={this.state.version} />
 				</Fade> :
 				<div>
-					<Auth store={me.store} name={me.state.name} version={me.state.version} onRenderAuthInfo={me.props.onRenderAuthInfo}/>
+					<Auth store={this.store} name={this.state.name} version={this.state.version} onRenderAuthInfo={this.props.onRenderAuthInfo}/>
 				</div>
 			;
 			let customContent;
 			
-			if (me.props.onCustomRender) {
-				customContent = me.props.onCustomRender ({content, app: me, location: me.state.locations.length ? me.state.locations [me.state.locations.length - 1]: {}});
+			if (this.props.onCustomRender) {
+				customContent = this.props.onCustomRender ({content, app: this, location: this.state.locations.length ? this.state.locations [this.state.locations.length - 1]: {}});
 
 				if (customContent) {
 					content = customContent;
 				}
-			} else if (me.props.username && me.props.password) {
-				return (<div/>);
+			} else if (this.props.username && this.props.password) {
+				return (<div />);
 			}
-			//return content;
-			return (
-				<div>
-					<Router>
-						<PageViews pushLocation={me.pushLocation} locations={me.state.locations} />
-						{content}
-					</Router>
-				</div>
-			);
+			return <div>
+				<Router>
+					<PageViews pushLocation={this.pushLocation} locations={this.state.locations} />
+					{content}
+				</Router>
+			</div>;
 		}
 	}
 };
 ObjectumApp.displayName = "ObjectumApp";
-
-export default ObjectumApp;

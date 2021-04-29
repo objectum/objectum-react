@@ -9,34 +9,27 @@ import _isNumber from "lodash.isnumber";
 import _each from "lodash.foreach";
 import _isEmpty from "lodash.isempty";
 
-class Form extends Component {
+export default class Form extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
+		this.fileMap = {};
+		this.record = null;
+		this.model = null;
 		
-		me.fileMap = {};
-		me.record = null;
-		me.model = null;
-		
-		me.onChange = me.onChange.bind (me);
-		me.onSave = me.onSave.bind (me);
-		me.onCreate = me.onCreate.bind (me);
-
-		me.state = {
+		this.state = {
 			_loading: true,
 			_saving: false,
 			_creating: false,
-			_rid: me.props.rid,
+			_rid: this.props.rid,
 			_showLog: false
 		};
-		if (me.props.values) {
-			Object.assign (me.state, me.props.values);
+		if (this.props.values) {
+			Object.assign (this.state, this.props.values);
 		}
 	}
 	
 	getValues (children) {
-		let me = this;
 		let values = {};
 
 		React.Children.forEach (children, child => {
@@ -46,17 +39,16 @@ class Form extends Component {
 			let code = child.props.property;
 			
 			if (code) {
-				values [code] = me.state [code];
+				values [code] = this.state [code];
 			} else
 			if (child.props.children) {
-				Object.assign (values, me.getValues (child.props.children));
+				Object.assign (values, this.getValues (child.props.children));
 			}
 		});
 		return values;
 	}
 	
 	getFields (children) {
-		let me = this;
 		let fields = {};
 		
 		React.Children.forEach (children, child => {
@@ -69,50 +61,49 @@ class Form extends Component {
 				fields [code] = child;
 			} else
 			if (child.props.children) {
-				Object.assign (fields, me.getFields (child.props.children));
+				Object.assign (fields, this.getFields (child.props.children));
 			}
 		});
 		return fields;
 	}
 	
 	async componentDidMount () {
-		let me = this;
 		let state = {_loading: false};
 		
 		try {
-			me.setState ({_loading: true});
+			this.setState ({_loading: true});
 			
 			await timeout (100);
 			
-			if (me.props.rsc && me.props.rid) {
-				me.record = await me.props.store.getRsc (me.props.rsc, me.props.rid);
+			if (this.props.rsc && this.props.rid) {
+				this.record = await this.props.store.getRsc (this.props.rsc, this.props.rid);
 				
-				if (me.props.rsc == "record") {
-					me.model = me.props.store.getModel (me.record.get ("_model"));
+				if (this.props.rsc == "record") {
+					this.model = this.props.store.getModel (this.record.get ("_model"));
 				}
 			}
-			if (!me.model && me.props.rsc == "record" && me.props.mid) {
-				me.model = me.props.store.getModel (me.props.mid);
+			if (!this.model && this.props.rsc == "record" && this.props.mid) {
+				this.model = this.props.store.getModel (this.props.mid);
 			}
-			if (me.model) {
-				me.regModel = me.props.store.getRegistered (me.model.getPath ());
+			if (this.model) {
+				this.regModel = this.props.store.getRegistered (this.model.getPath ());
 			}
-			if (!me.record && me.props.record) {
-				me.record = me.props.record;
+			if (!this.record && this.props.record) {
+				this.record = this.props.record;
 			}
-			let fields = me.getFields (me.props.children);
+			let fields = this.getFields (this.props.children);
 			
 			for (let code in fields) {
 				let field = fields [code];
 				
-				if (me.record) {
-					state [code] = me.record [code] === null ? "" : me.record [code];
+				if (this.record) {
+					state [code] = this.record [code] === null ? "" : this.record [code];
 				} else {
 					if (field.props.hasOwnProperty ("value") && field.props.value !== undefined) {
 						state [code] = field.props.value;
 					} else {
-						if (me.props.defaults && me.props.defaults.hasOwnProperty (code)) {
-							state [code] = me.props.defaults [code];
+						if (this.props.defaults && this.props.defaults.hasOwnProperty (code)) {
+							state [code] = this.props.defaults [code];
 						}
 					}
 				}
@@ -121,57 +112,55 @@ class Form extends Component {
 			state._error = err.message;
 			console.error (err);
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 	
 	componentDidUpdate (prevProps, prevState) {
-		let me = this;
 		let state = {};
 		
-		if (prevProps.record && me.props.record) {
-			let fields = me.getFields (me.props.children);
+		if (prevProps.record && this.props.record) {
+			let fields = this.getFields (this.props.children);
 			
-			me.record = me.props.record;
+			this.record = this.props.record;
 			
 			for (let code in fields) {
-				if (prevProps.record [code] !== me.props.record [code]) {
-					state [code] = me.props.record [code];
+				if (prevProps.record [code] !== this.props.record [code]) {
+					state [code] = this.props.record [code];
 				}
 			}
 			// поля исчезли
-			for (let code in me.props.record) {
-				if (!fields [code] && prevProps.record [code] !== me.props.record [code]) {
-					state [code] = me.props.record [code];
+			for (let code in this.props.record) {
+				if (!fields [code] && prevProps.record [code] !== this.props.record [code]) {
+					state [code] = this.props.record [code];
 				}
 			}
 		}
-		if (me.props.values) {
-			for (let code in me.props.values) {
-				if (!prevProps.values || me.props.values [code] != prevProps.values [code]) {
-					state [code] = me.props.values [code];
+		if (this.props.values) {
+			for (let code in this.props.values) {
+				if (!prevProps.values || this.props.values [code] != prevProps.values [code]) {
+					state [code] = this.props.values [code];
 				}
 			}
 		}
 		if (!_isEmpty (state)) {
-			me.setState (state);
+			this.setState (state);
 		}
 	}
 	
-	onChange ({code, value, file}) {
-		let me = this;
+	onChange = ({code, value, file}) => {
 		let state = {};
 		
 		if (file) {
-			me.fileMap [code] = file;
+			this.fileMap [code] = file;
 		}
 		state [code] = value;
 		
-		if (value && me.state [`${code}-error`]) {
+		if (value && this.state [`${code}-error`]) {
 			state [`${code}-error`] = "";
 
 			let errors = false;
 			
-			_each (me.state, (v, a) => {
+			_each (this.state, (v, a) => {
 				if (v && a.endsWith ("-error") && a != `${code}-error`) {
 					errors = true;
 				}
@@ -180,10 +169,10 @@ class Form extends Component {
 				state._error = "";
 			}
 		}
-		me.setState (state);
+		this.setState (state);
 		
-		if (me.props.onChange) {
-			me.props.onChange ({property: code, code, value, file});
+		if (this.props.onChange) {
+			this.props.onChange ({property: code, code, value, file});
 		}
 	}
 	
@@ -206,7 +195,7 @@ class Form extends Component {
 		});
 	}
 	
-	async onSave () {
+	onSave = async () => {
 		let me = this;
 		
 		if (!me.isValid ()) {
@@ -273,7 +262,7 @@ class Form extends Component {
 		return !state._error;
 	}
 	
-	async onCreate () {
+	onCreate = async () => {
 		let me = this;
 		
 		if (!me.isValid ()) {
@@ -440,7 +429,6 @@ class Form extends Component {
 					record: me.record,
 					model: me.model && me.model.getPath (),
 					store: me.props.store,
-					//ref: code,
 					key,
 					disabled: child.props.disabled || me.props.disabled,
 					error: me.state [`${code}-error`]
@@ -461,18 +449,7 @@ class Form extends Component {
 							props.secure = true;
 						}
 						let opts = property.getOpts ();
-						
-/*
-						if (opts.wysiwyg) {
-							props.wysiwyg = true;
-						}
-						if (opts.textarea) {
-							props.textarea = true;
-						}
-						if (opts.rows) {
-							props.rows = opts.rows;
-						}
-*/
+
 						Object.assign (props, opts);
 						props.label = props.label || property.name;
 					}
@@ -545,53 +522,48 @@ class Form extends Component {
 	
 	render () {
 		let me = this;
+		
 		if (!me.props.record && (!me.props.store || !me.props.rsc || (!me.props.rid && !me.props.mid && me.props.rsc == "record"))) {
 			return <EditForm {...me.props} />;
 		}
 		if (me.state._loading && !me.record) {
-			return (
-				<div className="alert alert-light text-primary" role="alert">
-					<Loading />
-				</div>
-			);
+			return <div className="alert alert-light text-primary" role="alert">
+				<Loading />
+			</div>;
 		}
 		let formChildren = me.renderChildren (me.props.children);
 
-		return (
-			<div className={me.props.className}>
-				{me.props.label && <div>
-					<h5 className="pl-3 py-2 ml-3">{me.props.label}</h5>
-				</div>}
-				{me.state._rid ? !me.props.hideButtons && <div className="actions p-1 border-bottom">
-					<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving || me.props.disableActions}>
-						{me.state._saving ?
-							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
-							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
-						}
-					</button>
-					{me.props.rsc == "record" && !me.props.hideLogButton &&
-						<button type="button" className="btn btn-primary" onClick={() => me.setState ({_showLog: !me.state._showLog})}>
-							<i className="fas fa-history mr-2" />{i18n ("Log")}
-						</button>
+		return <div className={me.props.className}>
+			{me.props.label && <div>
+				<h5 className="pl-3 py-2 ml-3">{me.props.label}</h5>
+			</div>}
+			{me.state._rid ? !me.props.hideButtons && <div className="actions p-1 border-bottom">
+				<button type="button" className="btn btn-primary mr-1" onClick={me.onSave} disabled={!me.isChanged () || me.state._saving || me.props.disableActions}>
+					{me.state._saving ?
+						<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
+						<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
 					}
-				</div> : <div />}
-				{me.state._showLog && <div className="border-bottom p-1"><Log form={me} /></div>}
-				{me.state._error && <div className="alert alert-danger" role="alert">{me.state._error}</div>}
-				<div className="actions p-1">
-					{formChildren}
-				</div>
-				{!me.state._rid && !me.props.hideButtons && <div className="mt-1 actions border-top p-1">
-					<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state._creating}>
-						{me.state._creating ?
-							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
-							<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>
-						}
+				</button>
+				{me.props.rsc == "record" && !me.props.hideLogButton &&
+					<button type="button" className="btn btn-primary" onClick={() => me.setState ({_showLog: !me.state._showLog})}>
+						<i className="fas fa-history mr-2" />{i18n ("Log")}
 					</button>
-				</div>}
+				}
+			</div> : <div />}
+			{me.state._showLog && <div className="border-bottom p-1"><Log form={me} /></div>}
+			{me.state._error && <div className="alert alert-danger" role="alert">{me.state._error}</div>}
+			<div className="actions p-1">
+				{formChildren}
 			</div>
-		);
+			{!me.state._rid && !me.props.hideButtons && <div className="mt-1 actions border-top p-1">
+				<button type="button" className="btn btn-primary mr-1" onClick={me.onCreate} disabled={!me.isChanged () || me.state._creating}>
+					{me.state._creating ?
+						<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
+						<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>
+					}
+				</button>
+			</div>}
+		</div>;
 	}
 }
 Form.displayName = "Form";
-
-export default Form;

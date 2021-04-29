@@ -4,7 +4,7 @@
 import React, {Component} from "react";
 import {Tooltip, getTimestampString} from "..";
 
-class Cell extends Component {
+export default class Cell extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -14,60 +14,52 @@ class Cell extends Component {
 	}
 	
 	renderString (v) {
-		let me = this;
-		let col = me.props.col;
+		let col = this.props.col;
 
-		if (col.property && me.props.store.getProperty (col.property).getOpts ().wysiwyg) {
+		if (col.property && this.props.store.getProperty (col.property).getOpts ().wysiwyg) {
 			return <div dangerouslySetInnerHTML={{__html: v}} />
 		} else {
-			//return <span>{v}</span>
 			return v;
 		}
 	}
 	
 	render () {
-		let me = this;
-		let value = me.props.value;
-		let col = me.props.col;
+		let value = this.props.value;
+		let col = this.props.col;
 		
 		if (value === null) {
-			return (<span />);
+			return <span />;
 		} else {
 			if (col.type == 3) {
 				// Date
-				return (<span>{getTimestampString (value)}</span>);
+				return <span>{getTimestampString (value)}</span>;
 			} else
 			if (col.type == 4) {
 				// Boolean
-				return (<input type="checkbox" checked={value} disabled />);
+				return <input type="checkbox" checked={value} disabled />;
 			} else
 			if (col.type == 5) {
 				// File
-				let opts = me.props.store.getProperty (col.property).getOpts ();
+				let opts = this.props.store.getProperty (col.property).getOpts ();
 				
-				if (me.props.showImages && opts.image && opts.image.resize) {
-					return (
-						<img
-							src={`/files/${me.props.rec.id}-${me.props.col.property}-${value}`}
-							width={opts.image.resize.width}
-							height={opts.image.resize.height}
-							alt={value}
-						/>
-					);
+				if (this.props.showImages && opts.image && opts.image.resize) {
+					return <img
+						src={`/files/${this.props.rec.id}-${this.props.col.property}-${value}`}
+						width={opts.image.resize.width}
+						height={opts.image.resize.height}
+						alt={value}
+					/>;
 				}
-				return (
-					<span>
-						<a target="_blank" rel="noopener noreferrer"
-						   href={`/files/${me.props.rec.id}-${me.props.col.property}-${value}`}>{value}
-						</a>
-					</span>
-				);
+				return <span>
+					<a target="_blank" rel="noopener noreferrer"
+					   href={`/files/${this.props.rec.id}-${this.props.col.property}-${value}`}>{value}
+					</a>
+				</span>;
 			} else
 			if (col.type == 6) {
 				// Class
-				let cls = me.props.store.getModel (value);
-				
-				return (<span>{`${cls.get ("name")} (${cls.getPath ()} : ${cls.get ("id")})`}</span>);
+				let cls = this.props.store.getModel (value);
+				return <span>{`${cls.get ("name")} (${cls.getPath ()} : ${cls.get ("id")})`}</span>;
 			} else
 			if (col.recs) {
 				let rec = col.recs.find ((rec) => {
@@ -81,16 +73,16 @@ class Cell extends Component {
 					if (rec.getLabel) {
 						label = rec.getLabel ();
 					}
-					return (<span>{label}</span>);
+					return <span>{label}</span>;
 				} else {
-					return (<span>{`${value}`}</span>);
+					return <span>{`${value}`}</span>;
 				}
 			} else {
 				if (typeof (value) == "string") {
-					if (value.length < me.state.maxStrLen) {
-						return me.renderString (value);
+					if (value.length < this.state.maxStrLen) {
+						return this.renderString (value);
 					} else {
-						return (<Tooltip label={me.renderString (value)}>{me.renderString (value.substr (0, me.state.maxStrLen) + " ...")}</Tooltip>);
+						return <Tooltip label={this.renderString (value)}>{this.renderString (value.substr (0, this.state.maxStrLen) + " ...")}</Tooltip>;
 					}
 				} else {
 					return <span>{value}</span>;
@@ -100,5 +92,3 @@ class Cell extends Component {
 	}
 };
 Cell.displayName = "Cell";
-
-export default Cell;

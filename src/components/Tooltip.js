@@ -27,7 +27,7 @@ window.onmousemove = function (e) {
 	}
 };
 
-class Tooltip extends Component {
+export default class Tooltip extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -45,25 +45,17 @@ class Tooltip extends Component {
 	}
 	
 	render () {
-		let me = this;
-		
 		if (isMobile) {
-			return (
-				<div className="objectum-tooltip w-100 h-100">
-					{me.props.children}
-				</div>
-			);
+			return <div className="objectum-tooltip w-100 h-100">
+				{this.props.children}
+			</div>;
 		}
-		return (
-			<div className="objectum-tooltip w-100 h-100">
-				{me.props.children}
-				{me.props.label && <span id={me.state.id} className="border p-1 bg-white shadow-sm">
-					{me.props.label}
-				</span>}
-			</div>
-		);
+		return <div className="objectum-tooltip w-100 h-100">
+			{this.props.children}
+			{this.props.label && <span id={this.state.id} className="border p-1 bg-white shadow-sm">
+				{this.props.label}
+			</span>}
+		</div>;
 	}
 };
 Tooltip.displayName = "Tooltip";
-
-export default Tooltip;

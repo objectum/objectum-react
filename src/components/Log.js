@@ -4,92 +4,83 @@
 import React, {Component} from "react";
 import {getTimestampString, i18n} from "..";
 
-class Log extends Component {
+export default class Log extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
+		this.form = this.props.form;
+		this.store = this.props.form.props.store;
 		
-		me.form = me.props.form;
-		me.store = me.props.form.props.store;
-		me.onChange = me.onChange.bind (me);
-		
-		me.state = {
+		this.state = {
 			field: "",
 			recs: []
 		};
 	}
 	
-	async onChange (val) {
-		let me = this;
+	onChange = async (val) => {
 		let v = val.target.value;
 		let state = {field: v};
 		
 		if (v) {
-			let record = await me.store.getRecord (me.form.record.id);
-			let model = me.store.getModel (record.get ("_model"));
+			let record = await this.store.getRecord (this.form.record.id);
+			let model = this.store.getModel (record.get ("_model"));
 			let property = model.properties [v];
 			
-			state.recs = await me.store.getLog (me.form.record.id, property.get ("id"));
+			state.recs = await this.store.getLog (this.form.record.id, property.get ("id"));
 			
 		} else {
 			state.recs = [];
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 	render () {
-		let me = this;
-		let fields = me.form.getFields (me.form.props.children);
+		let fields = this.form.getFields (this.form.props.children);
 		let recs = [];
 		
 		for (let code in fields) {
 			recs.push ({
-				id: code, name: me.form.model.properties [code] && me.form.model.properties [code].name
+				id: code, name: this.form.model.properties [code] && this.form.model.properties [code].name
 			});
 		}
-		return (
-			<div>
-				<strong>{i18n ("Log")}</strong>
-				<select className="form-control custom-select my-1" value={me.state.tag} onChange={me.onChange}>
-					{[{id: "", name: i18n ("Select field")}, ...recs].map ((rec, i) => {
-						return (
-							<option value={rec.id} key={i}>{rec.name}</option>
-						);
-					})}
-				</select>
-				{me.state.recs && <table className="table table-bordered table-sm objectum-table p-1 mb-0">
-					<thead className="bg-info text-white">
-						<tr>
-							<th>{i18n ("Date")}</th>
-							<th>{i18n ("Value")}</th>
-							<th>{i18n ("Comment")}</th>
-							<th>{i18n ("IP-address")}</th>
-							<th>{i18n ("User")}</th>
+		return <div>
+			<strong>{i18n ("Log")}</strong>
+			<select className="form-control custom-select my-1" value={this.state.tag} onChange={this.onChange}>
+				{[{id: "", name: i18n ("Select field")}, ...recs].map ((rec, i) => {
+					return (
+						<option value={rec.id} key={i}>{rec.name}</option>
+					);
+				})}
+			</select>
+			{this.state.recs && <table className="table table-bordered table-sm objectum-table p-1 mb-0">
+				<thead className="bg-info text-white">
+					<tr>
+						<th>{i18n ("Date")}</th>
+						<th>{i18n ("Value")}</th>
+						<th>{i18n ("Comment")}</th>
+						<th>{i18n ("IP-address")}</th>
+						<th>{i18n ("User")}</th>
+					</tr>
+				</thead>
+				<tbody>
+				{this.state.recs.map ((rec, i) => {
+					let value = rec.value || "";
+					
+					if (value && typeof (value) == "object" && value.getMonth) {
+						value = value.toLocaleString ();
+					}
+					return (
+						<tr key={i}>
+							<td key={"date-" + i}>{getTimestampString (rec.date)}</td>
+							<td key={"value-" + i}>{value}</td>
+							<td key={"description-" + i}>{rec.description || ""}</td>
+							<td key={"remote_addr-" + i}>{rec.remote_addr || ""}</td>
+							<td key={"user-" + i}>{`${rec.login || "admin"}${rec.user_id ? ` (${rec.user_id})`: ""}`}</td>
 						</tr>
-					</thead>
-					<tbody>
-					{me.state.recs.map ((rec, i) => {
-						let value = rec.value || "";
-						
-						if (value && typeof (value) == "object" && value.getMonth) {
-							value = value.toLocaleString ();
-						}
-						return (
-							<tr key={i}>
-								<td key={"date-" + i}>{getTimestampString (rec.date)}</td>
-								<td key={"value-" + i}>{value}</td>
-								<td key={"description-" + i}>{rec.description || ""}</td>
-								<td key={"remote_addr-" + i}>{rec.remote_addr || ""}</td>
-								<td key={"user-" + i}>{`${rec.login || "admin"}${rec.user_id ? ` (${rec.user_id})`: ""}`}</td>
-							</tr>
-						);
-					})}
-					</tbody>
-				</table>}
-			</div>
-		);
+					);
+				})}
+				</tbody>
+			</table>}
+		</div>;
 	}
 };
 Log.displayName = "Log";
-
-export default Log;

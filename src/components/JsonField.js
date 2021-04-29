@@ -4,85 +4,77 @@
 import React, {Component} from "react";
 import {i18n, newId} from "..";
 
-class JsonField extends Component {
+export default class JsonField extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.onChange = me.onChange.bind (me);
-		me.state = {
+		this.state = {
 			value: ""
 		};
-		if (me.props.value) {
-			me.state.value = me.props.value;
+		if (this.props.value) {
+			this.state.value = this.props.value;
 			
-			let o = JSON.parse (me.props.value);
+			let o = JSON.parse (this.props.value);
 			
 			for (let a in o) {
-				me.state [a] = o [a];
+				this.state [a] = o [a];
 			}
 		}
-		me.id = newId ();
+		this.id = newId ();
 	}
 	
-	onChange ({code, value}) {
-		let me = this;
+	onChange = ({code, value}) => {
 		let o = {};
 		
-		me.props.props.forEach (prop => {
-			o [prop.prop] = prop.prop == code ? value : me.state [prop.prop];
+		this.props.props.forEach (prop => {
+			o [prop.prop] = prop.prop == code ? value : this.state [prop.prop];
 		});
 		o = JSON.stringify (o);
 		
-		me.setState ({[code]: value, value: o});
+		this.setState ({[code]: value, value: o});
 		
-		if (me.props.onChange) {
-			me.props.onChange ({code: me.props.property, value: o});
+		if (this.props.onChange) {
+			this.props.onChange ({code: this.props.property, value: o});
 		}
 	}
 	
 	async componentDidUpdate (prevProps) {
-		let me = this;
-		
-		if (prevProps.value !== me.props.value) {
-			let state = {value: me.props.value};
+		if (prevProps.value !== this.props.value) {
+			let state = {value: this.props.value};
 			
-			if (me.props.value) {
-				let o = JSON.parse (me.props.value);
+			if (this.props.value) {
+				let o = JSON.parse (this.props.value);
 				
 				for (let a in o) {
 					state [a] = o [a];
 				}
 			}
-			me.setState (state);
+			this.setState (state);
 		}
 	}
 
 	renderFields () {
-		let me = this;
-
-		if (me.props.col) {
+		if (this.props.col) {
 			return (
 				<div className="row">
-					{me.props.props.map ((o, i) => {
+					{this.props.props.map ((o, i) => {
 						let Cmp = o.component;
 						
 						return (
-							<div key={i} className={`col-${o.col || me.props.col} ${i ? "mt-1" : ""}`}>
-								<Cmp {...o} label={o.label} property={o.prop} value={me.state [o.prop]} onChange={me.onChange} disabled={me.props.disabled}/>
+							<div key={i} className={`col-${o.col || this.props.col} ${i ? "mt-1" : ""}`}>
+								<Cmp {...o} label={o.label} property={o.prop} value={this.state [o.prop]} onChange={this.onChange} disabled={this.props.disabled}/>
 							</div>
 						);
 					})}
 				</div>
 			);
 		} else {
-			return me.props.props.map ((o, i) => {
+			return this.props.props.map ((o, i) => {
 				let Cmp = o.component;
 				
 				return (
 					<div key={i} className={i ? "mt-1" : ""}>
-						<Cmp {...o} label={o.label} property={o.prop} value={me.state [o.prop]} onChange={me.onChange} disabled={me.props.disabled}/>
+						<Cmp {...o} label={o.label} property={o.prop} value={this.state [o.prop]} onChange={this.onChange} disabled={this.props.disabled}/>
 					</div>
 				);
 			});
@@ -90,20 +82,14 @@ class JsonField extends Component {
 	}
 	
 	render () {
-		let me = this;
-		
-		if (!me.props.props) {
-			return <div>props not exist</div>
+		if (!this.props.props) {
+			return <div className="alert alert-danger">props not exist</div>
 		}
-		return (
-			<div>
-				{me.props.label && <div className="mb-1"><strong>{i18n (me.props.label)}</strong></div>}
-				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
-				{me.renderFields ()}
-			</div>
-		);
+		return <div>
+			{this.props.label && <div className="mb-1"><strong>{i18n (this.props.label)}</strong></div>}
+			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+			{this.renderFields ()}
+		</div>;
 	}
 };
 JsonField.displayName = "JsonField";
-
-export default JsonField;

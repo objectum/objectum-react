@@ -4,7 +4,7 @@
 import React, {Component} from "react";
 import {i18n} from "../i18n";
 
-class Panel extends Component {
+export default class Panel extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -34,5 +34,3 @@ class Panel extends Component {
 	}
 };
 Panel.displayName = "Panel";
-
-export default Panel;

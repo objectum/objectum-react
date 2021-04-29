@@ -15,41 +15,40 @@ import TableForm from "./TableForm";
 import Fade from "./Fade";
 import {execute} from "objectum-client";
 
-class Grid extends Component {
+export default class Grid extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		let hash = getHash (me) [me.props.id];
+		let hash = getHash (this) [this.props.id];
 		
-		me.state = {
+		this.state = {
 			loading: false,
 			refresh: false,
 			page: 1,
-			pageRecs: me.props.pageRecs || 20,
+			pageRecs: this.props.pageRecs || 20,
 			selected: null,
-			showFilters: me.props.showFilters || false,
-			dockFilters: me.props.dockFilters || "bottom",
-			filters: me.props.filters || [],
+			showFilters: this.props.showFilters || false,
+			dockFilters: this.props.dockFilters || "bottom",
+			filters: this.props.filters || [],
 			order: [],
 			parent: null,
-			mode: me.props.mode || "table",
+			mode: this.props.mode || "table",
 			cols: [],
 			recs: [],
 			imageRecs: [],
 			showCols: false,
 			hideCols: [],
 			pageNum: 1,
-			inlineActions: me.props.hasOwnProperty ("inlineActions") ? me.props.inlineActions : true,
+			inlineActions: this.props.hasOwnProperty ("inlineActions") ? this.props.inlineActions : true,
 		};
-		if (!me.hasInlineActions (me.props.children)) {
-			me.state.inlineActions = false;
+		if (!this.hasInlineActions (this.props.children)) {
+			this.state.inlineActions = false;
 		}
-		if (me.props.filters && me.props.filters.length) {
-			me.state.showFilters = true;
-			me.state.dockFilters = "top";
+		if (this.props.filters && this.props.filters.length) {
+			this.state.showFilters = true;
+			this.state.dockFilters = "top";
 		}
-		let id = `grid-${me.props.id}`;
+		let id = `grid-${this.props.id}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 
 		if (data.defaultFilter) {
@@ -71,45 +70,27 @@ class Grid extends Component {
 						}
 					}
 				});
-				me.state.filters = filters;
-				me.state.showFilters = true;
-				me.state.dockFilters = "top";
+				this.state.filters = filters;
+				this.state.showFilters = true;
+				this.state.dockFilters = "top";
 			}
 		}
 		if (hash) {
 			["page", "pageRecs", "selected", "parent", "showFilters", "dockFilters", "filters", "mode", "order", "showCols", "hideCols"].forEach (a => {
 				if (hash.hasOwnProperty (a)) {
-					me.state [a] = hash [a];
+					this.state [a] = hash [a];
 				}
 			});
 		}
-		me.position = [];
-		me.childMap = {};
-		me.nodeMap = {};
-		me.colMap = {};
-		me.unmounted = false;
-		
-		me.onRowClick = me.onRowClick.bind (me);
-		me.onFolderClick = me.onFolderClick.bind (me);
-		me.onChange = me.onChange.bind (me);
-		me.onFirst = me.onFirst.bind (me);
-		me.onPrev = me.onPrev.bind (me);
-		me.onNext = me.onNext.bind (me);
-		me.onLast = me.onLast.bind (me);
-		me.onShowFilters = me.onShowFilters.bind (me);
-		me.onDockFilters = me.onDockFilters.bind (me);
-		me.onShowCols = me.onShowCols.bind (me);
-		me.onImageMode = me.onImageMode.bind (me);
-		me.onEditMode = me.onEditMode.bind (me);
-		me.hashChange = me.hashChange.bind (me);
-		me.onFilter = me.onFilter.bind (me);
-		me.onOrder = me.onOrder.bind (me);
-		me.onHideCols = me.onHideCols.bind (me);
+		this.position = [];
+		this.childMap = {};
+		this.nodeMap = {};
+		this.colMap = {};
+		this.unmounted = false;
 	}
 	
-	hashChange () {
-		let me = this;
-		let hash = getHash (me) [me.props.id];
+	hashChange = () => {
+		let hash = getHash (this) [this.props.id];
 		let state = {};
 
 		if (hash) {
@@ -117,11 +98,11 @@ class Grid extends Component {
 				hash.parent = null;
 			}
 			["page", "pageRecs", "selected", "parent", "showFilters", "dockFilters", "filters", "mode", "order", "showCols", "hideCols"].forEach (a => {
-				if (hash.hasOwnProperty (a) && JSON.stringify (hash [a]) !== JSON.stringify (me.state [a])) {
+				if (hash.hasOwnProperty (a) && JSON.stringify (hash [a]) !== JSON.stringify (this.state [a])) {
 					state [a] = hash [a];
 					
-					if (a == "filters" && me.props.onFilters) {
-						me.props.onFilters (_map (hash [a], f => {
+					if (a == "filters" && this.props.onFilters) {
+						this.props.onFilters (_map (hash [a], f => {
 							return {
 								col: f [0], oper: f [1], value: f [2]
 							};
@@ -130,51 +111,48 @@ class Grid extends Component {
 				}
 			});
 		}
-		if (!me.unmounted) {
-			me.setState (state);
+		if (!this.unmounted) {
+			this.setState (state);
 		}
 	}
 	
 	async componentDidMount () {
-		let me = this;
-		
-		addHashListener (me, me.hashChange);
+		addHashListener (this, this.hashChange);
 
-		await me.load ();
+		await this.load ();
 		
-		let selected = me.state.selected;
-		let parent = me.state.parent;
+		let selected = this.state.selected;
+		let parent = this.state.parent;
 		
-		if (parent !== null && me.props.onSelectParent) {
-			me.props.onSelectParent (parent);
+		if (parent !== null && this.props.onSelectParent) {
+			this.props.onSelectParent (parent);
 		}
-		if (selected !== null && me.props.onSelect) {
-			me.props.onSelect (me.state.recs [selected] && me.state.recs [selected].id);
+		if (selected !== null && this.props.onSelect) {
+			this.props.onSelect (this.state.recs [selected] && this.state.recs [selected].id);
 		}
 	}
 	
 	async componentDidUpdate (prevProps, prevState) {
-		let me = this;
 		let needRefresh = false;
 		
 		["refresh", "params", "query", "model"].forEach (a => {
-			if (JSON.stringify (prevProps [a]) !== JSON.stringify (me.props [a])) {
+			if (JSON.stringify (prevProps [a]) !== JSON.stringify (this.props [a])) {
 				needRefresh = true;
 			}
 		});
 		["refresh", "page", "pageRecs", "filters", "order", "parent", "mode"].forEach (a => {
-			if (JSON.stringify (prevState [a]) !== JSON.stringify (me.state [a])) {
+			if (JSON.stringify (prevState [a]) !== JSON.stringify (this.state [a])) {
 				needRefresh = true;
 			}
 		});
 		if (needRefresh) {
-			await me.load ();
+			await this.load ();
 		}
-		if (prevState.parent !== me.state.parent && me.props.onSelectParent) {
-			me.props.onSelectParent (me.state.parent);
+		if (prevState.parent !== this.state.parent && this.props.onSelectParent) {
+			this.props.onSelectParent (this.state.parent);
 		}
-		if (prevState.selected !== me.state.selected && me.props.onSelect) {
-			me.props.onSelect (me.state.recs [me.state.selected] ? me.state.recs [me.state.selected].id : null);
+		if (prevState.selected !== this.state.selected && this.props.onSelect) {
+			this.props.onSelect (this.state.recs [this.state.selected] ? this.state.recs [this.state.selected].id : null);
 		}
 	}
 	
@@ -183,16 +161,15 @@ class Grid extends Component {
 		this.unmounted = true;
 	}
 	
-	onRowClick (row) {
+	onRowClick = (row) => {
 		setHash (this, {[this.props.id]: {selected: row}});
 	}
 	
-	onFolderClick (id) {
+	onFolderClick = (id) => {
 		setHash (this, {[this.props.id]: {parent: id, selected: null, page: 1}});
 	}
 	
-	onChange (val) {
-		let me = this;
+	onChange = (val) => {
 		let id = val.target.id;
 		let v = val.target.value;
 		
@@ -203,60 +180,59 @@ class Grid extends Component {
 			v = 1;
 		}
 		if (id == "pageRecs" || id == "page") {
-			setHash (me, {[me.props.id]: {[id]: v}});
+			setHash (this, {[this.props.id]: {[id]: v}});
 		}
 	}
 	
-	onFirst () {
+	onFirst = () => {
 		setHash (this, {[this.props.id]: {page: 1, selected: null}});
 	}
 	
-	onPrev () {
+	onPrev = () => {
 		setHash (this, {[this.props.id]: {page: Number (this.state.page) - 1, selected: null}});
 	}
 	
-	onLast () {
-		setHash (this, {[this.props.id]: {page: this.state.pageNum, selected: null}});
-	}
-	
-	onNext () {
+	onNext = () => {
 		setHash (this, {[this.props.id]: {page: Number (this.state.page) + 1, selected: null}});
 	}
 	
-	onShowFilters () {
+	onLast = () => {
+		setHash (this, {[this.props.id]: {page: this.state.pageNum, selected: null}});
+	}
+	
+	onShowFilters = () => {
 		setHash (this, {[this.props.id]: {showFilters: !this.state.showFilters}});
 	}
 	
-	onDockFilters () {
+	onDockFilters = () => {
 		setHash (this, {[this.props.id]: {dockFilters: this.state.dockFilters == "bottom" ? "top" : "bottom"}});
 	}
 	
-	onShowCols () {
+	onShowCols = () => {
 		setHash (this, {[this.props.id]: {showCols: !this.state.showCols}});
 	}
 	
-	onImageMode () {
+	onImageMode = () => {
 		setHash (this, {[this.props.id]: {mode: this.state.mode == "images" ? "table" : "images"}});
 	}
 	
-	onEditMode () {
+	onEditMode = () => {
 		setHash (this, {[this.props.id]: {mode: this.state.mode == "edit" ? "table" : "edit"}});
 	}
 	
-	onFilter (filters) {
+	onFilter = (filters) => {
 		setHash (this, {[this.props.id]: {filters, selected: null}});
 	}
 	
-	onHideCols (hideCols) {
+	onHideCols = (hideCols) => {
 		setHash (this, {[this.props.id]: {hideCols}});
 	}
 	
-	onOrder (colCode) {
-		let me = this;
-		let order = [...me.state.order];
+	onOrder = (colCode) => {
+		let order = [...this.state.order];
 		
-		if (me.state.order [0] === colCode) {
-			if (me.state.order [1] == "asc") {
+		if (this.state.order [0] === colCode) {
+			if (this.state.order [1] == "asc") {
 				order [1] = "desc";
 			} else {
 				order = [];
@@ -268,93 +244,86 @@ class Grid extends Component {
 	}
 	
 	prepareRequestOptions () {
-		let me = this;
 		let opts = {
-			offset: (me.state.page - 1) * me.state.pageRecs,
-			limit: me.state.pageRecs,
-			filters: me.state.filters.filter (f => {
+			offset: (this.state.page - 1) * this.state.pageRecs,
+			limit: this.state.pageRecs,
+			filters: this.state.filters.filter (f => {
 				if (f [2] == "" && f [1] != "is null" && f [1] != "is not null") {
 					return false;
 				}
 				return true;
 			})
 		};
-		if (me.props.tree) {
-			opts.parent = me.state.parent;
+		if (this.props.tree) {
+			opts.parent = this.state.parent;
 		}
-		if (me.props.query) {
-			opts.query = me.props.query;
+		if (this.props.query) {
+			opts.query = this.props.query;
 		}
-		if (me.props.model) {
-			opts.model = me.props.model;
+		if (this.props.model) {
+			opts.model = this.props.model;
 		}
-		if (me.state.order.length) {
-			opts.order = me.state.order;
+		if (this.state.order.length) {
+			opts.order = this.state.order;
 		}
-		if (me.props.params) {
-			opts = {...opts, ...me.props.params};
+		if (this.props.params) {
+			opts = {...opts, ...this.props.params};
 		}
 		return opts;
 	}
 	
 	async load () {
-		let me = this;
 		let state = {
-			pageRecs: me.state.pageRecs
+			pageRecs: this.state.pageRecs
 		};
 		try {
-			if (me.unmounted) {
+			if (this.unmounted) {
 				return;
 			}
-			me.setState ({loading: true});
+			this.setState ({loading: true});
 			
 			await timeout (100);
 			
-			let result = await me.props.store.getData (me.prepareRequestOptions ());
+			let result = await this.props.store.getData (this.prepareRequestOptions ());
 			
 			state.recs = result.recs;
 			state.cols = _sortBy (result.cols, ["order", "name"]);
-			me.position = result.position;
+			this.position = result.position;
 			state.length = result.length;
 			
-/*
-			if (me.state.selected > state.recs.length - 1) {
-				state.selected = null;
-			}
-*/
-			me.childMap = {};
+			this.childMap = {};
 			
-			if (me.props.tree) {
+			if (this.props.tree) {
 				result.childs.forEach (rec => {
-					me.childMap [rec.parent] = rec.num;
+					this.childMap [rec.parent] = rec.num;
 				});
 				result.recs.forEach (rec => {
-					me.nodeMap [rec.id] = rec;
+					this.nodeMap [rec.id] = rec;
 				});
 			}
-			me.colMap = {};
+			this.colMap = {};
 			
-			state.cols.forEach (col => me.colMap [col.code] = col);
+			state.cols.forEach (col => this.colMap [col.code] = col);
 			
-			if (!me.state.hideCols.length) {
+			if (!this.state.hideCols.length) {
 				state.cols.forEach (col => {
 					if (col.area === 0) {
-						me.state.hideCols.push (col.code);
+						this.state.hideCols.push (col.code);
 					}
 				});
 			}
-			if (me.props.card && me.state.mode == "images") {
-				let imageProperty = me.props.store.getProperty (me.colMap [me.props.card.image].property);
-				let imageModel = me.props.store.getModel (imageProperty.get ("type"));
-				let model = me.props.store.getModel (imageProperty.get ("model"));
+			if (this.props.card && this.state.mode == "images") {
+				let imageProperty = this.props.store.getProperty (this.colMap [this.props.card.image].property);
+				let imageModel = this.props.store.getModel (imageProperty.get ("type"));
+				let model = this.props.store.getModel (imageProperty.get ("model"));
 				
 				state.imageRecs = [];
 				
 				if (state.recs.length) {
-					let result = await me.props.store.getData ({
+					let result = await this.props.store.getData ({
 						model: imageModel.getPath (),
 						offset: 0,
-						limit: me.state.pageRecs * 3,
+						limit: this.state.pageRecs * 3,
 						filters: [[model.get ("code"), "in", _map (state.recs, "id")]]
 					});
 					state.imageRecs = result.recs;
@@ -369,10 +338,10 @@ class Grid extends Component {
 				let c = state.cols [i];
 				
 				if (c.type >= 1000) {
-					let m = me.props.store.getModel (c.type);
+					let m = this.props.store.getModel (c.type);
 					
-					if (m.isDictionary () || me.props.store.dict [m.getPath ()]) {
-						c.recs = await me.props.store.getDict (c.type);
+					if (m.isDictionary () || this.props.store.dict [m.getPath ()]) {
+						c.recs = await this.props.store.getDict (c.type);
 					}
 				}
 			}
@@ -381,23 +350,22 @@ class Grid extends Component {
 		}
 		state.loading = false;
 		
-		if (me.props.onLoad) {
-			me.props.onLoad (state);
+		if (this.props.onLoad) {
+			this.props.onLoad (state);
 		}
-		if (!me.unmounted) {
-			me.setState (state);
+		if (!this.unmounted) {
+			this.setState (state);
 		}
 	}
 
 	getInfo () {
-		let me = this;
-		let pos = (me.state.page - 1) * me.state.pageRecs + 1;
-		let pos2 = pos + Number (me.state.pageRecs) - 1;
+		let pos = (this.state.page - 1) * this.state.pageRecs + 1;
+		let pos2 = pos + Number (this.state.pageRecs) - 1;
 		
-		if (pos2 > me.state.length) {
-			pos2 = me.state.length;
+		if (pos2 > this.state.length) {
+			pos2 = this.state.length;
 		}
-		let s = `${i18n ("Records")}: ${pos}-${pos2} ${i18n ("of")} ${me.state.length} (${i18n ("Pages")}: ${me.state.pageNum})`;
+		let s = `${i18n ("Records")}: ${pos}-${pos2} ${i18n ("of")} ${this.state.length} (${i18n ("Pages")}: ${this.state.pageNum})`;
 		
 		if (!pos2) {
 			s = i18n ("empty");
@@ -406,24 +374,22 @@ class Grid extends Component {
 	}
 
 	renderChildren (children) {
-		let me = this;
-		
 		return React.Children.map (children, child => {
 			if (!child || !child.props) {
 				return child;
 			}
 			let o = {
-				store: me.props.store
+				store: this.props.store
 			};
 			if (child.type.displayName == "Action") {
-				if (me.state.inlineActions && (child.props.onClickSelected || child.props.selected)) {
+				if (this.state.inlineActions && (child.props.onClickSelected || child.props.selected)) {
 					return <div />;
 				}
 				o.onClick = async (opts) => {
-					Object.assign (opts, {grid: me, store: me.props.store, parentId: me.props.parentId, parentModel: me.props.parentModel})
+					Object.assign (opts, {grid: this, store: this.props.store, parentId: this.props.parentId, parentModel: this.props.parentModel})
 					
 					if (child.props.selected || child.props.onClickSelected) {
-						opts.id = me.state.recs [me.state.selected].id;
+						opts.id = this.state.recs [this.state.selected].id;
 					}
 					let fn = child.props.onClick || child.props.onClickSelected;
 					
@@ -431,60 +397,54 @@ class Grid extends Component {
 						return await execute (fn, opts);
 					}
 				};
-				if ((child.props.selected || child.props.onClickSelected) && me.state.selected === null) {
+				if ((child.props.selected || child.props.onClickSelected) && this.state.selected === null) {
 					o.disabled = true;
 				}
-				if ((child.props.modalComponent || child.props.popupComponent) && me.state.recs [me.state.selected]) {
-					o.recordId = me.state.recs [me.state.selected].id;
-					o.grid = me;
+				if ((child.props.modalComponent || child.props.popupComponent) && this.state.recs [this.state.selected]) {
+					o.recordId = this.state.recs [this.state.selected].id;
+					o.grid = this;
 				}
 			}
 			if (child.type && child.type.displayName == "RemoveAction") {
-				if (me.state.selected === null) {
+				if (this.state.selected === null) {
 					o.disabled = true;
 				} else {
-					o.removeId = me.state.recs [me.state.selected] && me.state.recs [me.state.selected].id;
+					o.removeId = this.state.recs [this.state.selected] && this.state.recs [this.state.selected].id;
 				}
 			}
 			if (child.props.children) {
-				o.children = me.renderChildren (child.props.children);
+				o.children = this.renderChildren (child.props.children);
 			}
 			return React.cloneElement (child, o);
 		});
 	}
 	
 	renderPosition () {
-		let me = this;
-		let active = !!me.position.length || me.state.parent;
+		let active = !!this.position.length || this.state.parent;
 		
-		return (
-			<div className="p-1 border-top">
-				<nav aria-label="breadcrumb">
-					<ol className="breadcrumb m-0 p-1">
-						<li className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
-							<button type="button" className="btn btn-link btn-sm p-0" onClick={() => me.onFolderClick (null)} disabled={!active}><i className="fas fa-home" /></button>
-						</li>
-						{me.position.map ((rec, i) => {
-							active = i < me.position.length - 1;
-							
-							return (
-								<li key={i} className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
-									<button type="button" className="btn btn-link btn-sm p-0" onClick={() => me.onFolderClick (rec.id)} disabled={!active}>{rec.name || "-"}</button>
-								</li>
-							);
-						})}
-					</ol>
-				</nav>
-			</div>
-		);
+		return <div className="p-1 border-top">
+			<nav aria-label="breadcrumb">
+				<ol className="breadcrumb m-0 p-1">
+					<li className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
+						<button type="button" className="btn btn-link btn-sm p-0" onClick={() => this.onFolderClick (null)} disabled={!active}><i className="fas fa-home" /></button>
+					</li>
+					{this.position.map ((rec, i) => {
+						active = i < this.position.length - 1;
+						
+						return <li key={i} className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
+							<button type="button" className="btn btn-link btn-sm p-0" onClick={() => this.onFolderClick (rec.id)} disabled={!active}>{rec.name || "-"}</button>
+						</li>;
+					})}
+				</ol>
+			</nav>
+		</div>;
 	}
 
 	visibleColNum () {
-		let me = this;
 		let n = 0;
 		
-		me.state.cols.forEach (col => {
-			if (me.state.hideCols.indexOf (col.code) > - 1 || me.props.groupCol == col.code) {
+		this.state.cols.forEach (col => {
+			if (this.state.hideCols.indexOf (col.code) > - 1 || this.props.groupCol == col.code) {
 				return;
 			}
 			n ++;
@@ -496,7 +456,6 @@ class Grid extends Component {
 	}
 	
 	hasInlineActions (children) {
-		let me = this;
 		let has = false;
 		
 		React.Children.forEach (children, child => {
@@ -507,7 +466,7 @@ class Grid extends Component {
 				has = true;
 			}
 			if (child.props.children) {
-				if (me.hasInlineActions (child.props.children)) {
+				if (this.hasInlineActions (child.props.children)) {
 					has = true;
 				}
 			}
@@ -516,7 +475,6 @@ class Grid extends Component {
 	}
 	
 	renderInlineActions (children, id, rowIdx, count = 1) {
-		let me = this;
 		let actions = [];
 		
 		React.Children.forEach (children, (child, i) => {
@@ -529,87 +487,80 @@ class Grid extends Component {
 					
 					if (child.props.modalComponent || child.props.popupComponent) {
 						opts.recordId = id;
-						opts.grid = me;
+						opts.grid = this;
 					}
-					if (me.state.selected != rowIdx && child.props.disabledControlled) {
+					if (this.state.selected != rowIdx && child.props.disabledControlled) {
 						opts.disabled = true;
 					}
-					actions.push (
-						<Action
-							{...opts}
-							key={`${id}-${i}`}
-							store={me.props.store}
-							label=""
-							title={child.props.label}
-							btnClassName={child.props.btnClassName || `btn btn-sm ${child.props.label == i18n ("Remove") ? "btn-outline-danger" : "btn-outline-primary"} mr-1`}
-							onClick={async (opts) => {
-								Object.assign (opts, {grid: me, store: me.props.store, parentId: me.props.parentId, parentModel: me.props.parentModel})
-								opts.id = id;
-								
-								return await execute (child.props.onClickSelected || child.props.onClick, opts);
-							}}
-						/>
-					);
+					actions.push (<Action
+						{...opts}
+						key={`${id}-${i}`}
+						store={this.props.store}
+						label=""
+						title={child.props.label}
+						btnClassName={child.props.btnClassName || `btn btn-sm ${child.props.label == i18n ("Remove") ? "btn-outline-danger" : "btn-outline-primary"} mr-1`}
+						onClick={async (opts) => {
+							Object.assign (opts, {grid: this, store: this.props.store, parentId: this.props.parentId, parentModel: this.props.parentModel})
+							opts.id = id;
+							
+							return await execute (child.props.onClickSelected || child.props.onClick, opts);
+						}}
+					/>);
 				}
 			}
 			if (child.props.children) {
-				actions = [...actions, ...me.renderInlineActions (child.props.children, id, rowIdx)];
+				actions = [...actions, ...this.renderInlineActions (child.props.children, id, rowIdx)];
 			}
 		});
 		return actions;
 	}
 	
 	renderTableRows () {
-		let me = this;
 		let rows = [];
 		let prevGroupColValue = null;
 		
-		me.state.recs.forEach ((rec, i) => {
-			let child = me.childMap [rec.id];
+		this.state.recs.forEach ((rec, i) => {
+			let child = this.childMap [rec.id];
 			
-			if (me.props.groupCol) {
-				if (rec [me.props.groupCol] != prevGroupColValue) {
-					rows.push (
-						<tr key={newId ()} className="table-secondary">
-							<td
-								key={newId ()}
-								className="align-top text-left"
-								colSpan={me.visibleColNum ()}
-							>
-								<Cell
-									store={me.props.store}
-									value={rec [me.props.groupCol]}
-									col={me.colMap [me.props.groupCol]}
-									rec={rec}
-									maxStrLen={me.props.maxStrLen}
-								/>
-							</td>
-						</tr>
-					);
+			if (this.props.groupCol) {
+				if (rec [this.props.groupCol] != prevGroupColValue) {
+					rows.push (<tr key={newId ()} className="table-secondary">
+						<td
+							key={newId ()}
+							className="align-top text-left"
+							colSpan={this.visibleColNum ()}
+						>
+							<Cell
+								store={this.props.store}
+								value={rec [this.props.groupCol]}
+								col={this.colMap [this.props.groupCol]}
+								rec={rec}
+								maxStrLen={this.props.maxStrLen}
+							/>
+						</td>
+					</tr>);
 				}
-				prevGroupColValue = rec [me.props.groupCol];
+				prevGroupColValue = rec [this.props.groupCol];
 			}
-			let row = (
-				<tr key={i} onClick={() => me.onRowClick (i)} className={me.state.selected == i ? "table-primary" : ""}>
-					{me.state.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{me.renderInlineActions (me.props.children, rec.id, i)}</div></td>}
-					{me.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-sm btn-primary text-left treegrid-button" disabled={!child} onClick={() => me.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
-					{me.state.cols.map ((col, j) => {
-						if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
-							return;
-						}
-						let cell = <Cell store={me.props.store} value={rec [col.code]} col={col} rec={rec} showImages={me.props.showImages} />;
-						
-						if (me.props.onRenderCell) {
-							cell = me.props.onRenderCell ({cell, col, rec});
-						}
-						return (
-							<td key={i + "_" + j} className="align-top">{cell}</td>
-						);
-					})}
-				</tr>
-			);
-			if (me.props.onTableRow || me.props.onRenderRow) {
-				row = (me.props.onTableRow || me.props.onRenderRow) ({row, rec, store: me.props.store, grid: me});
+			let row = <tr key={i} onClick={() => this.onRowClick (i)} className={this.state.selected == i ? "table-primary" : ""}>
+				{this.state.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{this.renderInlineActions (this.props.children, rec.id, i)}</div></td>}
+				{this.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-sm btn-primary text-left treegrid-button" disabled={!child} onClick={() => this.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
+				{this.state.cols.map ((col, j) => {
+					if (this.state.hideCols.indexOf (col.code) > -1 || this.props.groupCol == col.code) {
+						return;
+					}
+					let cell = <Cell store={this.props.store} value={rec [col.code]} col={col} rec={rec} showImages={this.props.showImages} />;
+					
+					if (this.props.onRenderCell) {
+						cell = this.props.onRenderCell ({cell, col, rec});
+					}
+					return (
+						<td key={i + "_" + j} className="align-top">{cell}</td>
+					);
+				})}
+			</tr>;
+			if (this.props.onTableRow || this.props.onRenderRow) {
+				row = (this.props.onTableRow || this.props.onRenderRow) ({row, rec, store: this.props.store, grid: this});
 			}
 			rows.push (row);
 		});
@@ -692,297 +643,265 @@ class Grid extends Component {
 	}
 	
 	renderTableView ({gridChildren}) {
-		let me = this;
-		
-		if (!me.state.cols.length) {
+		if (!this.state.cols.length) {
 			return (<div />);
 		}
-		if (me.props.onRenderTable) {
-			return me.props.onRenderTable ({grid: me, cols: me.state.cols, colMap: me.colMap, recs: me.state.recs, store: me.props.store});
+		if (this.props.onRenderTable) {
+			return this.props.onRenderTable ({grid: this, cols: this.state.cols, colMap: this.colMap, recs: this.state.recs, store: this.props.store});
 		}
-		let rows = me.getHeaderRows (me.state.cols.map (col => col.name));
+		let rows = this.getHeaderRows (this.state.cols.map (col => col.name));
 
-		return (
-			<div className={`p-1 ${gridChildren ? "border-top" : ""}`}>
-				<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
-					<thead className="bg-info text-white">
-					{rows.map ((row, i) => {
-						return <tr key={i}>
-							{(me.state.inlineActions && !i) ? <th className="align-top" rowSpan={rows.length}>{i18n ("Actions")}</th> : null}
-							{(me.props.tree && !i) ? <th className="align-top" rowSpan={rows.length}><i className="far fa-folder-open ml-2" /></th> : null}
-							{row.map (o => {
-								let col = me.state.cols [o.index - 1];
-								
-								if (me.state.hideCols.indexOf (col.code) > -1 || me.props.groupCol == col.code) {
-									if (o.colspan == 1) {
-										return;
-									}
-									o.colspan --;
+		return <div className={`p-1 ${gridChildren ? "border-top" : ""}`}>
+			<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
+				<thead className="bg-info text-white">
+				{rows.map ((row, i) => {
+					return <tr key={i}>
+						{(this.state.inlineActions && !i) ? <th className="align-top" rowSpan={rows.length}>{i18n ("Actions")}</th> : null}
+						{(this.props.tree && !i) ? <th className="align-top" rowSpan={rows.length}><i className="far fa-folder-open ml-2" /></th> : null}
+						{row.map (o => {
+							let col = this.state.cols [o.index - 1];
+							
+							if (this.state.hideCols.indexOf (col.code) > -1 || this.props.groupCol == col.code) {
+								if (o.colspan == 1) {
+									return;
 								}
-								let cls = "";
-								let f = me.state.filters.find (f => {
-									if (f [0] == col.code) {
-										return true;
-									}
-								});
-								let name = i18n (o.text);
-								
-								if (f) {
-									cls = "font-italic";
+								o.colspan --;
+							}
+							let cls = "";
+							let f = this.state.filters.find (f => {
+								if (f [0] == col.code) {
+									return true;
 								}
-								let orderClass = "sort";
-								
-								if (col.code === me.state.order [0]) {
-									if (me.state.order [1] == "asc") {
-										orderClass = "sort-up";
-									} else {
-										orderClass = "sort-down";
-									}
+							});
+							let name = i18n (o.text);
+							
+							if (f) {
+								cls = "font-italic";
+							}
+							let orderClass = "sort";
+							
+							if (col.code === this.state.order [0]) {
+								if (this.state.order [1] == "asc") {
+									orderClass = "sort-up";
+								} else {
+									orderClass = "sort-down";
 								}
-								return (
-									<th key={o.index} scope="col" className={cls + " align-top"} colSpan={o.colspan} rowSpan={o.rowspan}>
-										{(me.props.system || me.props.groupCol || !col.model || o.colspan > 1) ?
-											<div>{name}</div> :
-											<div className={orderClass} onClick={() => me.onOrder (col.code)}>{name}</div>
-										}
-									</th>
-								);
-							})}
-						</tr>;
-					})}
-					</thead>
-					<tbody>{me.renderTableRows ()}</tbody>
-				</table>
-			</div>
-		);
+							}
+							return (
+								<th key={o.index} scope="col" className={cls + " align-top"} colSpan={o.colspan} rowSpan={o.rowspan}>
+									{(this.props.system || this.props.groupCol || !col.model || o.colspan > 1) ?
+										<div>{name}</div> :
+										<div className={orderClass} onClick={() => this.onOrder (col.code)}>{name}</div>
+									}
+								</th>
+							);
+						})}
+					</tr>;
+				})}
+				</thead>
+				<tbody>{this.renderTableRows ()}</tbody>
+			</table>
+		</div>;
 	}
 	
 	renderCardView () {
-		let me = this;
-		let card = me.props.card;
+		let card = this.props.card;
 		
-		if (!me.colMap [card.image]) {
+		if (!this.colMap [card.image]) {
 			return (<div />);
 		}
-		let imageProperty = me.props.store.getProperty (me.colMap [card.image].property);
-		let imageModel = me.props.store.getModel (imageProperty.get ("type"));
-		let model = me.props.store.getModel (imageProperty.get ("model"));
+		let imageProperty = this.props.store.getProperty (this.colMap [card.image].property);
+		let imageModel = this.props.store.getModel (imageProperty.get ("type"));
+		let model = this.props.store.getModel (imageProperty.get ("model"));
 
-		return (
-			<div className="row">
-				{me.state.recs.map ((rec, i) => {
-					let imageRecs = _filter (me.state.imageRecs, {[model.get ("code")]: rec.id});
-					let smallImageRec = null, bigImageRec = null;
-					
-					imageRecs.forEach (rec => {
-						if (!smallImageRec || rec.width < smallImageRec.width) {
-							smallImageRec = rec;
-						}
-						if (!bigImageRec || rec.width > bigImageRec.width) {
-							bigImageRec = rec;
-						}
-					});
-					let smallImage = `${me.props.store.getUrl ()}/files/${smallImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${smallImageRec ["photo"]}`;
-					let bigImage = `${me.props.store.getUrl ()}/files/${bigImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${bigImageRec ["photo"]}`;
-					let text = [];
-					
-					card.text.forEach (code => {
-						if (rec [code] !== null) {
-							text.push (`${me.colMap [code].name}: ${rec [code]}`);
-						}
-					});
-					text = text.join (", ");
-					
-					return (
-						<div key={i} className="col">
-							<div key={i} className="card my-1" style={{width: "18rem"}}>
-								<img src={smallImage} className="card-img-top" alt="..." />
-								<div className="card-body">
-									<h5 className="card-title">{rec [card.title]}</h5>
-									<p className="card-text">{text}</p>
-									<button className="btn btn-primary btn-sm" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</button>
-									<a target="_blank" rel="noopener noreferrer" href={bigImage} className="ml-4">{i18n ("Image")}</a>
-								</div>
+		return <div className="row">
+			{this.state.recs.map ((rec, i) => {
+				let imageRecs = _filter (this.state.imageRecs, {[model.get ("code")]: rec.id});
+				let smallImageRec = null, bigImageRec = null;
+				
+				imageRecs.forEach (rec => {
+					if (!smallImageRec || rec.width < smallImageRec.width) {
+						smallImageRec = rec;
+					}
+					if (!bigImageRec || rec.width > bigImageRec.width) {
+						bigImageRec = rec;
+					}
+				});
+				let smallImage = `${this.props.store.getUrl ()}/files/${smallImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${smallImageRec ["photo"]}`;
+				let bigImage = `${this.props.store.getUrl ()}/files/${bigImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${bigImageRec ["photo"]}`;
+				let text = [];
+				
+				card.text.forEach (code => {
+					if (rec [code] !== null) {
+						text.push (`${this.colMap [code].name}: ${rec [code]}`);
+					}
+				});
+				text = text.join (", ");
+				
+				return (
+					<div key={i} className="col">
+						<div key={i} className="card my-1" style={{width: "18rem"}}>
+							<img src={smallImage} className="card-img-top" alt="..." />
+							<div className="card-body">
+								<h5 className="card-title">{rec [card.title]}</h5>
+								<p className="card-text">{text}</p>
+								<button className="btn btn-primary btn-sm" onClick={() => card.onEdit (rec.id)}><i className="fas fa-edit mr-2" />{i18n ("Edit")}</button>
+								<a target="_blank" rel="noopener noreferrer" href={bigImage} className="ml-4">{i18n ("Image")}</a>
 							</div>
 						</div>
-					);
-				})}
-			</div>
-		);
+					</div>
+				);
+			})}
+		</div>;
 	}
 	
 	renderEditView () {
-		let me = this;
-		
-		if (!me.colMap ["id"]) {
+		if (!this.colMap ["id"]) {
 			return (<div />);
 		}
-		let model = me.props.store.getModel (me.colMap ["id"].model);
-/*
-		let properties = [];
-		
-		me.state.cols.forEach (col => {
-			if (model.properties [col.code] && col.area == 1 && me.state.hideCols.indexOf (col.code) == -1) {
-				properties.push (col.code);
-			}
-		});
-*/
-		return (
-			<TableForm
-				store={me.props.store}
-				model={model.getPath ()}
-				editable={me.props.editable}
-				recs={me.state.recs}
-				cols={me.state.cols}
-				hideCols={me.state.hideCols}
-				colMap={me.colMap}
-				onSave={me.props.onSave}
-				groupCol={me.props.groupCol}
-			/>
-		);
+		let model = this.props.store.getModel (this.colMap ["id"].model);
+
+		return <TableForm
+			store={this.props.store}
+			model={model.getPath ()}
+			editable={this.props.editable}
+			recs={this.state.recs}
+			cols={this.state.cols}
+			hideCols={this.state.hideCols}
+			colMap={this.colMap}
+			onSave={this.props.onSave}
+			groupCol={this.props.groupCol}
+		/>;
 	}
 
 	renderToolbar () {
-		let me = this;
-		
-		if (me.state.mode == "edit") {
-			return (
-				<div className="border-top p-1">
-					<div className="btn-toolbar" role="toolbar">
-						<div className="btn-group mr-1" role="group">
-							{! me.props.system && <button type="button" className="btn btn-link" onClick={me.onEditMode} data-tip={i18n ("Edit mode")}>
-								{i18n ("Return")}
-							</button>}
-						</div>
+		if (this.state.mode == "edit") {
+			return <div className="border-top p-1">
+				<div className="btn-toolbar" role="toolbar">
+					<div className="btn-group mr-1" role="group">
+						{! this.props.system && <button type="button" className="btn btn-link" onClick={this.onEditMode} data-tip={i18n ("Edit mode")}>
+							{i18n ("Return")}
+						</button>}
 					</div>
 				</div>
-			);
+			</div>;
 		} else {
-			return (
-				<div className="border-top p-1">
-					<div className="d-flex">
-						<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onFirst} title={i18n ("First page")}>
-							<i className="fas fa-angle-double-left"/>
-						</button>
-						<button type="button" className="btn btn-link btn-sm" disabled={me.state.page == 1} onClick={me.onPrev} title={i18n ("Previous page")}>
-							<i className="fas fa-angle-left"/>
-						</button>
-						<input
-							type="number"
-							className="form-control form-control-sm"
-							value={me.state.page}
-							min="1"
-							max={me.state.pageNum}
-							onChange={me.onChange}
-							id="page"
-							title={i18n ("Page")}
-							style={{width: "5em"}}
-						/>
-						<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onNext} title={i18n ("Next page")}>
-							<i className="fas fa-angle-right"/>
-						</button>
-						<button type="button" className="btn btn-link btn-sm" disabled={me.state.page >= me.state.pageNum} onClick={me.onLast} title={i18n ("Last page")}>
-							<i className="fas fa-angle-double-right"/>
-						</button>
-						<button
-							type="button"
-							className="btn btn-link btn-sm"
-							onClick={() => me.setState ({refresh: ! me.state.refresh})}
-							title={i18n ("Refresh")}
-							disabled={me.state.loading}
-						>
-							{me.state.loading ?
-								<span className="spinner-border spinner-border-sm text-primary" /> :
-								<i className="fas fa-sync"/>
-							}
-						</button>
-						{!me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onShowFilters} title={i18n ("Filters")}>
-							<i className={`fas fa-filter ${me.state.showFilters ? "border-bottom border-primary" : ""}`} />
-						</button>}
-						{!me.props.system && <button type="button" className="btn btn-link btn-sm" onClick={me.onShowCols} title={i18n ("Columns")}>
-							<i className={`fas fa-eye ${me.state.showCols ? "border-bottom border-primary" : ""}`} />
-						</button>}
-						{!me.props.system && me.props.editable && <button type="button" className="btn btn-link btn-sm" onClick={me.onEditMode} title={i18n ("Edit mode")}>
-							<i className={`fas fa-edit ${me.state.mode == "edit" ? "border-bottom border-primary" : ""}`} />
-						</button>}
-						{me.props.card && <button type="button" className="btn btn-link btn-sm" onClick={me.onImageMode} data-tip={i18n ("Images mode")} title={i18n ("Images mode")}>
-							<i className={`fas fa-camera ${me.state.mode == "images" ? "border-bottom border-primary" : ""}`} />
-						</button>}
-						<select
-							className="custom-select custom-select-sm"
-							value={me.state.pageRecs}
-							id="pageRecs"
-							onChange={me.onChange}
-							title={i18n ("Records on page")}
-							style={{width: "6em"}}
-						>
-							<option value="10">10</option>
-							<option value="20">20</option>
-							<option value="30">30</option>
-							<option value="40">40</option>
-							<option value="50">50</option>
-						</select>
-					</div>
-					<div>
-						<small className="text-muted ml-1">
-							{me.getInfo ()}
-						</small>
-					</div>
+			return <div className="border-top p-1">
+				<div className="d-flex">
+					<button type="button" className="btn btn-link btn-sm" disabled={this.state.page == 1} onClick={this.onFirst} title={i18n ("First page")}>
+						<i className="fas fa-angle-double-left"/>
+					</button>
+					<button type="button" className="btn btn-link btn-sm" disabled={this.state.page == 1} onClick={this.onPrev} title={i18n ("Previous page")}>
+						<i className="fas fa-angle-left"/>
+					</button>
+					<input
+						type="number"
+						className="form-control form-control-sm"
+						value={this.state.page}
+						min="1"
+						max={this.state.pageNum}
+						onChange={this.onChange}
+						id="page"
+						title={i18n ("Page")}
+						style={{width: "5em"}}
+					/>
+					<button type="button" className="btn btn-link btn-sm" disabled={this.state.page >= this.state.pageNum} onClick={this.onNext} title={i18n ("Next page")}>
+						<i className="fas fa-angle-right"/>
+					</button>
+					<button type="button" className="btn btn-link btn-sm" disabled={this.state.page >= this.state.pageNum} onClick={this.onLast} title={i18n ("Last page")}>
+						<i className="fas fa-angle-double-right"/>
+					</button>
+					<button
+						type="button"
+						className="btn btn-link btn-sm"
+						onClick={() => this.setState ({refresh: ! this.state.refresh})}
+						title={i18n ("Refresh")}
+						disabled={this.state.loading}
+					>
+						{this.state.loading ?
+							<span className="spinner-border spinner-border-sm text-primary" /> :
+							<i className="fas fa-sync"/>
+						}
+					</button>
+					{!this.props.system && <button type="button" className="btn btn-link btn-sm" onClick={this.onShowFilters} title={i18n ("Filters")}>
+						<i className={`fas fa-filter ${this.state.showFilters ? "border-bottom border-primary" : ""}`} />
+					</button>}
+					{!this.props.system && <button type="button" className="btn btn-link btn-sm" onClick={this.onShowCols} title={i18n ("Columns")}>
+						<i className={`fas fa-eye ${this.state.showCols ? "border-bottom border-primary" : ""}`} />
+					</button>}
+					{!this.props.system && this.props.editable && <button type="button" className="btn btn-link btn-sm" onClick={this.onEditMode} title={i18n ("Edit mode")}>
+						<i className={`fas fa-edit ${this.state.mode == "edit" ? "border-bottom border-primary" : ""}`} />
+					</button>}
+					{this.props.card && <button type="button" className="btn btn-link btn-sm" onClick={this.onImageMode} data-tip={i18n ("Images mode")} title={i18n ("Images mode")}>
+						<i className={`fas fa-camera ${this.state.mode == "images" ? "border-bottom border-primary" : ""}`} />
+					</button>}
+					<select
+						className="custom-select custom-select-sm"
+						value={this.state.pageRecs}
+						id="pageRecs"
+						onChange={this.onChange}
+						title={i18n ("Records on page")}
+						style={{width: "6em"}}
+					>
+						<option value="10">10</option>
+						<option value="20">20</option>
+						<option value="30">30</option>
+						<option value="40">40</option>
+						<option value="50">50</option>
+					</select>
 				</div>
-			);
+				<div>
+					<small className="text-muted ml-1">
+						{this.getInfo ()}
+					</small>
+				</div>
+			</div>;
 		}
 	}
 	
 	render () {
-		let me = this;
-		let gridChildren = me.renderChildren (me.props.children);
-		let filters =
-			<div className="border-top">
-				<Filters
-					cols={me.state.cols.filter (col => !!col.model)}
-					store={me.props.store}
-					onFilter={me.onFilter}
-					filters={me.state.filters}
-					onDockFilters={me.onDockFilters}
-					dockFilters={me.state.dockFilters}
-					gridId={me.props.id}
-				/>
-			</div>
-		;
+		let gridChildren = this.renderChildren (this.props.children);
+		let filters = <div className="border-top">
+			<Filters
+				cols={this.state.cols.filter (col => !!col.model)}
+				store={this.props.store}
+				onFilter={this.onFilter}
+				filters={this.state.filters}
+				onDockFilters={this.onDockFilters}
+				dockFilters={this.state.dockFilters}
+				gridId={this.props.id}
+			/>
+		</div>;
 		
-		return (
-			<Fade><div className={me.props.className}>
-				{me.props.label && <div className="text-white bg-info py-1">
-					<strong className="ml-2">{i18n (me.props.label)}</strong>
+		return <Fade><div className={this.props.className}>
+			{this.props.label && <div className="text-white bg-info py-1">
+				<strong className="ml-2">{i18n (this.props.label)}</strong>
+			</div>}
+			<div className="border">
+				{this.state.error && <div className="alert alert-danger" role="alert">{this.state.error}</div>}
+				{this.state.mode == "table" && gridChildren && <div className="pl-1 pt-1">
+					{gridChildren}
 				</div>}
-				<div className="border">
-					{me.state.error && <div className="alert alert-danger" role="alert">{me.state.error}</div>}
-					{me.state.mode == "table" && gridChildren && <div className="pl-1 pt-1">
-						{gridChildren}
-					</div>}
-	
-					{me.props.tree && me.renderPosition ()}
-					
-					{me.state.showFilters && me.state.dockFilters == "top" && me.state.mode != "edit" && filters}
-					
-					{me.state.mode == "images" ? me.renderCardView () : (me.state.mode == "edit" ? me.renderEditView () : me.renderTableView ({gridChildren}))}
-					
-					{me.state.showFilters && me.state.dockFilters == "bottom" && me.state.mode != "edit" && filters}
-					
-					{me.state.showCols && me.state.mode != "edit" && <div className="border-top">
-						<GridColumns
-							cols={me.state.cols}
-							store={me.props.store}
-							onHideCols={me.onHideCols}
-							hideCols={me.state.hideCols}
-						/>
-					</div>}
-					{!(me.props.smartHideToolbar && (me.state.length - me.state.pageRecs < 0)) && me.renderToolbar ()}
-				</div>
-			</div></Fade>
-		);
+
+				{this.props.tree && this.renderPosition ()}
+				
+				{this.state.showFilters && this.state.dockFilters == "top" && this.state.mode != "edit" && filters}
+				
+				{this.state.mode == "images" ? this.renderCardView () : (this.state.mode == "edit" ? this.renderEditView () : this.renderTableView ({gridChildren}))}
+				
+				{this.state.showFilters && this.state.dockFilters == "bottom" && this.state.mode != "edit" && filters}
+				
+				{this.state.showCols && this.state.mode != "edit" && <div className="border-top">
+					<GridColumns
+						cols={this.state.cols}
+						store={this.props.store}
+						onHideCols={this.onHideCols}
+						hideCols={this.state.hideCols}
+					/>
+				</div>}
+				{!(this.props.smartHideToolbar && (this.state.length - this.state.pageRecs < 0)) && this.renderToolbar ()}
+			</div>
+		</div></Fade>;
 	}
 };
 Grid.displayName = "Grid";
-
-export default Grid;

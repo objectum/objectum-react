@@ -6,24 +6,18 @@ import _set from "lodash.set";
 import _get from "lodash.get";
 import {i18n, newId} from "..";
 
-class JsonEditor extends Component {
+export default class JsonEditor extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.onChange = me.onChange.bind (me);
-		me.onChangeTag = me.onChangeTag.bind (me);
-		me.onChangeTagValue = me.onChangeTagValue.bind (me);
-		
-		me.state = {
-			code: me.props.property,
-			value: me.props.value || "",
+		this.state = {
+			code: this.props.property,
+			value: this.props.value || "",
 			tags: [],
 			tag: "",
 			tagValue: ""
 		};
-		me.id = newId ();
+		this.id = newId ();
 	}
 	
 	async componentDidMount () {
@@ -31,7 +25,6 @@ class JsonEditor extends Component {
 	}
 	
 	updateTags (s) {
-		let me = this;
 		let l = [];
 		
 		function process (opts, prefix = "") {
@@ -46,7 +39,7 @@ class JsonEditor extends Component {
 				}
 			}
 		};
-		let opts = s || me.state.value || "{}";
+		let opts = s || this.state.value || "{}";
 		
 		try {
 			opts = JSON.parse (opts);
@@ -62,48 +55,45 @@ class JsonEditor extends Component {
 			state.tag = "";
 			state.tagValue = "";
 		}
-		me.setState (state);
+		this.setState (state);
 	}
 
-	onChange (val) {
+	onChange = (val) => {
 		let value = val.target.value;
-		let me = this;
 
-		me.updateTags (value);
-		me.setState ({value});
+		this.updateTags (value);
+		this.setState ({value});
 
-		if (me.props.onChange) {
-			me.props.onChange ({code: me.state.code, value, id: me.props.id});
+		if (this.props.onChange) {
+			this.props.onChange ({code: this.state.code, value, id: this.props.id});
 		}
 	}
 	
-	onChangeTag (val) {
-		let me = this;
+	onChangeTag = (val) => {
 		let v = val.target.value;
 		let tagValue = "";
 		
 		try {
-			tagValue = _get (JSON.parse (me.state.value), v) || "";
+			tagValue = _get (JSON.parse (this.state.value), v) || "";
 		} catch (err) {
 		}
-		me.setState ({tag: v, tagValue});
+		this.setState ({tag: v, tagValue});
 	}
 	
-	onChangeTagValue (val) {
-		let me = this;
+	onChangeTagValue = (val) => {
 		let value = val.target.value;
 		
-		if (me.state.tag) {
+		if (this.state.tag) {
 			try {
-				let opts = JSON.parse (me.state.value);
+				let opts = JSON.parse (this.state.value);
 				
-				_set (opts, me.state.tag, value);
+				_set (opts, this.state.tag, value);
 				opts = JSON.stringify (opts, null, "\t");
 				
-				me.setState ({tagValue: value, value: opts});
+				this.setState ({tagValue: value, value: opts});
 
-				if (me.props.onChange) {
-					me.props.onChange ({code: me.state.code, value: opts, id: me.props.id});
+				if (this.props.onChange) {
+					this.props.onChange ({code: this.state.code, value: opts, id: this.props.id});
 				}
 			} catch (err) {
 			}
@@ -124,35 +114,30 @@ class JsonEditor extends Component {
 	}
 	
 	render () {
-		let me = this;
-		let cls = me.state.tag ? "visible" : "invisible";
+		let cls = this.state.tag ? "visible" : "invisible";
 		
-		return (
-			<div className="form-group border p-1">
-				<label htmlFor={me.id}><h5>{i18n (me.props.label)}</h5></label>
-				<div className="row">
-					<div className="col-sm-6 pr-1" id={me.id}>
-						<div className="">
-							<textarea className="form-control text-monospace" rows={10} style={{width: "100%", height: "100%"}} value={me.state.value} onKeyDown={me.onKeyDown} onChange={me.onChange} />
-						</div>
+		return <div className="form-group border p-1">
+			<label htmlFor={this.id}><h5>{i18n (this.props.label)}</h5></label>
+			<div className="row">
+				<div className="col-sm-6 pr-1" id={this.id}>
+					<div className="">
+						<textarea className="form-control text-monospace" rows={10} style={{width: "100%", height: "100%"}} value={this.state.value} onKeyDown={this.onKeyDown} onChange={this.onChange} />
 					</div>
-					<div className="col-sm-6 pl-1">
-						<select className={"form-control custom-select"} value={me.state.tag} onChange={me.onChangeTag}>
-							{[{id: "", name: i18n ("Select text tag to edit")}, ...me.state.tags].map ((rec, i) => {
-								return (
-									<option value={rec.id} key={i}>{rec.name}</option>
-								);
-							})}
-						</select>
-						<div className={"mt-1 " + cls}>
-							<textarea className="form-control text-monospace" rows={8} style={{width: "100%", height: "100%"}} value={me.state.tagValue} onKeyDown={me.onKeyDown} onChange={me.onChangeTagValue} />
-						</div>
+				</div>
+				<div className="col-sm-6 pl-1">
+					<select className={"form-control custom-select"} value={this.state.tag} onChange={this.onChangeTag}>
+						{[{id: "", name: i18n ("Select text tag to edit")}, ...this.state.tags].map ((rec, i) => {
+							return (
+								<option value={rec.id} key={i}>{rec.name}</option>
+							);
+						})}
+					</select>
+					<div className={"mt-1 " + cls}>
+						<textarea className="form-control text-monospace" rows={8} style={{width: "100%", height: "100%"}} value={this.state.tagValue} onKeyDown={this.onKeyDown} onChange={this.onChangeTagValue} />
 					</div>
 				</div>
 			</div>
-		);
+		</div>;
 	}
 };
 JsonEditor.displayName = "JsonEditor";
-
-export default JsonEditor;

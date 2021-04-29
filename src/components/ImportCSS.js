@@ -1,8 +1,7 @@
 import {i18n} from "../i18n";
-
 import React, {Component} from "react";
 
-class ImportCSS extends Component {
+export default class ImportCSS extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -34,4 +33,3 @@ class ImportCSS extends Component {
 		</div>;
 	}
 };
-export default ImportCSS;

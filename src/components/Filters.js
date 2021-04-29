@@ -6,46 +6,35 @@ import {DictField, getDateString, i18n} from "..";
 import _isEmpty from "lodash.isempty";
 import _find from "lodash.find";
 import _keys from "lodash.keys";
-import _debounce from "lodash.debounce";
 
 class Filter extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.onChange = me.onChange.bind (me);
-		me.debouncedOnChange = _debounce (me.debouncedOnChange.bind (me), 500);
-		me.onClick = me.onClick.bind (me);
-
-		me.state = {
-			...me.props.value,
+		this.state = {
+			...this.props.value,
 			operatorRecs: []
 		};
-		if (me.state.column) {
-			me.state.operatorRecs = me.getOperatorRecs (me.state.column);
+		if (this.state.column) {
+			this.state.operatorRecs = this.getOperatorRecs (this.state.column);
 		}
 	}
 	
-	onClick () {
-		let me = this;
-		
-		me.props.onRemove (me.props.id);
+	onClick = () => {
+		this.props.onRemove (this.props.id);
 	}
 	
 	getOperatorRecs (column) {
-		let me = this;
-		
-		me.col = me.props.cols.find ((rec) => {
+		this.col = this.props.cols.find ((rec) => {
 			if (rec.code == column) {
 				return true;
 			}
 		});
-		let t = me.col && me.col.type;
+		let t = this.col && this.col.type;
 		let operatorRecs = [];
 		
 		if (t >= 1000) {
-			if (me.col.recs) {
+			if (this.col.recs) {
 				operatorRecs = [{
 					code: "=", name: "="
 				}, {
@@ -107,8 +96,7 @@ class Filter extends Component {
 		return operatorRecs;
 	}
 
-	onChange (opts) {
-		let me = this;
+	onChange = (opts) => {
 		let id = opts.id, v = opts.value;
 		
 		if (opts.target) {
@@ -118,12 +106,12 @@ class Filter extends Component {
 		if (id != "column" && id != "operator") {
 			id = "value";
 		}
-		let state = {...me.state};
+		let state = {...this.state};
 		
 		state [id] = v === null ? "" : v;
 		
 		if (id == "column") {
-			state.operatorRecs = me.getOperatorRecs (v);
+			state.operatorRecs = this.getOperatorRecs (v);
 			
 			if (_find (state.operatorRecs, {code: "like"})) {
 				state.operator = "like";
@@ -135,42 +123,33 @@ class Filter extends Component {
 			}
 			state.value = "";
 		}
-		me.setState (state);
-		me.debouncedOnChange (me.props.id, state);
+		this.setState (state);
+		this.debouncedOnChange (this.props.id, state);
 	}
 	
-	debouncedOnChange (id, state) {
+	debouncedOnChange = (id, state) => {
 		this.props.onChangeState (id, state);
 	}
 	
 	renderValue () {
-		let me = this;
-		
-		let t = me.col && me.col.type;
+		let t = this.col && this.col.type;
 		
 		if (t >= 1000) {
-			if (me.col.recs) {
-				let property = me.props.store.getProperty (me.col.property);
-				
-				return <DictField id="value" value={me.state.value} onChange={me.onChange} store={me.props.store} model={me.col.model} property={property.get ("code")} />
+			if (this.col.recs) {
+				let property = this.props.store.getProperty (this.col.property);
+				return <DictField id="value" value={this.state.value} onChange={this.onChange} store={this.props.store} model={this.col.model} property={property.get ("code")} />
 			} else {
 				t = 2;
 			}
 		}
 		if (t == 1 || t == 5) {
-			return (
-				<input id="value" type="text" className="filter-select mt-1" value={me.state.value} onChange={me.onChange} placeholder={i18n ("Enter value")} />
-			);
+			return <input id="value" type="text" className="filter-select mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
 		}
 		if (t == 2) {
-			return (
-				<input id="value" type="number" className="filter-select mt-1" value={me.state.value} onChange={me.onChange} placeholder={i18n ("Enter value")} />
-			);
+			return <input id="value" type="number" className="filter-select mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
 		}
 		if (t == 3) {
-			return (
-				<input id="value" type="date" className="filter-select mt-1" value={getDateString (me.state.value)} onChange={me.onChange} placeholder={i18n ("Enter value")} />
-			);
+			return <input id="value" type="date" className="filter-select mt-1" value={getDateString (this.state.value)} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
 		}
 		if (t == 4) {
 			return (<div />);
@@ -178,83 +157,67 @@ class Filter extends Component {
 	}
 	
 	componentDidUpdate (prevProps) {
-		let me = this;
 		let state = {};
 		
-		if (prevProps.cols.length != me.props.cols.length) {
-			state.operatorRecs = me.getOperatorRecs (me.state.column);
+		if (prevProps.cols.length != this.props.cols.length) {
+			state.operatorRecs = this.getOperatorRecs (this.state.column);
 		}
-		if (prevProps.value.column != me.props.value.column) {
-			state.column = me.props.value.column;
+		if (prevProps.value.column != this.props.value.column) {
+			state.column = this.props.value.column;
 		}
-		if (prevProps.value.operator != me.props.value.operator) {
-			state.operator = me.props.value.operator;
+		if (prevProps.value.operator != this.props.value.operator) {
+			state.operator = this.props.value.operator;
 		}
-		if (prevProps.value.value != me.props.value.value) {
-			state.value = me.props.value.value;
+		if (prevProps.value.value != this.props.value.value) {
+			state.value = this.props.value.value;
 		}
 		if (!_isEmpty (state)) {
-			me.setState (state);
+			this.setState (state);
 		}
 	}
 	
 	render () {
-		let me = this;
-		let showValue = !!me.state.column;
+		let showValue = !!this.state.column;
 		
-		if (me.state.operator == "is null" || me.state.operator == "is not null") {
+		if (this.state.operator == "is null" || this.state.operator == "is not null") {
 			showValue = false;
 		}
-		return (
-			<div className="border p-1 text-center mt-1">
-				<button type="button" className="btn btn-link mb-1" onClick={me.onClick}><i className="fas fa-minus mr-2" /><span className="text-dark"> {i18n ("Remove")}</span></button>
-				<select id="column" className="filter-select custom-select" value={me.state.column} onChange={me.onChange}>
-					{[{code: "", name: i18n ("Choose column")}, ...me.props.cols].map ((rec, i) => {
-						return (
-							<option value={rec.code} key={"column-" + i}>{i18n (rec.name)}</option>
-						);
-					})}
-				</select>
-				<br />
-				{me.state.column && <select id="operator" className="filter-select custom-select mt-1" value={me.state.operator} onChange={me.onChange} disabled={!me.state.column}>
-					{[{code: "", name: i18n ("Choose operator")}, ...me.state.operatorRecs].map ((rec, i) => {
-						return (
-							<option value={rec.code} key={"operator-" + i}>{rec.name}</option>
-						);
-					})}
-				</select>}
-				<br />
-				{showValue && <div className="mt-1">{me.renderValue ()}</div>}
-			</div>
-		);
+		return <div className="border p-1 text-center mt-1">
+			<button type="button" className="btn btn-link mb-1" onClick={this.onClick}><i className="fas fa-minus mr-2" /><span className="text-dark"> {i18n ("Remove")}</span></button>
+			<select id="column" className="filter-select custom-select" value={this.state.column} onChange={this.onChange}>
+				{[{code: "", name: i18n ("Choose column")}, ...this.props.cols].map ((rec, i) => {
+					return (
+						<option value={rec.code} key={"column-" + i}>{i18n (rec.name)}</option>
+					);
+				})}
+			</select>
+			<br />
+			{this.state.column && <select id="operator" className="filter-select custom-select mt-1" value={this.state.operator} onChange={this.onChange} disabled={!this.state.column}>
+				{[{code: "", name: i18n ("Choose operator")}, ...this.state.operatorRecs].map ((rec, i) => {
+					return (
+						<option value={rec.code} key={"operator-" + i}>{rec.name}</option>
+					);
+				})}
+			</select>}
+			<br />
+			{showValue && <div className="mt-1">{this.renderValue ()}</div>}
+		</div>;
 	}
 };
 
-class Filters extends Component {
+export default class Filters extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
+		this.gen = 1;
 		
-		me.onChangeState = me.onChangeState.bind (me);
-		me.onAdd = me.onAdd.bind (me);
-		me.onRemove = me.onRemove.bind (me);
-		me.onDock = me.onDock.bind (me);
-		me.onSelectFilter = me.onSelectFilter.bind (me);
-		me.onCreateFilter = me.onCreateFilter.bind (me);
-		me.onRemoveFilter = me.onRemoveFilter.bind (me);
-		me.onChangeFilterName = me.onChangeFilterName.bind (me);
-		me.onSaveFilter = me.onSaveFilter.bind (me);
-		
-		me.gen = 1;
-		
-		let id = `grid-${me.props.gridId}`;
+		let id = `grid-${this.props.gridId}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 		
-		me.state = {
+		this.state = {
 			refresh: false,
 			filters: [{
-				id: me.gen,
+				id: this.gen,
 				column: "",
 				operator: "",
 				value: ""
@@ -262,10 +225,10 @@ class Filters extends Component {
 			filterName: "",
 			filter: data.defaultFilter || ""
 		};
-		if (me.props.filters && me.props.filters.length) {
-			me.state.filters = me.props.filters.map (f => {
+		if (this.props.filters && this.props.filters.length) {
+			this.state.filters = this.props.filters.map (f => {
 				return {
-					id: me.gen ++,
+					id: this.gen ++,
 					column: f [0],
 					operator: f [1],
 					value: f [2]
@@ -275,7 +238,6 @@ class Filters extends Component {
 	}
 
 	sendFilters (filters) {
-		let me = this;
 		let data = [];
 		
 		filters.forEach (f => {
@@ -288,12 +250,11 @@ class Filters extends Component {
 				}
 			}
 		});
-		me.props.onFilter (data);
+		this.props.onFilter (data);
 	}
 	
-	onChangeState (id, state) {
-		let me = this;
-		let filters = [...me.state.filters];
+	onChangeState = (id, state) => {
+		let filters = [...this.state.filters];
 		
 		for (let i = 0; i < filters.length; i ++) {
 			if (filters [i].id == id) {
@@ -301,16 +262,14 @@ class Filters extends Component {
 				break;
 			}
 		}
-		me.setState ({filters});
-		me.sendFilters (filters);
+		this.setState ({filters});
+		this.sendFilters (filters);
 	}
 	
-	onAdd () {
-		let me = this;
-		
-		me.setState ({
-			filters: [...me.state.filters, {
-				id: ++ me.gen,
+	onAdd = () => {
+		this.setState ({
+			filters: [...this.state.filters, {
+				id: ++ this.gen,
 				column: "",
 				operator: "",
 				value: ""
@@ -318,9 +277,8 @@ class Filters extends Component {
 		});
 	}
 	
-	onRemove (id) {
-		let me = this;
-		let filters = me.state.filters;
+	onRemove = (id) => {
+		let filters = this.state.filters;
 		
 		for (let i = 0; i < filters.length; i ++) {
 			if (filters [i].id == id) {
@@ -328,18 +286,17 @@ class Filters extends Component {
 				break;
 			}
 		}
-		me.setState ({filters});
-		me.sendFilters (filters);
+		this.setState ({filters});
+		this.sendFilters (filters);
 	}
 	
-	onDock () {
+	onDock = () => {
 		this.props.onDockFilters (this.props.dockFilters == "bottom" ? "top" : "bottom");
 	}
 	
-	onSelectFilter (val) {
-		let me = this;
+	onSelectFilter = (val) => {
 		let filter = val.target.value;
-		let id = `grid-${me.props.gridId}`;
+		let id = `grid-${this.props.gridId}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 		
 		data.filters = data.filters || {};
@@ -357,43 +314,40 @@ class Filters extends Component {
 			operator: "",
 			value: ""
 		}];
-		me.setState ({filter, filters});
-		me.sendFilters (filters);
+		this.setState ({filter, filters});
+		this.sendFilters (filters);
 	}
 	
-	onCreateFilter () {
-		let me = this;
-		
-		if (me.state.filterName) {
-			let id = `grid-${me.props.gridId}`;
+	onCreateFilter = () => {
+		if (this.state.filterName) {
+			let id = `grid-${this.props.gridId}`;
 			let data = JSON.parse (localStorage.getItem (id) || "{}");
 			
 			data.filters = data.filters || {};
-			data.filters [me.state.filterName] = me.state.filters;
+			data.filters [this.state.filterName] = this.state.filters;
 			localStorage.setItem (id, JSON.stringify (data));
-			me.setState ({filterName: "", filter: me.state.filterName});
+			this.setState ({filterName: "", filter: this.state.filterName});
 		}
 	}
 	
-	onRemoveFilter () {
-		let me = this;
-		let id = `grid-${me.props.gridId}`;
+	onRemoveFilter = () => {
+		let id = `grid-${this.props.gridId}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 		
 		data.filters = data.filters || {};
 		
-		delete data.filters [me.state.filter];
+		delete data.filters [this.state.filter];
 		delete data.defaultFilter;
 		
 		localStorage.setItem (id, JSON.stringify (data));
 		
-		me.setState ({filter: "-", filters: [{
+		this.setState ({filter: "-", filters: [{
 			id: 1,
 			column: "",
 			operator: "",
 			value: ""
 		}]});
-		me.sendFilters ([{
+		this.sendFilters ([{
 			id: 1,
 			column: "",
 			operator: "",
@@ -401,30 +355,27 @@ class Filters extends Component {
 		}]);
 	}
 	
-	onSaveFilter () {
-		let me = this;
-		let id = `grid-${me.props.gridId}`;
+	onSaveFilter = () => {
+		let id = `grid-${this.props.gridId}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 		
 		data.filters = data.filters || {};
-		data.filters [me.state.filter] = me.state.filters;
+		data.filters [this.state.filter] = this.state.filters;
 		localStorage.setItem (id, JSON.stringify (data));
-		me.setState ({refresh: !me.state.refresh});
+		this.setState ({refresh: !this.state.refresh});
 	}
 	
 	saveDisabled () {
-		let me = this;
-		
-		if (!me.state.filter || me.state.filter == "-") {
+		if (!this.state.filter || this.state.filter == "-") {
 			return true;
 		}
-		let id = `grid-${me.props.gridId}`;
+		let id = `grid-${this.props.gridId}`;
 		let data = JSON.parse (localStorage.getItem (id) || "{}");
 
 		let result = true;
 		
-		data.filters [me.state.filter].forEach ((filter, i) => {
-			let filter2 = me.state.filters [i];
+		data.filters [this.state.filter].forEach ((filter, i) => {
+			let filter2 = this.state.filters [i];
 			
 			if (!filter2 || filter.column != filter2.column || filter.operator != filter2.operator || filter.value != filter2.value) {
 				result = false;
@@ -433,61 +384,56 @@ class Filters extends Component {
 		return result;
 	}
 	
-	onChangeFilterName (val) {
+	onChangeFilterName = (val) => {
 		this.setState ({filterName: val.target.value});
 	}
 	
 	render () {
-		let me = this;
-		let gridOpts = JSON.parse (localStorage.getItem (`grid-${me.props.gridId}`) || "{}");
+		let gridOpts = JSON.parse (localStorage.getItem (`grid-${this.props.gridId}`) || "{}");
 		let savedFilters = _keys (gridOpts.filters || {});
 		
-		return (
-			<div>
-				<div className="mt-1 ml-2 form-inline">
-					<strong className="">{i18n ("Filters")}</strong>
-					<button type="button" className="btn btn-link ml-3" onClick={me.onAdd}><i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Add filter")}</span></button>
-					<button type="button" className="btn btn-link ml-1" onClick={me.onDock}>
-						<i className={`fas ${me.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
-						<span className="text-dark">{me.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}</span>
+		return <div>
+			<div className="mt-1 ml-2 form-inline">
+				<strong className="">{i18n ("Filters")}</strong>
+				<button type="button" className="btn btn-link ml-3" onClick={this.onAdd}><i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Add filter")}</span></button>
+				<button type="button" className="btn btn-link ml-1" onClick={this.onDock}>
+					<i className={`fas ${this.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
+					<span className="text-dark">{this.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}</span>
+				</button>
+			</div>
+			<div className="mx-1 mb-1 row flex-row">
+				{this.state.filters.map (rec => {
+					return (
+						<div className="mr-1 filter-block" key={"div-filter-" + rec.id}>
+							<Filter {...this.props} id={rec.id} key={"filter-" + rec.id} cols={this.props.cols} value={rec} onChangeState={this.onChangeState} onRemove={this.onRemove} />
+						</div>
+					);
+				})}
+			</div>
+			<div className="m-1 p-1 border">
+				<div className="form-inline">
+					<input type="text" className="form-control filter-name-field" value={this.state.filterName} placeholder={i18n ("Filter name")} onChange={this.onChangeFilterName} />
+					<button type="button" className="btn btn-link" onClick={this.onCreateFilter} disabled={!this.state.filterName}>
+						<i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Create")}</span>
 					</button>
 				</div>
-				<div className="mx-1 mb-1 row flex-row">
-					{me.state.filters.map (rec => {
-						return (
-							<div className="mr-1 filter-block" key={"div-filter-" + rec.id}>
-								<Filter {...me.props} id={rec.id} key={"filter-" + rec.id} cols={me.props.cols} value={rec} onChangeState={me.onChangeState} onRemove={me.onRemove} />
-							</div>
-						);
-					})}
-				</div>
-				<div className="m-1 p-1 border">
-					<div className="form-inline">
-						<input type="text" className="form-control filter-name-field" value={me.state.filterName} placeholder={i18n ("Filter name")} onChange={me.onChangeFilterName} />
-						<button type="button" className="btn btn-link" onClick={me.onCreateFilter} disabled={!me.state.filterName}>
-							<i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Create")}</span>
-						</button>
-					</div>
-					<div className="form-inline mt-1">
-						<select className="form-control filter-name-field" value={me.state.filter} onChange={me.onSelectFilter}>
-							{["-", ...savedFilters].map ((f, i) => {
-								return (
-									<option value={f} key={i}>{f}</option>
-								);
-							})}
-						</select>
-						<button type="button" className="btn btn-link" onClick={me.onSaveFilter} disabled={me.saveDisabled ()}>
-							<i className="fas fa-check mr-2" /><span className="text-dark">{i18n ("Save")}</span>
-						</button>
-						<button type="button" className="btn btn-link" onClick={me.onRemoveFilter} disabled={!me.state.filter || me.state.filter == "-"}>
-							<i className="fas fa-minus mr-2" /><span className="text-dark">{i18n ("Remove")}</span>
-						</button>
-					</div>
+				<div className="form-inline mt-1">
+					<select className="form-control filter-name-field" value={this.state.filter} onChange={this.onSelectFilter}>
+						{["-", ...savedFilters].map ((f, i) => {
+							return (
+								<option value={f} key={i}>{f}</option>
+							);
+						})}
+					</select>
+					<button type="button" className="btn btn-link" onClick={this.onSaveFilter} disabled={this.saveDisabled ()}>
+						<i className="fas fa-check mr-2" /><span className="text-dark">{i18n ("Save")}</span>
+					</button>
+					<button type="button" className="btn btn-link" onClick={this.onRemoveFilter} disabled={!this.state.filter || this.state.filter == "-"}>
+						<i className="fas fa-minus mr-2" /><span className="text-dark">{i18n ("Remove")}</span>
+					</button>
 				</div>
 			</div>
-		);
+		</div>;
 	}
 };
 Filters.displayName = "Filters";
-
-export default Filters;

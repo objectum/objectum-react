@@ -6,25 +6,20 @@ import {i18n} from "../i18n";
 import Fade from "./Fade";
 import Modal from "react-modal";
 
-class Action extends Component {
+export default class Action extends Component {
 	constructor (props) {
 		super (props);
 		
-		let me = this;
-		
-		me.state = {
+		this.state = {
 			processing: false,
 			label: "",
 			value: "",
 			max: "",
 			showModal: false,
 			showPopup: false,
-			recordId: me.props.recordId
+			recordId: this.props.recordId
 		};
-		me.onClick = me.onClick.bind (me);
-		me.onClose = me.onClose.bind (me);
-		me.onCancel = me.onCancel.bind (me);
-		me._refs = {
+		this._refs = {
 			"confirm": React.createRef (),
 			"popup": React.createRef (),
 			"button": React.createRef ()
@@ -35,11 +30,6 @@ class Action extends Component {
 		if (this.state.confirm && !this._refs ["confirm"].current.contains (event.target)) {
 			this.confirm (false);
 		}
-/*
-		if (this.state.showPopup && !this._refs ["popup"].current.contains (event.target) && !this._refs ["button"].current.contains (event.target)) {
-			this.setState ({showPopup: false});
-		}
-*/
 	}
 	
 	componentDidMount () {
@@ -64,36 +54,35 @@ class Action extends Component {
 		document.removeEventListener ("mousedown", this.onDocumentClick);
 	}
 	
-	async onClick () {
-		let me = this;
+	onClick = async () => {
 		let execute = () => {
-			let handler = me.props.onClick || me.props.onClickSelected;
+			let handler = this.props.onClick || this.props.onClickSelected;
 			let state = {processing: false, abort: false};
 			
-			if (me.props.popupComponent) {
-				me.setState ({showPopup: !this.state.showPopup});
+			if (this.props.popupComponent) {
+				this.setState ({showPopup: !this.state.showPopup});
 			} else
-			if (me.props.modalComponent) {
-				me.setState ({showModal: true});
+			if (this.props.modalComponent) {
+				this.setState ({showModal: true});
 			} else
 			if (handler) {
-				me.setState ({processing: true, label: "", value: "", max: "", start: new Date (), current: new Date ()});
-				me.intervalId = setInterval (() => {
-					if (me.unmounted) {
-						return clearInterval (me.intervalId);
+				this.setState ({processing: true, label: "", value: "", max: "", start: new Date (), current: new Date ()});
+				this.intervalId = setInterval (() => {
+					if (this.unmounted) {
+						return clearInterval (this.intervalId);
 					}
-					me.setState ({current: new Date ()});
+					this.setState ({current: new Date ()});
 				}, 200);
 				
 				try {
 					let promise = handler ({
 						progress: ({label, value, max}) => {
-							me.setState ({label, value, max});
+							this.setState ({label, value, max});
 						},
 						confirm: (text) => {
 							return new Promise (resolve => {
-								me.confirmResolve = resolve;
-								me.setState ({confirm: text || i18n ("Are you sure?")});
+								this.confirmResolve = resolve;
+								this.setState ({confirm: text || i18n ("Are you sure?")});
 							});
 						}
 					});
@@ -102,24 +91,24 @@ class Action extends Component {
 							if (typeof (result) == "string") {
 								state.result = result;
 							}
-							if (!me.unmounted) {
-								me.setState (state);
-								clearInterval (me.intervalId);
+							if (!this.unmounted) {
+								this.setState (state);
+								clearInterval (this.intervalId);
 
-								if (me.props.store) {
-									me.props.store.abort = false;
+								if (this.props.store) {
+									this.props.store.abort = false;
 								}
 							}
 						}).catch (err => {
 							console.error (err);
 							state.error = err.message;
 
-							if (!me.unmounted) {
-								me.setState (state);
-								clearInterval (me.intervalId);
+							if (!this.unmounted) {
+								this.setState (state);
+								clearInterval (this.intervalId);
 
-								if (me.props.store) {
-									me.props.store.abort = false;
+								if (this.props.store) {
+									this.props.store.abort = false;
 								}
 							}
 						});
@@ -127,172 +116,164 @@ class Action extends Component {
 						if (typeof (promise) == "string") {
 							state.result = promise;
 						}
-						if (!me.unmounted) {
-							me.setState (state);
-							clearInterval (me.intervalId);
+						if (!this.unmounted) {
+							this.setState (state);
+							clearInterval (this.intervalId);
 
-							if (me.props.store) {
-								me.props.store.abort = false;
+							if (this.props.store) {
+								this.props.store.abort = false;
 							}
 						}
 					}
 				} catch (err) {
-					clearInterval (me.intervalId);
+					clearInterval (this.intervalId);
 
-					if (me.props.store) {
-						me.props.store.abort = false;
+					if (this.props.store) {
+						this.props.store.abort = false;
 					}
 					console.error (err);
 					state.error = err.message;
-					me.setState (state);
+					this.setState (state);
 				}
 			}
 		};
-		if (me.props.confirm) {
-			me.confirmResolve = result => {
+		if (this.props.confirm) {
+			this.confirmResolve = result => {
 				if (result) {
 					execute ();
 				}
 			};
-			me.setState ({confirm: typeof (me.props.confirm) == "string" ? me.props.confirm : i18n ("Are you sure?")});
+			this.setState ({confirm: typeof (this.props.confirm) == "string" ? this.props.confirm : i18n ("Are you sure?")});
 		} else {
 			execute ();
 		}
 	}
 	
 	async confirm (result) {
-		let me = this;
-		
-		me.setState ({confirm: null});
-		me.confirmResolve (result);
+		this.setState ({confirm: null});
+		this.confirmResolve (result);
 	}
 	
 	getDisabled () {
-		let me = this;
 		let disabled;
 		
-		if (me.props.disabled) {
-			if (typeof (me.props.disabled) == "function") {
-				disabled = me.props.disabled ();
+		if (this.props.disabled) {
+			if (typeof (this.props.disabled) == "function") {
+				disabled = this.props.disabled ();
 			} else {
-				disabled = me.props.disabled;
+				disabled = this.props.disabled;
 			}
 		} else {
-			disabled = me.props.disableActions
+			disabled = this.props.disableActions
 		}
-		if (me.state.processing) {
+		if (this.state.processing) {
 			disabled = true;
 		}
 		return disabled;
 	}
 	
-	onClose () {
+	onClose = () => {
 		this.setState ({error: "", result: ""});
 	}
 	
-	onCancel () {
+	onCancel = () => {
 		this.setState ({abort: true});
 		this.props.store.abortAction ();
 	}
 	
 	render () {
-		let me = this;
 		let progressText;
 		
-		if (me.state.processing) {
-			progressText = me.state.label ? (me.state.label + ": ") : "";
-			progressText += me.state.value ? me.state.value : "";
-			progressText += me.state.max ? (" / " + me.state.max) : "";
+		if (this.state.processing) {
+			progressText = this.state.label ? (this.state.label + ": ") : "";
+			progressText += this.state.value ? this.state.value : "";
+			progressText += this.state.max ? (" / " + this.state.max) : "";
 		}
 		progressText = progressText || i18n ("Processing") + " ...";
 		
-		let ModalComponent = me.props.modalComponent;
-		let PopupComponent = me.props.popupComponent;
-		let duration = (me.state.current && me.state.start) ? ((me.state.current.getTime () - me.state.start.getTime ()) / 1000) : 0;
+		let ModalComponent = this.props.modalComponent;
+		let PopupComponent = this.props.popupComponent;
+		let duration = (this.state.current && this.state.start) ? ((this.state.current.getTime () - this.state.start.getTime ()) / 1000) : 0;
 		
-		return (
-			<div className={me.props.className}>
-				<button
-					type="button"
-					className={me.props.btnClassName || "btn btn-primary btn-labeled mr-1 mb-1"}
-					onClick={me.onClick}
-					disabled={me.getDisabled ()}
-					ref={this._refs ["button"]}
-					title={this.props.title}
-				>
-					{me.props.icon && <i className={me.props.icon + (me.props.label ? " mr-2" : "")} />}
-					{me.props.children ? me.props.children : (me.props.label || "")}
-				</button>
-				{me.state.error && <Fade className="popup">
-					<div className="popup-content bg-white shadow text-danger p-1">
-						<div className="mb-1">{i18n (me.state.error)}</div>
-						<button type="button" className="btn btn-outline-primary btn-sm" onClick={me.onClose}>{i18n ("Close")}</button>
+		return <div className={this.props.className}>
+			<button
+				type="button"
+				className={this.props.btnClassName || "btn btn-primary btn-labeled mr-1 mb-1"}
+				onClick={this.onClick}
+				disabled={this.getDisabled ()}
+				ref={this._refs ["button"]}
+				title={this.props.title}
+			>
+				{this.props.icon && <i className={this.props.icon + (this.props.label ? " mr-2" : "")} />}
+				{this.props.children ? this.props.children : (this.props.label || "")}
+			</button>
+			{this.state.error && <Fade className="popup">
+				<div className="popup-content bg-white shadow text-danger p-1">
+					<div className="mb-1">{i18n (this.state.error)}</div>
+					<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onClose}>{i18n ("Close")}</button>
+				</div>
+			</Fade>}
+			{this.state.result && <Fade className="popup">
+				<div className="popup-content bg-white shadow text-success p-1">
+					<div className="border p-1">
+						{i18n (this.state.result)}
 					</div>
-				</Fade>}
-				{me.state.result && <Fade className="popup">
-					<div className="popup-content bg-white shadow text-success p-1">
-						<div className="border p-1">
-							{i18n (me.state.result)}
-						</div>
-						{duration > 2 ? <div className="p-1 my-1 text-info">
-							{i18n ("Duration")}: {duration.toFixed (1)} {i18n ("sec.")}
-						</div> : null}
-						<button type="button" className="btn btn-outline-primary btn-sm mt-1" onClick={me.onClose}>{i18n ("Close")}</button>
+					{duration > 2 ? <div className="p-1 my-1 text-info">
+						{i18n ("Duration")}: {duration.toFixed (1)} {i18n ("sec.")}
+					</div> : null}
+					<button type="button" className="btn btn-outline-primary btn-sm mt-1" onClick={this.onClose}>{i18n ("Close")}</button>
+				</div>
+			</Fade>}
+			{this.state.confirm && <Fade className="popup">
+				<div className="popup-content bg-white shadow text-danger p-1 mb-1" ref={this._refs ["confirm"]}>
+					<div className="mb-1">{this.state.confirm}</div>
+					<button type="button" className="btn btn-danger" onClick={() => this.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
+					<button type="button" className="btn btn-success ml-1" onClick={() => this.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
+				</div>
+			</Fade>}
+			{this.state.processing && !this.state.confirm && <Fade className="popup">
+				<div className="popup-content bg-white shadow text-primary p-1">
+					<div className="border p-1">
+						<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{progressText}
 					</div>
-				</Fade>}
-				{me.state.confirm && <Fade className="popup">
-					<div className="popup-content bg-white shadow text-danger p-1 mb-1" ref={me._refs ["confirm"]}>
-						<div className="mb-1">{me.state.confirm}</div>
-						<button type="button" className="btn btn-danger" onClick={() => me.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
-						<button type="button" className="btn btn-success ml-1" onClick={() => me.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
-					</div>
-				</Fade>}
-				{me.state.processing && !me.state.confirm && <Fade className="popup">
-					<div className="popup-content bg-white shadow text-primary p-1">
-						<div className="border p-1">
-							<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{progressText}
-						</div>
-						{duration > 2 ? <div className="p-1 mt-1 text-info">
-							{duration.toFixed (1)} {i18n ("sec.")}
-						</div> : null}
-						{me.props.store && <button type="button" className="btn btn-outline-danger btn-sm mt-1" onClick={me.onCancel} disabled={me.state.abort}>
-							{i18n ("Cancel")}
-						</button>}
-					</div>
-				</Fade>}
-				{this.state.showPopup && <Fade className="popup">
-					<div className="popup-component bg-white shadow p-1 mb-1" ref={me._refs ["popup"]}>
-						<div className="mb-2 border-bottom d-flex justify-content-end">
-							<button
-								type="button" className="btn btn-link btn-sm"
-								onClick={() => me.setState ({showPopup: false})}
-							>{i18n ("Close")}</button>
-						</div>
-						<PopupComponent {...this.props} recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
-					</div>
-				</Fade>}
-				{ModalComponent && <Modal
-					isOpen={me.state.showModal}
-					style={
-						{
-							content: me.props.modalStyle || OBJECTUM_APP.sidebar ? {
-								marginLeft: "21em"
-							} : {}
-						}
-					}
-				>
-					<div className="mb-2 pb-2 border-bottom d-flex justify-content-end">
+					{duration > 2 ? <div className="p-1 mt-1 text-info">
+						{duration.toFixed (1)} {i18n ("sec.")}
+					</div> : null}
+					{this.props.store && <button type="button" className="btn btn-outline-danger btn-sm mt-1" onClick={this.onCancel} disabled={this.state.abort}>
+						{i18n ("Cancel")}
+					</button>}
+				</div>
+			</Fade>}
+			{this.state.showPopup && <Fade className="popup">
+				<div className="popup-component bg-white shadow p-1 mb-1" ref={this._refs ["popup"]}>
+					<div className="mb-2 border-bottom d-flex justify-content-end">
 						<button
 							type="button" className="btn btn-link btn-sm"
-							onClick={() => me.setState ({showModal: false})}
+							onClick={() => this.setState ({showPopup: false})}
 						>{i18n ("Close")}</button>
 					</div>
-					<ModalComponent recordId={me.state.recordId} store={me.props.store} grid={me.props.grid} />
-				</Modal>}
-			</div>
-		);
+					<PopupComponent {...this.props} recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
+				</div>
+			</Fade>}
+			{ModalComponent && <Modal
+				isOpen={this.state.showModal}
+				style={
+					{
+						content: this.props.modalStyle || OBJECTUM_APP.sidebar ? {
+							marginLeft: "21em"
+						} : {}
+					}
+				}
+			>
+				<div className="mb-2 pb-2 border-bottom d-flex justify-content-end">
+					<button
+						type="button" className="btn btn-link btn-sm"
+						onClick={() => this.setState ({showModal: false})}
+					>{i18n ("Close")}</button>
+				</div>
+				<ModalComponent recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
+			</Modal>}
+		</div>;
 	}
 };
 Action.displayName = "Action";
-
-export default Action;

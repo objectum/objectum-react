@@ -4,7 +4,6 @@
 import React, {Component} from "react";
 import {Tree, i18n, newId} from "..";
 import _isEmpty from "lodash.isempty";
-import _defaults from "lodash.defaults";
 
 export default class DictField extends Component {
 	constructor (props) {

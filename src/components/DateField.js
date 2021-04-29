@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {i18n, newId, DateSelector, getTimestampString} from "..";
 
-class DateField extends Component {
+export default class DateField extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -175,5 +175,3 @@ class DateField extends Component {
 	}
 };
 DateField.displayName = "DateField";
-
-export default DateField;
