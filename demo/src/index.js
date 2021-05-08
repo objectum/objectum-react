@@ -148,6 +148,9 @@ class Test extends Component {
 				<div className="mt-1 border" style={{width: "20em"}}>
 					<Tree recs={this.state.recs} selectMulti onCheck={({checkedNodes}) => console.log (checkedNodes)} />
 				</div>
+				<div className="mt-1 border" style={{width: "2em"}}>
+					<NumberField value={123} />
+				</div>
 			</div>
 		);
 	}
