@@ -86,12 +86,11 @@ export default class DateSelector extends Component {
 			} else {
 				color = "text-secondary";
 			}
-			if (this.props.holidays) {
-				title = this.props.holidays [`${d.getFullYear ()}-${String (d.getMonth () + 1).padStart (2, "0")}-${String (d.getDate ()).padStart (2, "0")}`];
-				
-				if (title) {
-					color = "text-danger";
-				}
+			let day = `${d.getFullYear ()}-${String (d.getMonth () + 1).padStart (2, "0")}-${String (d.getDate ()).padStart (2, "0")}`;
+			
+			if (this.props.holidays && this.props.holidays.hasOwnProperty (day)) {
+				title = this.props.holidays [day] || "";
+				color = "text-danger";
 			}
 			let cd = new Date (d);
 			let selected = d.getFullYear () == this.state.value.getFullYear () && d.getMonth () == this.state.value.getMonth () && d.getDate () == this.state.value.getDate ();
