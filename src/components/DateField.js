@@ -167,6 +167,7 @@ export default class DateField extends Component {
 							value={this.state.value}
 							showTime={this.props.showTime}
 							onChange={({value}) => this.onChange ({target: {value}})}
+							holidays={this.props.holidays}
 						/>
 					</div>
 				</div> : <div />}

@@ -79,12 +79,19 @@ export default class DateSelector extends Component {
 			d.setDate (d.getDate () - 1);
 		}
 		while (1) {
-			let color = (d.getDay () == 6 || d.getDay () == 0) ? "text-danger" : "";
+			let color = (d.getDay () == 6 || d.getDay () == 0) ? "text-danger" : "", title = "";
 			
 			if (d.getMonth () == this.state.localValue.getMonth ()) {
 				prevMonthWas = true;
 			} else {
 				color = "text-secondary";
+			}
+			if (this.props.holidays) {
+				title = this.props.holidays [`${d.getFullYear ()}-${String (d.getMonth () + 1).padStart (2, "0")}-${String (d.getDate ()).padStart (2, "0")}`];
+				
+				if (title) {
+					color = "text-danger";
+				}
 			}
 			let cd = new Date (d);
 			let selected = d.getFullYear () == this.state.value.getFullYear () && d.getMonth () == this.state.value.getMonth () && d.getDate () == this.state.value.getDate ();
@@ -95,6 +102,7 @@ export default class DateSelector extends Component {
 					className={`${color} text-center`}
 					onClick={() => this.onChange (cd)}
 					style={{cursor: "pointer"}}
+					title={title}
 				>
 					<div className={selected ? "text-white bg-info" : ""}>{d.getDate ()}</div>
 				</td>

@@ -149,7 +149,7 @@ class Test extends Component {
 					<Tree recs={this.state.recs} selectMulti onCheck={({checkedNodes}) => console.log (checkedNodes)} />
 				</div>
 				<div className="mt-1 border" style={{width: "2em"}}>
-					<NumberField value={123} />
+					<DateField holidays={{"2021-05-20": "ee", "2021-05-19": "dd"}} />
 				</div>
 			</div>
 		);
