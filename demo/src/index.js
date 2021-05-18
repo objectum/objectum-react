@@ -61,6 +61,7 @@ class Test extends Component {
 		};
 		this._refs = {"test": React.createRef ()};
 		this.changed = {};
+		DateField.prototype.holidays = {"2021-05-20": "ee", "2021-05-19": "dd"};
 	}
 	
 	componentDidMount () {
@@ -149,7 +150,7 @@ class Test extends Component {
 					<Tree recs={this.state.recs} selectMulti onCheck={({checkedNodes}) => console.log (checkedNodes)} />
 				</div>
 				<div className="mt-1 border" style={{width: "2em"}}>
-					<DateField holidays={{"2021-05-20": "ee", "2021-05-19": "dd"}} />
+					<DateField />
 				</div>
 			</div>
 		);

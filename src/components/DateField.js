@@ -144,35 +144,33 @@ export default class DateField extends Component {
 	}
 	
 	render () {
-		return (
-			<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
-				{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-				<input
-					type="text"
-					className={`${this.props.inputClassName || "form-control"} ${this.props.sm ? "form-control-sm" : ""} ${this.props.error ? "is-invalid" : ""} datefield`}
-					id={this.id}
-					value={this.state.localValue}
-					onChange={this.onChange}
-					disabled={this.props.disabled}
-					onFocus={this.onFocus}
-					ref={this._refs ["input"]}
-					maxLength={this.props.showTime ? 18 : 11}
-					style={{width: `calc(${this.props.showTime ? 18 : 11}ch + 15px)`}}
-				/>
-				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+		return <div className={(this.props.label || this.props.error) ? "form-group" : ""}>
+			{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+			<input
+				type="text"
+				className={`${this.props.inputClassName || "form-control"} ${this.props.sm ? "form-control-sm" : ""} ${this.props.error ? "is-invalid" : ""} datefield`}
+				id={this.id}
+				value={this.state.localValue}
+				onChange={this.onChange}
+				disabled={this.props.disabled}
+				onFocus={this.onFocus}
+				ref={this._refs ["input"]}
+				maxLength={this.props.showTime ? 18 : 11}
+				style={{width: `calc(${this.props.showTime ? 18 : 11}ch + 15px)`}}
+			/>
+			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 
-				{this.state.showDateSelector ? <div className="date-selector-wrapper" ref={this._refs ["content"]}>
-					<div className="date-selector-content bg-white border shadow">
-						<DateSelector
-							value={this.state.value}
-							showTime={this.props.showTime}
-							onChange={({value}) => this.onChange ({target: {value}})}
-							holidays={this.props.holidays}
-						/>
-					</div>
-				</div> : <div />}
-			</div>
-		);
+			{this.state.showDateSelector ? <div className="date-selector-wrapper" ref={this._refs ["content"]}>
+				<div className="date-selector-content bg-white border shadow">
+					<DateSelector
+						value={this.state.value}
+						showTime={this.props.showTime}
+						onChange={({value}) => this.onChange ({target: {value}})}
+						holidays={this.props.holidays || this.holidays}
+					/>
+				</div>
+			</div> : <div />}
+		</div>;
 	}
 };
 DateField.displayName = "DateField";
