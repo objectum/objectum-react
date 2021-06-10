@@ -43,8 +43,7 @@ export default class Models extends Component {
 			await this.props.store.commitTransaction ();
 		} catch (err) {
 			await this.props.store.rollbackTransaction ();
-			
-			state.error = err.message;
+			throw err;
 		}
 		this.setState (state);
 	}
@@ -64,7 +63,8 @@ export default class Models extends Component {
 					label="Models"
 					store={this.props.store}
 					query="objectum.model"
-					tree={true} system={true}
+					tree
+					system
 					refresh={this.state.refresh}
 					onSelectParent={parent => this.parent = parent}
 					inlineActions
@@ -75,7 +75,6 @@ export default class Models extends Component {
 						<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
 						<Action icon="fas fa-eye" label={i18n ("Records")} onClickSelected={this.onRecords} />
 					</div>
-					{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
 				</Grid>
 			</div>
 		</div>;

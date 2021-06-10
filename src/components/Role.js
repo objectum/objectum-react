@@ -40,7 +40,7 @@ export default class Role extends Component {
 						<Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.role" onCreate={this.onCreate}>
 							<Field property="name" />
 							<Field property="code" />
-							<Field property="menu" dict={true} />
+							<Field property="menu" dict />
 						</Form>
 					</Tab>
 				</Tabs>

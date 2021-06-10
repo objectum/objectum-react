@@ -115,22 +115,18 @@ export default class ChooseField extends Component {
 		let addCls = this.props.error ? " is-invalid" : "";
 		
 		if (this.state.invalid) {
-			return (
-				<div className="form-group">
-					<label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
-					<div className="alert alert-danger">"choose: cmp, ref" or "choose: query" or "choose: model" not exist</div>
-				</div>
-			);
+			return <div className="form-group">
+				<label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
+				<div className="alert alert-danger">"choose: cmp, ref" or "choose: query" or "choose: model" not exist</div>
+			</div>;
 		}
 		if (this.props.disabled) {
-			return (
-				<div className="form-group">
-					<label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
-					<Tooltip label={this.state.name}>
-						<input type="text" className={"form-control" + addCls} id={this.id} value={this.state.name} disabled={true}/>
-					</Tooltip>
-				</div>
-			)
+			return <div className="form-group">
+				<label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>
+				<Tooltip label={this.state.name}>
+					<input type="text" className={"form-control" + addCls} id={this.id} value={this.state.name} disabled />
+				</Tooltip>
+			</div>;
 		}
 		let ChooseComponent = this.state.cmp;
 		let props = {
@@ -144,63 +140,61 @@ export default class ChooseField extends Component {
 		if (this.props.choose.model) {
 			gridId = "list-" + this.props.choose.model;
 		}
-		return (
-			<div>
-				<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
-					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-					
-					<div className="input-group dictfield">
-						<input
-							type="text"
-							className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
-							id={this.id}
-							value={this.state.name}
-							title={this.state.name}
-							onClick={this.onVisible}
-							ref={this._refs ["inputDiv"]}
-							readOnly
-						/>
-						{!this.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
-							<button
-								type="button"
-								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
-								onClick={this.onClear}
-								title={i18n ("Clear")}
-							>
-								<i className="fas fa-times" />
-							</button>
-						</div>}
-					</div>
-					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+		return <div>
+			<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
+				{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+				
+				<div className="input-group dictfield">
+					<input
+						type="text"
+						className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
+						id={this.id}
+						value={this.state.name}
+						title={this.state.name}
+						onClick={this.onVisible}
+						ref={this._refs ["inputDiv"]}
+						readOnly
+					/>
+					{!this.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
+						<button
+							type="button"
+							className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
+							onClick={this.onClear}
+							title={i18n ("Clear")}
+						>
+							<i className="fas fa-times" />
+						</button>
+					</div>}
 				</div>
-				<Modal
-					isOpen={this.state.visible}
-					style={
-						document.documentElement.clientWidth > 1000 ? {
-							content: {
-								left: "270px"
-							}
-						} : {}
-					}
-				>
-					<div className="row">
-						<div className="col-md mb-1">
-							<button type="button" className="btn btn-primary mr-1" onClick={this.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
-							<button type="button" className="btn btn-primary" onClick={() => this.setState ({visible: !this.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
-						</div>
-					</div>
-					{this.props.choose.cmp ?
-						<ChooseComponent {...props} {...this.props.choose} ref={this._refs ["component"]} disableActions={true}/> :
-						<Grid
-							id={gridId}
-							ref={this._refs ["list"]}
-							store={this.props.store}
-							{...this.props.choose}
-						/>
-					}
-				</Modal>
+				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 			</div>
-		);
+			<Modal
+				isOpen={this.state.visible}
+				style={
+					document.documentElement.clientWidth > 1000 ? {
+						content: {
+							left: "270px"
+						}
+					} : {}
+				}
+			>
+				<div className="row">
+					<div className="col-md mb-1">
+						<button type="button" className="btn btn-primary mr-1" onClick={this.onChoose}><i className="fas fa-check mr-1" />{i18n ("Choose")}</button>
+						<button type="button" className="btn btn-primary" onClick={() => this.setState ({visible: !this.state.visible})}><i className="fas fa-window-close mr-1" />{i18n ("Cancel")}</button>
+					</div>
+				</div>
+				{this.props.choose.cmp ?
+					<ChooseComponent {...props} {...this.props.choose} ref={this._refs ["component"]} disableActions /> :
+					<Grid
+						id={gridId}
+						ref={this._refs ["list"]}
+						store={this.props.store}
+						{...this.props.choose}
+					/>
+				}
+			</Modal>
+		</div>;
 	}
 };
 ChooseField.displayName = "ChooseField";

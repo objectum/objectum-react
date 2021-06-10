@@ -185,7 +185,7 @@ export default class ModelRecord extends Component {
 							label={i18n (label)}
 							store={this.props.store}
 							model={tableModel.getPath ()}
-							isTable={true}
+							isTable
 							parentModel={model.getPath ()}
 							parentId={this.state.rid}
 						/>

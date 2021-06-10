@@ -60,15 +60,15 @@ export default class Model extends Component {
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField property="code" label="Code" regexp={/^[a-zA-Z0-9_]+$/} />
+									<StringField property="code" label="Code" disabled={!!this.state.rid} regexp={/^[a-zA-Z0-9_]+$/} />
 								</div>
 								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea={true} />
+									<StringField property="description" label="Description" textarea />
 								</div>
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<BooleanField property="unlogged" label="Unlogged" />
+									<BooleanField property="unlogged" disabled={!!this.state.rid} label="Unlogged" />
 								</div>
 							</div>
 							<div className="form-row">

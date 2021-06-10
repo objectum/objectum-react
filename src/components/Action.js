@@ -267,7 +267,7 @@ export default class Action extends Component {
 			>
 				<div className="mb-2 pb-2 border-bottom d-flex justify-content-end">
 					<button
-						type="button" className="btn btn-link btn-sm"
+						type="button" className="btn btn-link"
 						onClick={() => this.setState ({showModal: false})}
 					>{i18n ("Close")}</button>
 				</div>

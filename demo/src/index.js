@@ -105,19 +105,6 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<Fade>12344</Fade>
-				<div className="bg-white border border-danger p-2" style={{width: "110%", left: "-5%", position: "relative"}}>
-					<div className="bg-white border border-danger p-2 fade-in" style={{left: "0px", top: "2px", position: "absolute"}}>
-						111
-					</div>
-				</div>
-				<ChooseField
-					store={store}
-					property="model" label="Model" rsc="model"
-					choose={{cmp: Models, ref: "models"}}
-					value={1007}
-					disabled
-				/>
 				<Form store={store} rsc="record" rid={14197} mid="item">
 					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
 				</Form>
@@ -128,29 +115,15 @@ class Test extends Component {
 					}
 					return "ok";
 				}} />
-				<select
-					className="form-control custom-select"
-					style={{width: "30em"}}
-					value={this.state.selectValue}
-					onChange={val => {
-						this.setState ({selectValue: val.target.value});
-						console.log (val.target.value);
-					}}
-				>
-					{[{id: "1", name: "1"}, {id: "2", name: "2"}].map ((rec, i) => {
-						return (
-							<option value={rec.id} key={i}>{rec.name}</option>
-						);
-					})}
-				</select>
-				<div className="p-1 border" style={{width: "15em"}}>
-					<DictField label="Dict" notNull records={this.state.recs} />
-				</div>
-				<div className="mt-1 border" style={{width: "20em"}}>
-					<Tree recs={this.state.recs} selectMulti onCheck={({checkedNodes}) => console.log (checkedNodes)} />
-				</div>
-				<div className="mt-1 border" style={{width: "2em"}}>
-					<DateField />
+				<div className="row">
+					<div className="col-6">
+						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
+					</div>
+					<div className="col-6 border">
+						<Form store={store} rsc="record" rid={this.state.id} mid="item" onCreate={() => this.setState ({refresh: !this.state.refresh})} onSave={() => this.setState ({refresh: !this.state.refresh})}>
+							<Field property="name" />
+						</Form>
+					</div>
 				</div>
 			</div>
 		);
@@ -243,7 +216,7 @@ class Demo extends Component {
 					}}
 */
 					/*onCustomRender={me.onCustomRender}*/
-					sidebar
+					//sidebar
 					onConnect={me.onConnect}
 				>
 					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />

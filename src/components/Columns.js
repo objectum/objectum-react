@@ -38,8 +38,7 @@ export default class Columns extends Component {
 			await this.props.store.commitTransaction ();
 		} catch (err) {
 			await this.props.store.rollbackTransaction ();
-			
-			state.error = err.message;
+			throw err;
 		}
 		this.setState (state);
 	}
@@ -123,14 +122,14 @@ export default class Columns extends Component {
 			}
 			await this.props.store.commitTransaction ();
 		} catch (err) {
-			state.error = err.message;
 			await this.props.store.rollbackTransaction ();
+			throw err;
 		}
 		this.setState (state);
 	}
 	
 	render () {
-		return <Grid id="Columns" store={this.props.store} query="objectum.column" system={true} refresh={this.state.refresh} params={{queryId: this.query}} inlineActions>
+		return <Grid id="Columns" store={this.props.store} query="objectum.column" system refresh={this.state.refresh} params={{queryId: this.query}} inlineActions>
 			<div className="d-flex">
 				<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
 				<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
@@ -139,7 +138,6 @@ export default class Columns extends Component {
 					<i className="fas fa-wrench mr-2" />{this.state.synchronizing ? i18n ("Synchronizing") : i18n ("Synchronize")}
 				</Action>
 			</div>
-			{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
 		</Grid>;
 	}
 };

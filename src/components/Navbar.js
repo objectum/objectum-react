@@ -66,20 +66,18 @@ export default class Navbar extends Component {
 			<button className={`${this.props.linkClassName || "btn btn-link nav-item nav-link font-weight-bold"}`} onClick={() => this.hideSubmenu ({[key]: !this.state [key]})}>
 				{link}
 			</button>
-			<div className={`dropdown-menu shadow-sm ml-${level} ${this.state [key] ? "d-block" : ""}`}>
+			<div className={`dropdown-menu shadow-sm ml-${level} d-block menu-hidden ${this.state [key] ? "menu-visible" : ""}`}>
 				{_map (item.items, (item, i) => {
 					let key2 = key + "-" + i;
 					
 					if (item && item.label && item.path) {
-						return (
-							<Link
-								key={i}
-								className={this.props.submenuLinkClassName || "dropdown-item nav-item nav-link font-weight-bold text-dark pr-2"} to={item.path}
-								onClick={() => this.hideSubmenu ({selected: key2})}
-							>
-								{item.icon ? <i className={`${item.icon} menu-icon mr-2`} /> : null} {i18n (item.label)}
-							</Link>
-						);
+						return <Link
+							key={i}
+							className={this.props.submenuLinkClassName || "dropdown-item nav-item nav-link font-weight-bold text-dark pr-2"} to={item.path}
+							onClick={() => this.hideSubmenu ({selected: key2})}
+						>
+							{item.icon ? <i className={`${item.icon} menu-icon mr-2`} /> : null} {i18n (item.label)}
+						</Link>;
 					}
 					if (item && item.label && item.items) {
 						return this.renderSubmenu (item, i, level + 1);

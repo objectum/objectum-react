@@ -1,3 +1,6 @@
+/*
+	Deprecated
+ */
 import React, {Component} from "react";
 import {Fade, i18n, timeout} from "..";
 

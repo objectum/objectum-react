@@ -149,7 +149,7 @@ export default class MenuItems extends Component {
 	
 	render () {
 		return <div className="p-1">
-			<Grid {...this.props} id="menuItems" ref={this._refs ["menuItems"]} store={this.props.store} query="objectum.menuItem" tree={true} refresh={this.state.refresh} onSelectParent={parent => this.parent = parent} params={{menu: this.menu}} inlineActions>
+			<Grid {...this.props} id="menuItems" ref={this._refs ["menuItems"]} store={this.props.store} query="objectum.menuItem" tree refresh={this.state.refresh} onSelectParent={parent => this.parent = parent} params={{menu: this.menu}} inlineActions>
 				<div className="d-flex">
 					<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
 					<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />

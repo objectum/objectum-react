@@ -117,7 +117,7 @@ export default class JsonEditor extends Component {
 		let cls = this.state.tag ? "visible" : "invisible";
 		
 		return <div className="form-group border p-1">
-			<label htmlFor={this.id}><h5>{i18n (this.props.label)}</h5></label>
+			<label htmlFor={this.id}>{i18n (this.props.label)}</label>
 			<div className="row">
 				<div className="col-sm-6 pr-1" id={this.id}>
 					<div className="">

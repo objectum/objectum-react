@@ -73,7 +73,7 @@ export default class Column extends Component {
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea={true} />
+									<StringField property="description" label="Description" textarea />
 								</div>
 								<div className="form-group col-md-6">
 								</div>

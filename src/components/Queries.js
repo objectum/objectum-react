@@ -43,8 +43,7 @@ export default class Queries extends Component {
 			await this.props.store.commitTransaction ();
 		} catch (err) {
 			await this.props.store.rollbackTransaction ();
-			
-			state.error = err.message;
+			throw err;
 		}
 		this.setState (state);
 	}
@@ -52,13 +51,12 @@ export default class Queries extends Component {
 	render () {
 		return <div className="container">
 			<div className="shadow-sm">
-				<Grid {...this.props} id="queries" ref={this._refs ["queries"]} label="Queries" store={this.props.store} query="objectum.query" tree={true} system={true} refresh={this.state.refresh} onSelectParent={(parent) => this.parent = parent} inlineActions>
+				<Grid {...this.props} id="queries" ref={this._refs ["queries"]} label="Queries" store={this.props.store} query="objectum.query" tree system refresh={this.state.refresh} onSelectParent={(parent) => this.parent = parent} inlineActions>
 					<div className="d-flex">
 						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
 						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
 						<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
 					</div>
-					{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
 				</Grid>
 			</div>
 		</div>;

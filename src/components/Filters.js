@@ -152,7 +152,7 @@ class Filter extends Component {
 			return <input id="value" type="date" className="filter-select mt-1" value={getDateString (this.state.value)} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
 		}
 		if (t == 4) {
-			return (<div />);
+			return <div />;
 		}
 	}
 	

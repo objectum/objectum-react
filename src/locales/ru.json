@@ -178,5 +178,11 @@
 	"no parameters": "параметры отсутствуют",
 	"import from another menu": "импортировать из другого меню",
 	"menu contains items": "меню содержит пункты",
-	"import selected menu items": "импортировать выбранные пункты меню"
+	"import selected menu items": "импортировать выбранные пункты меню",
+	"model has child models (remove them first)": "модель содержит дочерние модели (сначала удалите их)",
+	"query has child queries (remove them first)": "запрос содержит дочерние запросы (сначала удалите их)",
+	"model has properties (remove them first)": "модель содержит свойства (сначала удалите их)",
+	"parent model has properties (parent model must be namespace, without properties)": "родительская модель содержит свойства (родительская модель должна быть пространством имен, без свойств)",
+	"model has child models (this model is namespace)": "модель содержит дочерние модели (эта модель является пространством имен)",
+	"unsupported type": "неподдерживаемый тип"
 }

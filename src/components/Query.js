@@ -56,7 +56,7 @@ export default class Query extends Component {
 									<StringField property="code" label="Code" regexp={/^[a-zA-Z0-9_]+$/} />
 								</div>
 								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea={true} />
+									<StringField property="description" label="Description" textarea />
 								</div>
 							</div>
 							<div className="row">

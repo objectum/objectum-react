@@ -31,8 +31,7 @@ export default class Records extends Component {
 			await this.props.store.commitTransaction ();
 		} catch (err) {
 			await this.props.store.rollbackTransaction ();
-			
-			state.error = err.message;
+			throw err;
 		}
 		this.setState (state);
 	}
@@ -57,7 +56,6 @@ export default class Records extends Component {
 			editable: true
 		};
 		return <div>
-			{this.state.error && <span className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</span>}
 			<Grid {...gridOpts} inlineActions>
 				<div className="d-flex">
 					<Action {...this.props} onClickSelected={this.onEdit} icon="fas fa-edit" label={i18n ("Edit")} />

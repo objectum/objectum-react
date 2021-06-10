@@ -1,70 +1,8 @@
 import React, {Component} from "react";
-import {i18n, newId, Tooltip} from "..";
+import {i18n, newId} from "..";
 import _isEmpty from "lodash.isempty";
 
-/*
-class SelectField extends Component {
-	constructor (props) {
-		super (props);
-		
-		let me = this;
-		
-		me.onChange = me.onChange.bind (me);
-		me.state = {
-			rsc: me.props.rsc || "record",
-			code: me.props.property,
-			value: me.props.value
-		};
-		me.id = newId ();
-	}
-	
-	onChange (val) {
-		let me = this;
-		let value = val.target.value;
-		
-		if (!isNaN (value)) {
-			value = Number (value);
-		}
-		me.setState ({value});
-
-		if (me.props.onChange) {
-			me.props.onChange ({...me.props, code: me.state.code, value, id: me.props.id});
-		}
-	}
-	
-	async componentDidUpdate (prevProps) {
-		let me = this;
-		
-		if (prevProps.value !== me.props.value) {
-			me.setState ({value: me.props.value});
-		}
-	}
-	
-	render () {
-		let me = this;
-		let disabled = me.props.disabled;
-		let addCls = me.props.error ? " is-invalid" : "";
-
-		if (!me.props.recs && !me.props.records) {
-			return <div>recs or records not exist</div>
-		}
-		return (
-			<div className={(me.props.label || me.props.error) ? "form-group" : ""}>
-				{me.props.label && <label htmlFor={me.id}>{i18n (me.props.label)}{me.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-				<select className={"form-control custom-select" + addCls + (me.props.sm ? " custom-select-sm" : "")} id={me.id} value={me.state.value} onChange={me.onChange} disabled={disabled}>
-					{[{id: "", name: "-"}, ...(me.props.recs || me.props.records)].map ((rec, i) => {
-						return (
-							<option value={rec.id} key={i}>{rec.getLabel ? rec.getLabel () : rec.name}</option>
-						);
-					})}
-				</select>
-				{me.props.error && <div className="invalid-feedback">{me.props.error}</div>}
-			</div>
-		);
-	}
-};
-*/
-class SelectField extends Component {
+export default class SelectField extends Component {
 	constructor (props) {
 		super (props);
 		
@@ -100,7 +38,6 @@ class SelectField extends Component {
 	
 	componentDidUpdate (prevProps) {
 		let state = {};
-		
 		let recs = this.props.records || this.props.recs || [];
 		
 		if (this.state.recs.length !== recs.length) {
@@ -126,7 +63,6 @@ class SelectField extends Component {
 	
 	onDocumentClick = (event) => {
 		if (this._refs ["dialog"] && this._refs ["dialog"].current && !this._refs ["dialog"].current.contains (event.target) &&
-			//this._refs ["button"].current && !this._refs ["button"].current.contains (event.target) &&
 			this._refs ["inputDiv"].current && !this._refs ["inputDiv"].current.contains (event.target)
 		) {
 			this.setState ({
@@ -191,33 +127,31 @@ class SelectField extends Component {
 	renderParameters () {
 		let recs = this.filter (this.state.recs);
 		
-		return (
-			<div className="dictfield-dialog text-left" ref={this._refs ["dialog"]}>
-				<div className="dictfield-selector border bg-white shadow">
-					{(recs.length > 10 || this.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
-						<input
-							type="text"
-							className="form-control"
-							value={this.state.filter}
-							onChange={val => this.setState ({filter: val.target.value})}
-							placeholder={i18n ("Filter parameters") + " ..."}
-						/>
-					</div>}
-					<ul className="list-group">
-						{!recs.length ? <div className="p-3">{i18n ("No parameters")}</div> : recs.map ((rec, i) => {
-							let label = `${rec.name} (id: ${rec.id})`;
-							
-							if (rec.getLabel) {
-								label = rec.getLabel ();
-							}
-							return (
-								<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={this.onClick}>{label}</li>
-							);
-						})}
-					</ul>
-				</div>
+		return <div className="dictfield-dialog text-left" ref={this._refs ["dialog"]}>
+			<div className="dictfield-selector border bg-white shadow">
+				{(recs.length > 10 || this.state.filter) && <div className="sticky-top p-1 bg-white border-bottom">
+					<input
+						type="text"
+						className="form-control"
+						value={this.state.filter}
+						onChange={val => this.setState ({filter: val.target.value})}
+						placeholder={i18n ("Filter parameters") + " ..."}
+					/>
+				</div>}
+				<ul className="list-group">
+					{!recs.length ? <div className="p-3">{i18n ("No parameters")}</div> : recs.map ((rec, i) => {
+						let label = `${rec.name} (id: ${rec.id})`;
+						
+						if (rec.getLabel) {
+							label = rec.getLabel ();
+						}
+						return (
+							<li className="border-bottom p-1 dictfield-option" id={rec.id} key={i} onClick={this.onClick}>{label}</li>
+						);
+					})}
+				</ul>
 			</div>
-		);
+		</div>;
 	}
 	
 	onClear = () => {
@@ -233,78 +167,35 @@ class SelectField extends Component {
 	render () {
 		let addCls = this.props.error ? " is-invalid" : "";
 		
-		return (
-			<div>
-				<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
-					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-{/*
-					<div className="d-flex dictfield">
-						{!this.props.disabled && <div className="border border-right-0 rounded-left bg-white">
-							<Tooltip label={i18n ("Choose")}><button
-								type="button"
-								className="btn btn-link btn-sm p-1"
-								onClick={this.onShowDialog}
-								style={{height: "100%", width: "2.5em"}}
-								ref={this._refs ["button"]}
-							>
-								<i className="fas fa-edit" />
-							</button></Tooltip>
-						</div>}
-						<Tooltip label={this.state.label}>
-							<div onClick={this.onShowDialog} ref={this._refs ["inputDiv"]}>
-								<input
-									type="text"
-									className={`form-control bg-white dictfield-option ${addCls} ${this.props.disabled ? "" : " dictfield-input"}`}
-									id={this.id}
-									value={this.state.label}
-									disabled
-								/>
-							</div>
-						</Tooltip>
-					</div>
-*/}
-					<div className="input-group selectfield">
-{/*
-						{!this.props.disabled && <div className="input-group-prepend">
-							<button
-								type="button"
-								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
-								onClick={this.onShowDialog}
-								ref={this._refs ["button"]}
-								title={i18n ("Choose")}
-							>
-								<i className="fas fa-edit" />
-							</button>
-						</div>}
-*/}
-						<input
-							type="text"
-							className={`form-control ${(this.props.disabled || this.props.notNull) ? "rounded" : "rounded-left"} ${this.props.disabled ? "" : "bg-white dictfield-input border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
-							id={this.id}
-							value={this.state.label}
-							title={this.state.label}
-							onClick={this.onShowDialog}
-							ref={this._refs ["inputDiv"]}
-							readOnly
-						/>
-						{!this.props.disabled && !this.props.notNull && <div className="input-group-append" style={{zIndex: 0}}>
-							<button
-								type="button"
-								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
-								onClick={this.onClear}
-								title={i18n ("Clear")}
-							>
-								<i className="fas fa-times" />
-							</button>
-						</div>}
-					</div>
-					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
-					{this.state.showDialog && this.renderParameters ()}
+		return <div>
+			<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
+				{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+				<div className="input-group selectfield">
+					<input
+						type="text"
+						className={`form-control ${(this.props.disabled || this.props.notNull) ? "rounded" : "rounded-left"} ${this.props.disabled ? "" : "bg-white dictfield-input border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""}`}
+						id={this.id}
+						value={this.state.label}
+						title={this.state.label}
+						onClick={this.onShowDialog}
+						ref={this._refs ["inputDiv"]}
+						readOnly
+					/>
+					{!this.props.disabled && !this.props.notNull && <div className="input-group-append" style={{zIndex: 0}}>
+						<button
+							type="button"
+							className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
+							onClick={this.onClear}
+							title={i18n ("Clear")}
+						>
+							<i className="fas fa-times" />
+						</button>
+					</div>}
 				</div>
+				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+				{this.state.showDialog && this.renderParameters ()}
 			</div>
-		);
+		</div>;
 	}
 };
 SelectField.displayName = "SelectField";
-
-export default SelectField;

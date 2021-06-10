@@ -228,38 +228,36 @@ export default class DictField extends Component {
 		}
 		let addCls = this.props.error ? " is-invalid" : "";
 		
-		return (
-			<div>
-				<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
-					{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-					<div className="input-group dictfield">
-						<input
-							type="text"
-							className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.state.filter ? "text-warning" : ""}`}
-							id={this.id}
-							title={this.state.label}
-							value={this.state.filter || this.state.label}
-							onChange={this.onFilter}
-							onClick={this.onShowDialog}
-							ref={this._refs ["inputDiv"]}
-							readOnly={!!this.props.disabled}
-						/>
-						{!this.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
-							<button
-								type="button"
-								className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
-								onClick={this.onClear}
-								title={i18n ("Clear")}
-							>
-								<i className="fas fa-times" />
-							</button>
-						</div>}
-					</div>
-					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
-					{this.state.showDialog ? this.renderTree () : <div />}
+		return <div>
+			<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
+				{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+				<div className="input-group dictfield">
+					<input
+						type="text"
+						className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.state.filter ? "text-warning" : ""}`}
+						id={this.id}
+						title={this.state.label}
+						value={this.state.filter || this.state.label}
+						onChange={this.onFilter}
+						onClick={this.onShowDialog}
+						ref={this._refs ["inputDiv"]}
+						readOnly={!!this.props.disabled}
+					/>
+					{!this.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
+						<button
+							type="button"
+							className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
+							onClick={this.onClear}
+							title={i18n ("Clear")}
+						>
+							<i className="fas fa-times" />
+						</button>
+					</div>}
 				</div>
+				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+				{this.state.showDialog ? this.renderTree () : <div />}
 			</div>
-		);
+		</div>;
 	}
 };
 DictField.displayName = "DictField";

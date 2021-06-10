@@ -9,6 +9,7 @@ import BooleanField from "./BooleanField";
 import DictField from "./DictField";
 import ChooseField from "./ChooseField";
 import FileField from "./FileField";
+import {i18n} from "../i18n";
 
 export default class Field extends Component {
 	render () {
@@ -16,28 +17,28 @@ export default class Field extends Component {
 		let type = props.type;
 		
 		if (type == 1) {
-			return (<StringField {...props} />);
+			return <StringField {...props} />;
 		}
 		if (type == 2) {
-			return (<NumberField {...props} />);
+			return <NumberField {...props} />;
 		}
 		if (type == 3) {
-			return (<DateField {...props} />);
+			return <DateField {...props} />;
 		}
 		if (type == 4) {
-			return (<BooleanField {...props} />);
+			return <BooleanField {...props} />;
 		}
 		if (type >= 1000) {
 			if (props.dict) {
-				return (<DictField {...props} />);
+				return <DictField {...props} />;
 			} else {
-				return (<ChooseField {...props} />);
+				return <ChooseField {...props} />;
 			}
 		}
 		if (type == 5) {
-			return (<FileField {...props} />);
+			return <FileField {...props} />;
 		}
-		return (<div>unsupported type</div>);
+		return <div>{i18n ("Unsupported type")}: {type}</div>;
 	}
 };
 Field.displayName = "Field";

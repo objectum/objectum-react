@@ -4,7 +4,6 @@
 import React, {Component} from "react";
 import Grid from "./Grid";
 import Action from "./Action";
-import Confirm from "./Confirm";
 import {i18n} from "./../i18n";
 
 export default class Properties extends Component {
@@ -46,8 +45,7 @@ export default class Properties extends Component {
 			await this.props.store.commitTransaction ();
 		} catch (err) {
 			await this.props.store.rollbackTransaction ();
-			
-			state.error = err.message;
+			throw err;
 		}
 		this.setState (state);
 	}
@@ -55,16 +53,14 @@ export default class Properties extends Component {
 	render () {
 		return <div className="row">
 			<div className="col-sm-12">
-				<Grid id="properties" store={this.props.store} query="objectum.property" system={true} refresh={this.state.refresh} params={{modelId: this.model}} inlineActions>
+				<Grid id="properties" store={this.props.store} query="objectum.property" system refresh={this.state.refresh} params={{modelId: this.model}} inlineActions>
 					<div className="d-flex">
 						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
 						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
 						<Action icon="fas fa-minus" label={i18n ("Remove")} onClick={this.onRemove} confirm selected />
 					</div>
-					{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
 				</Grid>
 			</div>
-			<Confirm label="Are you sure?" visible={this.state.removeConfirm} onClick={this.onRemove} />
 		</div>;
 	}
 };

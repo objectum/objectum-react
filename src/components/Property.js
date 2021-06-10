@@ -62,18 +62,18 @@ export default class Property extends Component {
 						>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField property="name" label="Name" notNull={true} />
+									<StringField property="name" label="Name" notNull />
 								</div>
 								<div className="form-group col-md-6">
 									<ChooseField
-										property="model" label="Model" disabled={true} rsc="model" value={this.state.model}
+										property="model" label="Model" disabled rsc="model" value={this.state.model}
 										choose={{cmp: Models, ref: "models"}}
 									/>
 								</div>
 							</div>
 							<div className="form-row">
 								<div className="form-group col-md-6">
-									<StringField property="code" label="Code" disabled={!!this.state.rid} notNull={true} regexp={/^[a-zA-Z0-9_]+$/} />
+									<StringField property="code" label="Code" disabled={!!this.state.rid} notNull regexp={/^[a-zA-Z0-9_]+$/} />
 								</div>
 								<div className="form-group col-md-6">
 									<NumberField property="order" label="Order" />
@@ -82,12 +82,12 @@ export default class Property extends Component {
 							<div className="form-row">
 								<div className="form-group col-md-6">
 									<DictField
-										property="type" label="Type" disabled={!!this.state.rid} notNull={true}
+										property="type" label="Type" disabled={!!this.state.rid} notNull
 										recs={this.props.store.getModelRecords (true)} tree
 									/>
 								</div>
 								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea={true} />
+									<StringField property="description" label="Description" textarea />
 								</div>
 							</div>
 							<div className="form-row">

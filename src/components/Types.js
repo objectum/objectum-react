@@ -17,7 +17,7 @@ export default class Types extends Component {
 	render () {
 		return <div className="row">
 			<div className="col-sm-12">
-				<Grid {...this.props} id="types" ref={this._refs ["types"]} label="Data types" store={this.props.store} query="objectum.type" tree={true} system={true} refresh={this.state.refresh} onSelectParent={parent => this.parent = parent}>
+				<Grid {...this.props} id="types" ref={this._refs ["types"]} label="Data types" store={this.props.store} query="objectum.type" tree system refresh={this.state.refresh} onSelectParent={parent => this.parent = parent}>
 					<div className="d-flex">
 						<Action onClick={({grid}) => grid.onFolderClick (null)}>
 							<i className="fas fa-home mr-2" />{i18n ("Basic")}

@@ -1,3 +1,6 @@
+/*
+	Deprecated
+ */
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 

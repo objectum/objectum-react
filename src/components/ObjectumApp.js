@@ -5,7 +5,7 @@ import {
 	Menus, Menu, MenuItem, ModelList, ModelTree, ModelRecord, Records, Office, ImportCSS
 } from "..";
 import Sidebar from "react-sidebar";
-import {setLocale, i18n} from "./../i18n";
+import {setLocale, i18n} from "../i18n";
 import _filter from "lodash.filter";
 import _each from "lodash.foreach";
 import _keys from "lodash.keys";
@@ -160,7 +160,7 @@ export default class ObjectumApp extends Component {
 		this.setState ({[key]: !this.state [key]});
 	}
 	
-	renderMenu (size) {
+	renderMenuOld (size) {
 		function renderIcon (icon, key) {
 			if (icon) {
 				return (<span key={key} className={`${icon} ${size} menu-icon mr-1 align-middle`} />);
@@ -230,6 +230,71 @@ export default class ObjectumApp extends Component {
 				{menu}
 			</div>
 		);
+	}
+	
+	renderMenu (size) {
+		function renderIcon (icon, key) {
+			if (icon) {
+				return <span key={key} className={`${icon} ${size} menu-icon mr-1 align-middle`} />;
+			} else {
+				return <span key={key} />;
+			}
+		};
+		let items = [];
+		let renderItems = (parent, level, parentOpened) => {
+			let recs = this.menuItemRecs.filter (rec => rec.parent == parent);
+			
+			recs.forEach ((rec, i) => {
+				let childRecs = this.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
+				let key = `menu-${parent}-${i}`;
+				
+				if (childRecs.length) {
+					let opened = this.state [`open-${parent}-${i}`];
+					
+					items.push (
+						<div key={key} className="fade-in height-100-1">
+							<button className={`btn btn-link shadow-none pl-3 ml-${level * 2}`} onClick={() => this.onClickMenu (`open-${parent}-${i}`)}>
+								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
+								<span className="text-dark">{i18n (rec.name)}</span>
+								<i key={`open-${parent}-${i}`} className={`fas ${opened ? "fa-angle-up rotate-180-1" : `fa-angle-down ${this.state.hasOwnProperty (`open-${parent}-${i}`) ? "rotate-180-2" : ""}`} ml-2`} />
+							</button>
+						</div>
+					);
+					renderItems (rec.id, level + 1, opened);
+				} else {
+					let selected = this.state.selectedItem == key;
+					let cls = selected ? "bg-primary" : "";
+					
+					if (parent) {
+						cls += ` menu-hidden ${parentOpened ? "menu-visible" : ""}`;
+					}
+					items.push (
+						<div key={key} className={cls}>
+							<Link className={`nav-link text-nowrap ml-${level * 2} ${selected ? "text-white" : ""}`}
+								  to={rec.path}
+								  onClick={() => this.setState ({selectedItem: key})}
+							>
+								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
+								<span className={selected ? "text-white" : "text-dark"}>{i18n (rec.name)}</span>
+							</Link>
+						</div>
+					);
+				}
+			});
+		};
+		renderItems (null, 0);
+		
+		let menu = <div className="menu">
+			{items}
+			<div>
+				<LogoutButtonSB app={this} size={size} />
+			</div>
+		</div>;
+		
+		if (this.props.onRenderSidebar) {
+			menu = this.props.onRenderSidebar (menu);
+		}
+		return menu;
 	}
 	
 	renderMenu2 () {

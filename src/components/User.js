@@ -42,7 +42,7 @@ export default class User extends Component {
 							<Field property="login" />
 							<Field property="password" />
 							<Field property="email" />
-							<Field property="role" dict={true} />
+							<Field property="role" dict />
 						</Form>
 					</Tab>
 				</Tabs>

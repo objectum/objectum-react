@@ -34,8 +34,7 @@ export default class Menus extends Component {
 			await this.props.store.commitTransaction ();
 		} catch (err) {
 			await this.props.store.rollbackTransaction ();
-			
-			state.error = err.message;
+			throw err;
 		}
 		this.setState (state);
 	}
@@ -49,7 +48,6 @@ export default class Menus extends Component {
 						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
 						<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
 					</div>
-					{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
 				</Grid>
 			</div>
 		</div>;

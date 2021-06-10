@@ -64,8 +64,7 @@ export default class ModelList extends Component {
 		} catch (err) {
 			console.error (err);
 			await this.props.store.rollbackTransaction ();
-			
-			state.error = err.message;
+			throw err;
 		}
 		this.setState (state);
 	}
@@ -221,13 +220,12 @@ export default class ModelList extends Component {
 		let actions = this.renderActions ();
 		let grid = <Grid {...gridOpts}>
 			<div className="d-flex">
-				<Action {...this.props} icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} disabled={!this.state.canCreate} />
-				<Action {...this.props} icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
-				<Action {...this.props} icon="fas fa-minus" label={i18n ("Remove")} onClick={this.onRemove}
-						confirm selected disabled={!this.state.canRemove} disabledControlled={this.state.removeControlled} />
+				{!this.props.hideCreate && <Action {...this.props} icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} disabled={!this.state.canCreate} />}
+				{!this.props.hideEdit && <Action {...this.props} icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />}
+				{!this.props.hideRemove && <Action {...this.props} icon="fas fa-minus" label={i18n ("Remove")} onClick={this.onRemove}
+						confirm selected disabled={!this.state.canRemove} disabledControlled={this.state.removeControlled} />}
 				{actions}
 			</div>
-			{this.state.error && <div className="text-danger ml-3">{`${i18n ("Error")}: ${this.state.error}`}</div>}
 		</Grid>;
 		
 		if (this.regModel && this.regModel._renderGrid) {
