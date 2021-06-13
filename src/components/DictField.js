@@ -214,7 +214,7 @@ export default class DictField extends Component {
 			opened = records.map (record => record.id);
 		}
 		return <div className="dictfield-dialog text-left" ref={this._refs ["treeDialog"]}>
-			<div className="dictfield-tree border p-1 bg-white shadow">
+			<div className={`dictfield-tree border p-1 bg-white shadow dictfield-items-hidden ${this.state.showDialog ? "dictfield-items-visible" : ""}`}>
 				{records.length ? <Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})}/> :
 					<div className="p-1">{i18n ("No parameters")}</div>
 				}
@@ -255,7 +255,7 @@ export default class DictField extends Component {
 					</div>}
 				</div>
 				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
-				{this.state.showDialog ? this.renderTree () : <div />}
+				{this.renderTree ()}
 			</div>
 		</div>;
 	}

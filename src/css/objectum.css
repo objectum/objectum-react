@@ -269,3 +269,15 @@ textarea {
     font-size: 100%;
     opacity: 1;
 }
+.dictfield-items-hidden {
+    overflow: auto;
+    transition: all 0.6s ease-in-out;
+    max-height: 0;
+    font-size: 0;
+    opacity: 0;
+}
+.dictfield-items-visible {
+    max-height: 45em;
+    font-size: 100%;
+    opacity: 1;
+}
