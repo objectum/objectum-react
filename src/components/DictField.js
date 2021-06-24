@@ -14,7 +14,8 @@ export default class DictField extends Component {
 			showDialog: false,
 			filter: "",
 			value: null,
-			label: ""
+			label: "",
+			records: []
 		};
 		this._refs = {
 			"treeDialog": React.createRef (),
