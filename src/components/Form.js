@@ -66,10 +66,10 @@ export default class Form extends Component {
 		return fields;
 	}
 	
-	updateState = async (prevProps = {}) => {
+	updateState = async (prevProps = {}, initStateValues) => {
 		let state = {};
 		//let getValue = (a) => state.hasOwnProperty (a) ? state [a] : this.state [a];
-		let initStateValues = false;
+		//let initStateValues = false;
 		
 		try {
 			// edit record
@@ -143,7 +143,7 @@ export default class Form extends Component {
 	}
 	
 	async componentDidMount () {
-		await this.updateState ();
+		await this.updateState ({}, true);
 	}
 	
 	async componentDidUpdate (prevProps) {
