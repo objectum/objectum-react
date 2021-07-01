@@ -115,16 +115,18 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<BooleanField label="BooleanField" error="" />
 				<DictField label="DictField" recs={this.state.recs} />
 				<Form store={store} rsc="record" rid={14197} mid="item">
 					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
 				</Form>
 				<Action label="Action" modalComponent={Cmp} />
-				<Action label="Action2" onClick={async () => {
-					for (let i = 0; i < 2; i ++) {
-						await timeout (1000);
-					}
-					return "ok";
+				<Action label="Зависание после rollback" onClick={async () => {
+					await store.startTransaction ();
+					let record = await store.getRecord (1023);
+					record.name = new Date ().toLocaleString ();
+					await record.sync ();
+					await store.rollbackTransaction ();
 				}} />
 				<div className="row">
 					<div className="col-6">

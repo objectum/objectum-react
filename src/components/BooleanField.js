@@ -34,8 +34,8 @@ export default class BooleanField extends Component {
 		let addCls = this.props.error ? "is-invalid" : "";
 		
 		return <div className="form-check mb-2">
-			<input type="checkbox" className={`form-check-input ${addCls}`} id={this.id} checked={this.state.value} onChange={this.onChange} disabled={disabled} />
-			<label className="form-check-label booleanfield" htmlFor={this.id}>
+			<input type="checkbox" className={`form-check-input boolean-check ${addCls}`} id={this.id} checked={this.state.value} onChange={this.onChange} disabled={disabled} />
+			<label className="form-check-label" htmlFor={this.id}>
 				{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}
 			</label>
 			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}

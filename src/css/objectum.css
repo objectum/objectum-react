@@ -107,8 +107,9 @@
 .stringfield {
     min-width: 10em;
 }
-.booleanfield {
-    margin-top: 2px;
+.boolean-check {
+    height: 1em;
+    margin-top: 0.22em;
 }
 .filter-select {
     width: 100%;
@@ -259,7 +260,7 @@ textarea {
 }
 .menu-hidden {
     overflow: auto;
-    transition: all 0.6s ease-in-out;
+    transition: all 0.4s ease-in-out;
     max-height: 0;
     font-size: 0;
     opacity: 0;
@@ -271,7 +272,7 @@ textarea {
 }
 .dictfield-items-hidden {
     overflow: auto;
-    transition: all 0.6s ease-in-out;
+    transition: all 0.4s ease-in-out;
     max-height: 0;
     font-size: 0;
     opacity: 0;
