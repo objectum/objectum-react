@@ -127,7 +127,9 @@ export default class Form extends Component {
 			}
 			if (this.props.values && JSON.stringify (this.props.values) != JSON.stringify (prevProps.values)) {
 				for (let code in this.props.values) {
-					state [code] = this.props.values [code];
+					if (this.props.values [code] !== undefined) {
+						state [code] = this.props.values [code];
+					}
 				}
 			}
 		} catch (err) {
