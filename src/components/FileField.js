@@ -3,9 +3,9 @@
 
 import React, {Component} from "react";
 import {useDropzone} from "react-dropzone";
-import {i18n, newId} from "..";
+import {i18n, newId, loadCSS} from "..";
 import ReactCrop from "react-image-crop";
-import "react-image-crop/dist/ReactCrop.css";
+//import "react-image-crop/dist/ReactCrop.css";
 import Modal from "react-modal";
 
 function FileInput (props) {
@@ -119,8 +119,13 @@ export default class FileField extends Component {
 		}
 	}
 
-	componentDidMount () {
+	async componentDidMount () {
 		Modal.setAppElement ("body");
+
+		if (!window.ReactCropLoaded) {
+			window.ReactCropLoaded = true;
+			await loadCSS (`${this.store.getUrl ()}/public/react-image-crop/ReactCrop.css`);
+		}
 	}
 	
 	async componentDidUpdate (prevProps) {
