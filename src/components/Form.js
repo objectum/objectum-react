@@ -435,6 +435,13 @@ export default class Form extends Component {
 					disabled: child.props.disabled || this.props.disabled,
 					error: this.state [`${code}-error`]
 				};
+				if (this.model && this.model.properties [code]) {
+					let property = this.model.properties [code];
+					
+					if (property.notNull) {
+						props.notNull = true;
+					}
+				}
 				props.rsc = props.rsc || this.props.rsc;
 				
 				let field;

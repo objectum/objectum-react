@@ -116,7 +116,7 @@ class Test extends Component {
 		return (
 			<div className="container">
 				<BooleanField label="BooleanField" error="" />
-				<DictField label="DictField" recs={this.state.recs} />
+				<DictField label="DictField" recs={this.state.recs} notNull />
 				<Form store={store} rsc="record" rid={14197} mid="item">
 					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
 				</Form>

@@ -23,6 +23,18 @@ export default class Property extends Component {
 			
 			this.state.label = o.getLabel ();
 			this.state.type = o.get ("type");
+		} else {
+			let n = 0;
+			let model = this.props.store.getModel (this.state.model);
+			
+			for (let a in model.properties) {
+				let p = model.properties [a];
+				
+				if (p.order > n) {
+					n = p.order;
+				}
+			}
+			this.state.nextOrder = n + 1;
 		}
 	}
 
@@ -76,7 +88,7 @@ export default class Property extends Component {
 									<StringField property="code" label="Code" disabled={!!this.state.rid} notNull regexp={/^[a-zA-Z0-9_]+$/} />
 								</div>
 								<div className="form-group col-md-6">
-									<NumberField property="order" label="Order" />
+									<NumberField property="order" label="Order" value={this.state.rid ? undefined : this.state.nextOrder} />
 								</div>
 							</div>
 							<div className="form-row">
