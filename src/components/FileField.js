@@ -124,7 +124,7 @@ export default class FileField extends Component {
 
 		if (!window.ReactCropLoaded) {
 			window.ReactCropLoaded = true;
-			await loadCSS (`${this.store.getUrl ()}/public/react-image-crop/ReactCrop.css`);
+			await loadCSS (`${this.props.store.getUrl ()}/public/react-image-crop/ReactCrop.css`);
 		}
 	}
 	
