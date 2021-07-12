@@ -120,7 +120,7 @@ class Test extends Component {
 				<Form store={store} rsc="record" rid={14197} mid="item">
 					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
 				</Form>
-				<Action label="Action" modalComponent={Cmp} />
+				<Action label="Action" confirm modalComponent={Cmp} />
 				<Action label="Зависание после rollback" onClick={async () => {
 					await store.startTransaction ();
 					let record = await store.getRecord (1023);

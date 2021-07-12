@@ -22,7 +22,10 @@ export default class Auth extends Component {
 		try {
 			this.setState ({loading: true});
 			await timeout ();
-			
+
+			if (!this.store) {
+				throw new Error ("store not exist");
+			}
 			await this.store.auth ({
 				username: this.state.username,
 				password: require ("crypto").createHash ("sha1").update (this.state.password).digest ("hex").toUpperCase ()

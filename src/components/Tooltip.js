@@ -6,26 +6,28 @@ let tooltips = [];
 
 function createTooltip (id) {
 	tooltips.push (id);
-};
+}
 
 function removeTooltip (id) {
 	if (tooltips.indexOf (id)) {
 		tooltips.splice (tooltips.indexOf (id), 1);
 	}
-};
+}
 
-window.onmousemove = function (e) {
-	let x = e.clientX, y = e.clientY;
-	
-	for (let i = 0; i < tooltips.length; i ++) {
-		let c = document.getElementById (tooltips [i]);
-		
-		if (c) {
-			c.style.top = (y + 10) + "px";
-			c.style.left = (x + 10) + "px";
+if (typeof (window) !== 'undefined') {
+	window.onmousemove = function (e) {
+		let x = e.clientX, y = e.clientY;
+
+		for (let i = 0; i < tooltips.length; i ++) {
+			let c = document.getElementById (tooltips [i]);
+
+			if (c) {
+				c.style.top = (y + 10) + "px";
+				c.style.left = (x + 10) + "px";
+			}
 		}
 	}
-};
+}
 
 export default class Tooltip extends Component {
 	constructor (props) {
