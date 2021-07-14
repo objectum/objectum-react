@@ -115,6 +115,8 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<NumberField label="Number" min={0} max={10} />
+				<FileField label="file" />
 				<BooleanField label="BooleanField" error="" />
 				<DictField label="DictField" recs={this.state.recs} notNull />
 				<Form store={store} rsc="record" rid={14197} mid="item">

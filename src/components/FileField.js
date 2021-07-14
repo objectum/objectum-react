@@ -5,13 +5,12 @@ import React, {Component} from "react";
 import {useDropzone} from "react-dropzone";
 import {i18n, newId, loadCSS} from "..";
 import ReactCrop from "react-image-crop";
-//import "react-image-crop/dist/ReactCrop.css";
 import Modal from "react-modal";
 
 function FileInput (props) {
 	let propertyId = props.propertyId;
 	
-	if (!propertyId) {
+	if (!propertyId && props.model && props.property) {
 		let model = props.store.getModel (props.model);
 		let property = model.properties [props.property];
 		
@@ -122,7 +121,7 @@ export default class FileField extends Component {
 	async componentDidMount () {
 		Modal.setAppElement ("body");
 
-		if (!window.ReactCropLoaded) {
+		if (typeof (window) !== undefined && !window.ReactCropLoaded && this.props.store) {
 			window.ReactCropLoaded = true;
 			await loadCSS (`${this.props.store.getUrl ()}/public/react-image-crop/ReactCrop.css`);
 		}
@@ -192,12 +191,12 @@ export default class FileField extends Component {
 	render () {
 		return <div className="form-group">
 			{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-			<FileInput
+			{this.props.store ? <FileInput
 				id={this.id} onFile={this.onFile} value={this.state.value} store={this.props.store}
 				record={this.props.record} model={this.props.model} property={this.props.property} propertyId={this.props.propertyId} recordId={this.props.recordId}
 				image={this.state.image} error={this.props.error} disabled={this.props.disabled}
 				accept={this.props.accept}
-			/>
+			/> : <div className="alert alert-danger">store not exist</div> }
 			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 			{this.state.src && <Modal
 				isOpen={this.state.showModal}
