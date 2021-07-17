@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {getHash, setHash, addHashListener, removeHashListener, timeout, newId} from "./common";
+import {getHash, setHash, addHashListener, removeHashListener, timeout, newId} from "../modules/common";
 import Action from "./Action";
 import Cell from "./Cell";
 import Filters from "./Filters";
