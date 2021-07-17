@@ -81,7 +81,7 @@ export default class StringField extends Component {
 				if (this.state.value) {
 					this.quill.clipboard.dangerouslyPasteHTML (this.state.value);
 				}
-				this.quill.on ("text-change", function (delta, oldDelta, source) {
+				this.quill.on ("text-change", (delta, oldDelta, source) => {
 					let value = this.quill.root.innerHTML;
 					this.setState ({value});
 					
