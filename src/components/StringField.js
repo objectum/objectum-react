@@ -19,7 +19,7 @@ export default class StringField extends Component {
 			this.state.regexp = eval (this.state.regexp);
 		}
 		this.state.lastValidValue = this.state.value;
-		this.store = getStore ();
+		this.store = getStore () || this.props.store;
 		this.id = "stringfield-" + newId ();
 	}
 	
@@ -53,6 +53,9 @@ export default class StringField extends Component {
 	}
 	
 	async componentDidMount () {
+		if (!this.store && this.props.store) {
+			this.store = this.props.store;
+		}
 		if (this.props.wysiwyg) {
 			if (!window.Quill) {
 				await loadCSS (`${this.store.getUrl ()}/public/quill/quill.snow.css`);

@@ -116,7 +116,7 @@ class Test extends Component {
 		return (
 			<div className="container">
 				<NumberField label="Number" min={0} max={10} />
-				<FileField label="file" />
+				<FileField store={store} label="file" />
 				<BooleanField label="BooleanField" error="" />
 				<DictField label="DictField" recs={this.state.recs} notNull />
 				<Form store={store} rsc="record" rid={14197} mid="item">
@@ -140,6 +140,7 @@ class Test extends Component {
 						</Form>
 					</div>
 				</div>
+				<Grid store={store} query="q2" params={{filter: `{"a": "id"} is not null`}} />
 			</div>
 		);
 	}
