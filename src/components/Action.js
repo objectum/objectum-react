@@ -260,7 +260,7 @@ export default class Action extends Component {
 				isOpen={this.state.showModal}
 				style={
 					{
-						content: this.props.modalStyle || OBJECTUM_APP.sidebar ? {
+						content: this.props.modalStyle || (window.OBJECTUM_APP && window.OBJECTUM_APP.sidebar) ? {
 							marginLeft: "21em"
 						} : {}
 					}
