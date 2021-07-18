@@ -75,7 +75,8 @@ export default class Action extends Component {
 				}, 200);
 				
 				try {
-					let promise = handler ({
+					let promise = handler.call (this, {
+						store: this.props.store,
 						progress: ({label, value, max}) => {
 							this.setState ({label, value, max});
 						},
