@@ -115,6 +115,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<DateField label="Timestamp" showTime />
 				<NumberField label="Number" min={0} max={10} />
 				<FileField store={store} label="file" />
 				<BooleanField label="BooleanField" error="" />
@@ -122,7 +123,7 @@ class Test extends Component {
 				<Form store={store} rsc="record" rid={14197} mid="item">
 					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
 				</Form>
-				<Action label="Action" confirm modalComponent={Cmp} />
+				<Action label="Action" modalComponent={Cmp} />
 				<Action label="Зависание после rollback" onClick={async () => {
 					await store.startTransaction ();
 					let record = await store.getRecord (1023);

@@ -145,7 +145,7 @@ export default class DateSelector extends Component {
 		return <div className="d-flex justify-content-center">
 			<div className="my-auto mr-1">{i18n ("Time")}</div>
 			<select
-				className="custom-select" style={{width: "4em"}}
+				className="custom-select" style={{width: "5em"}}
 				value={hour}
 				onChange={val => this.onChange (new Date (this.state.value.setHours (val.target.value)))}
 			>
@@ -154,7 +154,7 @@ export default class DateSelector extends Component {
 				})}
 			</select>
 			<select
-				className="ml-1 custom-select" style={{width: "4em"}}
+				className="ml-1 custom-select" style={{width: "5em"}}
 				value={minute}
 				onChange={val => this.onChange (new Date (this.state.value.setMinutes (val.target.value)))}
 			>
