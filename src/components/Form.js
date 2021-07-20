@@ -83,8 +83,10 @@ export default class Form extends Component {
 				}
 			}
 			// new record
-			if (!this.model && this.props.rsc == "record" && this.props.mid) {
+			//if (!this.model && this.props.rsc == "record" && this.props.mid) {
+			if (!this.props.rid && this.props.rsc == "record" && this.props.mid) {
 				initStateValues = true;
+				state._rid = null;
 				this.model = this.props.store.getModel (this.props.mid);
 			}
 			if (this.model && !this.regModel) {
