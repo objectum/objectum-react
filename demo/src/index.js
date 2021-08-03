@@ -117,14 +117,10 @@ class Test extends Component {
 			<div className="container">
 				<JsonField
 					label="My options"
-					value='{"p1": true, "p2": false}'
 					col
 					multi
 					props={[
-						{prop: "p1", label: "P1", component: BooleanField, col: 3},
-						{prop: "p2", label: "P2", component: BooleanField, col: 3},
-						{prop: "p3", label: "P3", component: BooleanField, col: 3},
-						{prop: "p4", label: "P4", component: StringField, col: 3}
+						{prop: "p4", component: StringField, col: 3}
 					]}
 					multi
 					onChange={({value}) => console.log (value)}

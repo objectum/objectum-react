@@ -87,7 +87,7 @@ export default class JsonField extends Component {
 			return <Group {...this.props}>
 				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 				{this.state.value.map ((rec, i) => {
-					return <div key={i} className="d-flex border p-1 mb-1">
+					return <div key={i} className="d-flex border p-1 mb-1 align-items-center">
 						<Action label={i18n ("Remove")} icon="fas fa-minus-circle" btnClassName="btn btn-primary btn-sm mr-2" onClick={() => this.onRemove (i)} />
 						{this.renderFields (rec, `-${i}`)}
 					</div>;
