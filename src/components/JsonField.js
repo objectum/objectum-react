@@ -9,7 +9,7 @@ export default class JsonField extends Component {
 		super (props);
 		
 		this.state = {
-			value: this.props.multi ? [{}] : {}
+			value: this.props.multi ? [] : {}
 		};
 		if (this.props.value) {
 			this.state.value = typeof (this.props.value) == "string" ? JSON.parse (this.props.value) : this.props.value;
