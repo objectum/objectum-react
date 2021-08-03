@@ -115,6 +115,25 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<JsonField
+					label="My options"
+					value='{"p1": true, "p2": false}'
+					col
+					multi
+					props={[
+						{prop: "p1", label: "P1", component: BooleanField, col: 3},
+						{prop: "p2", label: "P2", component: BooleanField, col: 3},
+						{prop: "p3", label: "P3", component: BooleanField, col: 3},
+						{prop: "p4", label: "P4", component: StringField, col: 3}
+					]}
+					multi
+					onChange={({value}) => console.log (value)}
+				/>
+				<div className="border m-1 p-1">
+					<Form store={store} rsc="record" mid="item" rid={1023}>
+						<Field property="name" />
+					</Form>
+				</div>
 				<DateField label="Timestamp" showTime />
 				<NumberField label="Number" min={0} max={10} />
 				<FileField store={store} label="file" />
@@ -141,7 +160,6 @@ class Test extends Component {
 						</Form>
 					</div>
 				</div>
-				<Grid store={store} query="q2" params={{filter: `{"a": "id"} is not null`}} />
 			</div>
 		);
 	}

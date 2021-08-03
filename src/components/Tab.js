@@ -11,7 +11,7 @@ export default class Tab extends Component {
 	
 	render () {
 		if (this.props.children) {
-			return <Fade>
+			return <Fade className={this.props.className || ""}>
 				<div className="border border-top-0">
 					{this.props.children}
 				</div>

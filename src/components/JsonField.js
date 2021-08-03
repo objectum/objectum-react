@@ -2,93 +2,103 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {i18n, newId} from "..";
+import {i18n, newId, Group, Action} from "..";
 
 export default class JsonField extends Component {
 	constructor (props) {
 		super (props);
 		
 		this.state = {
-			value: ""
+			value: this.props.multi ? [{}] : {}
 		};
 		if (this.props.value) {
-			this.state.value = this.props.value;
+			this.state.value = typeof (this.props.value) == "string" ? JSON.parse (this.props.value) : this.props.value;
 			
-			let o = JSON.parse (this.props.value);
-			
-			for (let a in o) {
-				this.state [a] = o [a];
+			if (this.props.multi && this.state.value && !Array.isArray (this.state.value)) {
+				this.state.value = [this.state.value];
 			}
 		}
 		this.id = newId ();
 	}
-	
+
 	onChange = ({code, value}) => {
-		let o = {};
-		
-		this.props.props.forEach (prop => {
-			o [prop.prop] = prop.prop == code ? value : this.state [prop.prop];
-		});
-		o = JSON.stringify (o);
-		
-		this.setState ({[code]: value, value: o});
-		
-		if (this.props.onChange) {
-			this.props.onChange ({code: this.props.property, value: o});
+		if (this.props.multi) {
+			let [prop, i] = code.split ("-");
+			let o = JSON.parse (JSON.stringify (this.state.value));
+			o [i][prop] = value;
+			this.setValue (o);
+		} else {
+			let o = JSON.parse (JSON.stringify (this.state.value));
+			o [code] = value;
+			this.setValue (o);
 		}
 	}
 	
 	async componentDidUpdate (prevProps) {
-		if (prevProps.value !== this.props.value) {
-			let state = {value: this.props.value};
-			
-			if (this.props.value) {
-				let o = JSON.parse (this.props.value);
-				
-				for (let a in o) {
-					state [a] = o [a];
-				}
+		let prevValue = typeof (prevProps.value) == "string" ? prevProps.value : JSON.stringify (prevProps.value);
+		let value = typeof (this.props.value) == "string" ? this.props.value : JSON.stringify (this.props.value);
+
+		if (prevValue !== value) {
+			let state = {value: JSON.parse (value), refresh: !this.state.refresh};
+
+			if (this.props.multi && state.value && !Array.isArray (state.value)) {
+				state.value = [state.value];
 			}
 			this.setState (state);
 		}
 	}
 
-	renderFields () {
-		if (this.props.col) {
-			return (
-				<div className="row">
-					{this.props.props.map ((o, i) => {
-						let Cmp = o.component;
-						
-						return (
-							<div key={i} className={`col-${o.col || this.props.col} ${i ? "mt-1" : ""}`}>
-								<Cmp {...o} label={o.label} property={o.prop} value={this.state [o.prop]} onChange={this.onChange} disabled={this.props.disabled}/>
-							</div>
-						);
-					})}
-				</div>
-			);
-		} else {
-			return this.props.props.map ((o, i) => {
-				let Cmp = o.component;
-				
-				return (
-					<div key={i} className={i ? "mt-1" : ""}>
-						<Cmp {...o} label={o.label} property={o.prop} value={this.state [o.prop]} onChange={this.onChange} disabled={this.props.disabled}/>
-					</div>
-				);
-			});
+	renderFields (rec, suffix = "") {
+		let items = this.props.props.map ((o, i) => {
+			let Cmp = o.component;
+
+			return <div key={i} className={`${this.props.col ? `col-${o.col || this.props.col}` : ""} ${i ? "mt-1" : ""}`}>
+				<Cmp {...o} label={o.label} property={o.prop + suffix} value={rec [o.prop]} onChange={this.onChange} disabled={this.props.disabled}/>
+			</div>;
+		});
+		return <div className={this.props.col ? "row" : ""}>
+			{items}
+		</div>;
+	}
+
+	setValue (value) {
+		this.setState ({value});
+
+		if (this.props.onChange) {
+			this.props.onChange ({code: this.props.property, value: JSON.stringify (value)});
 		}
 	}
-	
+
+	onCreate = () => {
+		this.setValue ([...JSON.parse (JSON.stringify (this.state.value)), {}]);
+	}
+
+	onRemove = (i) => {
+		let value = JSON.parse (JSON.stringify (this.state.value));
+		value.splice (i, 1);
+		this.setValue (value);
+	}
+
 	render () {
 		if (!this.props.props) {
 			return <div className="alert alert-danger">props not exist</div>
 		}
+		if (this.props.multi) {
+			return <Group {...this.props}>
+				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+				{this.state.value.map ((rec, i) => {
+					return <div key={i} className="d-flex border p-1 mb-1">
+						<Action label={i18n ("Remove")} icon="fas fa-minus-circle" btnClassName="btn btn-primary btn-sm mr-2" onClick={() => this.onRemove (i)} />
+						{this.renderFields (rec, `-${i}`)}
+					</div>;
+				})}
+				<Action label={i18n ("Create")} icon="fas fa-plus-circle" btnClassName="btn btn-primary btn-sm" onClick={this.onCreate} />
+			</Group>;
+		}
 		return <div>
 			{this.props.label && <div className="mb-1"><strong>{i18n (this.props.label)}</strong></div>}
 			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
-			{this.renderFields ()}
+			{this.renderFields (this.state.value)}
 		</div>;
 	}
 };
