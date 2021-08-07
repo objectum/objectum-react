@@ -183,15 +183,18 @@ class Filter extends Component {
 			showValue = false;
 		}
 		return <div className="border p-1 text-center mt-1">
-			<button type="button" className="btn btn-outline-primary btn-sm mb-1" onClick={this.onClick}><i className="fas fa-minus mr-2" />{i18n ("Remove")}</button>
-			<select id="column" className="filter-select custom-select" value={this.state.column} onChange={this.onChange}>
-				{[{code: "", name: i18n ("Choose column")}, ...this.props.cols].map ((rec, i) => {
-					return (
-						<option value={rec.code} key={"column-" + i}>{i18n (rec.name)}</option>
-					);
-				})}
-			</select>
-			<br />
+			<div className="input-group">
+				<div className="input-group-prepend">
+					<button type="button" className="btn btn-outline-primary" onClick={this.onClick} title={i18n ("Remove")}><i className="fas fa-minus" /></button>
+				</div>
+				<select id="column" className="filter-select custom-select" value={this.state.column} onChange={this.onChange}>
+					{[{code: "", name: i18n ("Choose column")}, ...this.props.cols].map ((rec, i) => {
+						return (
+							<option value={rec.code} key={"column-" + i}>{i18n (rec.name)}</option>
+						);
+					})}
+				</select>
+			</div>
 			{this.state.column && <select id="operator" className="filter-select custom-select mt-1" value={this.state.operator} onChange={this.onChange} disabled={!this.state.column}>
 				{[{code: "", name: i18n ("Choose operator")}, ...this.state.operatorRecs].map ((rec, i) => {
 					return (
@@ -199,7 +202,6 @@ class Filter extends Component {
 					);
 				})}
 			</select>}
-			<br />
 			{showValue && <div className="mt-1">{this.renderValue ()}</div>}
 		</div>;
 	}

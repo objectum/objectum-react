@@ -115,6 +115,15 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<div className="input-group">
+					<div className="input-group-prepend">
+						<button className="btn btn-outline-secondary" type="button">Button</button>
+					</div>
+					<select className="filter-select custom-select">
+						<option value="1">1</option>
+					</select>
+				</div>
+
 				<JsonField
 					label="My options"
 					col
