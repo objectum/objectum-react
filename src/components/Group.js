@@ -9,7 +9,7 @@ export default class Group extends Component {
 		super (props);
 		
 		this.state = {
-			expanded: this.props.collapsible ? this.props.expanded : true
+			expanded: this.props.collapsible ? (this.props.expanded || false) : true
 		};
 	}
 	
