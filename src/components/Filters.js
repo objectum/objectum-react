@@ -183,7 +183,7 @@ class Filter extends Component {
 			showValue = false;
 		}
 		return <div className="border p-1 text-center mt-1">
-			<button type="button" className="btn btn-link mb-1" onClick={this.onClick}><i className="fas fa-minus mr-2" /><span className="text-dark"> {i18n ("Remove")}</span></button>
+			<button type="button" className="btn btn-outline-primary btn-sm mb-1" onClick={this.onClick}><i className="fas fa-minus mr-2" />{i18n ("Remove")}</button>
 			<select id="column" className="filter-select custom-select" value={this.state.column} onChange={this.onChange}>
 				{[{code: "", name: i18n ("Choose column")}, ...this.props.cols].map ((rec, i) => {
 					return (
@@ -393,12 +393,12 @@ export default class Filters extends Component {
 		let savedFilters = _keys (gridOpts.filters || {});
 		
 		return <div>
-			<div className="mt-1 ml-2 form-inline">
+			<div className="mt-1 ml-2 d-flex align-items-center">
 				<strong className="">{i18n ("Filters")}</strong>
-				<button type="button" className="btn btn-link ml-3" onClick={this.onAdd}><i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Add filter")}</span></button>
-				<button type="button" className="btn btn-link ml-1" onClick={this.onDock}>
+				<button type="button" className="btn btn-outline-primary btn-sm ml-3 " onClick={this.onAdd}><i className="fas fa-plus mr-2" />{i18n ("Add filter")}</button>
+				<button type="button" className="btn btn-outline-primary btn-sm ml-1" onClick={this.onDock}>
 					<i className={`fas ${this.props.dockFilters == "bottom" ? "fa-arrow-up" : "fa-arrow-down"} mr-2`} />
-					<span className="text-dark">{this.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}</span>
+					{this.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}
 				</button>
 			</div>
 			<div className="mx-1 mb-1 row flex-row">
@@ -410,27 +410,29 @@ export default class Filters extends Component {
 					);
 				})}
 			</div>
-			<Group className="m-1 p-1" label={i18n ("Saved filters")} collapsible>
-				<div className="form-inline">
-					<input type="text" className="form-control filter-name-field" value={this.state.filterName} placeholder={i18n ("Filter name")} onChange={this.onChangeFilterName} />
-					<button type="button" className="btn btn-link" onClick={this.onCreateFilter} disabled={!this.state.filterName}>
-						<i className="fas fa-plus mr-2" /><span className="text-dark">{i18n ("Create")}</span>
-					</button>
-				</div>
-				<div className="form-inline mt-1">
-					<select className="form-control filter-name-field" value={this.state.filter} onChange={this.onSelectFilter}>
-						{["-", ...savedFilters].map ((f, i) => {
-							return (
-								<option value={f} key={i}>{f}</option>
-							);
-						})}
-					</select>
-					<button type="button" className="btn btn-link" onClick={this.onSaveFilter} disabled={this.saveDisabled ()}>
-						<i className="fas fa-check mr-2" /><span className="text-dark">{i18n ("Save")}</span>
-					</button>
-					<button type="button" className="btn btn-link" onClick={this.onRemoveFilter} disabled={!this.state.filter || this.state.filter == "-"}>
-						<i className="fas fa-minus mr-2" /><span className="text-dark">{i18n ("Remove")}</span>
-					</button>
+			<Group className="p-1" label={i18n ("Saved filters")}>
+				<div className="d-flex overflow-auto">
+					<div className="d-flex border p-1">
+						<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onCreateFilter} disabled={!this.state.filterName} title={i18n ("Create")}>
+							<i className="fas fa-plus" />
+						</button>
+						<input type="text" className="ml-1 form-control filter-name-field" value={this.state.filterName} placeholder={i18n ("Name")} onChange={this.onChangeFilterName} size={10} />
+					</div>
+					<div className="d-flex border p-1 ml-1">
+						<select className="form-control filter-name-field" value={this.state.filter} onChange={this.onSelectFilter}>
+							{["-", ...savedFilters].map ((f, i) => {
+								return (
+									<option value={f} key={i}>{f}</option>
+								);
+							})}
+						</select>
+						<button type="button" className="ml-1 btn btn-outline-primary btn-sm" onClick={this.onSaveFilter} disabled={this.saveDisabled ()} title={i18n ("Save")}>
+							<i className="fas fa-check" />
+						</button>
+						<button type="button" className="ml-1 btn btn-outline-primary btn-sm" onClick={this.onRemoveFilter} disabled={!this.state.filter || this.state.filter == "-"} title={i18n ("Remove")}>
+							<i className="fas fa-minus" />
+						</button>
+					</div>
 				</div>
 			</Group>
 		</div>;
