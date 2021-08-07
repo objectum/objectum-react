@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {DictField, getDateString, i18n} from "..";
+import {DictField, getDateString, i18n, Group} from "..";
 import _isEmpty from "lodash.isempty";
 import _find from "lodash.find";
 import _keys from "lodash.keys";
@@ -410,7 +410,7 @@ export default class Filters extends Component {
 					);
 				})}
 			</div>
-			<div className="m-1 p-1 border">
+			<Group className="m-1 p-1" label={i18n ("Saved filters")} collapsible>
 				<div className="form-inline">
 					<input type="text" className="form-control filter-name-field" value={this.state.filterName} placeholder={i18n ("Filter name")} onChange={this.onChangeFilterName} />
 					<button type="button" className="btn btn-link" onClick={this.onCreateFilter} disabled={!this.state.filterName}>
@@ -432,7 +432,7 @@ export default class Filters extends Component {
 						<i className="fas fa-minus mr-2" /><span className="text-dark">{i18n ("Remove")}</span>
 					</button>
 				</div>
-			</div>
+			</Group>
 		</div>;
 	}
 };

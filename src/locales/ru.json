@@ -184,5 +184,6 @@
 	"model has properties (remove them first)": "модель содержит свойства (сначала удалите их)",
 	"parent model has properties (parent model must be namespace, without properties)": "родительская модель содержит свойства (родительская модель должна быть пространством имен, без свойств)",
 	"model has child models (this model is namespace)": "модель содержит дочерние модели (эта модель является пространством имен)",
-	"unsupported type": "неподдерживаемый тип"
+	"unsupported type": "неподдерживаемый тип",
+	"saved filters": "сохраненные фильтры"
 }
