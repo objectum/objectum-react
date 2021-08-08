@@ -199,7 +199,7 @@ export default class Action extends Component {
 		return <div className={this.props.className}>
 			<button
 				type="button"
-				className={this.props.btnClassName || "btn btn-primary btn-labeled mr-1 mb-1"}
+				className={this.props.btnClassName || "btn btn-primary btn-labeled mr-1"}
 				onClick={this.onClick}
 				disabled={this.getDisabled ()}
 				ref={this._refs ["button"]}
