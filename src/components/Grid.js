@@ -863,6 +863,9 @@ export default class Grid extends Component {
 	}
 	
 	render () {
+		if (!this.props.store) {
+			return <div className="alert alert-danger">store not exist</div>;
+		}
 		let gridChildren = this.renderChildren (this.props.children);
 		let filters = <div className="border-top">
 			<Filters

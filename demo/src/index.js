@@ -115,25 +115,6 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<div className="input-group">
-					<div className="input-group-prepend">
-						<button className="btn btn-outline-secondary" type="button">Button</button>
-					</div>
-					<select className="filter-select custom-select">
-						<option value="1">1</option>
-					</select>
-				</div>
-
-				<JsonField
-					label="My options"
-					col
-					multi
-					props={[
-						{prop: "p4", component: StringField, col: 3}
-					]}
-					multi
-					onChange={({value}) => console.log (value)}
-				/>
 				<div className="border m-1 p-1">
 					<Form store={store} rsc="record" mid="item" rid={1023}>
 						<Field property="name" />

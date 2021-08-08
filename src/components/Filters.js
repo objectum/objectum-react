@@ -137,19 +137,19 @@ class Filter extends Component {
 		if (t >= 1000) {
 			if (this.col.recs) {
 				let property = this.props.store.getProperty (this.col.property);
-				return <DictField id="value" value={this.state.value} onChange={this.onChange} store={this.props.store} model={this.col.model} property={property.get ("code")} />
+				return <DictField sm id="value" value={this.state.value} onChange={this.onChange} store={this.props.store} model={this.col.model} property={property.get ("code")} />
 			} else {
 				t = 2;
 			}
 		}
 		if (t == 1 || t == 5) {
-			return <input id="value" type="text" className="filter-select mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
+			return <input id="value" type="text" className="form-control form-control-sm  mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
 		}
 		if (t == 2) {
-			return <input id="value" type="number" className="filter-select mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
+			return <input id="value" type="number" className="form-control form-control-sm  mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
 		}
 		if (t == 3) {
-			return <input id="value" type="date" className="filter-select mt-1" value={getDateString (this.state.value)} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
+			return <input id="value" type="date" className="form-control form-control-sm  mt-1" value={getDateString (this.state.value)} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
 		}
 		if (t == 4) {
 			return <div />;
@@ -184,18 +184,18 @@ class Filter extends Component {
 		}
 		return <div className="border p-1 text-center mt-1">
 			<div className="input-group">
-				<div className="input-group-prepend">
-					<button type="button" className="btn btn-outline-primary" onClick={this.onClick} title={i18n ("Remove")}><i className="fas fa-minus" /></button>
-				</div>
-				<select id="column" className="filter-select custom-select" value={this.state.column} onChange={this.onChange}>
+				<select id="column" className="form-control form-control-sm" value={this.state.column} onChange={this.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...this.props.cols].map ((rec, i) => {
 						return (
 							<option value={rec.code} key={"column-" + i}>{i18n (rec.name)}</option>
 						);
 					})}
 				</select>
+				<div className="input-group-append">
+					<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onClick} title={i18n ("Remove")}><i className="fas fa-minus" /></button>
+				</div>
 			</div>
-			{this.state.column && <select id="operator" className="filter-select custom-select mt-1" value={this.state.operator} onChange={this.onChange} disabled={!this.state.column}>
+			{this.state.column && <select id="operator" className="form-control form-control-sm mt-1" value={this.state.operator} onChange={this.onChange} disabled={!this.state.column}>
 				{[{code: "", name: i18n ("Choose operator")}, ...this.state.operatorRecs].map ((rec, i) => {
 					return (
 						<option value={rec.code} key={"operator-" + i}>{rec.name}</option>
@@ -403,7 +403,7 @@ export default class Filters extends Component {
 					{this.props.dockFilters == "bottom" ? i18n ("Filters on top") : i18n ("Filters on bottom")}
 				</button>
 			</div>
-			<div className="mx-1 mb-1 row flex-row">
+			<div className="mx-1 row flex-row">
 				{this.state.filters.map (rec => {
 					return (
 						<div className="mr-1 filter-block" key={"div-filter-" + rec.id}>
@@ -413,27 +413,33 @@ export default class Filters extends Component {
 				})}
 			</div>
 			<Group className="p-1" label={i18n ("Saved filters")}>
-				<div className="d-flex overflow-auto">
-					<div className="d-flex border p-1">
-						<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onCreateFilter} disabled={!this.state.filterName} title={i18n ("Create")}>
-							<i className="fas fa-plus" />
-						</button>
-						<input type="text" className="ml-1 form-control filter-name-field" value={this.state.filterName} placeholder={i18n ("Name")} onChange={this.onChangeFilterName} size={10} />
+				<div className="form-inline overflow-auto">
+					<div className="input-group">
+						<input type="text" className="form-control form-control-sm filter-name-field" value={this.state.filterName} placeholder={i18n ("Name")} onChange={this.onChangeFilterName} />
+						<div className="input-group-append">
+							<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onCreateFilter} disabled={!this.state.filterName} title={i18n ("Create")}>
+								<i className="fas fa-plus" />
+							</button>
+						</div>
 					</div>
-					<div className="d-flex border p-1 ml-1">
-						<select className="form-control filter-name-field" value={this.state.filter} onChange={this.onSelectFilter}>
+					<div className="input-group ml-1">
+						<div className="input-group-prepend">
+							<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onSaveFilter} disabled={this.saveDisabled ()} title={i18n ("Save")}>
+								<i className="fas fa-check" />
+							</button>
+						</div>
+						<select className="form-control form-control-sm filter-name-field" value={this.state.filter} onChange={this.onSelectFilter}>
 							{["-", ...savedFilters].map ((f, i) => {
 								return (
 									<option value={f} key={i}>{f}</option>
 								);
 							})}
 						</select>
-						<button type="button" className="ml-1 btn btn-outline-primary btn-sm" onClick={this.onSaveFilter} disabled={this.saveDisabled ()} title={i18n ("Save")}>
-							<i className="fas fa-check" />
-						</button>
-						<button type="button" className="ml-1 btn btn-outline-primary btn-sm" onClick={this.onRemoveFilter} disabled={!this.state.filter || this.state.filter == "-"} title={i18n ("Remove")}>
-							<i className="fas fa-minus" />
-						</button>
+						<div className="input-group-append">
+							<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onRemoveFilter} disabled={!this.state.filter || this.state.filter == "-"} title={i18n ("Remove")}>
+								<i className="fas fa-minus" />
+							</button>
+						</div>
 					</div>
 				</div>
 			</Group>
