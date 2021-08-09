@@ -36,9 +36,9 @@ class Filter extends Component {
 		if (t >= 1000) {
 			if (this.col.recs) {
 				operatorRecs = [{
-					code: "=", name: "="
+					code: "=", name: i18n ("equal")
 				}, {
-					code: "<>", name: "<>"
+					code: "<>", name: i18n ("not equal")
 				}, {
 					code: "is null", name: i18n ("null")
 				}, {
@@ -50,9 +50,9 @@ class Filter extends Component {
 		}
 		if (t == 1 || t == 5) {
 			operatorRecs = [{
-				code: "=", name: "="
+				code: "=", name: i18n ("equal")
 			}, {
-				code: "<>", name: "<>"
+				code: "<>", name: i18n ("not equal")
 			}, {
 				code: "like", name: i18n ("like")
 			}, {
@@ -65,17 +65,17 @@ class Filter extends Component {
 		}
 		if (t == 2 || t == 3) {
 			operatorRecs = [{
-				code: "=", name: "="
+				code: "=", name: i18n ("equal")
 			}, {
-				code: ">", name: ">"
+				code: ">", name: i18n ("greater than")
 			}, {
-				code: "<", name: "<"
+				code: "<", name: i18n ("less than")
 			}, {
-				code: ">=", name: ">="
+				code: ">=", name: i18n ("greater than or equal")
 			}, {
-				code: "<=", name: "<="
+				code: "<=", name: i18n ("less than or equal")
 			}, {
-				code: "<>", name: "<>"
+				code: "<>", name: i18n ("not equal")
 			}, {
 				code: "is null", name: i18n ("null")
 			}, {

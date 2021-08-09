@@ -185,5 +185,11 @@
 	"parent model has properties (parent model must be namespace, without properties)": "родительская модель содержит свойства (родительская модель должна быть пространством имен, без свойств)",
 	"model has child models (this model is namespace)": "модель содержит дочерние модели (эта модель является пространством имен)",
 	"unsupported type": "неподдерживаемый тип",
-	"saved filters": "сохраненные фильтры"
+	"saved filters": "сохраненные фильтры",
+	"equal": "равно",
+	"not equal": "не равно",
+	"greater than": "больше",
+	"greater than or equal": "больше или равно",
+	"less than": "меньше",
+	"less than or equal": "меньше или равно"
 }
