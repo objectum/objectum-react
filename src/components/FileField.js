@@ -93,7 +93,7 @@ function FileInput (props) {
 		}
 	}
 	return <div className={`border p-1 ${props.error ? "border-danger" : ""}`}>
-		{props.disabled ? <input disabled className="w-100" /> : <div {...getRootProps ({className: "dropzone"})}>
+		{props.disabled ? null : <div {...getRootProps ({className: "dropzone"})}>
 			<input {...getInputProps ()} />
 			<div className="bg-light p-1">{i18n ("Drag 'n' drop some file here, or click to select file")}</div>
 		</div>}
