@@ -169,6 +169,9 @@ export default class DictField extends Component {
 		let value = val.target.id;
 		
 		if (!isNaN (value)) {
+			if (this.state.records && this.state.records.find (record => record.id == value)?.unselectable) {
+				return;
+			}
 			value = Number (value);
 		}
 		let state = {

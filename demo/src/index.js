@@ -69,12 +69,12 @@ class Test extends Component {
 			recs: [
 				{id: 1, name: "1"},
 				{id: 2, name: "2", getLabel: () => "2 (id: 2)"},
-				{id: 3, name: "3", parent: 2},
-				{id: 4, name: "4", parent: 3},
-				{id: 5, name: "5555 6 7 8 9 0", parent: 4},
-				{id: 6, name: "6"},
-				{id: 7, name: "7"},
-				{id: 8, name: "8"},
+				{id: 3, name: "3"},
+				{id: 4, name: "4"},
+				{id: 5, name: "5555 6 7 8 9 0"},
+				{id: 6, name: "6", group: 3},
+				{id: 7, name: "7", group: 3},
+				{id: 8, name: "8", group: 3},
 				{id: 9, name: "9"},
 				{id: 10, name: "10"},
 				{id: 11, name: "11"},
@@ -124,7 +124,7 @@ class Test extends Component {
 				<NumberField label="Number" min={0} max={10} />
 				<FileField store={store} label="file" description="Description foo bar" maxSize={12345} recordId={1023} propertyId={1028} value="1.jpg" disabled />
 				<BooleanField label="BooleanField" error="" />
-				<DictField label="DictField" recs={this.state.recs} notNull />
+				<DictField label="DictField" recs={this.state.recs} notNull groupProperty="group" />
 				<Form store={store} rsc="record" rid={14197} mid="item">
 					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
 				</Form>
