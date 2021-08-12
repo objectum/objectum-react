@@ -122,7 +122,7 @@ class Test extends Component {
 				</div>
 				<DateField label="Timestamp" showTime />
 				<NumberField label="Number" min={0} max={10} />
-				<FileField store={store} label="file" />
+				<FileField store={store} label="file" description="Description foo bar" maxSize={12345} />
 				<BooleanField label="BooleanField" error="" />
 				<DictField label="DictField" recs={this.state.recs} notNull />
 				<Form store={store} rsc="record" rid={14197} mid="item">

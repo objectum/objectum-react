@@ -1,7 +1,7 @@
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 
-import React, {Component} from "react";
+import React, {Component, useState, useEffect} from "react";
 import {useDropzone} from "react-dropzone";
 import {i18n, newId, loadCSS} from "..";
 import ReactCrop from "react-image-crop";
@@ -31,13 +31,15 @@ function FileInput (props) {
 		opts.accept = props.accept;
 	}
 	const {acceptedFiles, getRootProps, getInputProps} = useDropzone (opts);
+/*
 	let file;
-	
+
 	if (acceptedFiles.length) {
 		file = (<div>{acceptedFiles [0].path} - {acceptedFiles [0].size} {i18n ("bytes")}</div>);
 		
 		if (acceptedFiles [0].path != props.value) {
 			setTimeout (() => {
+				console.log (acceptedFiles [0].size);
 				props.onFile (props.id, acceptedFiles [0]);
 			}, 1);
 		}
@@ -48,12 +50,55 @@ function FileInput (props) {
 			file = <div>{props.value}</div>;
 		}
 	}
+*/
+	let [info, setInfo] = useState (props.value || "");
+	let [error, setError] = useState (null);
+	let fileEl;
+
+	function getSize (n) {
+		if (n < 1024 * 1024) {
+			return `${(props.maxSize / 1024).toFixed (1)} KB`;
+		}
+		if (n < 1024 * 1024 * 1024) {
+			return `${(props.maxSize / 1024 / 1024).toFixed (1)} MB`;
+		}
+		if (n < 1024 * 1024 * 1024 * 1024) {
+			return `${(props.maxSize / 1024 / 1024 / 1024).toFixed (1)} GB`;
+		}
+	}
+	useEffect (() => {
+		if (acceptedFiles.length) {
+			let acceptedFile = acceptedFiles [0];
+
+			if (acceptedFile.path != props.value) {
+				if (props.maxSize && acceptedFile.size > props.maxSize) {
+					return setError (`${i18n ("Maximum file size")}: ${getSize (props.maxSize)}`);
+				}
+				if (error) {
+					setError ("");
+				}
+				setInfo (`${acceptedFile.path} - ${acceptedFile.size} ${i18n ("bytes")}`);
+				props.onFile (props.id, acceptedFile);
+			}
+		}
+	}, [acceptedFiles.length]);
+
+	if (info) {
+		fileEl = info;
+	} else if (props.value) {
+		if (recordId) {
+			fileEl = <div><a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a></div>;
+		} else {
+			fileEl = <div>{props.value}</div>;
+		}
+	}
 	return <div className={`border p-1 ${props.error ? "border-danger" : ""}`}>
 		{props.disabled ? <input disabled className="w-100" /> : <div {...getRootProps ({className: "dropzone"})}>
 			<input {...getInputProps ()} />
 			<div className="bg-light p-1">{i18n ("Drag 'n' drop some file here, or click to select file")}</div>
 		</div>}
-		<div className="ml-2"><strong>{file}</strong></div>
+		<div className="ml-2"><strong>{fileEl}</strong></div>
+		{error && <div className="text-danger ml-2"><small>{error}</small></div>}
 	</div>;
 };
 
@@ -103,7 +148,7 @@ export default class FileField extends Component {
 	
 	onFile = (id, file) => {
 		this.setState ({value: file.path});
-		
+
 		if (this.state.image) {
 			const reader = new FileReader ();
 			
@@ -196,8 +241,10 @@ export default class FileField extends Component {
 				record={this.props.record} model={this.props.model} property={this.props.property} propertyId={this.props.propertyId} recordId={this.props.recordId}
 				image={this.state.image} error={this.props.error} disabled={this.props.disabled}
 				accept={this.props.accept}
+				maxSize={this.props.maxSize}
 			/> : <div className="alert alert-danger">store not exist</div> }
-			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
+			{this.props.error ? <div className="invalid-feedback">{this.props.error}</div> : null}
+			{this.props.description && <div className="text-muted"><small>{this.props.description}</small></div>}
 			{this.state.src && <Modal
 				isOpen={this.state.showModal}
 				style={{content: {marginLeft: "21em"}}}

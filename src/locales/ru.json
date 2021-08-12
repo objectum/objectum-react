@@ -191,5 +191,6 @@
 	"greater than": "больше",
 	"greater than or equal": "больше или равно",
 	"less than": "меньше",
-	"less than or equal": "меньше или равно"
+	"less than or equal": "меньше или равно",
+	"maximum file size": "максимальный размер файла"
 }
