@@ -51,7 +51,7 @@ function FileInput (props) {
 		}
 	}
 */
-	let [info, setInfo] = useState (props.value || "");
+	let [info, setInfo] = useState ("");
 	let [error, setError] = useState (null);
 	let fileEl;
 
