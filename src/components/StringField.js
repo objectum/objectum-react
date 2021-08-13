@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {loadCSS, loadJS, i18n, getLocale, newId, getStore} from "..";
+import {loadCSS, loadJS, i18n, getLocale, newId, getStore, Tree} from "..";
 import _isEmpty from "lodash.isempty";
 
 export default class StringField extends Component {
@@ -111,7 +111,7 @@ export default class StringField extends Component {
 			this.setState (state);
 		}
 	}
-	
+
 	onKeyDown (e) {
 		let ta = e.target;
 		
@@ -130,7 +130,28 @@ export default class StringField extends Component {
 			this.setState ({value: this.state.lastValidValue});
 		}
 	}
-	
+
+	renderValues () {
+		if (this.props.values && this.state.value) {
+			let values = this.props.values.filter (v => v.indexOf (this.state.value) > -1);
+			if (values.length) {
+				if (values.length == 1 && values [0] == this.state.value) {
+					return;
+				}
+				let records = values.map (v => {
+					return {id: v, name: v};
+				});
+				return <div className="dictfield-dialog text-left">
+					<div className="dictfield-tree border p-1 bg-white shadow">
+						<Tree records={records} highlightText={this.state.value} onChoose={({id}) => {
+							this.onChange ({target: {value: id}});
+						}} />
+					</div>
+				</div>;
+			}
+		}
+	}
+
 	render () {
 		let disabled = this.props.disabled;
 		let valid = true;
@@ -213,6 +234,7 @@ export default class StringField extends Component {
 		return <div className={(this.props.label || error) ? "form-group stringfield" : "stringfield"}>
 			{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 			{cmp}
+			{this.renderValues ()}
 			{error && <div className="invalid-feedback">{error}</div>}
 		</div>;
 	}

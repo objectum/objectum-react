@@ -115,27 +115,9 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<div className="border m-1 p-1">
-					<Form store={store} rsc="record" mid="item" rid={1023}>
-						<Field property="name" />
-					</Form>
-				</div>
-				<DateField label="Timestamp" showTime />
-				<NumberField label="Number" min={0} max={10} />
-				<FileField store={store} label="file" description="Description foo bar" maxSize={12345} recordId={1023} propertyId={1028} value="1.jpg" disabled />
-				<BooleanField label="BooleanField" error="" />
-				<DictField label="DictField" recs={this.state.recs} notNull groupProperty="group" />
-				<Form store={store} rsc="record" rid={14197} mid="item">
-					<StringField property="name" label="String" regexp1={"/^[0-9]{6}$/"} exampleValue="123456" notNull />
-				</Form>
-				<Action label="Action" modalComponent={Cmp} />
-				<Action label="Зависание после rollback" onClick={async () => {
-					await store.startTransaction ();
-					let record = await store.getRecord (1023);
-					record.name = new Date ().toLocaleString ();
-					await record.sync ();
-					await store.rollbackTransaction ();
-				}} />
+				<StringField label="Name" values={[
+					"foo", "bar", "test", "aaaaa", "aaabbb"
+				]} />
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
