@@ -46,7 +46,6 @@ export default class NumberField extends Component {
 		if (value) {
 			let n = Number (value);
 
-			console.log (value, n, this.props);
 			if (this.props.hasOwnProperty ("min") && n < this.props.min) {
 				value = this.props.min;
 				changed = true;

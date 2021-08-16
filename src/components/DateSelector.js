@@ -80,11 +80,18 @@ export default class DateSelector extends Component {
 		}
 		while (1) {
 			let color = (d.getDay () == 6 || d.getDay () == 0) ? "text-danger" : "", title = "";
+			let disabled = false;
 			
 			if (d.getMonth () == this.state.localValue.getMonth ()) {
 				prevMonthWas = true;
 			} else {
 				color = "text-secondary";
+			}
+			if (this.props.min && d < this.props.min) {
+				disabled = true;
+			}
+			if (this.props.max && d > this.props.max) {
+				disabled = true;
 			}
 			let day = `${d.getFullYear ()}-${String (d.getMonth () + 1).padStart (2, "0")}-${String (d.getDate ()).padStart (2, "0")}`;
 			
@@ -94,18 +101,20 @@ export default class DateSelector extends Component {
 			}
 			let cd = new Date (d);
 			let selected = d.getFullYear () == this.state.value.getFullYear () && d.getMonth () == this.state.value.getMonth () && d.getDate () == this.state.value.getDate ();
-			
-			row.push (
-				<td
-					key={num}
-					className={`${color} text-center`}
-					onClick={() => this.onChange (cd)}
-					style={{cursor: "pointer"}}
-					title={title}
-				>
-					<div className={selected ? "text-white bg-info" : ""}>{d.getDate ()}</div>
-				</td>
-			);
+			let opts = {
+				key: num,
+				className: `${color} text-center`,
+				title
+			};
+			if (disabled) {
+				opts.className = "text-secondary text-center font-weight-light";
+			} else {
+				opts.onClick = () => this.onChange (cd);
+				opts.style = {cursor: "pointer"};
+			}
+			row.push (<td {...opts}>
+				<div className={selected ? "text-white bg-info" : ""}>{d.getDate ()}</div>
+			</td>);
 			num ++;
 			weekDay ++;
 			d.setDate (d.getDate () + 1);

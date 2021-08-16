@@ -39,7 +39,6 @@ function FileInput (props) {
 		
 		if (acceptedFiles [0].path != props.value) {
 			setTimeout (() => {
-				console.log (acceptedFiles [0].size);
 				props.onFile (props.id, acceptedFiles [0]);
 			}, 1);
 		}

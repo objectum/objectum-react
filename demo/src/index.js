@@ -115,6 +115,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<DateField label="Date" min={new Date (2021, 7, 10)} max={new Date (2021, 7, 20)} onChange={opts => console.log (opts)} />
 				<StringField label="Name" values={[
 					"foo", "bar", "test", "aaaaa", "aaabbb"
 				]} />

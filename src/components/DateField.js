@@ -138,7 +138,30 @@ export default class DateField extends Component {
 		}
 		this.setState (state);
 	}
-	
+
+	onBlur = () => {
+		let value = this.state.value;
+		let changed = false;
+
+		if (value) {
+			if (this.props.min && value < this.props.min) {
+				value = this.props.min;
+				changed = true;
+			}
+			if (this.props.max && value > this.props.max) {
+				changed = true;
+				value = this.props.max;
+			}
+		}
+		if (changed) {
+			this.setState ({value, localValue: getTimestampString (value)});
+
+			if (this.props.onChange) {
+				this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
+			}
+		}
+	}
+
 	onFocus = () => {
 		this.setState ({showDateSelector: true});
 	}
@@ -152,6 +175,7 @@ export default class DateField extends Component {
 				id={this.id}
 				value={this.state.localValue}
 				onChange={this.onChange}
+				onBlur={this.onBlur}
 				disabled={this.props.disabled}
 				onFocus={this.onFocus}
 				ref={this._refs ["input"]}
@@ -167,6 +191,8 @@ export default class DateField extends Component {
 						showTime={this.props.showTime}
 						onChange={({value}) => this.onChange ({target: {value}})}
 						holidays={this.props.holidays || this.holidays}
+						min={this.props.min}
+						max={this.props.max}
 					/>
 				</div>
 			</div> : <div />}
