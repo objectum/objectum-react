@@ -118,7 +118,7 @@ class Test extends Component {
 				<DateField label="Date" min={new Date (2021, 7, 10)} max={new Date (2021, 7, 20)} onChange={opts => console.log (opts)} />
 				<StringField label="Name" values={[
 					"foo", "bar", "test", "aaaaa", "aaabbb"
-				]} />
+				]} value="f" />
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />

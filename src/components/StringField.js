@@ -13,7 +13,8 @@ export default class StringField extends Component {
 			rsc: this.props.rsc || "record",
 			code: this.props.property,
 			value: this.props.value === null ? "" : this.props.value,
-			regexp: this.props.regexp
+			regexp: this.props.regexp,
+			showDialog: false
 		};
 		if (this.state.regexp && typeof (this.state.regexp) == "string") {
 			this.state.regexp = eval (this.state.regexp);
@@ -26,7 +27,7 @@ export default class StringField extends Component {
 	onChange = (val) => {
 		let value = val.target.value;
 		let valid = true;
-		let state = {value};
+		let state = {value, showDialog: true};
 		
 		if (this.state.regexp && !this.state.regexp.test (value)) {
 			valid = false;
@@ -126,13 +127,15 @@ export default class StringField extends Component {
 	}
 	
 	onBlur = () => {
+		let state = {showDialog: false};
 		if (this.state.regexp && this.state.value && !this.state.regexp.test (this.state.value)) {
-			this.setState ({value: this.state.lastValidValue});
+			state.value = this.state.lastValidValue;
 		}
+		this.setState (state);
 	}
 
 	renderValues () {
-		if (this.props.values && this.state.value) {
+		if (this.state.showDialog && this.props.values && this.state.value) {
 			let values = this.props.values.filter (v => v.indexOf (this.state.value) > -1);
 			if (values.length) {
 				if (values.length == 1 && values [0] == this.state.value) {
