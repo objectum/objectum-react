@@ -41,15 +41,13 @@ export default class Roles extends Component {
 	
 	render () {
 		return <div className="container">
-			<div className="shadow-sm">
-				<Grid {...this.props} id="roles" ref={this._refs ["roles"]} label="Roles" store={this.props.store} query="objectum.role" refresh={this.state.refresh} inlineActions>
-					<div className="d-flex">
-						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
-						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
-						<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
-					</div>
-				</Grid>
-			</div>
+			<Grid {...this.props} id="roles" ref={this._refs ["roles"]} label="Roles" store={this.props.store} query="objectum.role" refresh={this.state.refresh} inlineActions>
+				<div className="d-flex pb-1">
+					<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
+					<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
+					<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
+				</div>
+			</Grid>
 		</div>;
 	}
 };

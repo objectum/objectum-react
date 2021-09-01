@@ -10,7 +10,6 @@ import Tabs from "./Tabs";
 import Properties from "./Properties";
 import JsonEditor from "./JsonEditor";
 import BooleanField from "./BooleanField";
-import Return from "./Return";
 import {getHash, goRidLocation} from "..";
 import {i18n} from "./../i18n";
 
@@ -42,47 +41,44 @@ export default class Model extends Component {
 	
 	render () {
 		return <div className="container">
-			<Return {...this.props} />
-			<div className="shadow-sm border">
-				<Tabs {...this.props} key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + this.state.label}>
-					<Tab key="tab1" label="Information">
-						<Form key="form1" store={this.props.store} rsc="model" rid={this.state.rid} onCreate={this.onCreate}>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="name" label="Name" />
-								</div>
-								<div className="form-group col-md-6">
-									<DictField
-										property="parent" label="Parent" disabled={!!this.state.rid} value={this.state.parent}
-										recs={this.props.store.getModelRecords ()} tree
-									/>
-								</div>
+			<Tabs {...this.props} key="modelTabs" id="modelTabs" label={i18n ("Model") + ": " + this.state.label}>
+				<Tab key="tab1" label="Information">
+					<Form key="form1" store={this.props.store} rsc="model" rid={this.state.rid} onCreate={this.onCreate}>
+						<div className="form-row">
+							<div className="form-group col-md-6">
+								<StringField property="name" label="Name" />
 							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="code" label="Code" disabled={!!this.state.rid} regexp={/^[a-zA-Z0-9_]+$/} />
-								</div>
-								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea />
-								</div>
+							<div className="form-group col-md-6">
+								<DictField
+									property="parent" label="Parent" disabled={!!this.state.rid} value={this.state.parent}
+									recs={this.props.store.getModelRecords ()} tree
+								/>
 							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<BooleanField property="unlogged" disabled={!!this.state.rid} label="Unlogged" />
-								</div>
+						</div>
+						<div className="form-row">
+							<div className="form-group col-md-6">
+								<StringField property="code" label="Code" disabled={!!this.state.rid} regexp={/^[a-zA-Z0-9_]+$/} />
 							</div>
-							<div className="form-row">
-								<div className="form-group col-md-12">
-									<JsonEditor property="opts" label="Options" />
-								</div>
+							<div className="form-group col-md-6">
+								<StringField property="description" label="Description" textarea />
 							</div>
-						</Form>
-					</Tab>
-					{this.state.rid && <Tab key="Tab2" label="Properties">
-						<div className="p-1"><Properties {...this.props} model={this.state.rid} /></div>
-					</Tab>}
-				</Tabs>
-			</div>
+						</div>
+						<div className="form-row">
+							<div className="form-group col-md-6">
+								<BooleanField property="unlogged" disabled={!!this.state.rid} label="Unlogged" />
+							</div>
+						</div>
+						<div className="form-row">
+							<div className="form-group col-md-12">
+								<JsonEditor property="opts" label="Options" />
+							</div>
+						</div>
+					</Form>
+				</Tab>
+				{this.state.rid && <Tab key="Tab2" label="Properties">
+					<div className="p-1"><Properties {...this.props} model={this.state.rid} /></div>
+				</Tab>}
+			</Tabs>
 		</div>;
 	}
 };

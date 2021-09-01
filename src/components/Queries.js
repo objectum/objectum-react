@@ -50,15 +50,13 @@ export default class Queries extends Component {
 	
 	render () {
 		return <div className="container">
-			<div className="shadow-sm">
-				<Grid {...this.props} id="queries" ref={this._refs ["queries"]} label="Queries" store={this.props.store} query="objectum.query" tree system refresh={this.state.refresh} onSelectParent={(parent) => this.parent = parent} inlineActions>
-					<div className="d-flex">
-						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
-						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
-						<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
-					</div>
-				</Grid>
-			</div>
+			<Grid {...this.props} id="queries" ref={this._refs ["queries"]} label="Queries" store={this.props.store} query="objectum.query" tree system refresh={this.state.refresh} onSelectParent={(parent) => this.parent = parent} inlineActions>
+				<div className="d-flex pb-1">
+					<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
+					<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
+					<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
+				</div>
+			</Grid>
 		</div>;
 	}
 };

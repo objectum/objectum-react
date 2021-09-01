@@ -54,7 +54,7 @@ export default class Properties extends Component {
 		return <div className="row">
 			<div className="col-sm-12">
 				<Grid id="properties" store={this.props.store} query="objectum.property" system refresh={this.state.refresh} params={{modelId: this.model}} inlineActions>
-					<div className="d-flex">
+					<div className="d-flex pb-1">
 						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
 						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
 						<Action icon="fas fa-minus" label={i18n ("Remove")} onClick={this.onRemove} confirm selected />

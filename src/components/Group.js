@@ -31,7 +31,9 @@ export default class Group extends Component {
 				<div className="border-top border-right w-100 h-50 mt-auto" />
 			</div>
 			<div className="border-left border-right border-bottom">
-				{this.state.expanded && <div className="p-1">{this.props.children}</div>}
+				{this.props.collapsible ? (
+					<div className={`p-1 block-hidden ${this.state.expanded ? "block-visible" : ""}`}>{this.props.children}</div>
+				) : <div className="p-1">{this.props.children}</div>}
 			</div>
 		</div>;
 	}

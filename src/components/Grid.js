@@ -13,6 +13,7 @@ import {i18n} from "./../i18n";
 import GridColumns from "./GridColumns";
 import TableForm from "./TableForm";
 import Fade from "./Fade";
+import PageTitle from "./PageTitle";
 import {execute} from "objectum-client";
 
 export default class Grid extends Component {
@@ -791,29 +792,31 @@ export default class Grid extends Component {
 		} else {
 			return <div className="border-top p-1">
 				<div className="d-flex">
-					<button type="button" className="btn btn-link btn-sm" disabled={this.state.page == 1} onClick={this.onFirst} title={i18n ("First page")}>
-						<i className="fas fa-angle-double-left"/>
-					</button>
-					<button type="button" className="btn btn-link btn-sm" disabled={this.state.page == 1} onClick={this.onPrev} title={i18n ("Previous page")}>
-						<i className="fas fa-angle-left"/>
-					</button>
-					<input
-						type="number"
-						className="form-control form-control-sm"
-						value={this.state.page}
-						min="1"
-						max={this.state.pageNum}
-						onChange={this.onChange}
-						id="page"
-						title={i18n ("Page")}
-						style={{width: "5em"}}
-					/>
-					<button type="button" className="btn btn-link btn-sm" disabled={this.state.page >= this.state.pageNum} onClick={this.onNext} title={i18n ("Next page")}>
-						<i className="fas fa-angle-right"/>
-					</button>
-					<button type="button" className="btn btn-link btn-sm" disabled={this.state.page >= this.state.pageNum} onClick={this.onLast} title={i18n ("Last page")}>
-						<i className="fas fa-angle-double-right"/>
-					</button>
+					{this.state.pageNum > 1 && <div className="d-flex">
+						<button type="button" className="btn btn-link btn-sm" disabled={this.state.page == 1} onClick={this.onFirst} title={i18n ("First page")}>
+							<i className="fas fa-angle-double-left"/>
+						</button>
+						<button type="button" className="btn btn-link btn-sm" disabled={this.state.page == 1} onClick={this.onPrev} title={i18n ("Previous page")}>
+							<i className="fas fa-angle-left"/>
+						</button>
+						<input
+							type="number"
+							className="form-control form-control-sm"
+							value={this.state.page}
+							min="1"
+							max={this.state.pageNum}
+							onChange={this.onChange}
+							id="page"
+							title={i18n ("Page")}
+							style={{width: "5em"}}
+						/>
+						<button type="button" className="btn btn-link btn-sm" disabled={this.state.page >= this.state.pageNum} onClick={this.onNext} title={i18n ("Next page")}>
+							<i className="fas fa-angle-right"/>
+						</button>
+						<button type="button" className="btn btn-link btn-sm" disabled={this.state.page >= this.state.pageNum} onClick={this.onLast} title={i18n ("Last page")}>
+							<i className="fas fa-angle-double-right"/>
+						</button>
+					</div>}
 					<button
 						type="button"
 						className="btn btn-link btn-sm"
@@ -838,7 +841,7 @@ export default class Grid extends Component {
 					{this.props.card && <button type="button" className="btn btn-link btn-sm" onClick={this.onImageMode} data-tip={i18n ("Images mode")} title={i18n ("Images mode")}>
 						<i className={`fas fa-camera ${this.state.mode == "images" ? "border-bottom border-primary" : ""}`} />
 					</button>}
-					<select
+					{this.state.pageNum > 1 && <select
 						className="custom-select custom-select-sm"
 						value={this.state.pageRecs}
 						id="pageRecs"
@@ -851,7 +854,7 @@ export default class Grid extends Component {
 						<option value="30">30</option>
 						<option value="40">40</option>
 						<option value="50">50</option>
-					</select>
+					</select>}
 				</div>
 				<div>
 					<small className="text-muted ml-1">
@@ -880,9 +883,7 @@ export default class Grid extends Component {
 		</div>;
 		
 		return <Fade><div className={this.props.className}>
-			{this.props.label && <div className="text-white bg-info py-1">
-				<strong className="ml-2">{i18n (this.props.label)}</strong>
-			</div>}
+			<PageTitle label={this.props.label} />
 			<div className="border">
 				{this.state.error && <div className="alert alert-danger" role="alert">{this.state.error}</div>}
 				{this.state.mode == "table" && gridChildren && <div className="pl-1 pt-1">

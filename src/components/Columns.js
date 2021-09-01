@@ -130,7 +130,7 @@ export default class Columns extends Component {
 	
 	render () {
 		return <Grid id="Columns" store={this.props.store} query="objectum.column" system refresh={this.state.refresh} params={{queryId: this.query}} inlineActions>
-			<div className="d-flex">
+			<div className="d-flex pb-1">
 				<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
 				<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
 				<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />

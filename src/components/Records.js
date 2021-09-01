@@ -12,7 +12,16 @@ export default class Records extends Component {
 			refresh: false
 		};
 	}
-	
+
+	onCreate = () => {
+		let opts = {
+			model: this.model
+		};
+		this.props.history.push ({
+			pathname: "/model_record/new#" + JSON.stringify ({opts})
+		});
+	}
+
 	onEdit = ({id}) => {
 		let opts = {
 			model: this.model
@@ -57,9 +66,10 @@ export default class Records extends Component {
 		};
 		return <div>
 			<Grid {...gridOpts} inlineActions>
-				<div className="d-flex">
-					<Action {...this.props} onClickSelected={this.onEdit} icon="fas fa-edit" label={i18n ("Edit")} />
-					<Action {...this.props} confirm onClickSelected={this.onRemove} icon="fas fa-minus" label={i18n ("Remove")} />
+				<div className="d-flex mb-1">
+					<Action {...this.props} icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
+					<Action {...this.props} selected onClick={this.onEdit} icon="fas fa-edit" label={i18n ("Edit")} />
+					<Action {...this.props} confirm selected onClick={this.onRemove} icon="fas fa-minus" label={i18n ("Remove")} />
 				</div>
 			</Grid>
 		</div>;

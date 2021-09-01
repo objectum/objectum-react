@@ -9,18 +9,18 @@ export default class Tree extends Component {
 		super (props);
 		
 		this.state = Object.assign ({
-			parent: 0
+			parent: null
 		}, this.processRecs (this.props.recs || this.props.records || [], this.props.opened));
 	}
 	
 	processRecs (recs, opened = []) {
-		let map = {"0": {childs: []}};
+		let map = {null: {childs: []}};
 		
 		recs.forEach (rec => {
 			rec.childs = [];
 			
 			if (!rec.parent) {
-				rec.parent = 0;
+				rec.parent = null;
 			}
 			map [rec.id] = rec;
 		});
@@ -28,12 +28,14 @@ export default class Tree extends Component {
 			if (rec.parent && !map [rec.parent]) {
 				throw new Error ("unknown parent: " + rec.parent);
 			}
-			map [rec.parent].childs.push (rec);
+			if (rec.hasOwnProperty ("parent")) {
+				map [rec.parent].childs.push (rec);
+			}
 		});
 		let state = {recs, map, opened};
 		
 		opened.forEach (id => state [`opened-${id}`] = true);
-		
+
 		return state;
 	}
 	
@@ -46,7 +48,7 @@ export default class Tree extends Component {
 				state.opened = this.props.opened;
 			}
 			Object.assign (state, this.processRecs (recs, state.opened));
-			state.parent = 0;
+			state.parent = null;
 		}
 		if (!_isEmpty (state)) {
 			this.setState (state);
@@ -136,7 +138,7 @@ export default class Tree extends Component {
 		return items;
 	}
 	
-	calcLevelNum (parent = 0, level = 1) {
+	calcLevelNum (parent = null, level = 1) {
 		if (!parent) {
 			this.levelNum = 1;
 		}
@@ -152,7 +154,7 @@ export default class Tree extends Component {
 	
 	render () {
 		this.calcLevelNum ();
-		return <table className="table table-sm table-striped"><tbody>{this.renderNodes (0)}</tbody></table>;
+		return <table className="table table-sm table-striped"><tbody>{this.renderNodes (null)}</tbody></table>;
 	}
 };
 Tree.displayName = "Tree";

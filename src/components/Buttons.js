@@ -19,7 +19,7 @@ function HomeButton (props) {
 	function handleClick () {
 		history.push ("/");
 	}
-	return <button className="btn btn-link p-0 text-white" onClick={handleClick}>
+	return <button className="btn btn-link p-0" onClick={handleClick}>
 		{props.children || <i className="fas fa-home" />}
 	</button>;
 };

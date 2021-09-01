@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Field, Form, Tab, Tabs, Return} from "..";
+import {Field, Form, Tab, Tabs} from "..";
 import {goRidLocation, i18n} from "..";
 
 export default class User extends Component {
@@ -33,20 +33,17 @@ export default class User extends Component {
 	
 	render () {
 		return <div className="container">
-			<Return {...this.props} />
-			<div className="shadow-sm border">
-				<Tabs key="tabs" id="tabs" label={i18n ("User") + ": " + this.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.user" onCreate={this.onCreate}>
-							<Field property="name" />
-							<Field property="login" />
-							<Field property="password" />
-							<Field property="email" />
-							<Field property="role" dict />
-						</Form>
-					</Tab>
-				</Tabs>
-			</div>
+			<Tabs key="tabs" id="tabs" label={i18n ("User") + ": " + this.state.label}>
+				<Tab key="Tab1" label="Information">
+					<Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.user" onCreate={this.onCreate}>
+						<Field property="name" />
+						<Field property="login" />
+						<Field property="password" />
+						<Field property="email" />
+						<Field property="role" dict />
+					</Form>
+				</Tab>
+			</Tabs>
 		</div>;
 	}
 };

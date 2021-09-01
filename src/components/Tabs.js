@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener, i18n} from "..";
 import {Link} from "react-router-dom";
+import PageTitle from "./PageTitle";
 
 export default class Tabs extends Component {
 	constructor (props) {
@@ -75,38 +76,32 @@ export default class Tabs extends Component {
 		let tab = tabs [this.state.tab];
 		
 		return <div className={this.props.className}>
-			{this.props.label && <div className="text-white bg-info py-1">
-				<strong className="pl-2">{i18n (this.props.label)}</strong>
-			</div>}
-			<div>
-				<div className={this.props.label ? "p-1" : ""}>
-					<ul className="nav nav-tabs">
-						{tabs.map ((item, i) => {
-							let active = "";
-							
-							if (i == this.state.tab) {
-								active = " active";
-							} else {
-								active = " border-bottom text-primary select-tab";
-							}
-							if (item.props.path) {
-								return (
-									<li className="nav-item" key={i}>
-										<Link className={"nav-link" + active} to={item.props.path} onClick={() => this.changeTab (i)}>{i18n (item.props.label)}</Link>
-									</li>
-								);
-							} else {
-								return (
-									<li className="nav-item" key={i}>
-										<span className={"nav-link" + active} onClick={() => this.changeTab (i)}>{i18n (item.props.label)}</span>
-									</li>
-								);
-							}
-						})}
-					</ul>
-					{tab}
-				</div>
-			</div>
+			<PageTitle label={this.props.label} />
+			<ul className="nav nav-tabs">
+				{tabs.map ((item, i) => {
+					let active = "";
+
+					if (i == this.state.tab) {
+						active = " active";
+					} else {
+						active = " border-bottom text-primary select-tab";
+					}
+					if (item.props.path) {
+						return (
+							<li className="nav-item" key={i}>
+								<Link className={"nav-link" + active} to={item.props.path} onClick={() => this.changeTab (i)}>{i18n (item.props.label)}</Link>
+							</li>
+						);
+					} else {
+						return (
+							<li className="nav-item" key={i}>
+								<span className={"nav-link" + active} onClick={() => this.changeTab (i)}>{i18n (item.props.label)}</span>
+							</li>
+						);
+					}
+				})}
+			</ul>
+			{tab}
 		</div>;
 	}
 }

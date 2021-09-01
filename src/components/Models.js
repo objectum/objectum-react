@@ -56,27 +56,25 @@ export default class Models extends Component {
 	
 	render () {
 		return <div className="container">
-			<div className="shadow-sm">
-				<Grid
-					{...this.props}
-					id="models" ref={this._refs ["models"]}
-					label="Models"
-					store={this.props.store}
-					query="objectum.model"
-					tree
-					system
-					refresh={this.state.refresh}
-					onSelectParent={parent => this.parent = parent}
-					inlineActions
-				>
-					<div className="d-flex">
-						<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
-						<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
-						<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
-						<Action icon="fas fa-eye" label={i18n ("Records")} onClickSelected={this.onRecords} />
-					</div>
-				</Grid>
-			</div>
+			<Grid
+				{...this.props}
+				id="models" ref={this._refs ["models"]}
+				label="Models"
+				store={this.props.store}
+				query="objectum.model"
+				tree
+				system
+				refresh={this.state.refresh}
+				onSelectParent={parent => this.parent = parent}
+				inlineActions
+			>
+				<div className="d-flex pb-1">
+					<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
+					<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
+					<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
+					<Action icon="fas fa-eye" label={i18n ("Records")} onClickSelected={this.onRecords} />
+				</div>
+			</Grid>
 		</div>;
 	}
 };

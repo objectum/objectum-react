@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Field, Form, Tab, Tabs, Return} from "..";
+import {Field, Form, Tab, Tabs} from "..";
 import {goRidLocation, i18n} from "..";
 
 export default class Role extends Component {
@@ -33,18 +33,15 @@ export default class Role extends Component {
 	
 	render () {
 		return <div className="container">
-			<Return {...this.props} />
-			<div className="shadow-sm border">
-				<Tabs key="tabs" id="tabs" label={i18n ("Role") + ": " + this.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.role" onCreate={this.onCreate}>
-							<Field property="name" />
-							<Field property="code" />
-							<Field property="menu" dict />
-						</Form>
-					</Tab>
-				</Tabs>
-			</div>
+			<Tabs key="tabs" id="tabs" label={i18n ("Role") + ": " + this.state.label}>
+				<Tab key="Tab1" label="Information">
+					<Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.role" onCreate={this.onCreate}>
+						<Field property="name" />
+						<Field property="code" />
+						<Field property="menu" dict />
+					</Form>
+				</Tab>
+			</Tabs>
 		</div>;
 	}
 };

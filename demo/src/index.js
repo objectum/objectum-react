@@ -5,7 +5,7 @@ import {Store, Record} from "objectum-client";
 import {
 	createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form,
 	StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth,
-	Pagination, Fade, Tree, JsonField, Panel, Group, Models
+	Pagination, Fade, Tree, JsonField, Panel, Group, Models, MenuButton
 } from '../../src'
 import {pushLocation, timeout, newId} from "../../src";
 import ReactCrop from "react-image-crop";
@@ -17,9 +17,16 @@ import ReactCrop from "react-image-crop";
 //import TBrakDishModel from "./models/TBrakDishModel";
 import ItemModel from "./models/ItemModel";
 
-import "../../src/css/bootstrap-sapr.css";
+import "../../src/css/bootstrap-nap.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
+
+import {
+	Menu,
+	MenuItem,
+	SubMenu
+} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
 
 import packageConfig from "./../package";
 import {i18n} from "../../src/i18n";
@@ -115,10 +122,20 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<DateField label="Date" min={new Date (2021, 7, 10)} max={new Date (2021, 7, 20)} onChange={opts => console.log (opts)} />
-				<StringField label="Name" values={[
-					"foo", "bar", "test", "aaaaa", "aaabbb"
-				]} value="f" />
+				<MenuButton items={[{
+					label: "Item 1", icon: "fas fa-building", path: "/model_list/item"
+				}, {
+					label: "Item 2", icon: "fas fa-building", items: [{
+						label: "Item 2.1", icon: "fas fa-building", value: "item2.1"
+					}]
+				}]} onClick={({value}) => console.log (value)} />
+
+				<Group label="Group" collapsible>
+					<DateField label="Date" min={new Date (2021, 7, 10)} max={new Date (2021, 7, 20)} onChange={opts => console.log (opts)} />
+					<StringField label="Name" values={[
+						"foo", "bar", "test", "aaaaa", "aaabbb"
+					]} value="f" />
+				</Group>
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />

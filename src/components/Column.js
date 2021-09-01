@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {StringField, NumberField, SelectField, Form, Tab, Tabs, ChooseField, Queries, Return} from "..";
+import {StringField, NumberField, DictField, Form, Tab, Tabs, ChooseField, Queries} from "..";
 import {getHash, goRidLocation, i18n} from "..";
 
 export default class Column extends Component {
@@ -40,48 +40,45 @@ export default class Column extends Component {
 			{id: "1", name: i18n ("Visible")}
 		];
 		return <div className="container">
-			<Return {...this.props} />
-			<div className="shadow-sm border">
-				<Tabs key="tabs" id="tabs" label={i18n ("Column") + ": " + this.state.label}>
-					<Tab key="Tab1" label="Information">
-						<Form key="form1" store={this.props.store} rsc="column" rid={this.state.rid} onCreate={this.onCreate}>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="name" label="Name" />
-								</div>
-								<div className="form-group col-md-6">
-									<ChooseField
-										property="query" label="Query" disabled rsc="query" value={this.state.query}
-										choose={{cmp: Queries, ref: "queries"}}
-									/>
-								</div>
+			<Tabs key="tabs" id="tabs" label={i18n ("Column") + ": " + this.state.label}>
+				<Tab key="Tab1" label="Information">
+					<Form key="form1" store={this.props.store} rsc="column" rid={this.state.rid} onCreate={this.onCreate}>
+						<div className="form-row">
+							<div className="form-group col-md-6">
+								<StringField property="name" label="Name" />
 							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="code" label="Code" regexp={/^[a-zA-Z0-9_]+$/} />
-								</div>
-								<div className="form-group col-md-6">
-									<NumberField property="order" label="Order" />
-								</div>
+							<div className="form-group col-md-6">
+								<ChooseField
+									property="query" label="Query" disabled rsc="query" value={this.state.query}
+									choose={{cmp: Queries, ref: "queries"}}
+								/>
 							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<SelectField property="area" label="Area" recs={areaRecs} value={this.state.area} />
-								</div>
-								<div className="form-group col-md-6">
-								</div>
+						</div>
+						<div className="form-row">
+							<div className="form-group col-md-6">
+								<StringField property="code" label="Code" regexp={/^[a-zA-Z0-9_]+$/} />
 							</div>
-							<div className="form-row">
-								<div className="form-group col-md-6">
-									<StringField property="description" label="Description" textarea />
-								</div>
-								<div className="form-group col-md-6">
-								</div>
+							<div className="form-group col-md-6">
+								<NumberField property="order" label="Order" />
 							</div>
-						</Form>
-					</Tab>
-				</Tabs>
-			</div>
+						</div>
+						<div className="form-row">
+							<div className="form-group col-md-6">
+								<DictField property="area" label="Area" recs={areaRecs} value={this.state.area} />
+							</div>
+							<div className="form-group col-md-6">
+							</div>
+						</div>
+						<div className="form-row">
+							<div className="form-group col-md-6">
+								<StringField property="description" label="Description" textarea />
+							</div>
+							<div className="form-group col-md-6">
+							</div>
+						</div>
+					</Form>
+				</Tab>
+			</Tabs>
 		</div>;
 	}
 };

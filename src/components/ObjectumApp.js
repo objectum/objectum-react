@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Link, useLocation} from "react-router-dom";
 import {
 	Auth, Models, Model, Property, Queries, Query, Column, Roles, Role, Users, User,
-	Menus, Menu, MenuItem, ModelList, ModelTree, ModelRecord, Records, Office, ImportCSS
+	Menus, Menu, MenuItem, ModelList, ModelTree, ModelRecord, Records, Office, ImportCSS,
+	MenuButton
 } from "..";
 import Sidebar from "react-sidebar";
 import {setLocale, i18n} from "../i18n";
@@ -67,7 +68,22 @@ export default class ObjectumApp extends Component {
 		this.menuItemRecs = [];
 		
 		setLocale (this.props.locale || "en");
-		
+
+		this.locationLabel = {
+			models: i18n ("Models"),
+			model: i18n ("Model"),
+			property: i18n ("Property"),
+			queries: i18n ("Queries"),
+			query: i18n ("Query"),
+			menus: i18n ("Menus"),
+			menu: i18n ("Menu"),
+			menu_item: i18n ("Menu item"),
+			roles: i18n ("Roles"),
+			role: i18n ("Role"),
+			users: i18n ("Users"),
+			user: i18n ("User"),
+			import_css: i18n ("Import css")
+		};
 		window.OBJECTUM_APP = {
 			store: this.store,
 			sidebar: this.props.sidebar,
@@ -160,79 +176,7 @@ export default class ObjectumApp extends Component {
 		this.setState ({[key]: !this.state [key]});
 	}
 	
-	renderMenuOld (size) {
-		function renderIcon (icon, key) {
-			if (icon) {
-				return (<span key={key} className={`${icon} ${size} menu-icon mr-1 align-middle`} />);
-			} else {
-				return (<span key={key} />);
-			}
-		};
-		let items = [];
-		let renderItems = (parent, level) => {
-			let recs = this.menuItemRecs.filter (rec => rec.parent == parent);
-			
-			recs.forEach ((rec, i) => {
-				let childRecs = this.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
-				
-				if (childRecs.length) {
-					let opened = this.state [`open-${parent}-${i}`];
-					
-					items.push (
-						<tr key={`menu-${parent}-${i}`}>
-							<td className="fade-in">
-								<button className={`btn btn-link pl-3 ml-${level * 2}`} onClick={() => this.onClickMenu (`open-${parent}-${i}`)}>
-									{renderIcon (rec.icon, `icon-${parent}-${i}`)}
-									<span className="text-dark">{i18n (rec.name)}</span>
-									<i key={`open-${parent}-${i}`} className={`fas ${opened ? "fa-angle-up rotate-180-1" : `fa-angle-down ${this.state.hasOwnProperty (`open-${parent}-${i}`) ? "rotate-180-2" : ""}`} ml-2`} />
-								</button>
-							</td>
-						</tr>
-					);
-					if (opened) {
-						renderItems (rec.id, level + 1);
-					}
-				} else {
-					let key = `menu-${parent}-${i}`;
-					let selected = this.state.selectedItem == key;
-					
-					items.push (
-						<tr key={key}><td className={selected ? "bg-primary" : ""}>
-							<Link className={`nav-link text-nowrap ml-${level * 2} ${selected ? "text-white" : ""}`}
-								  to={rec.path}
-								  onClick={() => this.setState ({selectedItem: key})}
-							>
-								{renderIcon (rec.icon, `icon-${parent}-${i}`)}
-								<span className={selected ? "text-white" : "text-dark"}>{i18n (rec.name)}</span>
-							</Link>
-						</td></tr>
-					);
-				}
-			});
-		};
-		renderItems (null, 0);
-		
-		let menu = (
-			<table className="table table-sm table-borderless">
-				<tbody>
-				{items}
-				<tr><td>
-					<LogoutButtonSB app={this} size={size} />
-				</td></tr>
-				</tbody>
-			</table>
-		);
-		if (this.props.onRenderSidebar) {
-			menu = this.props.onRenderSidebar (menu);
-		}
-		return (
-			<div className="menu">
-				{menu}
-			</div>
-		);
-	}
-	
-	renderMenu (size) {
+	renderSidebarMenu (size) {
 		function renderIcon (icon, key) {
 			if (icon) {
 				return <span key={key} className={`${icon} ${size} menu-icon mr-1 align-middle`} />;
@@ -297,8 +241,8 @@ export default class ObjectumApp extends Component {
 		return menu;
 	}
 	
-	renderMenu2 () {
-		return <Navbar iconsTop={this.props.iconsTop}
+	renderNavbarMenu () {
+		return <Navbar iconsTop={this.props.iconsTop} className2="navbar navbar-expand navbar-light bg-info"
 			items={[
 				<BackButton key="back" popLocation={this.popLocation} locations={this.state.locations} iconsTop={this.props.iconsTop} />,
 				...this.menuItems,
@@ -306,7 +250,51 @@ export default class ObjectumApp extends Component {
 			]}
 		/>;
 	}
-	
+
+	renderPosition () {
+		let position = [];
+
+		this.state.locations.forEach ((item, i) => {
+			let disabled = i == this.state.locations.length - 1;
+
+			if (i) {
+				position.push (<span key={"c-" + i} className={disabled ? "text-secondary" : "text-primary"}><i className="fas fa-chevron-right mx-2" /></span>);
+			}
+			let path = item.pathname.split ("/")[1];
+			let label = this.locationLabel [path] || path;
+
+			if (path == "records" || path == "model_list" || path == "model_tree") {
+				let m = this.store.getModel (item.pathname.split ("/")[2].split ("_").join ("."));
+
+				if (path == "records") {
+					label = i18n ("Records");
+				}
+				if (path == "model_list" || path == "model_tree") {
+					label = i18n ("List");
+				}
+				label += ": " + i18n (m.name);
+			}
+			if (path == "model_record") {
+				let m = this.store.getModel (JSON.parse (decodeURI (item.hash.substr (1))).opts.model);
+				label = i18n (m.name);
+			}
+			position.push (disabled ?
+				<span key={"p-" + i} className="text-secondary">{label}</span> :
+				<Link key={"p-" + i} to={item.pathname + item.hash} className="text-primary">{label}</Link>
+			);
+		});
+		if (position.length) {
+			position = [
+				<Link key="home" to="/" className="text-primary">{i18n ("Home")}</Link>,
+				<span key="home-chevron" className="text-primary"><i className="fas fa-chevron-right mx-2" /></span>,
+				...position
+			];
+		}
+		return <div className="ml-2 d-flex align-items-center">
+			{position}
+		</div>;
+	}
+
 	renderRoutes () {
 		let items = [
 			<Route key="objectum-1" path="/queries" render={props => <Queries {...props} store={this.store} />} />,
@@ -355,27 +343,21 @@ export default class ObjectumApp extends Component {
 				key={`model-list-${path}`}
 				path={`/model_list/${path.split (".").join ("_")}`}
 				render={props => <div className="container">
-					<div className="bg-white shadow-sm">
-						<ModelList {...props} store={this.store} model={path} />
-					</div>
+					<ModelList {...props} store={this.store} model={path} />
 				</div>}
 			/>);
 			items.push (<Route
 				key={`model-tree-${path}`}
 				path={`/model_tree/${path.split (".").join ("_")}`}
 				render={props => <div className="container">
-					<div className="bg-white shadow-sm">
-						<ModelTree {...props} store={this.store} model={path} />
-					</div>
+					<ModelTree {...props} store={this.store} model={path} />
 				</div>}
 			/>);
 			items.push (<Route
 				key={`records-${path}`}
 				path={`/records/${path.split (".").join ("_")}`}
 				render={props => <div className="container">
-					<div className="bg-white shadow-sm">
-						<Records {...props} store={this.store} model={path} />
-					</div>
+					<Records {...props} store={this.store} model={path} />
 				</div>}
 			/>);
 		});
@@ -388,7 +370,22 @@ export default class ObjectumApp extends Component {
 		if (needPop) {
 			locations.splice (locations.length - 1, 1);
 		}
-		this.setState ({locations: [...locations, {pathname, hash}]});
+		let menuItemRec = this.menuItemRecs.find (rec => rec.path == pathname);
+
+		if (menuItemRec) {
+			locations = [];
+		}
+		for (let i = 0; i < locations.length; i ++) {
+			if (locations [i].pathname == pathname) {
+				locations.splice (i);
+				break;
+			}
+		}
+		if (pathname == "/") {
+			this.setState ({locations: []});
+		} else {
+			this.setState ({locations: [...locations, {pathname, hash}]});
+		}
 	}
 	
 	popLocation = () => {
@@ -421,7 +418,7 @@ export default class ObjectumApp extends Component {
 				if (this.props.sidebar) {
 					content = <div>
 						<Sidebar
-							sidebar={this.renderMenu (this.props.menuIconSize || "fa-2x")}
+							sidebar={this.renderSidebarMenu (this.props.menuIconSize || "fa-2x")}
 							open={false}
 							docked={this.state.sidebarDocked}
 							sidebarClassName="bg-white border-right"
@@ -440,8 +437,7 @@ export default class ObjectumApp extends Component {
 									<HomeButtonSB />
 									<BackButtonSB popLocation={this.popLocation} locations={this.state.locations}/>
 									
-									<span
-										className="ml-3 font-weight-bold">{`${this.state.name || "Objectum"} (${i18n ("version")}: ${this.state.version}, ${i18n ("user")}: ${this.store.username})`}</span>
+									<span className="ml-3 font-weight-bold">{`${this.state.name || "Objectum"} (${i18n ("version")}: ${this.state.version}, ${i18n ("user")}: ${this.store.username})`}</span>
 								</div>
 							</Fade>
 							
@@ -454,12 +450,20 @@ export default class ObjectumApp extends Component {
 					let label = this.props.label || `${this.state.name || "Objectum"} (${i18n ("version")}: ${this.state.version}, ${i18n ("user")}: ${this.store.username})`;
 					
 					content = <Fade>
-						<Navbar className="navbar navbar-expand navbar-dark bg-dark" linkClassName="nav-item nav-link" items={[
+{/*
+						<Navbar className="navbar navbar-expand" linkClassName="nav-item nav-link text-dark" items={[
 							<HomeButton><strong>{label}</strong></HomeButton>,
 						]} />
-						{this.renderMenu2 ()}
-						<div className="objectum-content">
+*/}
+						<div className="d-flex p-1 border-bottom align-items-center fixed-top bg-white">
+							<MenuButton items={this.menuItems} />
+							{this.renderPosition ()}
+						</div>
+						<div className="objectum-content mt-5">
 							{this.renderRoutes ()}
+						</div>
+						<div className="p-1 fixed-bottom border-top text-center bg-white">
+							{label}
 						</div>
 					</Fade>;
 				}

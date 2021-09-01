@@ -1,6 +1,6 @@
 {
 	"name": "objectum-react",
-	"version": "1.2.160",
+	"version": "1.2.161",
 	"description": "objectum-react React component",
 	"main": "lib/index.js",
 	"module": "es/index.js",
@@ -42,6 +42,7 @@
 		"react-component"
 	],
 	"dependencies": {
+		"@szhsin/react-menu": "^2.0.0",
 		"file-saver": "^2.0.2",
 		"lodash.chunk": "^4.2.0",
 		"lodash.debounce": "^4.0.8",
@@ -59,7 +60,7 @@
 		"lodash.sortby": "^4.7.0",
 		"lodash.uniq": "^4.5.0",
 		"lodash.values": "^4.3.0",
-		"objectum-client": "^1.2.18",
+		"objectum-client": "^1.2.23",
 		"react-device-detect": "^1.13.1",
 		"react-dropzone": "^10.2.2",
 		"react-image-crop": "^8.6.2",

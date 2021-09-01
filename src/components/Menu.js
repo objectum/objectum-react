@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Field, Form, Tab, Tabs, MenuItems, Return} from "..";
+import {Field, Form, Tab, Tabs, MenuItems} from "..";
 import {goRidLocation, i18n} from "..";
 
 export default class Menu extends Component {
@@ -34,21 +34,18 @@ export default class Menu extends Component {
 	
 	render () {
 		return <div className="container">
-			<Return {...this.props} />
-			<div className="shadow-sm border">
-				<Tabs key="tabs" id="tabs" label={i18n ("Menu") + ": " + this.state.label}>
-					<Tab key="tab-1" label="Information">
-						<Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.menu" onCreate={this.onCreate}>
-							<Field property="name" />
-							<Field property="code" />
-							<Field property="order" />
-						</Form>
-					</Tab>
-					{this.state.rid && <Tab key="Tab2" label="Menu items">
-						<MenuItems {...this.props} menu={this.state.rid} />
-					</Tab>}
-				</Tabs>
-			</div>
+			<Tabs key="tabs" id="tabs" label={i18n ("Menu") + ": " + this.state.label}>
+				<Tab key="tab-1" label="Information">
+					<Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid="objectum.menu" onCreate={this.onCreate}>
+						<Field property="name" />
+						<Field property="code" />
+						<Field property="order" />
+					</Form>
+				</Tab>
+				{this.state.rid && <Tab key="Tab2" label="Menu items">
+					<MenuItems {...this.props} menu={this.state.rid} />
+				</Tab>}
+			</Tabs>
 		</div>;
 	}
 };

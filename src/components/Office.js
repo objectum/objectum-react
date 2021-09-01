@@ -232,15 +232,15 @@ export default class Office extends Component {
 		if (this.props.authorized || this.state.authorized) {
 			content = this.props.children;
 		} else if (this.state.activationId) {
-			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
 				{i18n ("Account activation") + " ..."}
 			</div>;
 		} else if (this.state.recoverId) {
-			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
 				{i18n ("Password recovery") + " ..."}
 			</div>;
 		} else if (this.state.activationResult) {
-			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
 				<div className="mb-2">
 					{this.state.activationResult}
 				</div>
@@ -249,7 +249,7 @@ export default class Office extends Component {
 				><i className="fas fa-check mr-2"/>Ok</Action>
 			</div>;
 		} else if (this.state.recoverResult) {
-			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
 				<div className="mb-2">
 					{this.state.recoverResult}
 				</div>
@@ -258,7 +258,7 @@ export default class Office extends Component {
 				><i className="fas fa-check mr-2"/>Ok</Action>
 			</div>;
 		} else if (this.state.recover) {
-			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
 				<h3 className="text-center">{i18n ("Password recovery")}</h3>
 				<div className="form-group mt-4">
 					<label htmlFor="email">{i18n ("E-mail")}</label>
@@ -304,7 +304,7 @@ export default class Office extends Component {
 				</div>
 			</div>;
 		} else if (this.state.register) {
-			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
 				<h3 className="text-center">{i18n ("Registration")}</h3>
 				<div className="form-group mt-4">
 					<label htmlFor="email">{i18n ("E-mail")}</label>
@@ -351,7 +351,7 @@ export default class Office extends Component {
 				</div>
 			</div>;
 		} else {
-			content = <div className={this.props.cardClassName || "p-3 shadow"}>
+			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
 				<h3 className="text-center">{i18n ("Sign In")}</h3>
 				<div className="form-group mt-4">
 					<label htmlFor="email">{i18n ("E-mail")}</label>

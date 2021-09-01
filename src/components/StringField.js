@@ -145,7 +145,7 @@ export default class StringField extends Component {
 					return {id: v, name: v};
 				});
 				return <div className="dictfield-dialog text-left">
-					<div className="dictfield-tree border p-1 bg-white shadow">
+					<div className="dictfield-tree border p-1 bg-white shadow-sm">
 						<Tree records={records} highlightText={this.state.value} onChoose={({id}) => {
 							this.onChange ({target: {value: id}});
 						}} />

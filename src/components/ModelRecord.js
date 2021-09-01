@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import Return from "./Return";
+import PageTitle from "./PageTitle";
 import Field from "./Field";
 import Form from "./Form";
 import Tab from "./Tab";
@@ -80,12 +80,11 @@ export default class ModelRecord extends Component {
 		}
 	}
 	
-	async componentDidUpdate () {
-		let rid = this.props.match.params.rid.split ("#")[0];
-		
-		rid = rid == "new" ? null : rid;
-		
-		if (this.state.rid != rid) {
+	async componentDidUpdate (prevProps, prevState) {
+		let rid = (rid => rid == "new" ? null : rid) (this.props.match.params.rid.split ("#")[0]);
+		let prevRid = (rid => rid == "new" ? null : rid) (prevProps.match.params.rid.split ("#")[0]);
+
+		if (this.state.rid != prevState.rid || rid != prevRid) {
 			let hash = getHash ();
 			let label = "";
 			
@@ -95,15 +94,22 @@ export default class ModelRecord extends Component {
 				label = o.getLabel ();
 			}
 			this.regModel = this.props.store.getRegistered (hash.opts.model) || {};
-			
-			this.setState ({
-				rid,
-				model: hash.opts.model,
-				label
-			});
+
+			if (!this.unmounted) {
+				let state = {model: hash.opts.model, label};
+
+				if (rid != prevRid) {
+					state.rid = rid;
+				}
+				this.setState (state);
+			}
 		}
 	}
-	
+
+	componentWillUnmount () {
+		this.unmounted = true;
+	}
+
 	renderProperty (p, key, o, props = {}) {
 		let dict = false;
 		let chooseModel;
@@ -307,7 +313,7 @@ export default class ModelRecord extends Component {
 					</Tab>);
 				}
 			});
-			items.push (<div className="p-1" key={`tabs-${model ? model.id : "n"}-${level}-${gen}`}>
+			items.push (<div key={`tabs-${model ? model.id : "n"}-${level}-${gen}`}>
 				<Tabs id={`tabs-${model ? model.id : "n"}-${level}-${gen}`}>
 					{tabs}
 				</Tabs>
@@ -342,13 +348,8 @@ export default class ModelRecord extends Component {
 		}
 		if (regModel._layout) {
 			let form = <div className="container">
-				<Return {...this.props} />
-				<div className="text-white bg-info py-1">
-					<strong className="pl-2">{label + ": " + this.state.label}</strong>
-				</div>
-				<div className="border shadow-sm">
-					{this.renderLayout (regModel._layout ({store: this.props.store, id: this.state.rid}), m)}
-				</div>
+				<PageTitle label={label + ": " + this.state.label} />
+				{this.renderLayout (regModel._layout ({store: this.props.store, id: this.state.rid}), m)}
 			</div>;
 			return form;
 		}
@@ -375,40 +376,38 @@ export default class ModelRecord extends Component {
 			form = this.regModel._renderForm ({form, store: this.props.store});
 		}
 		form = <div className="container">
-			<Return {...this.props} />
-			<div className="border shadow-sm">
-				<Tabs key={`tabs-${this.state.model}`} id={`tabs-${this.state.model}`} label={label + ": " + this.state.label}>
-					<Tab key={`tab1-${this.state.model}`} label="Information">
-						{form}
-					</Tab>
-					{this.state.rid && this.getTables ().map ((t, i) => {
-						let label = t.get ("name");
-						let opts = t.getOpts ();
-						
-						if (opts.grid && opts.grid.label) {
-							label = opts.grid.label;
-						}
-						return (
-							<Tab key={`table-${this.state.model}-${i}`} label={label}>
-								<div className="p-1">
-									<ModelList
-										{...this.props}
-										id={`list-${i}`}
-										/*ref={`list-${i}`}*/
-										label=""
-										store={this.props.store}
-										model={t.getPath ()}
-										parentModel={m.getPath ()}
-										parentId={this.state.rid}
-										disableActions={this.state.disableActions}
-									/>
-								</div>
-							</Tab>
-						);
-					})}
-				</Tabs>
-			</div>
+			<Tabs key={`tabs-${this.state.model}`} id={`tabs-${this.state.model}`} label={label + ": " + this.state.label}>
+				<Tab key={`tab1-${this.state.model}`} label="Information">
+					{form}
+				</Tab>
+				{this.state.rid && this.getTables ().map ((t, i) => {
+					let label = t.get ("name");
+					let opts = t.getOpts ();
+
+					if (opts.grid && opts.grid.label) {
+						label = opts.grid.label;
+					}
+					return (
+						<Tab key={`table-${this.state.model}-${i}`} label={label}>
+							<div className="p-1">
+								<ModelList
+									{...this.props}
+									id={`list-${i}`}
+									/*ref={`list-${i}`}*/
+									label=""
+									store={this.props.store}
+									model={t.getPath ()}
+									parentModel={m.getPath ()}
+									parentId={this.state.rid}
+									disableActions={this.state.disableActions}
+								/>
+							</div>
+						</Tab>
+					);
+				})}
+			</Tabs>
 		</div>;
+
 		return form;
 	}
 };

@@ -141,7 +141,7 @@ export default class Form extends Component {
 		if (this.state._loading) {
 			state._loading = false;
 		}
-		if (!_isEmpty (state)) {
+		if (!_isEmpty (state) && !this.unmounted) {
 			this.setState (state);
 		}
 	}
@@ -153,7 +153,11 @@ export default class Form extends Component {
 	async componentDidUpdate (prevProps) {
 		await this.updateState (prevProps);
 	}
-	
+
+	componentWillUnmount () {
+		this.unmounted = true;
+	}
+
 	onChange = ({code, value, file}) => {
 		let state = {};
 		
@@ -337,8 +341,9 @@ export default class Form extends Component {
 			await this.props.store.rollbackTransaction ();
 			state._error = err.message;
 		}
-		this.setState (state);
-		
+		if (!this.unmounted) {
+			this.setState (state);
+		}
 		return !state._error;
 	}
 	

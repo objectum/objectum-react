@@ -282,3 +282,11 @@ textarea {
     max-height: 45em;
     opacity: 1;
 }
+.block-hidden {
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+    max-height: 0;
+}
+.block-visible {
+    max-height: 2000px;
+}

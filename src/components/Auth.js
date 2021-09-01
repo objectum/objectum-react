@@ -70,7 +70,7 @@ export default class Auth extends Component {
 		}
 		return <Fade>
 			{authInfo ? <div className="auth-long">
-				<div className="border shadow mt-5">
+				<div className="border shadow-sm mt-5">
 					<div className="bg-info text-white py-2 pl-4">
 						<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
 					</div>
@@ -112,7 +112,7 @@ export default class Auth extends Component {
 					</div>
 				</div>
 			</div> : <div className="auth">
-				<div className="border shadow mt-5">
+				<div className="border shadow-sm mt-5">
 					<div className="bg-info text-white py-2 pl-2">
 						<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
 					</div>

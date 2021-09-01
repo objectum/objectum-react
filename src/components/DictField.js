@@ -51,7 +51,7 @@ export default class DictField extends Component {
 		if (records && (!getValue ("records") || records.map (record => record.id).join () != getValue ("records").map (record => record.id).join ())) {
 			state.records = records;
 		}
-		if (state.model || state.property) {
+		if ((state.model || state.property) && getValue ("property")) {
 			if (!state.records) {
 				state.records = await this.props.store.getDict (getValue ("property").get ("type"));
 			}
@@ -84,7 +84,7 @@ export default class DictField extends Component {
 		if (this.state.loading) {
 			state.loading = false;
 		}
-		if (!_isEmpty (state)) {
+		if (!_isEmpty (state) && !this.unmounted) {
 			this.setState (state);
 		}
 	}
@@ -99,6 +99,7 @@ export default class DictField extends Component {
 	}
 	
 	componentWillUnmount () {
+		this.unmounted = true;
 		document.removeEventListener ("mousedown", this.onDocumentClick);
 	}
 	
@@ -227,7 +228,7 @@ export default class DictField extends Component {
 		</div>;
 */
 		return <div className="dictfield-dialog text-left" ref={this._refs ["treeDialog"]}>
-			{this.state.showDialog ? <div className="dictfield-tree border p-1 bg-white shadow ">
+			{this.state.showDialog ? <div className="dictfield-tree border p-1 bg-white shadow-sm">
 				{records.length ? <Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})}/> :
 					<div className="p-1">{i18n ("No parameters")}</div>
 				}

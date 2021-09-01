@@ -1,5 +1,6 @@
 import {i18n} from "../i18n";
 import React, {Component} from "react";
+import PageTitle from "./PageTitle";
 
 export default class ImportCSS extends Component {
 	constructor (props) {
@@ -26,7 +27,8 @@ export default class ImportCSS extends Component {
 	
 	render () {
 		return <div className="container">
-			<div className="border m-2 p-2">
+			<PageTitle label={i18n ("Import css")} />
+			<div className="border p-2">
 				<input type="file" ref={this._refs ["input"]} />
 				<button className="btn btn-primary" onClick={this.onClick}>{i18n ("Load")}</button>
 			</div>

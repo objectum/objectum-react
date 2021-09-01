@@ -45,7 +45,7 @@
 	"query": "запрос",
 	"queries": "запросы",
 	"menu": "меню",
-	"menus": "меню",
+	"menus": "список меню",
 	"role": "роль",
 	"roles": "роли",
 	"user": "пользователь",
@@ -192,5 +192,6 @@
 	"greater than or equal": "больше или равно",
 	"less than": "меньше",
 	"less than or equal": "меньше или равно",
-	"maximum file size": "максимальный размер файла"
+	"maximum file size": "максимальный размер файла",
+	"home": "главная"
 }

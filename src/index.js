@@ -46,6 +46,7 @@ import Navbar from "./components/Navbar";
 import Fade from "./components/Fade";
 import Office from "./components/Office";
 import Return from "./components/Return";
+import MenuButton from "./components/MenuButton";
 import ImportCSS from "./components/ImportCSS";
 /*
 import Schema from "./components/Schema";
@@ -164,6 +165,7 @@ export {
 	Tree,
 	Panel,
 	Group,
+	MenuButton,
 	i18n,
 	setLocale,
 	getLocale,
@@ -251,6 +253,7 @@ export default {
 	Tree,
 	Panel,
 	Group,
+	MenuButton,
 	i18n,
 	setLocale,
 	getLocale,

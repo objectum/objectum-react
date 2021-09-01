@@ -219,7 +219,7 @@ export default class ModelList extends Component {
 		
 		let actions = this.renderActions ();
 		let grid = <Grid {...gridOpts}>
-			<div className="d-flex">
+			<div className="d-flex pb-1">
 				{!this.props.hideCreate && <Action {...this.props} icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} disabled={!this.state.canCreate} />}
 				{!this.props.hideEdit && <Action {...this.props} icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />}
 				{!this.props.hideRemove && <Action {...this.props} icon="fas fa-minus" label={i18n ("Remove")} onClick={this.onRemove}
