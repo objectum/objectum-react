@@ -23,6 +23,8 @@ import {
 	BackButton
 } from "./Buttons";
 import {setStore} from "../modules/common";
+import "../css/objectum.css";
+import "@szhsin/react-menu/dist/index.css";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
