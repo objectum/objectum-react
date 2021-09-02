@@ -61,7 +61,7 @@ import Tree from "./components/Tree";
 import Panel from "./components/Panel";
 import Group from "./components/Group";
 
-import {i18n, setLocale, getLocale} from "./i18n";
+import {i18n, setLocale, getLocale, locales} from "./i18n";
 import {
 	HomeButtonSB,
 	HomeButton,
@@ -169,6 +169,7 @@ export {
 	i18n,
 	setLocale,
 	getLocale,
+	locales,
 	goRidLocation,
 	timeout,
 	newId,
@@ -257,6 +258,7 @@ export default {
 	i18n,
 	setLocale,
 	getLocale,
+	locales,
 	goRidLocation,
 	timeout,
 	newId,
