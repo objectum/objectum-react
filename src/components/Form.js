@@ -551,32 +551,34 @@ export default class Form extends Component {
 			{this.props.label && <div>
 				<h5 className="pl-3 py-2 ml-3">{this.props.label}</h5>
 			</div>}
-			{this.state._rid ? !this.props.hideButtons && <div className="actions p-1 border-bottom">
-				<button type="button" className="btn btn-primary mr-1" onClick={this.onSave} disabled={!this.isChanged () || this.state._saving || this.props.disableActions}>
-					{this.state._saving ?
-						<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
-						<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
-					}
-				</button>
-				{this.props.rsc == "record" && !this.props.hideLogButton &&
-					<button type="button" className="btn btn-primary" onClick={() => this.setState ({_showLog: !this.state._showLog})}>
-						<i className="fas fa-history mr-2" />{i18n ("Log")}
+			<div className="bg-white">
+				{this.state._rid ? !this.props.hideButtons && <div className="actions p-1 border-bottom">
+					<button type="button" className="btn btn-primary mr-1" onClick={this.onSave} disabled={!this.isChanged () || this.state._saving || this.props.disableActions}>
+						{this.state._saving ?
+							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
+							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
+						}
 					</button>
-				}
-			</div> : <div />}
-			{this.state._showLog && <div className="border-bottom p-1"><Log form={this} /></div>}
-			{this.state._error && <div className="p-1"><div className="alert alert-danger" role="alert">{i18n (this.state._error)}</div></div>}
-			<div className="actions p-1">
-				{formChildren}
-			</div>
-			{!this.state._rid && !this.props.hideButtons && <div className="mt-1 actions border-top p-1">
-				<button type="button" className="btn btn-primary mr-1" onClick={this.onCreate} disabled={!this.isChanged () || this.state._creating}>
-					{this.state._creating ?
-						<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
-						<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>
+					{this.props.rsc == "record" && !this.props.hideLogButton &&
+						<button type="button" className="btn btn-primary" onClick={() => this.setState ({_showLog: !this.state._showLog})}>
+							<i className="fas fa-history mr-2" />{i18n ("Log")}
+						</button>
 					}
-				</button>
-			</div>}
+				</div> : <div />}
+				{this.state._showLog && <div className="border-bottom p-1"><Log form={this} /></div>}
+				{this.state._error && <div className="p-1"><div className="alert alert-danger" role="alert">{i18n (this.state._error)}</div></div>}
+				<div className="actions p-1">
+					{formChildren}
+				</div>
+				{!this.state._rid && !this.props.hideButtons && <div className="mt-1 actions border-top p-1">
+					<button type="button" className="btn btn-primary mr-1" onClick={this.onCreate} disabled={!this.isChanged () || this.state._creating}>
+						{this.state._creating ?
+							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :
+							<span><i className="fas fa-plus-circle mr-2"/>{i18n ("Create")}</span>
+						}
+					</button>
+				</div>}
+			</div>
 		</div>;
 	}
 }

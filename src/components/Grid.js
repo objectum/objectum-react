@@ -884,7 +884,7 @@ export default class Grid extends Component {
 		
 		return <Fade><div className={this.props.className}>
 			<PageTitle label={this.props.label} />
-			<div className="border">
+			<div className="border bg-white">
 				{this.state.error && <div className="alert alert-danger" role="alert">{this.state.error}</div>}
 				{this.state.mode == "table" && gridChildren && <div className="pl-1 pt-1">
 					{gridChildren}
