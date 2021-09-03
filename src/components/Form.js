@@ -551,7 +551,7 @@ export default class Form extends Component {
 			{this.props.label && <div>
 				<h5 className="pl-3 py-2 ml-3">{this.props.label}</h5>
 			</div>}
-			<div className="bg-white">
+			<div className={this.props.formClassName}>
 				{this.state._rid ? !this.props.hideButtons && <div className="actions p-1 border-bottom">
 					<button type="button" className="btn btn-primary mr-1" onClick={this.onSave} disabled={!this.isChanged () || this.state._saving || this.props.disableActions}>
 						{this.state._saving ?
