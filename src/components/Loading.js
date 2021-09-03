@@ -12,7 +12,7 @@ export default class Loading extends Component {
 	render () {
 		if (this.props.container) {
 			return <div className="container">
-				<div className="mt-2 p-4 border shadow-sm d-flex">
+				<div className="mt-2 p-4 border shadow-sm d-flex bg-white">
 					<div className="spinner-border spinner-border-sm mr-2 my-auto" role="status" aria-hidden="true" />
 					<div className="my-auto">{i18n ("Loading") + " ..."}</div>
 				</div>

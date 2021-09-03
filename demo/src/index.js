@@ -20,6 +20,7 @@ import ItemModel from "./models/ItemModel";
 import "../../src/css/bootstrap-nap.css";
 import "../../src/css/objectum.css";
 import "../../src/fontawesome/css/all.css";
+import "./demo.css";
 
 import {
 	Menu,
@@ -219,7 +220,7 @@ class Demo extends Component {
 				<ObjectumApp
 					locale="ru"
 					store={store}
-					username="admin"
+					username_="admin"
 					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 /*
 					username="guest"
@@ -227,7 +228,7 @@ class Demo extends Component {
 */
 					name="objectum-react"
 					version={packageConfig.version}
-					//registration
+					registration
 					siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
 					//label="Label"
 					onDisconnect={() => console.log ("disc")}

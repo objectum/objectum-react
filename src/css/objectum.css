@@ -7,11 +7,12 @@
     width: 20em;
 }
 .auth-button {
-    width: 17em;
+    width: 12em;
 }
 .auth {
-    width: 30em;
-    margin: auto;
+    width: 35em;
+    margin: 5em auto;
+    padding: 5em;
 }
 .treegrid-button {
     width: 7em;

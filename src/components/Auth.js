@@ -111,51 +111,39 @@ export default class Auth extends Component {
 						{authInfo}
 					</div>
 				</div>
-			</div> : <div className="auth">
-				<div className="border shadow-sm mt-5">
-					<div className="bg-info text-white py-2 pl-2">
-						<strong><i className="fas fa-user mr-2" />{i18n ("Sign in")}</strong>
-					</div>
-					<div className="border-bottom px-2 py-1">
-						<strong>{this.props.name}</strong>
-					</div>
-					<div className="border-bottom px-2 py-1">
-						<i>{i18n ("version") + " " + this.props.version}</i>
-					</div>
-					<div className="p-2">
-						<div>
-							<input
-								type="text"
-								className="form-control"
-								id="username"
-								placeholder={i18n ("Username")}
-								onChange={this.fieldChange}
-								ref={input => this.usernameInput = input}
-								onKeyDown={this.onKeyDown}
-							/>
-						</div>
-						<div className="mt-3">
-							<input
-								type="password"
-								className="form-control"
-								id="password"
-								placeholder={i18n ("Password")}
-								onChange={this.fieldChange}
-								onKeyDown={this.onKeyDown}
-							/>
-						</div>
-						<div className="mt-3">
-							<button type="button" className="btn btn-primary" onClick={this.buttonClick} disabled={disabledButton}>
-								{this.state.loading ? <Loading /> : <span><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</span>}
-							</button>
-						</div>
-					</div>
-					{this.state.error && (
-						<div className="alert alert-danger mt-3" role="alert">
-							{this.state.error}
-						</div>
-					)}
+			</div> : <div className="auth shadow-sm bg-white rounded text-center">
+				<h2 className="font-weight-bold mb-5">{i18n ("Sign in")}</h2>
+				<div>
+					<input
+						type="text"
+						className="form-control"
+						id="username"
+						placeholder={i18n ("Username")}
+						onChange={this.fieldChange}
+						ref={input => this.usernameInput = input}
+						onKeyDown={this.onKeyDown}
+					/>
 				</div>
+				<div className="mt-3">
+					<input
+						type="password"
+						className="form-control"
+						id="password"
+						placeholder={i18n ("Password")}
+						onChange={this.fieldChange}
+						onKeyDown={this.onKeyDown}
+					/>
+				</div>
+				<div className="mt-3 mb-1">
+					<button type="button" className="btn btn-primary w-100" onClick={this.buttonClick} disabled={disabledButton}>
+						{this.state.loading ? <Loading /> : <span className="text-uppercase font-weight-bold">{i18n ("Log in")}</span>}
+					</button>
+				</div>
+				{this.state.error && (
+					<div className="alert alert-danger mt-3" role="alert">
+						{this.state.error}
+					</div>
+				)}
 			</div>}
 		</Fade>;
 	}

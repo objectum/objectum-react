@@ -258,72 +258,54 @@ export default class Office extends Component {
 				><i className="fas fa-check mr-2"/>Ok</Action>
 			</div>;
 		} else if (this.state.recover) {
-			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
-				<h3 className="text-center">{i18n ("Password recovery")}</h3>
-				<div className="form-group mt-4">
-					<label htmlFor="email">{i18n ("E-mail")}</label>
-					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} />
+			content = <div className={this.props.cardClassName || "auth shadow-sm bg-white rounded text-center"}>
+				<h3 className="font-weight-bold mb-5">{i18n ("Password recovery")}</h3>
+				<div className="form-group">
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} placeholder={i18n ("E-mail")} />
 					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
 				</div>
 				<div className="form-group">
-					<label htmlFor="name">{i18n ("Change name")}</label>
-					<input type="name" className="form-control" id="name" value={this.state.name} onChange={this.onChange} />
-				</div>
-				<div className="form-group">
-					<label htmlFor="password">{i18n ("New password")}</label>
-					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} />
+					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} placeholder={i18n ("New password")} />
 					{this.state.inputError ["password"] && <div className="small text-danger">{this.state.inputError ["password"]}</div>}
 				</div>
 				<div className="form-group">
-					<label htmlFor="password2">{i18n ("Confirm password")}</label>
-					<input type="password" className="form-control" id="password2" value={this.state.password2} onChange={this.onChange} />
+					<input type="password" className="form-control" id="password2" value={this.state.password2} onChange={this.onChange} placeholder={i18n ("Confirm password")} />
 					{this.state.inputError ["password2"] && <div className="small text-danger">{this.state.inputError ["password2"]}</div>}
 				</div>
-				{this.state.password && this.state.password2 && this.state.password != this.state.password2 && <div className="small text-danger mb-2">
+				{this.state.password && this.state.password2 && this.state.password != this.state.password2 && <div className="small text-danger mb-3">
 					{i18n ("Passwords do not match")}
 				</div>}
 				<div id="g-recaptcha" />
 				{this.state.inputError ["recaptchaRes"] && <div className="small text-danger">{this.state.inputError ["recaptchaRes"]}</div>}
-				<div className="text-center">
-					<div className="mt-3">
-						<Action
-							btnClassName="btn btn-primary auth-button px-0"
-							onClick={this.onRecover}
-						><i className="fas fa-envelope mr-2"/>{i18n ("Restore password")}</Action>
-					</div>
-					<div className="mt-3">
-						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: false, recover: false})}>
-							<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
-						</button>
-					</div>
-					<div className="mt-3">
-						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: true, recover: false})}>
-							<i className="fas fa-key mr-2"/>{i18n ("Registration")}
-						</button>
-					</div>
+				<div className="mt-3">
+					<Action
+						btnClassName="btn btn-primary w-100"
+						onClick={this.onRecover}
+					><span className="text-uppercase font-weight-bold">{i18n ("Restore password")}</span></Action>
+				</div>
+				<div className="mt-2">
+					<button className="btn btn-link" onClick={() => this.switch ({register: false, recover: false})}>
+						<span className="text-uppercase font-weight-bold">{i18n ("Sign in")}</span>
+					</button>
 				</div>
 			</div>;
 		} else if (this.state.register) {
-			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
-				<h3 className="text-center">{i18n ("Registration")}</h3>
-				<div className="form-group mt-4">
-					<label htmlFor="email">{i18n ("E-mail")}</label>
-					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} />
+			content = <div className={this.props.cardClassName || "auth shadow-sm bg-white rounded text-center"}>
+				<h2 className="font-weight-bold mb-5">{i18n ("Registration")}</h2>
+				<div className="form-group">
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} placeholder={i18n ("E-mail")} />
 					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
 				</div>
 				<div className="form-group">
-					<label htmlFor="name">{i18n ("Your name")}</label>
-					<input type="name" className="form-control" id="name" value={this.state.name} onChange={this.onChange} />
+					<input type="name" className="form-control" id="name" value={this.state.name} onChange={this.onChange} placeholder={i18n ("Your name")} />
 					{this.state.inputError ["name"] && <div className="small text-danger">{this.state.inputError ["name"]}</div>}
 				</div>
 				<div className="form-group">
-					<label htmlFor="password">{i18n ("Password")}</label>
-					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} />
+					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} placeholder={i18n ("Password")} />
 					{this.state.inputError ["password"] && <div className="small text-danger">{this.state.inputError ["password"]}</div>}
 				</div>
 				<div className="form-group">
-					<label htmlFor="password2">{i18n ("Confirm password")}</label>
-					<input type="password" className="form-control" id="password2" value={this.state.password2} onChange={this.onChange} />
+					<input type="password" className="form-control" id="password2" value={this.state.password2} onChange={this.onChange} placeholder={i18n ("Confirm password")} />
 					{this.state.inputError ["password2"] && <div className="small text-danger">{this.state.inputError ["password2"]}</div>}
 				</div>
 				{this.state.password && this.state.password2 && this.state.password != this.state.password2 && <div className="small text-danger mb-2">
@@ -331,55 +313,45 @@ export default class Office extends Component {
 				</div>}
 				<div id="g-recaptcha" />
 				{this.state.inputError ["recaptchaRes"] && <div className="small text-danger">{this.state.inputError ["recaptchaRes"]}</div>}
-				<div className="text-center">
-					<div className="mt-3">
-						<Action
-							btnClassName="btn btn-primary auth-button"
-							onClick={this.onRegister}
-						><i className="fas fa-key mr-2"/>{i18n ("Register")}</Action>
-					</div>
-					<div className="mt-3">
-						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: false, recover: false})}>
-							<i className="fas fa-sign-in-alt mr-2"/>{i18n ("Sign in")}
-						</button>
-					</div>
-					<div className="mt-3">
-						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({recover: true, register: false})}>
-							<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
-						</button>
-					</div>
+				<div className="mt-3">
+					<Action
+						btnClassName="btn btn-primary w-100"
+						onClick={this.onRegister}
+					><span className="text-uppercase font-weight-bold">{i18n ("Register")}</span></Action>
+				</div>
+				<div className="mt-2">
+					<button className="btn btn-link" onClick={() => this.switch ({register: false, recover: false})}>
+						<span className="text-uppercase font-weight-bold">{i18n ("Sign in")}</span>
+					</button>
 				</div>
 			</div>;
 		} else {
-			content = <div className={this.props.cardClassName || "p-3 shadow-sm"}>
-				<h3 className="text-center">{i18n ("Sign In")}</h3>
-				<div className="form-group mt-4">
-					<label htmlFor="email">{i18n ("E-mail")}</label>
-					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} ref={input => this.loginInput = input} />
+			content = <div className={this.props.cardClassName || "auth shadow-sm bg-white rounded text-center"}>
+				<h2 className="font-weight-bold mb-5">{i18n ("Sign In")}</h2>
+				<div className="form-group">
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} ref={input => this.loginInput = input} placeholder={i18n ("E-mail")} />
 					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
 				</div>
 				<div className="form-group">
-					<label htmlFor="loginPassword">{i18n ("Password")}</label>
-					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} onKeyDown={this.onKeyDown}/>
+					<input type="password" className="form-control" id="password" value={this.state.password} onChange={this.onChange} onKeyDown={this.onKeyDown} placeholder={i18n ("Password")} />
 					{this.state.inputError ["password"] && <div className="small text-danger">{this.state.inputError ["password"]}</div>}
 				</div>
-				<div className="text-center">
-					<div className="mt-4">
-						<Action
-							btnClassName="btn btn-primary auth-button"
-							onClick={this.onLogin}
-						><i className="fas fa-sign-in-alt mr-2"/>{i18n ("Log in")}</Action>
-					</div>
-					<div className="mt-3">
-						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: true, recover: false})}>
-							<i className="fas fa-key mr-2"/>{i18n ("Registration")}
-						</button>
-					</div>
-					<div className="mt-3">
-						<button className="btn btn-outline-primary px-0 auth-button" onClick={() => this.switch ({register: false, recover: true})}>
-							<i className="fas fa-envelope mr-2"/>{i18n ("Forgot password?")}
-						</button>
-					</div>
+				<div className="mt-2">
+					<button className="btn btn-link" onClick={() => this.switch ({register: false, recover: true})}>
+						<span className="font-italic">{i18n ("Forgot password?")}</span>
+					</button>
+				</div>
+				<div className="mt-2">
+					<Action
+						btnClassName="btn btn-primary w-100"
+						onClick={this.onLogin}
+						label={<span className="text-uppercase font-weight-bold">{i18n ("Log in")}</span>}
+					/>
+				</div>
+				<div className="mt-2">
+					<button className="btn btn-link" onClick={() => this.switch ({register: true, recover: false})}>
+						<span className="text-uppercase font-weight-bold">{i18n ("Registration")}</span>
+					</button>
 				</div>
 				{this.state.error && <div className="mt-3 alert alert-danger" role="alert">
 					{this.state.error}
