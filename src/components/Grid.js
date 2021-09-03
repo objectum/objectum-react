@@ -369,7 +369,7 @@ export default class Grid extends Component {
 		let s = `${i18n ("Records")}: ${pos}-${pos2} ${i18n ("of")} ${this.state.length} (${i18n ("Pages")}: ${this.state.pageNum})`;
 
 		if (this.state.pageNum == 1) {
-			s = `${i18n ("Records")}: ${this.state.length}`;
+			s = `${i18n ("Records")}: ${this.state.length || ""}`;
 		}
 		if (!pos2) {
 			s = i18n ("empty");

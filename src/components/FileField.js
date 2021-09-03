@@ -29,6 +29,7 @@ function FileInput (props) {
 	}
 	if (props.accept) {
 		opts.accept = props.accept;
+		console.log (props.accept);
 	}
 	const {acceptedFiles, getRootProps, getInputProps} = useDropzone (opts);
 /*
@@ -87,9 +88,9 @@ function FileInput (props) {
 	} else if (props.value) {
 		if (recordId) {
 			fileEl = <div className="d-flex align-items-center">
-				<button className="btn btn-link" onClick={() => props.onChange ({target: {value: null}})} title={i18n ("Remove")}>
+				{!props.disabled && <button className="btn btn-link" onClick={() => props.onChange ({target: {value: null}})} title={i18n ("Remove")}>
 					<i className="fas fa-times text-danger" />
-				</button>
+				</button>}
 				<a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a>
 			</div>;
 		} else {

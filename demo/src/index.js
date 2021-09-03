@@ -137,7 +137,7 @@ class Test extends Component {
 					<div className="col-6 border">
 						<Form store={store} rsc="record" rid={this.state.id} mid="item" onCreate={() => this.setState ({refresh: !this.state.refresh})} onSave={() => this.setState ({refresh: !this.state.refresh})}>
 							<Field property="name" />
-							<Field property="photo" />
+							<Field property="photo" accept=".pdf" />
 						</Form>
 					</div>
 				</div>
