@@ -86,7 +86,12 @@ function FileInput (props) {
 		fileEl = info;
 	} else if (props.value) {
 		if (recordId) {
-			fileEl = <div><a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a></div>;
+			fileEl = <div className="d-flex align-items-center">
+				<button className="btn btn-link" onClick={() => props.onChange ({target: {value: null}})} title={i18n ("Remove")}>
+					<i className="fas fa-times text-danger" />
+				</button>
+				<a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a>
+			</div>;
 		} else {
 			fileEl = <div>{props.value}</div>;
 		}
@@ -135,6 +140,7 @@ export default class FileField extends Component {
 		this.id = newId ();
 	}
 	
+/*
 	onChange = (val) => {
 		let value = val.target.value;
 		
@@ -144,7 +150,18 @@ export default class FileField extends Component {
 			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 		}
 	}
-	
+*/
+
+	onChange = (val) => {
+		let value = val.target.value;
+
+		this.setState ({value});
+
+		if (this.props.onChange) {
+			this.props.onChange ({...this.props, code: this.state.code, property: this.state.code, value, id: this.props.id});
+		}
+	}
+
 	onFile = (id, file) => {
 		this.setState ({value: file.path});
 
@@ -237,6 +254,7 @@ export default class FileField extends Component {
 			{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 			{this.props.store ? <FileInput
 				id={this.id} onFile={this.onFile} value={this.state.value} store={this.props.store}
+				onChange={this.onChange}
 				record={this.props.record} model={this.props.model} property={this.props.property} propertyId={this.props.propertyId} recordId={this.props.recordId}
 				image={this.state.image} error={this.props.error} disabled={this.props.disabled}
 				accept={this.props.accept}

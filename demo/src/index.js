@@ -123,13 +123,6 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<MenuButton items={[{
-					label: "Item 1", icon: "fas fa-building", path: "/model_list/item"
-				}, {
-					label: "Item 2", icon: "fas fa-building", items: [{
-						label: "Item 2.1", icon: "fas fa-building", value: "item2.1"
-					}]
-				}]} onClick={({value}) => console.log (value)} />
 
 				<Group label="Group" collapsible>
 					<DateField label="Date" min={new Date (2021, 7, 10)} max={new Date (2021, 7, 20)} onChange={opts => console.log (opts)} />
@@ -144,6 +137,7 @@ class Test extends Component {
 					<div className="col-6 border">
 						<Form store={store} rsc="record" rid={this.state.id} mid="item" onCreate={() => this.setState ({refresh: !this.state.refresh})} onSave={() => this.setState ({refresh: !this.state.refresh})}>
 							<Field property="name" />
+							<Field property="photo" />
 						</Form>
 					</div>
 				</div>
@@ -220,7 +214,7 @@ class Demo extends Component {
 				<ObjectumApp
 					locale="ru"
 					store={store}
-					username_="admin"
+					username="admin"
 					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 /*
 					username="guest"
@@ -228,7 +222,7 @@ class Demo extends Component {
 */
 					name="objectum-react"
 					version={packageConfig.version}
-					registration
+					//registration
 					siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
 					//label="Label"
 					onDisconnect={() => console.log ("disc")}
