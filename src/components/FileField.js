@@ -29,7 +29,6 @@ function FileInput (props) {
 	}
 	if (props.accept) {
 		opts.accept = props.accept;
-		console.log (props.accept);
 	}
 	const {acceptedFiles, getRootProps, getInputProps} = useDropzone (opts);
 /*

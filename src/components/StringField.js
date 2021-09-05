@@ -35,7 +35,7 @@ export default class StringField extends Component {
 			state.lastValidValue = value;
 		}
 		if (this.props.onChange && valid) {
-			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
+			this.props.onChange ({...this.props, code: this.state.code, property: this.state.code, value, id: this.props.id});
 		}
 		this.setState (state);
 	}
@@ -132,6 +132,10 @@ export default class StringField extends Component {
 			state.value = this.state.lastValidValue;
 		}
 		this.setState (state);
+
+		if (this.props.onBlur) {
+			this.props.onBlur ({property: this.state.code});
+		}
 	}
 
 	renderValues () {
@@ -177,7 +181,7 @@ export default class StringField extends Component {
 			onChange={this.onChange}
 			onBlur={this.onBlur}
 			disabled={disabled}
-			placeholder={this.props.placeholder}
+			placeholder={this.props.placeholder || this.props.label}
 		/>;
 		if (this.props.textarea) {
 			cmp = <textarea
@@ -188,7 +192,7 @@ export default class StringField extends Component {
 				onChange={this.onChange}
 				disabled={disabled}
 				rows={this.props.rows || 5}
-				placeholder={this.props.placeholder}
+				placeholder={this.props.placeholder || this.props.label}
 			/>;
 		}
 		if (this.props.wysiwyg) {
@@ -235,7 +239,7 @@ export default class StringField extends Component {
 			</div>;
 		}
 		return <div className={(this.props.label || error) ? "form-group stringfield" : "stringfield"}>
-			{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+			{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 			{cmp}
 			{this.renderValues ()}
 			{error && <div className="invalid-feedback">{error}</div>}

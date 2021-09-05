@@ -414,7 +414,13 @@ export default class Form extends Component {
 		}
 		return changed;
 	}
-	
+
+	onFieldBlur = async () => {
+		if (this.state._rid && this.props.autoSave && this.isChanged () && !this.state._saving) {
+			await this.onSave ();
+		}
+	}
+
 	renderChildren (children, parent = "") {
 		return React.Children.map (children, (child, i) => {
 			if (!child || !child.props) {
@@ -433,6 +439,7 @@ export default class Form extends Component {
 						}
 						this.onChange (opts);
 					},
+					onBlur: this.onFieldBlur,
 					property: code,
 					value,
 					record: this.record,
@@ -467,7 +474,7 @@ export default class Form extends Component {
 						let opts = property.getOpts ();
 
 						Object.assign (props, opts);
-						props.label = props.label || property.name;
+						props.label = props.hasOwnProperty ("label") ? props.label : property.name;
 					}
 					if (!type) {
 						return <div key={key} />;
@@ -552,7 +559,7 @@ export default class Form extends Component {
 				<h5 className="pl-3 py-2 ml-3">{this.props.label}</h5>
 			</div>}
 			<div className={this.props.formClassName}>
-				{this.state._rid ? !this.props.hideButtons && <div className="actions p-1 border-bottom">
+				{this.state._rid ? (!this.props.hideButtons && !this.props.autoSave && <div className="actions p-1 border-bottom">
 					<button type="button" className="btn btn-primary mr-1" onClick={this.onSave} disabled={!this.isChanged () || this.state._saving || this.props.disableActions}>
 						{this.state._saving ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
@@ -564,13 +571,13 @@ export default class Form extends Component {
 							<i className="fas fa-history mr-2" />{i18n ("Log")}
 						</button>
 					}
-				</div> : <div />}
+				</div>) : <div />}
 				{this.state._showLog && <div className="border-bottom p-1"><Log form={this} /></div>}
 				{this.state._error && <div className="p-1"><div className="alert alert-danger" role="alert">{i18n (this.state._error)}</div></div>}
 				<div className="actions p-1">
 					{formChildren}
 				</div>
-				{!this.state._rid && !this.props.hideButtons && <div className="mt-1 actions border-top p-1">
+				{!this.state._rid && !this.props.hideButtons && !this.props.autoSave && <div className="mt-1 actions border-top p-1">
 					<button type="button" className="btn btn-primary mr-1" onClick={this.onCreate} disabled={!this.isChanged () || this.state._creating}>
 						{this.state._creating ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Creating")}</span> :

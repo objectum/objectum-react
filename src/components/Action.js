@@ -55,7 +55,7 @@ export default class Action extends Component {
 	}
 	
 	onClick = async () => {
-		let execute = () => {
+		let execute = async () => {
 			let handler = this.props.onClick || this.props.onClickSelected;
 			let state = {processing: false, abort: false};
 			
@@ -75,6 +75,9 @@ export default class Action extends Component {
 				}, 200);
 				
 				try {
+					if (this.props.transaction && this.props.store) {
+						await this.props.store.startTransaction (typeof (this.props.transaction) == "string" ? this.props.transaction : undefined);
+					}
 					let promise = handler.call (this, {
 						store: this.props.store,
 						progress: ({label, value, max}) => {
@@ -88,7 +91,10 @@ export default class Action extends Component {
 						}
 					});
 					if (promise && promise.then) {
-						promise.then (result => {
+						promise.then (async (result) => {
+							if (this.props.transaction && this.props.store) {
+								await this.props.store.commitTransaction ();
+							}
 							if (typeof (result) == "string") {
 								state.result = result;
 							}
@@ -100,8 +106,12 @@ export default class Action extends Component {
 									this.props.store.abort = false;
 								}
 							}
-						}).catch (err => {
+						}).catch (async (err) => {
 							console.error (err);
+
+							if (this.props.transaction && this.props.store) {
+								await this.props.store.rollbackTransaction ();
+							}
 							state.error = err.message;
 
 							if (!this.unmounted) {
