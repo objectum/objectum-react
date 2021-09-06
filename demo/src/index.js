@@ -113,6 +113,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<textarea maxlength={10} />
 				<Action label="transaction change" transaction onClick={this.onClick} store={store} />
 				<Group label="Group" collapsible>
 					<DateField label="Date" min={new Date (2021, 7, 10)} max={new Date (2021, 7, 20)} onChange={opts => console.log (opts)} />

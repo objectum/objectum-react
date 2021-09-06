@@ -190,8 +190,10 @@ export default class StringField extends Component {
 				value={this.state.value || ""}
 				onKeyDown={this.onKeyDown}
 				onChange={this.onChange}
+				onBlur={this.onBlur}
 				disabled={disabled}
 				rows={this.props.rows || 5}
+				maxlength={this.props.maxlength}
 				placeholder={this.props.placeholder || this.props.label}
 			/>;
 		}

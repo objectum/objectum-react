@@ -11,6 +11,7 @@ export default class Records extends Component {
 		this.state = {
 			refresh: false
 		};
+		this._ref = React.createRef ();
 	}
 
 	onCreate = () => {
@@ -57,7 +58,7 @@ export default class Records extends Component {
 		let gridOpts = {
 			...this.props,
 			id: this.props.id || `records-${this.model}`,
-			ref: this.props.id || `records-${this.model}`,
+			ref: this._ref,
 			store: this.props.store,
 			label: i18n ("Records") + ": " + m.get ("name"),
 			refresh: this.state.refresh,
