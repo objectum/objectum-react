@@ -154,7 +154,7 @@ export default class Tree extends Component {
 	
 	render () {
 		this.calcLevelNum ();
-		return <table className="table table-sm table-striped"><tbody>{this.renderNodes (null)}</tbody></table>;
+		return <table className="table table-sm border-bottom mb-0"><tbody>{this.renderNodes (null)}</tbody></table>;
 	}
 };
 Tree.displayName = "Tree";

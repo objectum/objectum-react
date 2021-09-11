@@ -193,7 +193,7 @@ export default class StringField extends Component {
 				onBlur={this.onBlur}
 				disabled={disabled}
 				rows={this.props.rows || 5}
-				maxlength={this.props.maxlength}
+				maxLength={this.props.maxLength || this.props.maxlength}
 				placeholder={this.props.placeholder || this.props.label}
 			/>;
 		}

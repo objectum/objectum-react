@@ -61,6 +61,8 @@ export default class ObjectumApp extends Component {
 		
 		this.state = {
 			sidebarDocked: true,
+			headerVisible: true,
+			headerMarginTop: 0,
 			locations: [{pathname: window.location.pathname, hash: window.location.hash}],
 			name: this.props.name || "Objectum",
 			version: this.props.version || "0.0.1"
@@ -86,16 +88,33 @@ export default class ObjectumApp extends Component {
 			user: i18n ("User"),
 			import_css: i18n ("Import css")
 		};
+		this._refs = {
+			header: React.createRef ()
+		};
 		window.OBJECTUM_APP = {
 			store: this.store,
 			sidebar: this.props.sidebar,
 			locale: this.props.locale
 		};
 	}
-	
+
+	onScroll = () => {
+		if (this._refs ["header"].current) {
+			let headerHeight = this._refs ["header"].current.offsetHeight;
+			let headerVisible = window.pageYOffset <= headerHeight;
+			let headerMarginTop = (window.pageYOffset > headerHeight && window.pageYOffset < headerHeight * 2) ? headerHeight * 2 - window.pageYOffset : 0;
+
+			if (headerVisible != this.state.headerVisible || headerMarginTop != this.state.headerMarginTop) {
+				let state = {headerVisible, headerMarginTop};
+				this.setState (state);
+			}
+		}
+	}
+
 	async componentDidMount () {
 		this.store.addListener ("connect", this.onConnect);
 		this.store.addListener ("disconnect", this.onDisconnect);
+		window.addEventListener ("scroll", this.onScroll)
 		
 		if (this.props.username && this.props.password) {
 			try {
@@ -119,6 +138,7 @@ export default class ObjectumApp extends Component {
 	componentWillUnmount () {
 		this.store.removeListener ("connect", this.onConnect);
 		this.store.removeListener ("disconnect", this.onConnect);
+		window.removeEventListener ("scroll", this.onScroll);
 	}
 	
 	onConnect = async (opts) => {
@@ -457,11 +477,16 @@ export default class ObjectumApp extends Component {
 							<HomeButton><strong>{label}</strong></HomeButton>,
 						]} />
 */}
-						<div className="d-flex p-1 border-bottom align-items-center fixed-top bg-white">
+						<div
+							className={`objectum-header d-flex p-1 align-items-center bg-white shadow-sm ${this.state.headerVisible ? "" : "fixed-top"}`}
+							style={{marginTop: `-${this.state.headerMarginTop}px`}}
+							ref={this._refs ["header"]}
+						>
 							<MenuButton items={this.menuItems} />
 							{this.renderPosition ()}
 						</div>
-						<div className="objectum-content mt-5">
+						{!this.state.headerVisible && <div className="objectum-header" />}
+						<div className="objectum-content">
 							{this.renderRoutes ()}
 						</div>
 						<div className="p-1 fixed-bottom border-top text-center bg-white">

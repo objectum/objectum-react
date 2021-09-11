@@ -89,8 +89,8 @@
     position: absolute;
     left: -1px;
     top: 2px;
-    min-width: 35em;
-    min-height: 5em;
+    min-width: 10em;
+    min-height: 3em;
     max-height: 45em;
     white-space: nowrap;
     z-index: 1000;
@@ -173,6 +173,9 @@
     overflow: hidden;
     z-index: 10000;
     max-width: 30em;
+}
+.objectum-header {
+    height: 3.2em;
 }
 .objectum-content {
     margin-top: 1.5em;
@@ -290,4 +293,11 @@ textarea {
 }
 .block-visible {
     max-height: 2000px;
+}
+.header-hidden {
+    transition: all 1.2s ease-in-out;
+    max-height: 0;
+}
+.header-visible {
+    max-height: 100px;
 }

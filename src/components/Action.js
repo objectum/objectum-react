@@ -75,7 +75,10 @@ export default class Action extends Component {
 				}, 200);
 				
 				try {
-					if (this.props.transaction && this.props.store) {
+					if (this.props.transaction) {
+						if (!this.props.store) {
+							throw new Error ("Action.props.store not exist");
+						}
 						await this.props.store.startTransaction (typeof (this.props.transaction) == "string" ? this.props.transaction : undefined);
 					}
 					let promise = handler.call (this, {
@@ -242,7 +245,7 @@ export default class Action extends Component {
 					<button type="button" className="btn btn-success ml-1" onClick={() => this.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
 				</div>
 			</Fade>}
-			{this.state.processing && !this.state.confirm && <Fade className="popup">
+			{this.state.processing && !this.state.confirm && !this.props.hideProgress && <Fade className="popup">
 				<div className="popup-content bg-white shadow-sm text-primary p-1">
 					<div className="border p-1">
 						<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{progressText}

@@ -113,14 +113,35 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<textarea maxlength={10} />
-				<Action label="transaction change" transaction onClick={this.onClick} store={store} />
-				<Group label="Group" collapsible>
-					<DateField label="Date" min={new Date (2021, 7, 10)} max={new Date (2021, 7, 20)} onChange={opts => console.log (opts)} />
-					<StringField label="Name" values={[
-						"foo", "bar", "test", "aaaaa", "aaabbb"
-					]} value="f" />
-				</Group>
+				<Action label="Action" icon="fas fa-check" onClick={async () => {
+					await timeout (1000);
+				}} />
+				<div className="row">
+					<div className="col-2">
+						<DictField recs={[
+							{id: 1, name: "Red"},
+							{id: 2, name: "Blue"},
+							{id: 3, name: "Green"},
+							{id: 4, name: "Yellow"}
+						]} />
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-6">
+						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
+					</div>
+					<div className="col-6 border">
+						<Form
+							store={store} rsc="record" rid={this.state.id} mid="item"
+							onCreate={() => this.setState ({refresh: !this.state.refresh})}
+							onSave={() => this.setState ({refresh: !this.state.refresh})}
+							autoSave
+						>
+							<Field property="name" hideLabel />
+							<Field property="photo" accept=".pdf" />
+						</Form>
+					</div>
+				</div>
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
