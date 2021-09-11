@@ -114,7 +114,7 @@ export default class Tree extends Component {
 					</button>
 				</div> : null}
 			</td>);
-			td.push (<td key="value" colSpan={this.levelNum - level} style={{paddingLeft: 0}}>
+			td.push (<td key="value" colSpan={this.levelNum - level} style={{paddingLeft: 0, paddingRight: "2.5em"}}>
 				<div className="d-flex align-items-center">
 					{this.props.selectMulti && <input type="checkbox" className="mr-1" checked={this.state [`checked-${rec.id}`] || false} onChange={val => {
 						this.check (rec.id, val.target.checked);

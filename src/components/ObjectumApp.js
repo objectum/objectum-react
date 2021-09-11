@@ -63,10 +63,13 @@ export default class ObjectumApp extends Component {
 			sidebarDocked: true,
 			headerVisible: true,
 			headerMarginTop: 0,
-			locations: [{pathname: window.location.pathname, hash: window.location.hash}],
+			locations: [],
 			name: this.props.name || "Objectum",
 			version: this.props.version || "0.0.1"
 		};
+		if (window.location.pathname != "/") {
+			this.state.locations.push ({pathname: window.location.pathname, hash: window.location.hash});
+		}
 		setStore (this.props.store);
 		this.store = this.props.store;
 		this.menuItemRecs = [];

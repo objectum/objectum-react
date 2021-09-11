@@ -119,7 +119,7 @@ class Test extends Component {
 				<div className="row">
 					<div className="col-2">
 						<DictField recs={[
-							{id: 1, name: "Red"},
+							{id: 1, name: "Red Red Red Red"},
 							{id: 2, name: "Blue"},
 							{id: 3, name: "Green"},
 							{id: 4, name: "Yellow"}
@@ -226,48 +226,44 @@ class Demo extends Component {
 	render () {
 		let me = this;
 		
-		return (
-			<div>
-				<ObjectumApp
-					locale="ru"
-					store={store}
-					username="admin"
-					password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+		return <ObjectumApp
+			locale="ru"
+			store={store}
+			username="admin"
+			password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 /*
-					username="guest"
-					password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
+			username="guest"
+			password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
 */
-					name="objectum-react"
-					version={packageConfig.version}
-					//registration
-					siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
-					//label="Label"
-					onDisconnect={() => console.log ("disc")}
+			name="objectum-react"
+			version={packageConfig.version}
+			//registration
+			siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
+			//label="Label"
+			onDisconnect={() => console.log ("disc")}
 /*
-					onRenderAuthInfo={div => {
-						return div;
-					}}
+			onRenderAuthInfo={div => {
+				return div;
+			}}
 */
-					/*onCustomRender={me.onCustomRender}*/
-					//sidebar
-					onConnect={me.onConnect}
-				>
-					<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
-					<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />
-					<ObjectumRoute path="/office" render={props => (
-						<div className="container">
-							<div style={{width: "50em"}}>
-								<Office
-									{...props} store={store} name="objectum-react" cardClassName="p-4 shadow"
-									/*authorized={me.state.username && me.state.username != "guest"}*/
-									siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
-								/>
-							</div>
-						</div>
-					)} />
-				</ObjectumApp>
-			</div>
-		);
+			/*onCustomRender={me.onCustomRender}*/
+			//sidebar
+			onConnect={me.onConnect}
+		>
+			<ObjectumRoute path="/test" render={props => <Test {...props} store={store} />} />
+			<ObjectumRoute path="/test2" render={props => <Test {...props} store={store} />} />
+			<ObjectumRoute path="/office" render={props => (
+				<div className="container">
+					<div style={{width: "50em"}}>
+						<Office
+							{...props} store={store} name="objectum-react" cardClassName="p-4 shadow"
+							/*authorized={me.state.username && me.state.username != "guest"}*/
+							siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
+						/>
+					</div>
+				</div>
+			)} />
+		</ObjectumApp>;
 	}
 };
 
