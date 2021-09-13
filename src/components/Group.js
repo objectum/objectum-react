@@ -23,14 +23,14 @@ export default class Group extends Component {
 		}
 		return <div className={this.props.className}>
 			<div className="d-flex" style={{height: "2em"}}>
-				<div className="border-top border-left h-50 mt-auto"  style={{width: "2em"}} />
+				<div className="border-top border-left h-50 mt-auto rounded-top-left"  style={{width: "2em"}} />
 				<div {...opts}>
 					{this.props.collapsible && <i className={`far ${this.state.expanded ? "fa-caret-square-down" : "fa-caret-square-up"} ml-2 my-auto text-primary`} />}
 					<div className="mx-2 text-nowrap">{i18n (this.props.label) || ""}</div>
 				</div>
-				<div className="border-top border-right w-100 h-50 mt-auto" />
+				<div className="border-top border-right w-100 h-50 mt-auto rounded-top-right" />
 			</div>
-			<div className="border-left border-right border-bottom">
+			<div className="border-left border-right border-bottom rounded-bottom">
 				{this.props.collapsible ? (
 					<div className={`p-1 block-hidden ${this.state.expanded ? "block-visible" : ""}`}>{this.props.children}</div>
 				) : <div className="p-1">{this.props.children}</div>}

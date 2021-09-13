@@ -304,3 +304,9 @@ textarea {
 .header-visible {
     max-height: 100px;
 }
+.rounded-top-right {
+    border-top-right-radius: 0.25rem !important;
+}
+.rounded-top-left {
+    border-top-left-radius: 0.25rem !important;
+}

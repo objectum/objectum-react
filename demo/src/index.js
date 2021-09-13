@@ -118,12 +118,14 @@ class Test extends Component {
 				}} />
 				<div className="row">
 					<div className="col-2">
-						<DictField recs={[
-							{id: 1, name: "Red Red Red Red"},
-							{id: 2, name: "Blue"},
-							{id: 3, name: "Green"},
-							{id: 4, name: "Yellow"}
-						]} />
+						<Group label="123">
+							<DictField recs={[
+								{id: 1, name: "Red Red Red Red"},
+								{id: 2, name: "Blue"},
+								{id: 3, name: "Green"},
+								{id: 4, name: "Yellow"}
+							]} />
+						</Group>
 					</div>
 				</div>
 				<div className="row">
