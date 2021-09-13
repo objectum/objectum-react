@@ -174,7 +174,7 @@ export default class FileField extends Component {
 			reader.readAsDataURL (file);
 		} else {
 			if (this.props.onChange) {
-				this.props.onChange ({...this.props, code: this.state.code, value: file.path, file, id: this.props.id});
+				this.props.onChange ({...this.props, code: this.state.code, property: this.state.code, value: file.path, file, id: this.props.id});
 			}
 		}
 	}
@@ -252,14 +252,14 @@ export default class FileField extends Component {
 	render () {
 		return <div className="form-group">
 			{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-			{this.props.store ? <FileInput
+			<FileInput
 				id={this.id} onFile={this.onFile} value={this.state.value} store={this.props.store}
 				onChange={this.onChange}
 				record={this.props.record} model={this.props.model} property={this.props.property} propertyId={this.props.propertyId} recordId={this.props.recordId}
 				image={this.state.image} error={this.props.error} disabled={this.props.disabled}
 				accept={this.props.accept}
 				maxSize={this.props.maxSize}
-			/> : <div className="alert alert-danger">store not exist</div> }
+			/>
 			{this.props.error ? <div className="invalid-feedback">{this.props.error}</div> : null}
 			{this.props.description && <div className="text-muted"><small>{this.props.description}</small></div>}
 			{this.state.src && <Modal

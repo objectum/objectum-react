@@ -574,7 +574,7 @@ export default class Form extends Component {
 				</div>) : <div />}
 				{this.state._showLog && <div className="border-bottom p-1"><Log form={this} /></div>}
 				{this.state._error && <div className="p-1"><div className="alert alert-danger" role="alert">{i18n (this.state._error)}</div></div>}
-				<div className="actions p-1">
+				<div className={this.props.autoSave ? "" : "actions p-1"}>
 					{formChildren}
 				</div>
 				{!this.state._rid && !this.props.hideButtons && !this.props.autoSave && <div className="mt-1 actions border-top p-1">
