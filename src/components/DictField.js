@@ -228,7 +228,7 @@ export default class DictField extends Component {
 		</div>;
 */
 		return <div className="dictfield-dialog text-left" ref={this._refs ["treeDialog"]}>
-			{this.state.showDialog ? <div className="dictfield-tree bg-white shadow-sm">
+			{this.state.showDialog ? <div className="dictfield-tree bg-white shadow-sm rounded">
 				{records.length ? <Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})}/> :
 					<div className="p-1">{i18n ("No parameters")}</div>
 				}

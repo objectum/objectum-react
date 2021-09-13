@@ -39,7 +39,7 @@ export default class JsonField extends Component {
 		let value = typeof (this.props.value) == "string" ? this.props.value : JSON.stringify (this.props.value);
 
 		if (prevValue !== value) {
-			let state = {value: JSON.parse (value), refresh: !this.state.refresh};
+			let state = {value: JSON.parse (value || "{}"), refresh: !this.state.refresh};
 
 			if (this.props.multi && state.value && !Array.isArray (state.value)) {
 				state.value = [state.value];
