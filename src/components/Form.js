@@ -105,7 +105,7 @@ export default class Form extends Component {
 					let value;
 					
 					if (this.record) {
-						value = this.record [code] === null ? "" : this.record [code];
+						value = (this.record [code] === null || this.record [code] === undefined) ? "" : this.record [code];
 					} else {
 						if (field.props.hasOwnProperty ("value") && field.props.value !== undefined) {
 							value = field.props.value;
