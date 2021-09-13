@@ -60,7 +60,7 @@
 		"lodash.sortby": "^4.7.0",
 		"lodash.uniq": "^4.5.0",
 		"lodash.values": "^4.3.0",
-		"objectum-client": "^1.2.28",
+		"objectum-client": "^1.2.29",
 		"react-device-detect": "^1.13.1",
 		"react-dropzone": "^10.2.2",
 		"react-image-crop": "^8.6.2",
