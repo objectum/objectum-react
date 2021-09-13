@@ -168,7 +168,7 @@ export default class DateField extends Component {
 	
 	render () {
 		return <div className={(this.props.label || this.props.error) ? "form-group" : ""}>
-			{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+			{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 			<input
 				type="text"
 				className={`${this.props.inputClassName || "form-control"} ${this.props.sm ? "form-control-sm" : ""} ${this.props.error ? "is-invalid" : ""} datefield`}

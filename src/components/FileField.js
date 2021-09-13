@@ -251,7 +251,7 @@ export default class FileField extends Component {
 	
 	render () {
 		return <div className="form-group">
-			{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+			{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 			{this.props.store ? <FileInput
 				id={this.id} onFile={this.onFile} value={this.state.value} store={this.props.store}
 				onChange={this.onChange}

@@ -244,7 +244,7 @@ export default class DictField extends Component {
 		
 		return <div>
 			<div className={(this.props.label || this.props.error) ? "form-group" : ""}>
-				{this.props.label && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
+				{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 				<div className="input-group dictfield">
 					<input
 						type="text"

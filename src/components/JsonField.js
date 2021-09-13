@@ -96,7 +96,7 @@ export default class JsonField extends Component {
 			</Group>;
 		}
 		return <div>
-			{this.props.label && <div className="mb-1"><strong>{i18n (this.props.label)}</strong></div>}
+			{this.props.label && !this.props.hideLabel && <div className="mb-1"><strong>{i18n (this.props.label)}</strong></div>}
 			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 			{this.renderFields (this.state.value)}
 		</div>;
