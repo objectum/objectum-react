@@ -15,13 +15,13 @@ export default class Menus extends Component {
 	
 	onCreate = () => {
 		this.props.history.push ({
-			pathname: "/menu/new"
+			pathname: this.props.prefix + "/menu/new"
 		});
 	}
 	
 	onEdit = ({id}) => {
 		this.props.history.push ({
-			pathname: "/menu/" + id
+			pathname: this.props.prefix + "/menu/" + id
 		});
 	}
 	

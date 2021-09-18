@@ -175,7 +175,7 @@
 	"sun": "вс",
 	"invalid value": "неправильное значение",
 	"example": "пример",
-	"import css": "импорт css",
+	"Import CSS": "Импорт CSS",
 	"no parameters": "параметры отсутствуют",
 	"import from another menu": "импортировать из другого меню",
 	"menu contains items": "меню содержит пункты",
@@ -194,5 +194,6 @@
 	"less than": "меньше",
 	"less than or equal": "меньше или равно",
 	"maximum file size": "максимальный размер файла",
-	"home": "главная"
+	"home": "главная",
+	"Sign In with Google": "Войти через Google"
 }

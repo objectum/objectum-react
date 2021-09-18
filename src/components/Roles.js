@@ -15,13 +15,13 @@ export default class Roles extends Component {
 	
 	onCreate = () => {
 		this.props.history.push ({
-			pathname: "/role/new"
+			pathname: this.props.prefix + "/role/new"
 		});
 	}
 	
 	onEdit = ({id}) => {
 		this.props.history.push ({
-			pathname: "/role/" + id
+			pathname: this.props.prefix + "/role/" + id
 		});
 	}
 	

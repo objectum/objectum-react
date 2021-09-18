@@ -18,7 +18,7 @@ export default class Properties extends Component {
 	
 	onCreate = () => {
 		this.props.history.push ({
-			pathname: "/property/new#" + JSON.stringify ({
+			pathname: this.props.prefix + "/property/new#" + JSON.stringify ({
 				opts: {
 					model: this ["model"]
 				}
@@ -28,7 +28,7 @@ export default class Properties extends Component {
 	
 	onEdit = ({id}) => {
 		this.props.history.push ({
-			pathname: "/property/" + id + "#" + JSON.stringify ({
+			pathname: this.props.prefix + "/property/" + id + "#" + JSON.stringify ({
 				opts: {
 					model: this ["model"]
 				}

@@ -20,6 +20,9 @@ function i18n (s) {
 	if (!s || typeof (s) != "string") {
 		return s;
 	}
+	if (map [s]) {
+		return map [s];
+	}
 	let r = map [s.toLowerCase ()] || s;
 	
 	if (s [0] === s [0].toUpperCase ()) {

@@ -15,13 +15,13 @@ export default class Users extends Component {
 	
 	onCreate = () => {
 		this.props.history.push ({
-			pathname: "/user/new"
+			pathname: this.props.prefix + "/user/new"
 		});
 	}
 	
 	onEdit = ({id}) => {
 		this.props.history.push ({
-			pathname: "/user/" + id
+			pathname: this.props.prefix + "/user/" + id
 		});
 	}
 	

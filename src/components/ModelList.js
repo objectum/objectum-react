@@ -37,7 +37,7 @@ export default class ModelList extends Component {
 			opts.parentId = this.props.parentId;
 		}
 		this.props.history.push ({
-			pathname: "/model_record/new#" + JSON.stringify ({opts})
+			pathname: this.props.prefix + "/model_record/new#" + JSON.stringify ({opts})
 		});
 	}
 	
@@ -50,7 +50,7 @@ export default class ModelList extends Component {
 			opts.parentId = this.props.parentId;
 		}
 		this.props.history.push ({
-			pathname: "/model_record/" + id + "#" + JSON.stringify ({opts})
+			pathname: this.props.prefix + "/model_record/" + id + "#" + JSON.stringify ({opts})
 		});
 	}
 	
