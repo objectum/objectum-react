@@ -155,6 +155,16 @@ export default class ObjectumApp extends Component {
 				query: "objectum.userMenuItems",
 				menu: menuId
 			});
+			if (this.props.home) {
+				result.recs.forEach (rec => {
+					if (rec.path) {
+						let tokens = rec.path.split ("/");
+						if (tokens [1] != this.props.home) {
+							rec.path = this.props.home + rec.path;
+						}
+					}
+				});
+			}
 			this.menuItemRecs = result.recs;
 			
 			let items = [];
