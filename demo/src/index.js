@@ -233,14 +233,13 @@ class Demo extends Component {
 			store={store}
 			__username="admin"
 			password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-			home="/home"
 /*
 			username="guest"
 			password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
 */
 			name="objectum-react"
 			version={packageConfig.version}
-			registration
+			//registration
 			siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
 			//label="Label"
 			onDisconnect={() => console.log ("disc")}

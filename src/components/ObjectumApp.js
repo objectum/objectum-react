@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Link, useLocation} from "react-router-do
 import {
 	Auth, Models, Model, Property, Queries, Query, Column, Roles, Role, Users, User,
 	Menus, Menu, MenuItem, ModelList, ModelTree, ModelRecord, Records, Office, ImportCSS,
-	MenuButton
+	MenuButton, timeout
 } from "..";
 import Sidebar from "react-sidebar";
 import {setLocale, i18n} from "../i18n";
@@ -12,7 +12,6 @@ import _each from "lodash.foreach";
 import _keys from "lodash.keys";
 import Fade from "./Fade";
 import {execute} from "objectum-client";
-import Loading from "./Loading";
 import {Navbar} from "../index";
 import {
 	HomeButtonSB,
@@ -149,8 +148,6 @@ export default class ObjectumApp extends Component {
 		let menuId = opts.menuId;
 		let state = {sid: opts.sessionId};
 		
-		this.setState ({loading: true});
-		
 		if (menuId) {
 			let result = await this.store.getData ({
 				query: "objectum.userMenuItems",
@@ -194,8 +191,6 @@ export default class ObjectumApp extends Component {
 			this.menuItemRecs = [];
 			this.menuItems = [];
 		}
-		state.loading = false;
-
 		if (this.props.onConnect) {
 			await execute (this.props.onConnect);
 		}
@@ -441,9 +436,11 @@ export default class ObjectumApp extends Component {
 				</div>
 			</div>;
 		}
+/*
 		if (this.state.loading) {
 			return <Loading container />
 		}
+*/
 		let content;
 		
 		if (this.state.sid) {

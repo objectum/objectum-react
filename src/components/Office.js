@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {Action, i18n, loadJS} from "..";
+import {Action, i18n, loadJS, Loading} from "..";
 import crypto from "crypto";
 
 export default class Office extends Component {
@@ -170,12 +170,14 @@ export default class Office extends Component {
 			}
 		}
 		try {
+			this.setState ({processing: true});
+
 			await this.props.store.auth ({
 				username: this.state.email,
 				password: require ("crypto").createHash ("sha1").update (this.state.password).digest ("hex").toUpperCase ()
 			});
 			if (!this.unmounted) {
-				this.setState ({authorized: true, inputError: {}});
+				this.setState ({processing: false, authorized: true, inputError: {}});
 			}
 			return i18n ("Logged in")
 		} catch (err) {
@@ -345,7 +347,10 @@ export default class Office extends Component {
 					<Action
 						btnClassName="btn btn-primary w-100"
 						onClick={this.onLogin}
-						label={<span className="text-uppercase font-weight-bold">{i18n ("Log in")}</span>}
+						hideProgress
+						disabled={this.state.processing}
+						label={this.state.processing ? <span className="spinner-border spinner-border-sm" /> :
+							<span className="text-uppercase font-weight-bold">{i18n ("Log in")}</span>}
 					/>
 				</div>
 				<div className="mt-2">

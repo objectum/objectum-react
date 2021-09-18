@@ -136,7 +136,8 @@ export default class Auth extends Component {
 				</div>
 				<div className="mt-3 mb-1">
 					<button type="button" className="btn btn-primary w-100" onClick={this.buttonClick} disabled={disabledButton}>
-						{this.state.loading ? <Loading /> : <span className="text-uppercase font-weight-bold">{i18n ("Log in")}</span>}
+						{this.state.loading ? <span className="spinner-border spinner-border-sm" /> :
+							<span className="text-uppercase font-weight-bold">{i18n ("Log in")}</span>}
 					</button>
 				</div>
 				{this.state.error && (
