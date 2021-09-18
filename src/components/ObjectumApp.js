@@ -310,7 +310,7 @@ export default class ObjectumApp extends Component {
 		});
 		if (position.length) {
 			position = [
-				<Link key="home" to="/" className="text-primary">{i18n ("Home")}</Link>,
+				<Link key="home" to={this.props.home || "/"} className="text-primary">{i18n ("Home")}</Link>,
 				<span key="home-chevron" className="text-primary"><i className="fas fa-chevron-right mx-2" /></span>,
 				...position
 			];
@@ -321,22 +321,23 @@ export default class ObjectumApp extends Component {
 	}
 
 	renderRoutes () {
+		let prefix = this.props.home ? `/${this.props.home}` : "";
 		let items = [
-			<Route key="objectum-1" path="/queries" render={props => <Queries {...props} store={this.store} />} />,
-			<Route key="objectum-2" path="/query/:rid" render={props => <Query {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-3" path="/column/:rid" render={props => <Column {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-4" path="/models" render={props => <Models {...props} store={this.store} />} />,
-			<Route key="objectum-5" path="/model/:rid" render={props => <Model {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-6" path="/property/:rid" render={props => <Property {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-7" path="/roles" render={props => <Roles {...props} store={this.store} />} />,
-			<Route key="objectum-8" path="/role/:rid" render={props => <Role {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-9" path="/users" render={props => <Users {...props} store={this.store} />} />,
-			<Route key="objectum-10" path="/user/:rid" render={props => <User {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-11" path="/menus" render={props => <Menus {...props} store={this.store} />} />,
-			<Route key="objectum-12" path="/menu/:rid" render={props => <Menu {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={this.store} app={this} />} />,
-			<Route key="objectum-17" path="/import_css" render={props => <ImportCSS {...props} />} />,
+			<Route key="objectum-1" path={`${prefix}/queries`} render={props => <Queries {...props} store={this.store} />} />,
+			<Route key="objectum-2" path={`${prefix}/query/:rid`} render={props => <Query {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-3" path={`${prefix}/column/:rid`} render={props => <Column {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-4" path={`${prefix}/models`} render={props => <Models {...props} store={this.store} />} />,
+			<Route key="objectum-5" path={`${prefix}/model/:rid`} render={props => <Model {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-6" path={`${prefix}/property/:rid`} render={props => <Property {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-7" path={`${prefix}/roles`} render={props => <Roles {...props} store={this.store} />} />,
+			<Route key="objectum-8" path={`${prefix}/role/:rid`} render={props => <Role {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-9" path={`${prefix}/users`} render={props => <Users {...props} store={this.store} />} />,
+			<Route key="objectum-10" path={`${prefix}/user/:rid`} render={props => <User {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-11" path={`${prefix}/menus`} render={props => <Menus {...props} store={this.store} />} />,
+			<Route key="objectum-12" path={`${prefix}/menu/:rid`} render={props => <Menu {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-13" path={`${prefix}/menu_item/:rid`} render={props => <MenuItem {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-16" path={`${prefix}/model_record/:rid`} render={props => <ModelRecord {...props} store={this.store} app={this} />} />,
+			<Route key="objectum-17" path={`${prefix}/import_css`} render={props => <ImportCSS {...props} />} />,
 		];
 		let SearchRoutes = (children) => {
 			React.Children.forEach (children, (child, i) => {
@@ -366,21 +367,21 @@ export default class ObjectumApp extends Component {
 			}
 			items.push (<Route
 				key={`model-list-${path}`}
-				path={`/model_list/${path.split (".").join ("_")}`}
+				path={`${prefix}/model_list/${path.split (".").join ("_")}`}
 				render={props => <div className="container">
 					<ModelList {...props} store={this.store} model={path} />
 				</div>}
 			/>);
 			items.push (<Route
 				key={`model-tree-${path}`}
-				path={`/model_tree/${path.split (".").join ("_")}`}
+				path={`${prefix}/model_tree/${path.split (".").join ("_")}`}
 				render={props => <div className="container">
 					<ModelTree {...props} store={this.store} model={path} />
 				</div>}
 			/>);
 			items.push (<Route
 				key={`records-${path}`}
-				path={`/records/${path.split (".").join ("_")}`}
+				path={`${prefix}/records/${path.split (".").join ("_")}`}
 				render={props => <div className="container">
 					<Records {...props} store={this.store} model={path} />
 				</div>}
