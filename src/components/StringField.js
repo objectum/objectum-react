@@ -76,7 +76,7 @@ export default class StringField extends Component {
 						]
 					},
 					readOnly: this.props.disabled || this.props.readOnly,
-					placeholder: this.props.placeholder,
+					placeholder: i18n (this.props.placeholder),
 					theme: "snow"
 				});
 				if (this.state.value) {
@@ -181,7 +181,7 @@ export default class StringField extends Component {
 			onChange={this.onChange}
 			onBlur={this.onBlur}
 			disabled={disabled}
-			placeholder={this.props.placeholder || this.props.label}
+			placeholder={i18n (this.props.placeholder || this.props.label)}
 		/>;
 		if (this.props.textarea) {
 			cmp = <textarea
@@ -194,7 +194,7 @@ export default class StringField extends Component {
 				disabled={disabled}
 				rows={this.props.rows || 5}
 				maxLength={this.props.maxLength || this.props.maxlength}
-				placeholder={this.props.placeholder || this.props.label}
+				placeholder={i18n (this.props.placeholder || this.props.label)}
 			/>;
 		}
 		if (this.props.wysiwyg) {

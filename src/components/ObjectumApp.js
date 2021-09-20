@@ -483,7 +483,15 @@ export default class ObjectumApp extends Component {
 							style={{marginTop: `-${this.state.headerMarginTop}px`}}
 							ref={this._refs ["header"]}
 						>
-							<MenuButton items={this.menuItems} />
+							<MenuButton items={[...this.menuItems, {icon: "fas fa-sign-out-alt", label: i18n ("Logout"), value: "logout"}]} onClick={({value, history}) => {
+								if (value == "logout") {
+									this.store.end ();
+									this.setState ({
+										sidebarOpen: false, locations: [], sid: null
+									});
+									history.push ("/");
+								}
+							}} />
 							{this.renderPosition ()}
 						</div>
 						{!this.state.headerVisible && <div className="objectum-header" />}

@@ -21,7 +21,7 @@ export default function MenuButton (props) {
 					{getItems (item.items)}
 				</SubMenu>;
 			} else {
-				return <MenuItem key={i} path={item.path} onClick={() => onClick ({value: item.value || item.label, path: item.path})}>
+				return <MenuItem key={i} path={item.path} onClick={() => onClick ({value: item.value || item.label, path: item.path, history})}>
 					{item.icon ? <i className={`${item.icon} mr-2 text-center`} style={{width: "1.5em"}} /> : null}{i18n (item.label)}
 				</MenuItem>;
 			}
