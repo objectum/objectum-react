@@ -183,9 +183,9 @@ export default class Office extends Component {
 		} catch (err) {
 			if (!this.unmounted) {
 				if (err.message == "401 Unauthenticated") {
-					this.setState ({error: i18n ("Incorrect e-mail (login) or password"), inputError: {}});
+					this.setState ({processing: false, error: i18n ("Incorrect e-mail (login) or password"), inputError: {}});
 				} else {
-					this.setState ({error: err.message, inputError: {}});
+					this.setState ({processing: false, error: err.message, inputError: {}});
 				}
 			}
 		}

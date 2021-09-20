@@ -192,37 +192,12 @@ class Demo extends Component {
 	}
 	
 	onCustomRender ({content, app, location}) {
-		if (!this.state.username) {
-			return <Loading container />
+		if (!app.state.sid) {
+			return <div>
+				<div>{content}</div>
+				<div>test</div>
+			</div>;
 		}
-		return (
-			<div className="container">
-				<Navbar className="navbar navbar-expand navbar-dark bg-dark" items={[
-					<HomeButton><strong className="text-white">Label</strong></HomeButton>,
-				]} />
-				<Navbar expand app={app} items={[
-					"back",
-					...app.menuItems,
-					{
-						id: "1",
-						label: "Label",
-						icon: "fas fa-check",
-						path: null,
-						items: [
-							{
-								id: "2",
-								label: "Label Label Label Label Label Label",
-								icon: "fas fa-check",
-								path: "/test"
-							}
-						]
-					}
-				]} />
-				<div className="bg-secondary p-1">
-					{content}
-				</div>
-			</div>
-		);
 	}
 	
 	render () {
@@ -239,7 +214,7 @@ class Demo extends Component {
 */
 			name="objectum-react"
 			version={packageConfig.version}
-			//registration
+			registration
 			siteKey="6LffszoUAAAAALAe2ghviS8wqitVKvsR1bFMwtcK"
 			//label="Label"
 			onDisconnect={() => console.log ("disc")}
@@ -248,7 +223,7 @@ class Demo extends Component {
 				return div;
 			}}
 */
-			/*onCustomRender={me.onCustomRender}*/
+			onCustomRender={me.onCustomRender}
 			//sidebar
 			onConnect={me.onConnect}
 		>
