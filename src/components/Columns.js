@@ -15,7 +15,7 @@ export default class Columns extends Component {
 	
 	onCreate = () => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/column/new#" + JSON.stringify ({
+			pathname: "/column/new#" + JSON.stringify ({
 				opts: {
 					query: this.query
 				}
@@ -25,7 +25,7 @@ export default class Columns extends Component {
 	
 	onEdit = ({id}) => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/column/" + id
+			pathname: "/column/" + id
 		});
 	}
 	

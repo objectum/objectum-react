@@ -16,7 +16,7 @@ export default class Queries extends Component {
 	
 	onCreate = () => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/query/new#" + JSON.stringify ({
+			pathname: "/query/new#" + JSON.stringify ({
 				opts: {
 					parent: this.parent
 				}
@@ -26,7 +26,7 @@ export default class Queries extends Component {
 	
 	onEdit = ({id}) => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/query/" + id
+			pathname: "/query/" + id
 		});
 	}
 	

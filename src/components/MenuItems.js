@@ -113,7 +113,7 @@ export default class MenuItems extends Component {
 	
 	onCreate = () => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/menu_item/new#" + JSON.stringify ({
+			pathname: "/menu_item/new#" + JSON.stringify ({
 				opts: {
 					menu: this.menu,
 					parent: this.state.parent
@@ -124,7 +124,7 @@ export default class MenuItems extends Component {
 	
 	onEdit = ({id}) => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/menu_item/" + id + "#" + JSON.stringify ({
+			pathname: "/menu_item/" + id + "#" + JSON.stringify ({
 				opts: {
 					menu: this.menu,
 					parent: this.state.parent

@@ -16,7 +16,7 @@ export default class Models extends Component {
 	
 	onCreate = () => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/model/new#" + JSON.stringify ({
+			pathname: "/model/new#" + JSON.stringify ({
 				opts: {
 					parent: this.parent
 				}
@@ -26,7 +26,7 @@ export default class Models extends Component {
 	
 	onEdit = ({id}) => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/model/" + id + "#" + JSON.stringify ({
+			pathname: "/model/" + id + "#" + JSON.stringify ({
 				opts: {
 					parent: this.parent
 				}
@@ -50,7 +50,7 @@ export default class Models extends Component {
 	
 	onRecords = ({id}) => {
 		this.props.history.push ({
-			pathname: this.props.prefix + "/records/" + this.props.store.getModel (id).getPath ().split (".").join ("_")
+			pathname: "/records/" + this.props.store.getModel (id).getPath ().split (".").join ("_")
 		});
 	}
 	
