@@ -184,18 +184,19 @@ class Demo extends Component {
 		//window.store = store;
 	}
 	
-	onConnect = () => {
+	onConnect = async () => {
 		this.setState ({
 			username: store.username
 		});
 		window.store = store;
+		await timeout (2000);
 	}
 	
 	onCustomRender ({content, app, location}) {
 		if (!app.state.sid) {
 			return <div>
 				<div>{content}</div>
-				<div className="auth text-center border">test</div>
+				<div className="text-center"><Action icon="fas fa-key" label={i18n ("Create temporary account and sign in")} /></div>
 			</div>;
 		}
 	}
