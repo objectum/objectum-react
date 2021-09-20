@@ -363,7 +363,7 @@ export default class Office extends Component {
 				</div>}
 			</div>;
 		}
-		return <div className={this.props.className || "m-auto"} style={{width: this.props.width || "352px"}}>{content}</div>;
+		return <div>{content}</div>;
 	}
 };
 Office.displayName = "Office";

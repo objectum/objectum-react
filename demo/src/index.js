@@ -195,7 +195,7 @@ class Demo extends Component {
 		if (!app.state.sid) {
 			return <div>
 				<div>{content}</div>
-				<div>test</div>
+				<div className="auth text-center border">test</div>
 			</div>;
 		}
 	}
