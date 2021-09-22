@@ -113,9 +113,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<Action label="Action" icon="fas fa-check" onClick={async () => {
-					await timeout (1000);
-				}} />
+				<StringField label="String" values={["abc", "def"]} />
 				<div className="row">
 					<div className="col-2">
 						<Group label="123">
@@ -189,7 +187,6 @@ class Demo extends Component {
 			username: store.username
 		});
 		window.store = store;
-		await timeout (2000);
 	}
 	
 	onCustomRender ({content, app, location}) {
@@ -207,7 +204,7 @@ class Demo extends Component {
 		return <ObjectumApp
 			locale="ru"
 			store={store}
-			__username="admin"
+			username="admin"
 			password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
 /*
 			username="guest"
@@ -224,7 +221,7 @@ class Demo extends Component {
 				return div;
 			}}
 */
-			onCustomRender={me.onCustomRender}
+			//onCustomRender={me.onCustomRender}
 			//sidebar
 			onConnect={me.onConnect}
 		>

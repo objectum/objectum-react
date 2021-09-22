@@ -30,6 +30,9 @@ export default class DictField extends Component {
 		if (this.props.onChange) {
 			this.props.onChange ({...this.props, code: this.state.code, value: null, id: this.props.id});
 		}
+		if (this.props.onBlur) {
+			this.props.onBlur ({property: this.state.code});
+		}
 	}
 	
 	updateState = async (prevProps = {}) => {
@@ -185,6 +188,9 @@ export default class DictField extends Component {
 		
 		if (this.props.onChange) {
 			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
+		}
+		if (this.props.onBlur) {
+			this.props.onBlur ({property: this.state.code});
 		}
 	}
 	
