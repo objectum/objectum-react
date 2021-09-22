@@ -275,7 +275,8 @@ export default class Action extends Component {
 					{
 						content: this.props.modalStyle || (window.OBJECTUM_APP && window.OBJECTUM_APP.sidebar) ? {
 							marginLeft: "21em"
-						} : {}
+						} : {},
+						overlay: {zIndex: 1000}
 					}
 				}
 			>
