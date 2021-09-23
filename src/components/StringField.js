@@ -143,7 +143,7 @@ export default class StringField extends Component {
 
 	renderValues () {
 		if (this.state.showDialog && this.props.values && this.state.value) {
-			let values = this.props.values.filter (v => v.indexOf (this.state.value) > -1);
+			let values = this.props.values.filter (v => v.toLowerCase ().indexOf (this.state.value.toLowerCase ()) > -1);
 			if (values.length) {
 				if (values.length == 1 && values [0] == this.state.value) {
 					return;

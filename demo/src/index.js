@@ -113,6 +113,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<StringField label="String" values={["Abc", "def"]} />
 				<Action label="Modal" modalComponent={() => <div>test</div>} />
 				<div className="row">
 					<div className="col-2">
