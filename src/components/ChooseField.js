@@ -170,12 +170,22 @@ export default class ChooseField extends Component {
 			</div>
 			<Modal
 				isOpen={this.state.visible}
+/*
 				style={
 					document.documentElement.clientWidth > 1000 ? {
 						content: {
 							left: "270px"
 						}
 					} : {}
+				}
+*/
+				style={
+					{
+						content: this.props.modalStyle || (window.OBJECTUM_APP && window.OBJECTUM_APP.sidebar) ? {
+							marginLeft: "21em"
+						} : {},
+						overlay: {zIndex: 1000}
+					}
 				}
 			>
 				<div className="row">

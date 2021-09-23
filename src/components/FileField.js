@@ -264,7 +264,17 @@ export default class FileField extends Component {
 			{this.props.description && <div className="text-muted"><small>{this.props.description}</small></div>}
 			{this.state.src && <Modal
 				isOpen={this.state.showModal}
+/*
 				style={{content: {marginLeft: "21em"}}}
+*/
+				style={
+					{
+						content: this.props.modalStyle || (window.OBJECTUM_APP && window.OBJECTUM_APP.sidebar) ? {
+							marginLeft: "21em"
+						} : {},
+						overlay: {zIndex: 1000}
+					}
+				}
 			>
 				<div className="mb-3">
 					<button
