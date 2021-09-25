@@ -277,7 +277,7 @@ export default class Form extends Component {
 			await this.props.store.rollbackTransaction ();
 		}
 		try {
-			if (this.props.onSave) {
+			if (this.props.onSave && changed) {
 				await execute (this.props.onSave, {form: this, store: this.props.store});
 			}
 		} catch (err) {
