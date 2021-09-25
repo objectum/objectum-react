@@ -131,23 +131,7 @@ class Test extends Component {
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
 					</div>
-					<div className="col-6 border">
-						<Form
-							store={store} rsc="record" rid={this.state.id} mid="item"
-							onCreate={() => this.setState ({refresh: !this.state.refresh})}
-							onSave={() => this.setState ({refresh: !this.state.refresh})}
-							autoSave
-						>
-							<Field property="name" hideLabel />
-							<Field property="photo" accept=".pdf" />
-						</Form>
-					</div>
-				</div>
-				<div className="row">
 					<div className="col-6">
-						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
-					</div>
-					<div className="col-6 border">
 						<Form
 							store={store} rsc="record" rid={this.state.id} mid="item"
 							onCreate={() => this.setState ({refresh: !this.state.refresh})}
@@ -155,6 +139,12 @@ class Test extends Component {
 							autoSave
 						>
 							<Field property="name" hideLabel />
+							<Field property="category" />
+							<JsonField property="code" props={[
+								{prop: "green", label: "Green", component: BooleanField},
+								{prop: "blue", label: "Blue", component: BooleanField},
+								{prop: "red", label: "red", component: BooleanField}
+							]} />
 							<Field property="photo" accept=".pdf" />
 						</Form>
 					</div>

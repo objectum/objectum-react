@@ -127,18 +127,11 @@ export default class StringField extends Component {
 	}
 
 	onBlur = () => {
-		if (this.state.dialogHover) {
-			return;
-		}
-		let state = {showDialog: false};
+		let state = {};
 		if (this.state.regexp && this.state.value && !this.state.regexp.test (this.state.value)) {
 			state.value = this.state.lastValidValue;
 		}
 		this.setState (state);
-
-		if (this.props.onBlur) {
-			this.props.onBlur ({property: this.state.code});
-		}
 	}
 
 	renderValues () {
@@ -152,7 +145,7 @@ export default class StringField extends Component {
 					return {id: v, name: v};
 				});
 				return <div className="dictfield-dialog text-left">
-					<div className="dictfield-tree border p-1 bg-white shadow-sm" onMouseEnter={() => this.setState ({dialogHover: true})} onMouseLeave={() => this.setState ({dialogHover: false})}>
+					<div className="dictfield-tree border p-1 bg-white shadow-sm">
 						<Tree records={records} highlightText={this.state.value} onChoose={({id}) => {
 							this.onChange ({target: {value: id}});
 						}} />

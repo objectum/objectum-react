@@ -29,6 +29,10 @@ export default class JsonField extends Component {
 			this.setValue (o);
 		} else {
 			let o = JSON.parse (JSON.stringify (this.state.value));
+
+			if (typeof (o) != "object") {
+				o = {};
+			}
 			o [code] = value;
 			this.setValue (o);
 		}

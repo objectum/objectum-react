@@ -148,14 +148,27 @@ export default class Form extends Component {
 	
 	async componentDidMount () {
 		await this.updateState ({}, true);
+		this.autoSaveIntervalId = setInterval (this.autoSave, this.props.autoSaveInterval || 5000);
 	}
 	
 	async componentDidUpdate (prevProps) {
+		if (this.props.rsc && prevProps.rid && this.props.rid != prevProps.rid) {
+			await this.autoSave ();
+		}
 		await this.updateState (prevProps);
 	}
 
-	componentWillUnmount () {
+	async componentWillUnmount () {
+		await this.autoSave ();
+		clearInterval (this.autoSaveIntervalId);
 		this.unmounted = true;
+	}
+
+	autoSave = async () => {
+		if (!this.props.autoSave || !this.state._rid) {
+			return;
+		}
+		await this.onSave ();
 	}
 
 	onChange = ({code, value, file}) => {
@@ -213,10 +226,10 @@ export default class Form extends Component {
 		this.setState ({_saving: true});
 
 		await timeout (100);
-		await this.props.store.startTransaction (`${i18n ("Saving")}, id: ${this.state._rid}`);
-		
+
 		let state = {_saving: false};
 		let values = this.getValues (this.props.children);
+		let changed = false;
 		
 		try {
 			for (let code in values) {
@@ -232,23 +245,28 @@ export default class Form extends Component {
 				if (value === "") {
 					value = null;
 				}
-				this.record.set (code, value);
-			}
-			await this.record.sync ();
-			
-			for (let code in values) {
-				if (this.fileMap [code]) {
-					await this.upload ({
-						sessionId: this.props.store.getSessionId (),
-						objectId: this.record.get ("id"),
-						classAttrId: this.model.properties [code].get ("id"),
-						name: this.record.get (code),
-						file: this.fileMap [code]
-					});
+				if (this.record [code] != value) {
+					changed = true;
+					this.record [code] = value;
 				}
 			}
-			await this.props.store.commitTransaction ();
-			
+			if (changed) {
+				await this.props.store.startTransaction (`${i18n ("Saving")}, id: ${this.state._rid}`);
+				await this.record.sync ();
+
+				for (let code in values) {
+					if (this.fileMap [code]) {
+						await this.upload ({
+							sessionId: this.props.store.getSessionId (),
+							objectId: this.record.get ("id"),
+							classAttrId: this.model.properties [code].get ("id"),
+							name: this.record.get (code),
+							file: this.fileMap [code]
+						});
+					}
+				}
+				await this.props.store.commitTransaction ();
+			}
 			for (let code in values) {
 				state [code] = this.record.get (code);
 			}
@@ -415,11 +433,13 @@ export default class Form extends Component {
 		return changed;
 	}
 
+/*
 	onFieldBlur = async () => {
 		if (this.state._rid && this.props.autoSave && this.isChanged () && !this.state._saving) {
 			await this.onSave ();
 		}
 	}
+*/
 
 	renderChildren (children, parent = "") {
 		return React.Children.map (children, (child, i) => {
@@ -439,7 +459,6 @@ export default class Form extends Component {
 						}
 						this.onChange (opts);
 					},
-					onBlur: this.onFieldBlur,
 					property: code,
 					value,
 					record: this.record,
