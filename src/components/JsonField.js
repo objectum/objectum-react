@@ -12,8 +12,10 @@ export default class JsonField extends Component {
 			value: this.props.multi ? [] : {}
 		};
 		if (this.props.value) {
-			this.state.value = typeof (this.props.value) == "string" ? JSON.parse (this.props.value) : this.props.value;
-			
+			try {
+				this.state.value = typeof (this.props.value) == "string" ? JSON.parse (this.props.value) : this.props.value;
+			} catch (err) {
+			}
 			if (this.props.multi && this.state.value && !Array.isArray (this.state.value)) {
 				this.state.value = [this.state.value];
 			}
@@ -43,8 +45,13 @@ export default class JsonField extends Component {
 		let value = typeof (this.props.value) == "string" ? this.props.value : JSON.stringify (this.props.value);
 
 		if (prevValue !== value) {
-			let state = {value: JSON.parse (value || "{}"), refresh: !this.state.refresh};
+			let state = {refresh: !this.state.refresh};
 
+			if (this.props.value) {
+				state.value = typeof (this.props.value) == "string" ? JSON.parse (this.props.value) : this.props.value;
+			} else {
+				state.value = {};
+			}
 			if (this.props.multi && state.value && !Array.isArray (state.value)) {
 				state.value = [state.value];
 			}

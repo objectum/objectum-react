@@ -140,10 +140,10 @@ class Test extends Component {
 						>
 							<Field property="name" hideLabel />
 							<Field property="category" />
-							<JsonField property="code" props={[
+							<JsonField property="opts" props={[
 								{prop: "green", label: "Green", component: BooleanField},
 								{prop: "blue", label: "Blue", component: BooleanField},
-								{prop: "red", label: "red", component: BooleanField}
+								{prop: "red", label: "Red", component: BooleanField}
 							]} />
 							<Field property="photo" accept=".pdf" />
 						</Form>
