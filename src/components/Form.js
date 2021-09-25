@@ -3,7 +3,7 @@
 
 import React, {Component} from "react";
 import {StringField, NumberField, DateField, BooleanField, DictField, ChooseField, FileField, ModelList, Log, Loading, EditForm} from "..";
-import {i18n, timeout} from "..";
+import {i18n} from "..";
 import {execute} from "objectum-client";
 import _isNumber from "lodash.isnumber";
 import _each from "lodash.foreach";
@@ -225,8 +225,6 @@ export default class Form extends Component {
 		}
 		this.setState ({_saving: true});
 
-		await timeout (100);
-
 		let state = {_saving: false};
 		let values = this.getValues (this.props.children);
 		let changed = false;
@@ -295,7 +293,6 @@ export default class Form extends Component {
 		}
 		this.setState ({_creating: true});
 		
-		await timeout (100);
 		await this.props.store.startTransaction (`${i18n ("Creating")}${this.props.mid ? `, ${i18n ("model")}: ${this.props.mid}` : ""}`);
 		
 		let state = {_creating: false};
