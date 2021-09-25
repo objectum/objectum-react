@@ -21,7 +21,8 @@ export default class Form extends Component {
 			_loading: true,
 			_saving: false,
 			_creating: false,
-			_showLog: false
+			_showLog: false,
+			_saveProgress: 0
 		};
 		if (this.props.values) {
 			Object.assign (this.state, this.props.values);
@@ -249,7 +250,9 @@ export default class Form extends Component {
 				}
 			}
 			if (changed) {
+				this.setState ({_saveProgress: 25});
 				await this.props.store.startTransaction (`${i18n ("Saving")}, id: ${this.state._rid}`);
+				this.setState ({_saveProgress: 50});
 				await this.record.sync ();
 
 				for (let code in values) {
@@ -263,7 +266,9 @@ export default class Form extends Component {
 						});
 					}
 				}
+				this.setState ({_saveProgress: 75});
 				await this.props.store.commitTransaction ();
+				this.setState ({_saveProgress: 0});
 			}
 			for (let code in values) {
 				state [code] = this.record.get (code);
@@ -591,6 +596,9 @@ export default class Form extends Component {
 				{this.state._showLog && <div className="border-bottom p-1"><Log form={this} /></div>}
 				{this.state._error && <div className="p-1"><div className="alert alert-danger" role="alert">{i18n (this.state._error)}</div></div>}
 				<div className={this.props.autoSave ? "" : "actions p-1"}>
+					{this.props.autoSave ? <div className="progress mb-1" style={{height: "1px"}}>
+						<div className="progress-bar" role="progressbar" style={{width: `${this.state._saveProgress}%`}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" />
+					</div> : null}
 					{formChildren}
 				</div>
 				{!this.state._rid && !this.props.hideButtons && !this.props.autoSave && <div className="mt-1 actions border-top p-1">
