@@ -259,7 +259,7 @@ export default class Action extends Component {
 				</div>
 			</Fade>}
 			{this.state.showPopup && <Fade className="popup">
-				<div className="popup-component bg-white shadow-sm p-1 mb-1" ref={this._refs ["popup"]}>
+				<div className="popup-component bg-white shadow-sm p-1 my-1" ref={this._refs ["popup"]}>
 					<div className="mb-2 border-bottom d-flex justify-content-end">
 						<button
 							type="button" className="btn btn-link btn-sm"
