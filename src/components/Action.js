@@ -222,13 +222,13 @@ export default class Action extends Component {
 				{this.props.children ? this.props.children : (this.props.label || "")}
 			</button>
 			{this.state.error && <Fade className="popup">
-				<div className="popup-content bg-white shadow-sm text-danger p-1">
+				<div className="popup-content bg-white shadow-sm text-danger p-1 my-1">
 					<div className="mb-1">{i18n (this.state.error)}</div>
 					<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onClose}>{i18n ("Close")}</button>
 				</div>
 			</Fade>}
 			{this.state.result && <Fade className="popup">
-				<div className="popup-content bg-white shadow-sm text-success p-1">
+				<div className="popup-content bg-white shadow-sm text-success p-1 my-1">
 					<div className="border p-1">
 						{i18n (this.state.result)}
 					</div>
@@ -239,14 +239,14 @@ export default class Action extends Component {
 				</div>
 			</Fade>}
 			{this.state.confirm && <Fade className="popup">
-				<div className="popup-content bg-white shadow-sm text-danger p-1 mb-1" ref={this._refs ["confirm"]}>
+				<div className="popup-content bg-white shadow-sm text-danger p-1 my-1" ref={this._refs ["confirm"]}>
 					<div className="mb-1">{this.state.confirm}</div>
 					<button type="button" className="btn btn-danger" onClick={() => this.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
 					<button type="button" className="btn btn-success ml-1" onClick={() => this.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>
 				</div>
 			</Fade>}
 			{this.state.processing && !this.state.confirm && !this.props.hideProgress && <Fade className="popup">
-				<div className="popup-content bg-white shadow-sm text-primary p-1">
+				<div className="popup-content bg-white shadow-sm text-primary p-1 my-1">
 					<div className="border p-1">
 						<span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{progressText}
 					</div>

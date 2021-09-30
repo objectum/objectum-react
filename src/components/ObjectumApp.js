@@ -23,7 +23,8 @@ import {
 } from "./Buttons";
 import {setStore} from "../modules/common";
 import "../css/objectum.css";
-import "@szhsin/react-menu/dist/index.css";
+//import "@szhsin/react-menu/dist/index.css";
+import "../css/react-menu.css";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
