@@ -41,12 +41,14 @@ export default class Action extends Component {
 		if (prevProps.recordId != this.props.recordId) {
 			this.setState ({recordId: this.props.recordId});
 		}
+/*
 		if (this.state.confirm && !prevState.confirm) {
 			this._refs ["confirm"].current.scrollIntoView ();
 		}
 		if (this.state.showPopup && !prevState.showPopup) {
 			this._refs ["popup"].current.scrollIntoView ();
 		}
+*/
 	}
 	
 	componentWillUnmount () {

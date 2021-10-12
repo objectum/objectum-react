@@ -476,6 +476,7 @@ export default class Form extends Component {
 					if (property.notNull) {
 						props.notNull = true;
 					}
+					props.label = props.hasOwnProperty ("label") ? props.label : property.name;
 				}
 				props.rsc = props.rsc || this.props.rsc;
 				
