@@ -142,9 +142,10 @@ function loadJS (file) {
 
 function goRidLocation (props, rid) {
 	let location = decodeURI (window.location.pathname + window.location.hash);
-	let tokens = location.split ("/new");
-	
-	location = tokens.join (`/${rid}`);
+	let tokens = location.split ("/");
+
+	tokens [tokens.length - 1] = rid;
+	location = tokens.join ("/");
 	props.history.push (location)
 };
 
