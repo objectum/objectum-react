@@ -196,5 +196,7 @@
 	"maximum file size": "максимальный размер файла",
 	"home": "главная",
 	"Sign In with Google": "Войти через Google",
-	"file": "файл"
+	"file": "файл",
+	"dependence": "зависимость",
+	"dependencies": "зависимости"
 }

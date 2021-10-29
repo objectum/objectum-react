@@ -295,9 +295,11 @@ textarea {
     overflow: hidden;
     transition: all 0.4s ease-in-out;
     max-height: 0;
+    display: none;
 }
 .block-visible {
     max-height: 2000px;
+    display: block;
 }
 .header-hidden {
     transition: all 1.2s ease-in-out;

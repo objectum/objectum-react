@@ -26,6 +26,7 @@ import DictField from "./components/DictField";
 import StringField from "./components/StringField";
 import JsonField from "./components/JsonField";
 import LabelField from "./components/LabelField";
+import RadioField from "./components/RadioField";
 import Tab from "./components/Tab";
 import Tabs from "./components/Tabs";
 import Types from "./components/Types";
@@ -119,6 +120,7 @@ export {
 	StringField,
 	JsonField,
 	LabelField,
+	RadioField,
 	Tab,
 	Tabs,
 	Types,
@@ -208,6 +210,7 @@ export default {
 	StringField,
 	JsonField,
 	LabelField,
+	RadioField,
 	Tab,
 	Tabs,
 	Types,

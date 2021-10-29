@@ -596,7 +596,7 @@ export default class Form extends Component {
 				</div>) : <div />}
 				{this.state._showLog && <div className="border-bottom p-1"><Log form={this} /></div>}
 				{this.state._error && <div className="p-1"><div className="alert alert-danger" role="alert">{i18n (this.state._error)}</div></div>}
-				<div className={this.props.autoSave ? "" : "actions p-1"}>
+				<div className={(this.props.autoSave || this.props.hideButtons) ? "" : "actions p-1"}>
 					{this.props.autoSave ? <div className="progress mb-1" style={{height: "1px"}}>
 						<div className="progress-bar" role="progressbar" style={{width: `${this.state._saveProgress}%`}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" />
 					</div> : null}

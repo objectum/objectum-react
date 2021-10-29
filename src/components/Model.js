@@ -12,6 +12,8 @@ import JsonEditor from "./JsonEditor";
 import BooleanField from "./BooleanField";
 import {getHash, goRidLocation} from "..";
 import {i18n} from "./../i18n";
+import Grid from "./Grid";
+import Action from "./Action";
 
 export default class Model extends Component {
 	constructor (props) {
@@ -77,6 +79,9 @@ export default class Model extends Component {
 				</Tab>
 				{this.state.rid && <Tab key="Tab2" label="Properties">
 					<div className="p-1"><Properties {...this.props} model={this.state.rid} /></div>
+				</Tab>}
+				{this.state.rid && <Tab key="Tab3" label="Dependencies">
+					<div className="p-1"><Grid id="dependencies" store={this.props.store} query="objectum.dependence" system params={{typeId: this.state.rid}} /></div>
 				</Tab>}
 			</Tabs>
 		</div>;

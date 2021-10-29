@@ -131,7 +131,7 @@ class Test extends Component {
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
 					</div>
-					<div className="col-6">
+					<div className="col-6 bg-white">
 						<Form
 							store={store} rsc="record" rid={this.state.id} mid="item"
 							onCreate={() => this.setState ({refresh: !this.state.refresh})}

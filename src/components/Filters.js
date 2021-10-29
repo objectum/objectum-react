@@ -412,7 +412,7 @@ export default class Filters extends Component {
 					);
 				})}
 			</div>
-			<Group className="p-1" label={i18n ("Saved filters")}>
+			<Group className="p-1" label={i18n ("Saved filters")} collapsible>
 				<div className="form-inline overflow-auto">
 					<div className="input-group">
 						<input type="text" className="form-control form-control-sm filter-name-field" value={this.state.filterName} placeholder={i18n ("Name")} onChange={this.onChangeFilterName} />

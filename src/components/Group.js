@@ -30,10 +30,10 @@ export default class Group extends Component {
 				</div>
 				<div className="border-top border-right w-100 h-50 mt-auto rounded-top-right" />
 			</div>
-			<div className="border-left border-right border-bottom rounded-bottom">
+			<div className="border-left border-right border-bottom rounded-bottom p-1">
 				{this.props.collapsible ? (
-					<div className={`p-1 block-hidden ${this.state.expanded ? "block-visible" : ""}`}>{this.props.children}</div>
-				) : <div className="p-1">{this.props.children}</div>}
+					<div className={`block-hidden ${this.state.expanded ? "block-visible" : ""}`}>{this.props.children}</div>
+				) : <div className="">{this.props.children}</div>}
 			</div>
 		</div>;
 	}
