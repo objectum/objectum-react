@@ -19,7 +19,8 @@ export default class DictField extends Component {
 		};
 		this._refs = {
 			"treeDialog": React.createRef (),
-			"inputDiv": React.createRef ()
+			"inputDiv": React.createRef (),
+			"clearButton": React.createRef ()
 		};
 		this.id = newId ();
 	}
@@ -218,17 +219,13 @@ export default class DictField extends Component {
 		if (this.state.filter) {
 			opened = records.map (record => record.id);
 		}
-/*
+		let minWidth = "10em";
+
+		if (this._refs ["inputDiv"].current && this._refs ["clearButton"].current) {
+			minWidth = this._refs ["inputDiv"].current.offsetWidth + this._refs ["clearButton"].current.offsetWidth;
+		}
 		return <div className="dictfield-dialog text-left" ref={this._refs ["treeDialog"]}>
-			<div className={`dictfield-tree border p-1 bg-white shadow dictfield-items-hidden ${this.state.showDialog ? "dictfield-items-visible" : ""}`}>
-				{records.length ? <Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})}/> :
-					<div className="p-1">{i18n ("No parameters")}</div>
-				}
-			</div>
-		</div>;
-*/
-		return <div className="dictfield-dialog text-left" ref={this._refs ["treeDialog"]}>
-			{this.state.showDialog ? <div className="dictfield-tree bg-white shadow-sm rounded">
+			{this.state.showDialog ? <div className="dictfield-tree bg-white shadow-sm rounded" style={{minWidth}}>
 				{records.length ? <Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})}/> :
 					<div className="p-1">{i18n ("No parameters")}</div>
 				}
@@ -264,6 +261,7 @@ export default class DictField extends Component {
 							className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
 							onClick={this.onClear}
 							title={i18n ("Clear")}
+							ref={this._refs ["clearButton"]}
 						>
 							<i className="fas fa-times" />
 						</button>

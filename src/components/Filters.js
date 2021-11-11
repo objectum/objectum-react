@@ -182,7 +182,7 @@ class Filter extends Component {
 		if (this.state.operator == "is null" || this.state.operator == "is not null") {
 			showValue = false;
 		}
-		return <div className="border p-1 text-center mt-1">
+		return <div className="border rounded p-1 text-center mt-1">
 			<div className="input-group">
 				<select id="column" className="form-control form-control-sm" value={this.state.column} onChange={this.onChange}>
 					{[{code: "", name: i18n ("Choose column")}, ...this.props.cols].map ((rec, i) => {

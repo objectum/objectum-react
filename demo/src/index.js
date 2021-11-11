@@ -5,7 +5,7 @@ import {Store, Record} from "objectum-client";
 import {
 	createReport, Office, Loading, Navbar, ObjectumApp, SelectField, DateField, FileField, BooleanField, Form,
 	StringField, Field, ObjectumRoute, Tabs, Tab, Grid, ChooseField, DictField, NumberField, ModelList, Action, Tooltip, Auth,
-	Pagination, Fade, Tree, JsonField, Panel, Group, Models, MenuButton
+	Pagination, Fade, Tree, JsonField, Panel, Group, Models, MenuButton, RadioField
 } from '../../src'
 import {pushLocation, timeout, newId} from "../../src";
 import ReactCrop from "react-image-crop";
@@ -119,7 +119,7 @@ class Test extends Component {
 					<div className="col-2">
 						<Group label="123">
 							<DictField recs={[
-								{id: 1, name: "Red Red Red Red"},
+								{id: 1, name: "Red"},
 								{id: 2, name: "Blue"},
 								{id: 3, name: "Green"},
 								{id: 4, name: "Yellow"}
@@ -139,7 +139,9 @@ class Test extends Component {
 							autoSave
 						>
 							<Field property="name" hideLabel />
-							<Field property="category" />
+							<RadioField property="category" records={[
+								{id: 1, name: "first"}, {id: 2, name: "second"}
+							]} />
 							<JsonField property="opts" props={[
 								{prop: "green", label: "Green", component: BooleanField},
 								{prop: "blue", label: "Blue", component: BooleanField},
