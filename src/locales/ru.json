@@ -198,5 +198,10 @@
 	"Sign In with Google": "Войти через Google",
 	"file": "файл",
 	"dependence": "зависимость",
-	"dependencies": "зависимости"
+	"dependencies": "зависимости",
+	"query constructor": "конструктор запроса",
+	"pagination": "разбивка на страницы",
+	"clause": "пункт",
+	"tree": "дерево",
+	"build": "построить"
 }

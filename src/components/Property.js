@@ -41,7 +41,7 @@ export default class Property extends Component {
 	onChange = ({property, value}) => {
 		let state = {[property]: value};
 		
-		if (property == "type" && value >= 1000) {
+		if (property == "type" && value >= 1000 && !this.state.name && !this.state.code) {
 			let m = this.props.store.getModel (value);
 			
 			state.name = m.name;

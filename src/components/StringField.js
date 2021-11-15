@@ -52,7 +52,7 @@ export default class StringField extends Component {
 		}
 		this.onChange ({target: {value: `${hour}:${minute}`}});
 	}
-	
+
 	async componentDidMount () {
 		if (!this.store && this.props.store) {
 			this.store = this.props.store;

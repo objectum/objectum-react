@@ -28,7 +28,13 @@ export default class BooleanField extends Component {
 			this.setState ({value: this.props.value || ""});
 		}
 	}
-	
+
+	setValue (checked) {
+		this.onChange ({target: {checked}});
+	}
+
+	getValue = () => this.state.value;
+
 	render () {
 		let disabled = this.props.disabled;
 		let addCls = this.props.error ? "is-invalid" : "";

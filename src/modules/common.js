@@ -138,6 +138,7 @@ function loadJS (file) {
 	});
 };
 
+/*
 function goRidLocation (props, rid) {
 	let location = decodeURI (window.location.pathname + window.location.hash);
 	let tokens = location.split ("/");
@@ -145,6 +146,18 @@ function goRidLocation (props, rid) {
 	tokens [tokens.length - 1] = rid;
 	location = tokens.join ("/");
 	props.history.push (location);
+};
+*/
+function goRidLocation (props, rid) {
+	let location = decodeURI (window.location.pathname + window.location.hash);
+	let tokens = location.split ("/new#");
+
+	if (tokens.length == 2) {
+		return props.history.push (`${tokens [0]}/${rid}#${tokens [1]}`);
+	}
+	if (location.endsWith ("/new")) {
+		return props.history.push (`${location.substr (0, location.length - 4)}/${rid}`);
+	}
 };
 
 let lastId = 0;

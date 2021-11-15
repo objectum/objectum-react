@@ -34,6 +34,10 @@ import {i18n} from "../../src/i18n";
 
 const store = new Store ();
 
+store.addListener ("record", data => {
+	console.log ("record", data);
+});
+
 function HomeButton (props) {
 	let history = useHistory ();
 	
@@ -113,6 +117,9 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<RadioField records={[
+					{id: 1, name: "first"}, {id: 2, name: "second"}
+				]} />
 				<StringField label="String" values={["Abc", "def"]} />
 				<Action label="Modal" modalComponent={() => <div>test</div>} />
 				<div className="row">
