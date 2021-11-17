@@ -102,7 +102,7 @@ function FileInput (props) {
 			<div className="bg-light p-1">{i18n ("Drag 'n' drop some file here, or click to select file")}</div>
 		</div>}
 		<div className="ml-2"><strong>{fileEl}</strong></div>
-		{error && <div className="text-danger ml-2"><small>{error}</small></div>}
+		{(error || props.error) && <div className="text-danger ml-2"><small>{error || props.error}</small></div>}
 	</div>;
 };
 

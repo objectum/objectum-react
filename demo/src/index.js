@@ -117,6 +117,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<FileField label="FileField" error="123" />
 				<RadioField records={[
 					{id: 1, name: "first"}, {id: 2, name: "second"}
 				]} />
