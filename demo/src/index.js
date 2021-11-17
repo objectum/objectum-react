@@ -117,7 +117,10 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<FileField label="FileField" error="123" />
+				<JsonField property="articleUrl" label="Статьи или исследования" multi col props={[
+					{prop: "article", label: "Название", col: 6, component: StringField},
+					{prop: "url", label: "Ссылка", col: 6, component: StringField}
+				]} />
 				<RadioField records={[
 					{id: 1, name: "first"}, {id: 2, name: "second"}
 				]} />

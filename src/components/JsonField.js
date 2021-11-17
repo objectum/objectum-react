@@ -63,7 +63,7 @@ export default class JsonField extends Component {
 		let items = this.props.props.map ((o, i) => {
 			let Cmp = o.component;
 
-			return <div key={i} className={`${this.props.col ? `col-${o.col || this.props.col}` : ""} ${i ? "mt-1" : ""}`}>
+			return <div key={i} className={`${this.props.col ? `col-${o.col || this.props.col}` : ""} ${(i && !this.props.col) ? "mt-1" : ""}`}>
 				<Cmp {...o} label={o.label} property={o.prop + suffix} value={rec [o.prop]} onChange={this.onChange} disabled={this.props.disabled}/>
 			</div>;
 		});
