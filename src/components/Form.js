@@ -20,6 +20,7 @@ export default class Form extends Component {
 		this.state = {
 			_loading: true,
 			_saving: false,
+			_saved: false,
 			_creating: false,
 			_showLog: false,
 			_saveProgress: 0
@@ -274,6 +275,7 @@ export default class Form extends Component {
 				state [code] = this.record.get (code);
 			}
 			state._error = "";
+			state._saved = true;
 		} catch (err) {
 			state._error = err.message;
 			console.error (err.stack);
@@ -356,6 +358,7 @@ export default class Form extends Component {
 				state._error = err.message;
 				console.error (err.stack);
 			}
+			state._saved = true;
 		} catch (err) {
 			console.error (err, err.stack);
 			await this.props.store.rollbackTransaction ();
@@ -575,6 +578,7 @@ export default class Form extends Component {
 			</div>;
 		}
 		let formChildren = this.renderChildren (this.props.children);
+		let disabledSave = !this.isChanged () || this.state._saving || this.props.disableActions;
 
 		return <div className={this.props.className}>
 			{this.props.label && <div>
@@ -582,10 +586,10 @@ export default class Form extends Component {
 			</div>}
 			<div className={this.props.formClassName}>
 				{this.state._rid ? (!this.props.hideButtons && !this.props.autoSave && <div className="actions p-1 border-bottom">
-					<button type="button" className="btn btn-primary mr-1" onClick={this.onSave} disabled={!this.isChanged () || this.state._saving || this.props.disableActions}>
+					<button type="button" className="btn btn-primary mr-1" onClick={this.onSave} disabled={disabledSave}>
 						{this.state._saving ?
 							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
-							<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>
+							<span>{(this.state._saved && disabledSave) ? <span><i className="fas fa-check-double mr-2"/>{i18n ("Saved")}</span> : <span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>}</span>
 						}
 					</button>
 					{this.props.rsc == "record" && !this.props.hideLogButton &&
