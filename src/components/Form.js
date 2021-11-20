@@ -381,14 +381,15 @@ export default class Form extends Component {
 		for (let code in fields) {
 			let field = fields [code];
 			let notNull = field.props.notNull;
-			
+			let property = this.model && this.model.properties [code];
+
 			state [`${code}-error`] = "";
 			
 			if (this.model && this.model.properties [code] && this.model.properties [code].notNull) {
 				notNull = true;
 			}
 			if (notNull && (!this.state.hasOwnProperty (code) || this.state [code] === "" || this.state [code] === null || this.state [code] === undefined)) {
-				errors [code] = i18n ("Please enter value");
+				errors [code] = property?.type == 5 ? i18n ("Please attach file") : i18n ("Please enter value");
 			}
 			if (field.props.onValidate) {
 				let result = field.props.onValidate ({value: this.state [code], values, errors, form: this});
