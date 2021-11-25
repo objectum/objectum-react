@@ -117,27 +117,8 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<JsonField property="articleUrl" label="Статьи или исследования" multi col props={[
-					{prop: "article", label: "Название", col: 6, component: StringField},
-					{prop: "url", label: "Ссылка", col: 6, component: StringField}
-				]} />
-				<RadioField records={[
-					{id: 1, name: "first"}, {id: 2, name: "second"}
-				]} />
-				<StringField label="String" values={["Abc", "def"]} />
-				<Action label="Modal" modalComponent={() => <div>test</div>} />
-				<div className="row">
-					<div className="col-2">
-						<Group label="123">
-							<DictField recs={[
-								{id: 1, name: "Red"},
-								{id: 2, name: "Blue"},
-								{id: 3, name: "Green"},
-								{id: 4, name: "Yellow"}
-							]} />
-						</Group>
-					</div>
-				</div>
+				<Link to={encodeURI (`/test#{"list-item":{"filters":[["id","=",1023]]}}`)} onClick={() => setTimeout (() => window.dispatchEvent(new HashChangeEvent("hashchange")), 200)}>test 1</Link>
+				<Link to={encodeURI (`/test#{"list-item":{"filters":[["name","like","12"]]}}`)} onClick={() => setTimeout (() => window.dispatchEvent(new HashChangeEvent("hashchange")), 200)}>test 2</Link>
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
@@ -178,7 +159,7 @@ class Demo extends Component {
 		//store.register ("t.org.product", TOrgProductModel);
 		//store.register ("brak", BrakModel);
 		//store.register ("t.brak.dish", TBrakDishModel);
-		store.register ("item", ItemModel);
+		//store.register ("item", ItemModel);
 		
 		this.onCustomRender = this.onCustomRender.bind (this);
 		

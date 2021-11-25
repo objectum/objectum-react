@@ -239,6 +239,20 @@ export default class Filters extends Component {
 		}
 	}
 
+	componentDidUpdate (prevProps) {
+		if (JSON.stringify (prevProps.filters) != JSON.stringify (this.props.filters)) {
+			let filters = this.props.filters.map (f => {
+				return {
+					id: this.gen ++,
+					column: f [0],
+					operator: f [1],
+					value: f [2]
+				};
+			});
+			this.setState ({filters});
+		}
+	}
+
 	sendFilters (filters) {
 		let data = [];
 		
