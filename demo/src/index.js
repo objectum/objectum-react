@@ -69,7 +69,8 @@ class Test extends Component {
 			refresh: false,
 			active: 0,
 			recs: [],
-			value: ""
+			value: "",
+			tabs: [<div>1</div>, <div>2</div>, <div>3</div>]
 		};
 		this._refs = {"test": React.createRef ()};
 		this.changed = {};
@@ -117,8 +118,13 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<Link to={encodeURI (`/test#{"list-item":{"filters":[["id","=",1023]]}}`)} onClick={() => setTimeout (() => window.dispatchEvent(new HashChangeEvent("hashchange")), 200)}>test 1</Link>
-				<Link to={encodeURI (`/test#{"list-item":{"filters":[["name","like","12"]]}}`)} onClick={() => setTimeout (() => window.dispatchEvent(new HashChangeEvent("hashchange")), 200)}>test 2</Link>
+				<Tabs closable onClose={tab => {
+					let tabs = [...this.state.tabs];
+					tabs.splice (tab, 1);
+					this.setState ({tabs});
+				}}>
+					{this.state.tabs.map ((tab, i) => <Tab label={`Tab ${i + 1}`}>{tab}</Tab>)}
+				</Tabs>
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />

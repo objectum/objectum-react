@@ -89,13 +89,20 @@ export default class Tabs extends Component {
 					if (item.props.path) {
 						return (
 							<li className="nav-item" key={i}>
-								<Link className={"nav-link" + active} to={item.props.path} onClick={() => this.changeTab (i)}>{i18n (item.props.label)}</Link>
+								<Link className={"nav-link" + active} to={item.props.path} onClick={() => this.changeTab (i)}>
+									{i18n (item.props.label)}
+									{this.props.closable ? <button className="btn btn-link my-0 ml-2 p-0 text-danger" title={i18n ("Close")} onClick={() => this.props.onClose (i)}><i className="fas fa-times" /></button> : null}
+
+								</Link>
 							</li>
 						);
 					} else {
 						return (
 							<li className="nav-item" key={i}>
-								<span className={"nav-link" + active} onClick={() => this.changeTab (i)}>{i18n (item.props.label)}</span>
+								<span className={"nav-link" + active} onClick={() => this.changeTab (i)}>
+									{i18n (item.props.label)}
+									{this.props.closable ? <button className="btn btn-link my-0 ml-2 p-0 text-danger" title={i18n ("Close")} onClick={() => this.props.onClose (i)}><i className="fas fa-times" /></button> : null}
+								</span>
 							</li>
 						);
 					}
