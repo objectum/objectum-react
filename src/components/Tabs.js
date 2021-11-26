@@ -58,7 +58,15 @@ export default class Tabs extends Component {
 			}
 		});
 	}
-	
+
+	componentDidUpdate (prevProps) {
+		let num = this.getTabs ().length;
+
+		if (this.state.tab > num - 1) {
+			this.changeTab (num - 1);
+		}
+	}
+
 	componentWillUnmount () {
 		removeHashListener (this, this.hashChange);
 	}
