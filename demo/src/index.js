@@ -118,7 +118,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<DateField label={"Date"} onChange={({value}) => console.log (value)} />
+				<DictField label={"DictField"} records={[{id: 1, name: "1"}]} error={"123"} />
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />

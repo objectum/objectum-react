@@ -245,7 +245,7 @@ export default class DictField extends Component {
 				<div className="input-group dictfield">
 					<input
 						type="text"
-						className={`form-control ${this.props.disabled ? "rounded" : "bg-white dictfield-input rounded-left border-primary"} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.state.filter ? "text-warning" : ""}`}
+						className={`form-control ${this.props.disabled ? "rounded" : `bg-white dictfield-input rounded-left ${this.props.error ? "" : "border-primary"}`} dictfield-option ${addCls} ${this.props.sm ? "form-control-sm" : ""} ${this.state.filter ? "text-warning" : ""}`}
 						id={this.id}
 						title={this.state.label}
 						value={this.state.filter || this.state.label}
@@ -258,7 +258,7 @@ export default class DictField extends Component {
 					{!this.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
 						<button
 							type="button"
-							className={`btn btn-outline-primary ${this.props.sm ? "btn-sm" : ""}`}
+							className={`btn btn-outline-primary rounded-right ${this.props.sm ? "btn-sm" : ""}`}
 							onClick={this.onClear}
 							title={i18n ("Clear")}
 							ref={this._refs ["clearButton"]}
@@ -266,8 +266,8 @@ export default class DictField extends Component {
 							<i className="fas fa-times" />
 						</button>
 					</div>}
+					{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 				</div>
-				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 				{this.renderTree ()}
 			</div>
 		</div>;
