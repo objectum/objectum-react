@@ -105,7 +105,7 @@ export default class Form extends Component {
 				for (let code in fields) {
 					let field = fields [code];
 					let value;
-					
+
 					if (this.record) {
 						value = (this.record [code] === null || this.record [code] === undefined) ? "" : this.record [code];
 					} else {
@@ -222,7 +222,7 @@ export default class Form extends Component {
 	}
 	
 	onSave = async () => {
-		if (!this.isValid ()) {
+		if (!(await this.isValid ())) {
 			return false;
 		}
 		this.setState ({_saving: true});
@@ -295,7 +295,7 @@ export default class Form extends Component {
 	}
 	
 	onCreate = async () => {
-		if (!this.isValid ()) {
+		if (!(await this.isValid ())) {
 			return false;
 		}
 		this.setState ({_creating: true});
@@ -370,7 +370,7 @@ export default class Form extends Component {
 		return !state._error;
 	}
 	
-	isValid () {
+	async isValid () {
 		let fields = this.getFields (this.props.children);
 		let state = {}, errors = {};
 		let values = {};
@@ -400,7 +400,7 @@ export default class Form extends Component {
 			}
 		}
 		if (this.props.onValidate) {
-			this.props.onValidate ({form: this, values, errors});
+			await execute (this.props.onValidate, {form: this, values, errors});
 		}
 		if (!_isEmpty (errors)) {
 			for (let code in errors) {
@@ -457,6 +457,7 @@ export default class Form extends Component {
 			
 			if (code) {
 				let value = this.state.hasOwnProperty (code) ? this.state [code] : (child.props.value || "");
+//				let value = child.props.value !== undefined ? child.props.value : (this.state [code] || ""); todo: button Save disabled
 				let props = {
 					...child.props,
 					onChange: (opts) => {

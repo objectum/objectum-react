@@ -118,13 +118,7 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<Tabs closable onClose={tab => {
-					let tabs = [...this.state.tabs];
-					tabs.splice (tab, 1);
-					this.setState ({tabs});
-				}}>
-					{this.state.tabs.map ((tab, i) => <Tab label={`Tab ${i + 1}`}>{tab}</Tab>)}
-				</Tabs>
+				<DateField label={"Date"} onChange={({value}) => console.log (value)} />
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
@@ -134,12 +128,10 @@ class Test extends Component {
 							store={store} rsc="record" rid={this.state.id} mid="item"
 							onCreate={() => this.setState ({refresh: !this.state.refresh})}
 							onSave={() => this.setState ({refresh: !this.state.refresh})}
-							autoSave
 						>
 							<Field property="name" hideLabel />
-							<RadioField property="category" records={[
-								{id: 1, name: "first"}, {id: 2, name: "second"}
-							]} />
+							<Action label={"test"} onClick={() => this.setState ({category: 1115})} />
+							<DictField property="category" value={this.state.category} />
 							<JsonField property="opts" props={[
 								{prop: "green", label: "Green", component: BooleanField},
 								{prop: "blue", label: "Blue", component: BooleanField},
