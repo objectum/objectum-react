@@ -869,18 +869,32 @@ export default class Grid extends Component {
 	}
 
 	onReport = async () => {
-		let cols = this.state.cols.filter (col => col.area != 0);
+		let cols = this.state.cols.filter (col => {
+			if (col.type >= 1000) {
+				let m = this.props.store.getModel (col.type);
+				if (this.props.store.dict [m.getPath ()]) {
+					col.dict = this.props.store.dict [m.getPath ()];
+				}
+			}
+			return col.area != 0;
+		});
 		let opts = Object.assign (this.prepareRequestOptions (), {offset: 0, limit: this.state.length});
 		let recs = await this.props.store.getRecs (opts);
 
 		let content = "\ufeff" + [
-			cols.map (col => col.name).join (";"),
+			cols.map (col => i18n (col.name)).join (";"),
 			...recs.map (rec => {
 				return cols.map (col => {
 					let v = rec [col.code] || "";
 
 					if (v && typeof (v) == "object" && v.getMonth) {
 						v = v.toLocaleDateString ();
+					}
+					if (col.dict) {
+						v = col.dict [v] ? col.dict [v].name : "";
+					}
+					if (v && typeof (v) == "string" && v.indexOf (";") > -1) {
+						v = `"${v}"`
 					}
 					return v;
 				}).join (";")
