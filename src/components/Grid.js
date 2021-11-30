@@ -869,13 +869,14 @@ export default class Grid extends Component {
 	}
 
 	onReport = async () => {
+		let cols = this.state.cols.filter (col => col.area != 0);
 		let opts = Object.assign (this.prepareRequestOptions (), {offset: 0, limit: this.state.length});
 		let recs = await this.props.store.getRecs (opts);
 
 		let content = "\ufeff" + [
-			this.state.cols.map (col => col.name).join (";"),
+			cols.map (col => col.name).join (";"),
 			...recs.map (rec => {
-				return this.state.cols.map (col => {
+				return cols.map (col => {
 					let v = rec [col.code] || "";
 
 					if (v && typeof (v) == "object" && v.getMonth) {
