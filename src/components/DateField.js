@@ -78,7 +78,7 @@ export default class DateField extends Component {
 		let v = "";
 
 		for (let i = 0; i < s.length; i ++) {
-			if ("01234567890.".indexOf (s [i]) > -1) {
+			if ("01234567890. :".indexOf (s [i]) > -1) {
 				v += s [i];
 			}
 		}
@@ -195,7 +195,7 @@ export default class DateField extends Component {
 				ref={this._refs ["input"]}
 				maxLength={this.props.showTime ? 18 : 11}
 				style={{width: `calc(${this.props.showTime ? 18 : 11}ch + 15px)`}}
-				placeholder={i18n ("dd.mm.yyyy")}
+				placeholder={this.props.showTime ? i18n ("dd.mm.yyyy hh:mm:ss") : i18n ("dd.mm.yyyy")}
 			/>
 			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 

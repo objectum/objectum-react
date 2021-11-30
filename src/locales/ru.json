@@ -207,5 +207,6 @@
 	"build": "построить",
 	"Please attach file": "Пожалуйста прикрепите файл",
 	"dd.mm.yyyy": "дд.мм.гггг",
+	"dd.mm.yyyy hh:mm:ss": "дд.мм.гггг чч:мм:сс",
 	"export csv": "экспорт csv"
 }
