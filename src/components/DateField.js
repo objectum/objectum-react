@@ -70,9 +70,23 @@ export default class DateField extends Component {
 			this.setState (state);
 		}
 	}
-	
+
+	dateHelper (s) {
+		if (s && typeof (s) == "object" && s.getMonth) {
+			return s;
+		}
+		let v = "";
+
+		for (let i = 0; i < s.length; i ++) {
+			if ("01234567890.".indexOf (s [i]) > -1) {
+				v += s [i];
+			}
+		}
+		return v;
+	}
+
 	onChange = (val) => {
-		let localValue = val.target.value;
+		let localValue = this.dateHelper (val.target.value);
 		let state = {localValue};
 		let decodeDate = s => {
 			let value;
@@ -181,6 +195,7 @@ export default class DateField extends Component {
 				ref={this._refs ["input"]}
 				maxLength={this.props.showTime ? 18 : 11}
 				style={{width: `calc(${this.props.showTime ? 18 : 11}ch + 15px)`}}
+				placeholder={i18n ("dd.mm.yyyy")}
 			/>
 			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 

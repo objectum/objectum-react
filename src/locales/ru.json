@@ -205,5 +205,7 @@
 	"clause": "пункт",
 	"tree": "дерево",
 	"build": "построить",
-	"Please attach file": "Пожалуйста прикрепите файл"
+	"Please attach file": "Пожалуйста прикрепите файл",
+	"dd.mm.yyyy": "дд.мм.гггг",
+	"export csv": "экспорт csv"
 }

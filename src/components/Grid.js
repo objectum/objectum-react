@@ -835,6 +835,9 @@ export default class Grid extends Component {
 					{!this.props.system && <button type="button" className="btn btn-link btn-sm" onClick={this.onShowCols} title={i18n ("Columns")}>
 						<i className={`fas fa-eye ${this.state.showCols ? "border-bottom border-primary" : ""}`} />
 					</button>}
+					{!this.props.system && <button type="button" className="btn btn-link btn-sm" onClick={this.onReport} title={i18n ("Export csv")}>
+						<i className="fas fa-print" />
+					</button>}
 					{!this.props.system && this.props.editable && <button type="button" className="btn btn-link btn-sm" onClick={this.onEditMode} title={i18n ("Edit mode")}>
 						<i className={`fas fa-edit ${this.state.mode == "edit" ? "border-bottom border-primary" : ""}`} />
 					</button>}
@@ -863,6 +866,47 @@ export default class Grid extends Component {
 				</div>
 			</div>;
 		}
+	}
+
+	onReport = async () => {
+		let opts = Object.assign (this.prepareRequestOptions (), {offset: 0, limit: this.state.length});
+		let recs = await this.props.store.getRecs (opts);
+
+		let content = "\ufeff" + [
+			this.state.cols.map (col => col.name).join (";"),
+			...recs.map (rec => {
+				return this.state.cols.map (col => {
+					let v = rec [col.code] || "";
+
+					if (v && typeof (v) == "object" && v.getMonth) {
+						v = v.toLocaleDateString ();
+					}
+					return v;
+				}).join (";")
+			})
+		].join ("\n");
+
+		let createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL || function () {};
+		let blob = null;
+		let mimeString = "application/octet-stream";
+
+		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+
+		if (window.BlobBuilder) {
+			let bb = new BlobBuilder ();
+			bb.append (content);
+			blob = bb.getBlob (mimeString);
+		} else {
+			blob = new Blob ([content], {type: mimeString});
+		}
+		let url = createObjectURL (blob);
+		let a = document.createElement ("a");
+
+		a.href = url;
+		a.download = "report.csv";
+		a.innerHTML = "download file";
+		document.body.appendChild (a);
+		a.click ();
 	}
 	
 	render () {
