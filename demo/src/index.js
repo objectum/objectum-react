@@ -118,7 +118,11 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<DateField label={"Date"} onChange={({value}) => console.log (value)} showTime />
+				<Tabs>
+					<Tab label="Tab">
+						<Grid id="items" store={store} model="item" filters={[["id", "=", "1"], ["category", "=", ""]]} />
+					</Tab>
+				</Tabs>
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />

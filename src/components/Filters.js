@@ -240,7 +240,9 @@ export default class Filters extends Component {
 	}
 
 	componentDidUpdate (prevProps) {
-		if (JSON.stringify (prevProps.filters) != JSON.stringify (this.props.filters)) {
+		let stateFilters = this.state.filters.map (f => [f.column, f.operator, f.value]);
+
+		if (JSON.stringify (prevProps.filters) != JSON.stringify (this.props.filters) && JSON.stringify (stateFilters) != JSON.stringify (this.props.filters)) {
 			let filters = this.props.filters.map (f => {
 				return {
 					id: this.gen ++,
@@ -255,14 +257,21 @@ export default class Filters extends Component {
 
 	sendFilters (filters) {
 		let data = [];
-		
+
 		filters.forEach (f => {
 			if (f.column) {
+/*
 				if ((f.operator && f.value !== "") || f.operator == "is null" || f.operator == "is not null") {
 					data.push ([f.column, f.operator, f.value]);
 				}
 				if (f.operator === "0" || f.operator === "1") {
 					data.push ([f.column, "=", f.operator]);
+				}
+*/
+				if (f.operator === "0" || f.operator === "1") {
+					data.push ([f.column, "=", f.operator]);
+				} else {
+					data.push ([f.column, f.operator, f.value]);
 				}
 			}
 		});

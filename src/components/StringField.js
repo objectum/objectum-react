@@ -22,8 +22,20 @@ export default class StringField extends Component {
 		this.state.lastValidValue = this.state.value;
 		this.store = getStore () || this.props.store;
 		this.id = "stringfield-" + newId ();
+		this._refs = {
+			"values": React.createRef (),
+			"input": React.createRef ()
+		};
 	}
-	
+
+	onDocumentClick = event => {
+		if (this._refs ["values"]?.current && !this._refs ["values"].current.contains (event.target) &&
+			this._refs ["input"]?.current && !this._refs ["input"].current.contains (event.target)
+		) {
+			this.setState ({showDialog: false});
+		}
+	}
+
 	onChange = (val) => {
 		let value = val.target.value;
 		let valid = true;
@@ -54,6 +66,8 @@ export default class StringField extends Component {
 	}
 
 	async componentDidMount () {
+		document.addEventListener ("mousedown", this.onDocumentClick)
+
 		if (!this.store && this.props.store) {
 			this.store = this.props.store;
 		}
@@ -113,6 +127,11 @@ export default class StringField extends Component {
 		}
 	}
 
+	componentWillUnmount () {
+		this.unmounted = true;
+		document.removeEventListener ("mousedown", this.onDocumentClick);
+	}
+
 	onKeyDown (e) {
 		let ta = e.target;
 		
@@ -144,7 +163,7 @@ export default class StringField extends Component {
 				let records = values.map (v => {
 					return {id: v, name: v};
 				});
-				return <div className="dictfield-dialog text-left">
+				return <div className="dictfield-dialog text-left" ref={this._refs ["values"]}>
 					<div className="dictfield-tree border p-1 bg-white shadow-sm">
 						<Tree records={records} highlightText={this.state.value} onChoose={({id}) => {
 							this.onChange ({target: {value: id}});
@@ -178,6 +197,7 @@ export default class StringField extends Component {
 			onBlur={this.onBlur}
 			disabled={disabled}
 			placeholder={i18n (this.props.placeholder || this.props.label)}
+			ref={this._refs ["input"]}
 		/>;
 		if (this.props.textarea) {
 			cmp = <textarea
