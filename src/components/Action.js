@@ -166,13 +166,11 @@ export default class Action extends Component {
 			let tableEl = this._refs ["button"].current.closest (".objectum-table");
 			let height1 = tableEl?.scrollHeight;
 
-			this.setState ({confirm: typeof (this.props.confirm) == "string" ? this.props.confirm : i18n ("Are you sure?")});
-
-			setTimeout (() => {
+			this.setState ({confirm: typeof (this.props.confirm) == "string" ? this.props.confirm : i18n ("Are you sure?")}, () => {
 				if (tableEl && tableEl.scrollHeight > height1) {
 					tableEl.scrollTop = tableEl.scrollHeight;
 				}
-			}, 1);
+			});
 		} else {
 			execute ();
 		}
