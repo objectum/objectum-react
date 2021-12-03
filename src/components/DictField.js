@@ -19,6 +19,7 @@ export default class DictField extends Component {
 		};
 		this._refs = {
 			"treeDialog": React.createRef (),
+			"treeDialog2": React.createRef (),
 			"inputDiv": React.createRef (),
 			"clearButton": React.createRef ()
 		};
@@ -165,6 +166,13 @@ export default class DictField extends Component {
 			});
 		}
 		this.setState ({showDialog: true});
+		setTimeout (() => {
+			if (this._refs ["treeDialog2"].current.getBoundingClientRect ().bottom > window.innerHeight) {
+				const element = this._refs ["inputDiv"].current;
+				const y = element.getBoundingClientRect ().top + window.pageYOffset + window.OBJECTUM_APP.DictField.scrollOffset;
+				window.scrollTo ({top: y, behavior: "smooth"});
+			}
+		}, 1);
 	}
 	
 	onClick = async (val) => {
@@ -225,11 +233,11 @@ export default class DictField extends Component {
 			minWidth = this._refs ["inputDiv"].current.offsetWidth + this._refs ["clearButton"].current.offsetWidth;
 		}
 		return <div className="dictfield-dialog text-left" ref={this._refs ["treeDialog"]}>
-			{this.state.showDialog ? <div className="dictfield-tree bg-white shadow-sm rounded" style={{minWidth}}>
+			{this.state.showDialog ? <div className="dictfield-tree bg-white shadow-sm rounded overflow-auto" style={{minWidth}} ref={this._refs ["treeDialog2"]}>
 				{records.length ? <Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})}/> :
 					<div className="p-1">{i18n ("No parameters")}</div>
 				}
-			</div> : <div />}
+			</div>: <div />}
 		</div>;
 	}
 	

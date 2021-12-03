@@ -271,3 +271,8 @@ export default {
 	getStore,
 	mediator
 };
+window.OBJECTUM_APP = {
+	DictField: {
+		scrollOffset: -50
+	}
+};

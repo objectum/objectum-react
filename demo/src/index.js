@@ -120,9 +120,12 @@ class Test extends Component {
 			<div className="container">
 				<Tabs>
 					<Tab label="Tab">
-						<Grid id="items" store={store} model="item" filters={[["id", "=", "1"], ["category", "=", ""]]} />
+						<Grid id="items" store={store} query="item">
+							<Action icon="fas fa-edit" onClick={() => console.log (1)} selected confirm />
+						</Grid>
 					</Tab>
 				</Tabs>
+				<DictField label={"Dict"} records={this.state.recs} />
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
@@ -145,6 +148,14 @@ class Test extends Component {
 						</Form>
 					</div>
 				</div>
+				<DictField label={"Dict"} records={this.state.recs} />
+				<select id="column" className="form-control form-control-sm">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
 			</div>
 		);
 	}

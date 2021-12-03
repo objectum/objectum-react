@@ -1,6 +1,7 @@
 /* eslint-disable no-whitespace-before-property */
 /* eslint-disable eqeqeq */
 
+
 import React, {Component} from "react";
 import {i18n} from "../i18n";
 import Fade from "./Fade";
@@ -27,7 +28,7 @@ export default class Action extends Component {
 	}
 	
 	onDocumentClick = (event) => {
-		if (this.state.confirm && !this._refs ["confirm"].current.contains (event.target)) {
+		if (this.state.confirm && !this._refs ["confirm"].current.contains (event.target) && !this._refs ["button"].current.contains (event.target)) {
 			this.confirm (false);
 		}
 	}
@@ -154,12 +155,24 @@ export default class Action extends Component {
 			}
 		};
 		if (this.props.confirm) {
+			if (this.state.confirm) {
+				return this.confirm (false);
+			}
 			this.confirmResolve = result => {
 				if (result) {
 					execute ();
 				}
 			};
+			let tableEl = this._refs ["button"].current.closest (".objectum-table");
+			let height1 = tableEl?.scrollHeight;
+
 			this.setState ({confirm: typeof (this.props.confirm) == "string" ? this.props.confirm : i18n ("Are you sure?")});
+
+			setTimeout (() => {
+				if (tableEl && tableEl.scrollHeight > height1) {
+					tableEl.scrollTop = tableEl.scrollHeight;
+				}
+			}, 1);
 		} else {
 			execute ();
 		}
@@ -241,7 +254,7 @@ export default class Action extends Component {
 				</div>
 			</Fade>}
 			{this.state.confirm && <Fade className="popup">
-				<div className="popup-content bg-white shadow-sm text-danger p-1 my-1" ref={this._refs ["confirm"]}>
+				<div className="popup-content bg-white rounded shadow-sm text-danger p-1 my-1" ref={this._refs ["confirm"]}>
 					<div className="mb-1">{this.state.confirm}</div>
 					<button type="button" className="btn btn-danger" onClick={() => this.confirm (true)}><i className="fas fa-check mr-2" />{i18n ("Yes")}</button>
 					<button type="button" className="btn btn-success ml-1" onClick={() => this.confirm (false)}><i className="fas fa-times mr-2" />{i18n ("No")}</button>

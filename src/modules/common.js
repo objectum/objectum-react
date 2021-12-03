@@ -177,6 +177,14 @@ function getStore () {
 	return store;
 };
 
+function setOption (name) {
+
+}
+
+function getOption (name) {
+
+}
+
 module.exports = {
 	getHash,
 	setHash,

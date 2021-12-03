@@ -92,11 +92,11 @@ export default class ObjectumApp extends Component {
 		this._refs = {
 			header: React.createRef ()
 		};
-		window.OBJECTUM_APP = {
+		Object.assign (window.OBJECTUM_APP, {
 			store: this.store,
 			sidebar: this.props.sidebar,
 			locale: this.props.locale
-		};
+		});
 	}
 
 	onScroll = () => {

@@ -47,7 +47,7 @@
     position: absolute;
     left: -1px;
     top: 2px;
-    z-index: 1000;
+    z-index: 10000;
 }
 .dictfield {
     min-width: 11em;
@@ -66,16 +66,8 @@
     max-width: 40em;
     min-height: 4em;
     max-height: 30em;
-    z-index: 1000;
+    z-index: 10000;
     overflow: auto;
-}
-.dictfield-filter {
-    position: absolute;
-    left: -1px;
-    top: 2px;
-    width: 33em;
-    height: 3em;
-    z-index: 1000;
 }
 .dictfield-params {
     position: absolute;
@@ -84,7 +76,7 @@
     width: 33em;
     min-height: 5em;
     max-height: 25em;
-    z-index: 1000;
+    z-index: 10000;
     overflow: auto;
 }
 .dictfield-tree {
@@ -94,8 +86,7 @@
     min-height: 3em;
     max-height: 45em;
     white-space: nowrap;
-    z-index: 1000;
-    overflow: auto;
+    z-index: 10000;
 }
 .dictfield-input {
     border-radius: 0;
@@ -197,7 +188,7 @@ textarea {
 }
 .popup {
     position: relative;
-    z-index: 1000;
+    z-index: 10000;
 }
 .popup-content {
     position: absolute;
@@ -208,7 +199,7 @@ textarea {
     max-width: 40em;
     min-height: 5em;
     max-height: 20em;
-    z-index: 1000;
+    z-index: 10000;
     overflow: auto;
 }
 .popup-component {
@@ -217,7 +208,7 @@ textarea {
     top: 1px;
     min-width: 15em;
     min-height: 5em;
-    z-index: 1000;
+    z-index: 10000;
 }
 .fade-in {
     animation-duration: 0.6s;
