@@ -208,7 +208,12 @@ export default class DictField extends Component {
 			}
 			filteredMap [parent] = true;
 			let record = map [parent];
-			collectParents (record.parent);
+
+			if (record) {
+				collectParents (record.parent);
+			} else {
+				console.log ("unknown parent:", parent);
+			}
 		};
 		inRecords.forEach (record => {
 			if (this.state.filter && (record.name.toLowerCase () || "").indexOf (this.state.filter.toLowerCase ()) == -1) {
