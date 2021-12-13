@@ -173,9 +173,11 @@ export default class Form extends Component {
 		await this.onSave ();
 	}
 
-	onChange = ({code, value, file}) => {
+	onChange = ({code, property, value, file}) => {
 		let state = {};
-		
+
+		code = code || property;
+
 		if (file) {
 			this.fileMap [code] = file;
 		}
@@ -202,6 +204,7 @@ export default class Form extends Component {
 		}
 	}
 	
+/*
 	async upload ({sessionId, objectId, classAttrId, name, file}) {
 		let formData = new FormData ();
 		
@@ -220,7 +223,8 @@ export default class Form extends Component {
 			body: formData
 		});
 	}
-	
+*/
+
 	onSave = async () => {
 		if (!(await this.isValid ())) {
 			return false;
@@ -258,10 +262,18 @@ export default class Form extends Component {
 
 				for (let code in values) {
 					if (this.fileMap [code]) {
+/*
 						await this.upload ({
 							sessionId: this.props.store.getSessionId (),
 							objectId: this.record.get ("id"),
 							classAttrId: this.model.properties [code].get ("id"),
+							name: this.record.get (code),
+							file: this.fileMap [code]
+						});
+*/
+						await this.props.store.upload ({
+							recordId: this.record.get ("id"),
+							propertyId: this.model.properties [code].get ("id"),
 							name: this.record.get (code),
 							file: this.fileMap [code]
 						});
@@ -336,10 +348,18 @@ export default class Form extends Component {
 			
 			for (let code in values) {
 				if (this.fileMap [code]) {
+/*
 					await this.upload ({
 						sessionId: this.props.store.getSessionId (),
 						objectId: this.record.get ("id"),
 						classAttrId: this.model.properties [code].get ("id"),
+						name: this.record.get (code),
+						file: this.fileMap [code]
+					});
+*/
+					await this.props.store.upload ({
+						recordId: this.record.get ("id"),
+						propertyId: this.model.properties [code].get ("id"),
 						name: this.record.get (code),
 						file: this.fileMap [code]
 					});

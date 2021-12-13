@@ -144,7 +144,7 @@ export default class ObjectumApp extends Component {
 	
 	onConnect = async (opts) => {
 		let menuId = opts.menuId;
-		let state = {sid: opts.sessionId};
+		let state = {sid: opts.sid};
 		
 		if (menuId) {
 			let result = await this.store.getData ({
