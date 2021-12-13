@@ -15,7 +15,7 @@ export default class DictField extends Component {
 			filter: "",
 			value: null,
 			label: "",
-			records: []
+			records: this.props.recs || this.props.records || []
 		};
 		this._refs = {
 			"treeDialog": React.createRef (),
@@ -49,8 +49,9 @@ export default class DictField extends Component {
 			}
 		}
 		let records = this.props.recs || this.props.records;
+		let prevRecords = prevProps.recs || prevProps.records;
 		
-		if (records && (!getValue ("records") || records.map (record => record.id).join () != getValue ("records").map (record => record.id).join ())) {
+		if (records && (!prevRecords || records.map (record => record.id).join () != prevRecords.map (record => record.id).join ())) {
 			state.records = records;
 		}
 		if ((state.model || state.property) && getValue ("property")) {
@@ -58,7 +59,7 @@ export default class DictField extends Component {
 				state.records = await this.props.store.getDict (getValue ("property").get ("type"));
 			}
 			let m = this.props.store.getModel (getValue ("property").get ("type"));
-			
+
 			for (let code in m.properties) {
 				let property = m.properties [code];
 				
@@ -211,8 +212,6 @@ export default class DictField extends Component {
 
 			if (record) {
 				collectParents (record.parent);
-			} else {
-				console.log ("unknown parent:", parent);
 			}
 		};
 		inRecords.forEach (record => {
@@ -238,7 +237,7 @@ export default class DictField extends Component {
 			minWidth = this._refs ["inputDiv"].current.offsetWidth + this._refs ["clearButton"].current.offsetWidth;
 		}
 		return <div className="dictfield-dialog text-left" ref={this._refs ["treeDialog"]}>
-			{this.state.showDialog ? <div className="dictfield-tree bg-white shadow-sm rounded overflow-auto" style={{minWidth}} ref={this._refs ["treeDialog2"]}>
+			{this.state.showDialog ? <div className="dictfield-tree bg-white shadow rounded overflow-auto" style={{minWidth}} ref={this._refs ["treeDialog2"]}>
 				{records.length ? <Tree records={records} highlightText={this.state.filter} opened={opened} onChoose={({id, name}) => this.onClick ({target: {id, name}})}/> :
 					<div className="p-1">{i18n ("No parameters")}</div>
 				}

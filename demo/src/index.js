@@ -202,10 +202,8 @@ class Demo extends Component {
 		return <ObjectumApp
 			locale="ru"
 			store={store}
-/*
 			username="admin"
 			password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-*/
 /*
 			username="guest"
 			password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}
