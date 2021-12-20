@@ -215,7 +215,9 @@ export default class DictField extends Component {
 			}
 		};
 		inRecords.forEach (record => {
-			if (this.state.filter && (record.name.toLowerCase () || "").indexOf (this.state.filter.toLowerCase ()) == -1) {
+			let name = record.getLabel ? record.getLabel () : (record.name || "");
+
+			if (this.state.filter && (name.toLowerCase () || "").indexOf (this.state.filter.toLowerCase ()) == -1) {
 				return;
 			}
 			filteredMap [record.id] = true;
