@@ -197,6 +197,7 @@ export default class DateField extends Component {
 				maxLength={this.props.showTime ? 18 : 11}
 				style={{width: `calc(${this.props.showTime ? 18 : 11}ch + 15px)`}}
 				placeholder={this.props.showTime ? i18n ("dd.mm.yyyy hh:mm:ss") : i18n ("dd.mm.yyyy")}
+				autoComplete="off"
 			/>
 			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 

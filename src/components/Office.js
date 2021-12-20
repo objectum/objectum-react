@@ -263,7 +263,7 @@ export default class Office extends Component {
 			content = <div className={this.props.cardClassName || "auth shadow-sm bg-white rounded text-center"}>
 				<h3 className="font-weight-bold mb-5">{i18n ("Password recovery")}</h3>
 				<div className="form-group">
-					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} placeholder={i18n ("E-mail")} />
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} placeholder={i18n ("E-mail")} autoComplete="off" />
 					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
 				</div>
 				<div className="form-group">
@@ -295,11 +295,11 @@ export default class Office extends Component {
 			content = <div className={this.props.cardClassName || "auth shadow-sm bg-white rounded text-center"}>
 				<h2 className="font-weight-bold mb-5">{i18n ("Registration")}</h2>
 				<div className="form-group">
-					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} placeholder={i18n ("E-mail")} />
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} placeholder={i18n ("E-mail")} autoComplete="off" />
 					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
 				</div>
 				<div className="form-group">
-					<input type="name" className="form-control" id="name" value={this.state.name} onChange={this.onChange} placeholder={i18n ("Your name")} />
+					<input type="name" className="form-control" id="name" value={this.state.name} onChange={this.onChange} placeholder={i18n ("Your name")} autoComplete="off" />
 					{this.state.inputError ["name"] && <div className="small text-danger">{this.state.inputError ["name"]}</div>}
 				</div>
 				<div className="form-group">
@@ -331,7 +331,7 @@ export default class Office extends Component {
 			content = <div className={this.props.cardClassName || "auth shadow-sm bg-white rounded text-center"}>
 				<h2 className="font-weight-bold mb-5">{i18n ("Sign In")}</h2>
 				<div className="form-group">
-					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} ref={input => this.loginInput = input} placeholder={i18n ("E-mail")} />
+					<input type="email" className="form-control" id="email" value={this.state.email} onChange={this.onChange} ref={input => this.loginInput = input} placeholder={i18n ("E-mail")} autoComplete="off" />
 					{this.state.inputError ["email"] && <div className="small text-danger">{this.state.inputError ["email"]}</div>}
 				</div>
 				<div className="form-group">

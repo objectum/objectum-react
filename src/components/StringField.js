@@ -198,6 +198,7 @@ export default class StringField extends Component {
 			disabled={disabled}
 			placeholder={i18n (this.props.placeholder || this.props.label)}
 			ref={this._refs ["input"]}
+			autoComplete="off"
 		/>;
 		if (this.props.textarea) {
 			cmp = <textarea

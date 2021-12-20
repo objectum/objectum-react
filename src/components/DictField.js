@@ -266,6 +266,7 @@ export default class DictField extends Component {
 						ref={this._refs ["inputDiv"]}
 						readOnly={!!this.props.disabled}
 						placeholder={i18n (this.props.placeholder || this.props.label)}
+						autoComplete="off"
 					/>
 					{!this.props.disabled && <div className="input-group-append" style={{zIndex: 0}}>
 						<button

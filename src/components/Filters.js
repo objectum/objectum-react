@@ -143,13 +143,13 @@ class Filter extends Component {
 			}
 		}
 		if (t == 1 || t == 5) {
-			return <input id="value" type="text" className="form-control form-control-sm  mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
+			return <input id="value" type="text" className="form-control form-control-sm  mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} autoComplete="off" />;
 		}
 		if (t == 2) {
-			return <input id="value" type="number" className="form-control form-control-sm  mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
+			return <input id="value" type="number" className="form-control form-control-sm  mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} autoComplete="off" />;
 		}
 		if (t == 3) {
-			return <input id="value" type="date" className="form-control form-control-sm  mt-1" value={getDateString (this.state.value)} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
+			return <input id="value" type="date" className="form-control form-control-sm  mt-1" value={getDateString (this.state.value)} onChange={this.onChange} placeholder={i18n ("Enter value")} autoComplete="off" />;
 		}
 		if (t == 4) {
 			return <div />;
@@ -438,7 +438,7 @@ export default class Filters extends Component {
 			<Group className="p-1" label={i18n ("Saved filters")} collapsible>
 				<div className="form-inline overflow-auto">
 					<div className="input-group">
-						<input type="text" className="form-control form-control-sm filter-name-field" value={this.state.filterName} placeholder={i18n ("Name")} onChange={this.onChangeFilterName} />
+						<input type="text" className="form-control form-control-sm filter-name-field" value={this.state.filterName} placeholder={i18n ("Name")} onChange={this.onChangeFilterName} autoComplete="off" />
 						<div className="input-group-append">
 							<button type="button" className="btn btn-outline-primary btn-sm" onClick={this.onCreateFilter} disabled={!this.state.filterName} title={i18n ("Create")}>
 								<i className="fas fa-plus" />

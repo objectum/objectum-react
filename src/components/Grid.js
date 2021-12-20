@@ -809,6 +809,7 @@ export default class Grid extends Component {
 							id="page"
 							title={i18n ("Page")}
 							style={{width: "5em"}}
+							autoComplete="off"
 						/>
 						<button type="button" className="btn btn-link btn-sm" disabled={this.state.page >= this.state.pageNum} onClick={this.onNext} title={i18n ("Next page")}>
 							<i className="fas fa-angle-right"/>
