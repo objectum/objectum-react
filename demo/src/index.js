@@ -118,13 +118,6 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<Tabs>
-					<Tab label="Tab">
-						<Grid id="items" store={store} query="item">
-							<Action icon="fas fa-edit" onClick={() => console.log (1)} selected confirm />
-						</Grid>
-					</Tab>
-				</Tabs>
 				<DictField label={"Dict"} records={this.state.recs} />
 				<div className="row">
 					<div className="col-6">
@@ -136,6 +129,7 @@ class Test extends Component {
 							onCreate={() => this.setState ({refresh: !this.state.refresh})}
 							onSave={() => this.setState ({refresh: !this.state.refresh})}
 						>
+							<DateField property="date" showTime />
 							<Field property="name" hideLabel />
 							<Action label={"test"} onClick={() => this.setState ({category: 1115})} />
 							<DictField property="category" value={this.state.category} />

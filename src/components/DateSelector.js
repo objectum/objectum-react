@@ -156,7 +156,12 @@ export default class DateSelector extends Component {
 			<select
 				className="custom-select" style={{width: "5em"}}
 				value={hour}
-				onChange={val => this.onChange (new Date (this.state.value.setHours (val.target.value)))}
+				onChange={val => {
+					this.state.value.setHours (val.target.value);
+					this.state.value.setSeconds (0);
+					this.state.value.setMilliseconds (1);
+					this.onChange (new Date (this.state.value))
+				}}
 			>
 				{hours.map ((v, i) => {
 					return <option key={i} value={v}>{v}</option>;
@@ -165,7 +170,12 @@ export default class DateSelector extends Component {
 			<select
 				className="ml-1 custom-select" style={{width: "5em"}}
 				value={minute}
-				onChange={val => this.onChange (new Date (this.state.value.setMinutes (val.target.value)))}
+				onChange={val => {
+					this.state.value.setMinutes (val.target.value);
+					this.state.value.setSeconds (0);
+					this.state.value.setMilliseconds (1);
+					this.onChange (new Date (this.state.value))
+				}}
 			>
 				{minutes.map ((v, i) => {
 					return <option key={i} value={v}>{v}</option>;

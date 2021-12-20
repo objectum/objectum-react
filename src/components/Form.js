@@ -258,7 +258,9 @@ export default class Form extends Component {
 				this.setState ({_saveProgress: 25});
 				await this.props.store.startTransaction (`${i18n ("Saving")}, id: ${this.state._rid}`);
 				this.setState ({_saveProgress: 50});
+				console.log (1, this.record.date.getMilliseconds ());
 				await this.record.sync ();
+				console.log (2, this.record.date.getMilliseconds ());
 
 				for (let code in values) {
 					if (this.fileMap [code]) {

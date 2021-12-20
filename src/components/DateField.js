@@ -139,6 +139,7 @@ export default class DateField extends Component {
 						if (tokens.length >= 3) {
 							value.setSeconds (tokens [2]);
 						}
+						value.setMilliseconds (1);
 					}
 				}
 			} else {
