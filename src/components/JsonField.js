@@ -67,7 +67,7 @@ export default class JsonField extends Component {
 				<Cmp {...o} label={o.label} property={o.prop + suffix} value={rec [o.prop]} onChange={this.onChange} disabled={this.props.disabled}/>
 			</div>;
 		});
-		return <div className={this.props.col ? "row" : ""}>
+		return <div className={this.props.col ? "row w-100" : ""}>
 			{items}
 		</div>;
 	}

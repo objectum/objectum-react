@@ -118,6 +118,10 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
+				<JsonField label="Статьи или исследования" multi col props={[
+					{prop: "article", label: "Название", col: 6, component: StringField},
+					{prop: "url", label: "Ссылка", col: 6, component: StringField}
+				]} />
 				<DictField label={"Dict"} records={this.state.recs} />
 				<div className="row">
 					<div className="col-6">
