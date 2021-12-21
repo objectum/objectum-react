@@ -134,7 +134,11 @@ class Test extends Component {
 							onSave={() => this.setState ({refresh: !this.state.refresh})}
 						>
 							<DateField property="date" showTime />
-							<Field property="name" hideLabel />
+							<Field property="name" hideLabel onChange={opts => {
+								if (opts.value == "123") {
+									opts.value = "123-"
+								}
+							}} />
 							<Action label={"test"} onClick={() => this.setState ({category: 1115})} />
 							<DictField property="category" value={this.state.category} />
 							<JsonField property="opts" props={[

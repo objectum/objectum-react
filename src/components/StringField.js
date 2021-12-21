@@ -47,7 +47,9 @@ export default class StringField extends Component {
 			state.lastValidValue = value;
 		}
 		if (this.props.onChange && valid) {
-			this.props.onChange ({...this.props, code: this.state.code, property: this.state.code, value, id: this.props.id});
+			let opts = {...this.props, code: this.state.code, property: this.state.code, value, id: this.props.id};
+			this.props.onChange (opts);
+			state.value = opts.value;
 		}
 		this.setState (state);
 	}
@@ -192,7 +194,8 @@ export default class StringField extends Component {
 		let cmp = <input
 			type={this.props.secure ? "password" : "text"}
 			className={"form-control" + addCls}
-			id={this.id} value={this.state.value || ""}
+			id={this.id}
+			value={this.state.value || ""}
 			onChange={this.onChange}
 			onBlur={this.onBlur}
 			disabled={disabled}
