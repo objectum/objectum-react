@@ -27,6 +27,7 @@ export default function Stat ({store}) {
                         <th>{i18n ("Auth")}</th>
                         <th>{i18n ("User")}</th>
                         <th>{i18n ("Role")}</th>
+                        <th>IP</th>
                         <th>{i18n ("Activity")}</th>
                     </tr>
                     {data.access.map (({id, time}, i) => {
@@ -35,6 +36,7 @@ export default function Stat ({store}) {
                             <td>{o.id}</td>
                             <td>{o.username} {o.userId ? ` (${o.userId})` : ""}</td>
                             <td>{o.roleCode}</td>
+                            <td>{o.ip}</td>
                             <td>{new Date (time).toLocaleString ()}</td>
                         </tr>;
                     })}
