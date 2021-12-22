@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Link, useLocation} from "react-router-do
 import {
 	Auth, Models, Model, Property, Queries, Query, Column, Roles, Role, Users, User,
 	Menus, Menu, MenuItem, ModelList, ModelTree, ModelRecord, Records, Office, ImportCSS,
-	MenuButton, timeout
+	MenuButton, Stat, timeout
 } from "..";
 import Sidebar from "react-sidebar";
 import {setLocale, i18n} from "../i18n";
@@ -282,7 +282,7 @@ export default class ObjectumApp extends Component {
 			let path = item.pathname.split ("/")[1];
 			let label = this.locationLabel [path] || path;
 
-			if (path == "records" || path == "model_list" || path == "model_tree") {
+			if (["records", "model_list", "model_tree"].indexOf (path) > -1) {
 				let m = this.store.getModel (item.pathname.split ("/")[2].split ("_").join ("."));
 
 				if (path == "records") {
@@ -292,6 +292,9 @@ export default class ObjectumApp extends Component {
 					label = i18n ("List");
 				}
 				label += ": " + i18n (m.name);
+			}
+			if (path == "stat") {
+				label = i18n ("Activity");
 			}
 			if (path == "model_record") {
 				let m = this.store.getModel (JSON.parse (decodeURI (item.hash.substr (1))).opts.model);
@@ -331,6 +334,7 @@ export default class ObjectumApp extends Component {
 			<Route key="objectum-13" path="/menu_item/:rid" render={props => <MenuItem {...props} store={this.store} app={this} />} />,
 			<Route key="objectum-16" path="/model_record/:rid" render={props => <ModelRecord {...props} store={this.store} app={this} />} />,
 			<Route key="objectum-17" path="/import_css" render={props => <ImportCSS {...props} />} />,
+			<Route key="objectum-18" path="/stat" render={props => <Stat {...props} store={this.store} />} />
 		];
 		let SearchRoutes = (children) => {
 			React.Children.forEach (children, (child, i) => {

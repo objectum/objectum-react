@@ -49,6 +49,7 @@ import Office from "./components/Office";
 import Return from "./components/Return";
 import MenuButton from "./components/MenuButton";
 import ImportCSS from "./components/ImportCSS";
+import Stat from "./components/Stat";
 /*
 import Schema from "./components/Schema";
 */
@@ -155,6 +156,7 @@ export {
 	Office,
 	Return,
 	ImportCSS,
+	Stat,
 	/*
 		Schema,
 	*/
@@ -245,6 +247,7 @@ export default {
 	Office,
 	Return,
 	ImportCSS,
+	Stat,
 	/*
 		Schema,
 	*/

@@ -118,11 +118,15 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<JsonField label="Статьи или исследования" multi col props={[
-					{prop: "article", label: "Название", col: 6, component: StringField},
-					{prop: "url", label: "Ссылка", col: 6, component: StringField}
-				]} />
-				<DictField label={"Dict"} records={this.state.recs} />
+				<div>{this.state.stat}</div>
+				<Action label="stat" onClick={async () => {
+					let data = await store.getStat ();
+					this.setState ({stat: JSON.stringify ({
+						access: data.access.length,
+						refresh: data.refreshToken.length,
+						map: Object.keys (data.map).length
+					}, null, "\t")});
+				}} />
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
@@ -147,6 +151,7 @@ class Test extends Component {
 								{prop: "red", label: "Red", component: BooleanField}
 							]} />
 							<Field property="photo" accept=".pdf" />
+							<Field property="file" />
 						</Form>
 					</div>
 				</div>

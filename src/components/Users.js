@@ -46,6 +46,11 @@ export default class Users extends Component {
 					<Action icon="fas fa-plus" label={i18n ("Create")} onClick={this.onCreate} />
 					<Action icon="fas fa-edit" label={i18n ("Edit")} onClick={this.onEdit} selected />
 					<Action icon="fas fa-minus" label={i18n ("Remove")} confirm onClick={this.onRemove} selected />
+					{this.props.store.username == "admin" ? <Action icon="fas fa-users" label={i18n ("Activity")} onClick={() => {
+						this.props.history.push ({
+							pathname: "/stat"
+						});
+					}} /> : null}
 				</div>
 			</Grid>
 		</div>;
