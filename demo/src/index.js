@@ -118,15 +118,14 @@ class Test extends Component {
 	render () {
 		return (
 			<div className="container">
-				<div>{this.state.stat}</div>
-				<Action label="stat" onClick={async () => {
-					let data = await store.getStat ();
-					this.setState ({stat: JSON.stringify ({
-						access: data.access.length,
-						refresh: data.refreshToken.length,
-						map: Object.keys (data.map).length
-					}, null, "\t")});
-				}} />
+				<div className="text-right">
+					<Action label="time" onClick={async ({progress}) => {
+						for (let i = 0; i < 10; i ++) {
+	//						progress ({value: i + 1, max: 10});
+							await timeout (1000);
+						}
+					}} confirm />
+				</div>
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />

@@ -31,6 +31,9 @@ export default class Action extends Component {
 		if (this.state.confirm && !this._refs ["confirm"].current.contains (event.target) && !this._refs ["button"].current.contains (event.target)) {
 			this.confirm (false);
 		}
+		if (this.state.showPopup && !this._refs ["popup"].current.contains (event.target) && !this._refs ["button"].current.contains (event.target)) {
+			this.setState ({showPopup: false});
+		}
 	}
 	
 	componentDidMount () {
@@ -170,6 +173,13 @@ export default class Action extends Component {
 				if (tableEl && tableEl.scrollHeight > height1) {
 					tableEl.scrollTop = tableEl.scrollHeight;
 				}
+/*
+				var rect = this._refs ["button"].current.getBoundingClientRect();
+				console.log(this._refs ["button"].current.style.left, rect.top, rect.right, rect.bottom, rect.left);
+				var rect2 = this._refs ["confirm"].current.getBoundingClientRect();
+				console.log(rect2.top, rect2.right, rect2.bottom, rect2.left);
+				this._refs ["confirm"].current.style.left = rect.left + "px";
+*/
 			});
 		} else {
 			execute ();
