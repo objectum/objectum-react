@@ -484,7 +484,9 @@ export default class Form extends Component {
 						if (child.props.onChange) {
 							child.props.onChange (opts);
 						}
-						this.onChange (opts);
+						if (!opts.invalid) {
+							this.onChange (opts);
+						}
 					},
 					property: code,
 					value,

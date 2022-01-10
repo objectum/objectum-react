@@ -36,7 +36,7 @@ export default class StringField extends Component {
 		}
 	}
 
-	onChange = (val) => {
+	onChange = val => {
 		let value = val.target.value;
 		let valid = true;
 		let state = {value, showDialog: true};
@@ -46,10 +46,13 @@ export default class StringField extends Component {
 		} else {
 			state.lastValidValue = value;
 		}
-		if (this.props.onChange && valid) {
-			let opts = {...this.props, code: this.state.code, property: this.state.code, value, id: this.props.id};
+		if (this.props.onChange) {
+			let opts = {...this.props, code: this.state.code, property: this.state.code, value, id: this.props.id, invalid: !valid};
 			this.props.onChange (opts);
-			state.value = opts.value;
+
+			if (valid) {
+				state.value = opts.value;
+			}
 		}
 		this.setState (state);
 	}
