@@ -208,6 +208,7 @@
 	"Please attach file": "Пожалуйста прикрепите файл",
 	"dd.mm.yyyy": "дд.мм.гггг",
 	"dd.mm.yyyy hh:mm:ss": "дд.мм.гггг чч:мм:сс",
+	"dd.mm.yyyy hh:mm": "дд.мм.гггг чч:мм",
 	"export csv": "экспорт csv",
 	"online": "онлайн",
 	"transactions": "транзакции",

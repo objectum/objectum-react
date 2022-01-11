@@ -116,6 +116,7 @@ class Test extends Component {
 	}
 	
 	render () {
+		window.OBJECTUM_APP.hideSeconds = true;
 		return (
 			<div className="container">
 				<div className="text-right">
@@ -128,7 +129,7 @@ class Test extends Component {
 				</div>
 				<div className="row">
 					<div className="col-6">
-						<ModelList hideSeconds store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
+						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
 					</div>
 					<div className="col-6 bg-white">
 						<Form

@@ -182,6 +182,11 @@ export default class DateField extends Component {
 	}
 	
 	render () {
+		let placeholder = i18n ("dd.mm.yyyy");
+
+		if (this.props.showTime) {
+			placeholder = (this.props.hideSeconds || window.OBJECTUM_APP.hideSeconds) ? i18n ("dd.mm.yyyy hh:mm") : i18n ("dd.mm.yyyy hh:mm:ss");
+		}
 		return <div className={(this.props.label || this.props.error) ? "form-group" : ""}>
 			{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
 			<input
@@ -196,7 +201,7 @@ export default class DateField extends Component {
 				ref={this._refs ["input"]}
 				maxLength={this.props.showTime ? 18 : 11}
 				style={{width: `calc(${this.props.showTime ? 18 : 11}ch + 15px)`}}
-				placeholder={this.props.showTime ? i18n ("dd.mm.yyyy hh:mm:ss") : i18n ("dd.mm.yyyy")}
+				placeholder={placeholder}
 				autoComplete="off"
 			/>
 			{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
