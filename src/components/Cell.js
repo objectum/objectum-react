@@ -32,7 +32,7 @@ export default class Cell extends Component {
 		} else {
 			if (col.type == 3) {
 				// Date
-				return <span>{getTimestampString (value)}</span>;
+				return <span>{getTimestampString (value, {hideSeconds: this.props.hideSeconds})}</span>;
 			} else
 			if (col.type == 4) {
 				// Boolean

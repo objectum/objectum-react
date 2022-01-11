@@ -21,14 +21,14 @@ function getDateString (d) {
 	return d.getFullYear () + "-" + pad (d.getMonth () + 1) + "-" + pad (d.getDate ());
 };
 
-function getTimestampString (d) {
+function getTimestampString (d, opts = {}) {
 	if (!d || typeof d == "string") {
 		return d;
 	}
 	let s = `${pad (d.getDate ())}.${pad (d.getMonth () + 1)}.${d.getFullYear ()}`;
 	
 	if (d.getHours () || d.getMinutes () || d.getSeconds ()) {
-		s += ` ${pad (d.getHours ())}:${pad (d.getMinutes ())}:${pad (d.getSeconds ())}`;
+		s += ` ${pad (d.getHours ())}:${pad (d.getMinutes ())}${opts.hideSeconds ? "" : `:${pad (d.getSeconds ())}`}`;
 	}
 	return s;
 };

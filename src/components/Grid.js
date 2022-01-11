@@ -540,6 +540,7 @@ export default class Grid extends Component {
 								col={this.colMap [this.props.groupCol]}
 								rec={rec}
 								maxStrLen={this.props.maxStrLen}
+								hideSeconds={this.props.hideSeconds}
 							/>
 						</td>
 					</tr>);
@@ -553,7 +554,7 @@ export default class Grid extends Component {
 					if (this.state.hideCols.indexOf (col.code) > -1 || this.props.groupCol == col.code) {
 						return;
 					}
-					let cell = <Cell store={this.props.store} value={rec [col.code]} col={col} rec={rec} showImages={this.props.showImages} />;
+					let cell = <Cell store={this.props.store} value={rec [col.code]} col={col} rec={rec} showImages={this.props.showImages} hideSeconds={this.props.hideSeconds} />;
 					
 					if (this.props.onRenderCell) {
 						cell = this.props.onRenderCell ({cell, col, rec});
