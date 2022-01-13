@@ -49,31 +49,36 @@ export default class Grid extends Component {
 			this.state.showFilters = true;
 			this.state.dockFilters = "top";
 		}
-		let id = `grid-${this.props.id}`;
-		let data = JSON.parse (localStorage.getItem (id) || "{}");
+		if (this.props.id) {
+			let id = `grid-${this.props.id}`;
+			let data = JSON.parse (localStorage.getItem (id) || "{}");
 
-		if (data.defaultFilter) {
-			if (!data.filters) {
-				localStorage.setItem (id, "");
-			} else if (!data.filters [data.defaultFilter]) {
-				delete data.defaultFilter;
-				localStorage.setItem (id, JSON.stringify (data));
-			} else {
-				let filters = [];
-				
-				data.filters [data.defaultFilter].forEach (f => {
-					if (f.column) {
-						if ((f.operator && f.hasOwnProperty ("value")) || f.operator == "is null" || f.operator == "is not null") {
-							filters.push ([f.column, f.operator, f.value]);
+			if (data.defaultFilter) {
+				if (!data.filters) {
+					localStorage.setItem (id, "");
+				} else if (!data.filters [data.defaultFilter]) {
+					delete data.defaultFilter;
+					localStorage.setItem (id, JSON.stringify (data));
+				} else {
+					let filters = [];
+
+					data.filters [data.defaultFilter].forEach (f => {
+						if (f.column) {
+							if ((f.operator && f.hasOwnProperty ("value")) || f.operator == "is null" || f.operator == "is not null") {
+								filters.push ([f.column, f.operator, f.value]);
+							}
+							if (f.operator === "0" || f.operator === "1") {
+								filters.push ([f.column, "=", f.operator]);
+							}
 						}
-						if (f.operator === "0" || f.operator === "1") {
-							filters.push ([f.column, "=", f.operator]);
-						}
-					}
-				});
-				this.state.filters = filters;
-				this.state.showFilters = true;
-				this.state.dockFilters = "top";
+					});
+					this.state.filters = filters;
+					this.state.showFilters = true;
+					this.state.dockFilters = "top";
+				}
+			}
+			if (data.hideCols) {
+				this.state.hideCols = data.hideCols;
 			}
 		}
 		if (hash) {
@@ -226,6 +231,12 @@ export default class Grid extends Component {
 	}
 	
 	onHideCols = (hideCols) => {
+		if (this.props.id) {
+			let id = `grid-${this.props.id}`;
+			let data = JSON.parse (localStorage.getItem (id) || "{}");
+			data.hideCols = hideCols;
+			localStorage.setItem (id, JSON.stringify (data));
+		}
 		setHash (this, {[this.props.id]: {hideCols}});
 	}
 	
