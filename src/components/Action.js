@@ -289,7 +289,10 @@ export default class Action extends Component {
 							onClick={() => this.setState ({showPopup: false})}
 						>{i18n ("Close")}</button>
 					</div>
-					<PopupComponent {...this.props} recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
+					<PopupComponent
+						{...this.props} recordId={this.state.recordId} store={this.props.store}
+						grid={this.props.grid} onClose={() => this.setState ({showPopup: false})}
+					/>
 				</div>
 			</Fade>}
 			{ModalComponent && <Modal
