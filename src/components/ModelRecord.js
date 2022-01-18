@@ -340,11 +340,7 @@ export default class ModelRecord extends Component {
 			}
 		}
 		if (this.state.loading) {
-			return <div className="container">
-				<div className="p-4 border shadow-sm">
-					<Loading />
-				</div>
-			</div>;
+			return <Loading container />;
 		}
 		if (regModel._layout) {
 			let form = <div className="container">

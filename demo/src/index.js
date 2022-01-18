@@ -119,6 +119,9 @@ class Test extends Component {
 		window.OBJECTUM_APP.hideSeconds = true;
 		return (
 			<div className="container">
+				<div className="border p-1" style={{width: "10em"}}>
+					<Action label="test_test_test" icon="fas fa-check" />
+				</div>
 				<div className="text-right">
 					<Action label="time" onClick={async ({progress}) => {
 						for (let i = 0; i < 10; i ++) {
@@ -209,8 +212,10 @@ class Demo extends Component {
 		return <ObjectumApp
 			locale="ru"
 			store={store}
+/*
 			username="admin"
 			password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
+*/
 /*
 			username="guest"
 			password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}

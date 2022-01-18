@@ -241,8 +241,10 @@ export default class Action extends Component {
 				ref={this._refs ["button"]}
 				title={this.props.title}
 			>
-				{this.props.icon && <i className={this.props.icon + (this.props.label ? " mr-2" : "")} />}
-				{this.props.children ? this.props.children : (this.props.label || "")}
+				<div className="d-flex justify-content-center">
+					<div>{this.props.icon && <i className={this.props.icon + (this.props.label ? " mr-2" : "")} />}</div>
+					<div>{this.props.children ? this.props.children : (this.props.label || "")}</div>
+				</div>
 			</button>
 			{this.state.error && <Fade className="popup">
 				<div className="popup-content bg-white shadow-sm text-danger p-1 my-1">
