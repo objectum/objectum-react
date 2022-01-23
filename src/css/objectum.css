@@ -85,6 +85,7 @@
     top: 2px;
     min-height: 3em;
     max-height: 45em;
+    max-width: 45em;
     white-space: nowrap;
     z-index: 10000;
 }
