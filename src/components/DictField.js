@@ -168,10 +168,17 @@ export default class DictField extends Component {
 		}
 		this.setState ({showDialog: true});
 		setTimeout (() => {
-			if (this._refs ["treeDialog2"].current.getBoundingClientRect ().bottom > window.innerHeight) {
+			let treeRect = this._refs ["treeDialog2"].current.getBoundingClientRect ();
+
+			if (treeRect.bottom > window.innerHeight || treeRect.right > window.innerWidth) {
 				const element = this._refs ["inputDiv"].current;
-				const y = element.getBoundingClientRect ().top + window.pageYOffset + window.OBJECTUM_APP.DictField.scrollOffset;
-				window.scrollTo ({top: y, behavior: "smooth"});
+				const inputRect = element.getBoundingClientRect ();
+				const y = inputRect.top + window.pageYOffset + window.OBJECTUM_APP.DictField.scrollOffset;
+				window.scrollTo ({
+					top: treeRect.bottom > window.innerHeight ? y : undefined,
+					left: treeRect.right > window.innerWidth ? (treeRect.right - window.innerWidth + window.pageXOffset + window.OBJECTUM_APP.scrollbarWidth) : undefined,
+					behavior: "smooth"
+				});
 			}
 		}, 1);
 	}

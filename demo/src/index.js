@@ -118,7 +118,7 @@ class Test extends Component {
 	render () {
 		window.OBJECTUM_APP.hideSeconds = true;
 		return (
-			<div className="container">
+			<div className="container-fluid">
 				<div className="border p-1" style={{width: "10em"}}>
 					<Action label="test_test_test" icon="fas fa-check" />
 				</div>
@@ -147,7 +147,13 @@ class Test extends Component {
 								}
 							}} />
 							<Action label={"test"} onClick={() => this.setState ({category: 1115})} />
-							<DictField property="category" value={this.state.category} />
+							<div className="row">
+								<div className="col-8">
+								</div>
+								<div className="col">
+									<DictField property="category" value={this.state.category} />
+								</div>
+							</div>
 							<JsonField property="opts" props={[
 								{prop: "green", label: "Green", component: BooleanField},
 								{prop: "blue", label: "Blue", component: BooleanField},
@@ -212,10 +218,8 @@ class Demo extends Component {
 		return <ObjectumApp
 			locale="ru"
 			store={store}
-/*
 			username="admin"
 			password={require ("crypto").createHash ("sha1").update ("admin").digest ("hex").toUpperCase ()}
-*/
 /*
 			username="guest"
 			password={require ("crypto").createHash ("sha1").update ("guest").digest ("hex").toUpperCase ()}

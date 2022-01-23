@@ -276,7 +276,8 @@ export default {
 };
 window.OBJECTUM_APP = {
 	DictField: {
-		scrollOffset: -50
+		scrollOffset: -50,
 	},
+	scrollbarWidth: 18,
 	hideSeconds: false
 };
