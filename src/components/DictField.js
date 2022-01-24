@@ -170,13 +170,23 @@ export default class DictField extends Component {
 		setTimeout (() => {
 			let treeRect = this._refs ["treeDialog2"].current.getBoundingClientRect ();
 
-			if (treeRect.bottom > window.innerHeight || treeRect.right > window.innerWidth) {
+			if (treeRect.bottom > window.innerHeight) {
 				const element = this._refs ["inputDiv"].current;
 				const inputRect = element.getBoundingClientRect ();
 				const y = inputRect.top + window.pageYOffset + window.OBJECTUM_APP.DictField.scrollOffset;
+
 				window.scrollTo ({
 					top: treeRect.bottom > window.innerHeight ? y : undefined,
-					left: treeRect.right > window.innerWidth ? (treeRect.right - window.innerWidth + window.pageXOffset + window.OBJECTUM_APP.scrollbarWidth) : undefined,
+					behavior: "smooth"
+				});
+			}
+			if (treeRect.right > window.innerWidth) {
+				let sidebarContent = window.OBJECTUM_APP?.sidebar ? document.getElementById ("objectum-sidebar-content") : null;
+				let x = treeRect.right - window.innerWidth + window.OBJECTUM_APP.scrollbarWidth + (
+					sidebarContent ? sidebarContent.getBoundingClientRect ().left  : window.pageXOffset
+				);
+				(sidebarContent || window).scrollTo ({
+					left: treeRect.right > window.innerWidth ? x : undefined,
 					behavior: "smooth"
 				});
 			}

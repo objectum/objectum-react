@@ -447,7 +447,9 @@ export default class ObjectumApp extends Component {
 							open={false}
 							docked={this.state.sidebarDocked}
 							sidebarClassName="bg-white border-right"
+							contentClassName="overflow-auto"
 							shadow={false}
+							contentId="objectum-sidebar-content"
 						>
 							<Fade>
 								<div className="bg-white shadow-sm header border-bottom py-1 form-inline">
