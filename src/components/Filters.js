@@ -2,7 +2,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {Component} from "react";
-import {DictField, getDateString, i18n, Group} from "..";
+import {DictField, DateField, getDateString, i18n, Group} from "..";
 import _isEmpty from "lodash.isempty";
 import _find from "lodash.find";
 import _keys from "lodash.keys";
@@ -148,8 +148,13 @@ class Filter extends Component {
 		if (t == 2) {
 			return <input id="value" type="number" className="form-control form-control-sm  mt-1" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} autoComplete="off" />;
 		}
+/*
 		if (t == 3) {
 			return <input id="value" type="date" className="form-control form-control-sm  mt-1" value={getDateString (this.state.value)} onChange={this.onChange} placeholder={i18n ("Enter value")} autoComplete="off" />;
+		}
+*/
+		if (t == 3) {
+			return <DateField sm showTime id="value" value={this.state.value} onChange={this.onChange} placeholder={i18n ("Enter value")} />;
 		}
 		if (t == 4) {
 			return <div />;
