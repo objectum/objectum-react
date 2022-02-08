@@ -25,9 +25,24 @@ export default class Log extends Component {
 			let record = await this.store.getRecord (this.form.record.id);
 			let model = this.store.getModel (record.get ("_model"));
 			let property = model.properties [v];
-			
+
 			state.recs = await this.store.getLog (this.form.record.id, property.get ("id"));
-			
+
+			for (let i = 0; i < state.recs.length; i ++) {
+				let value = state.recs [i].value;
+
+				if (value && typeof (value) == "object" && value.getMonth) {
+					value = value.toLocaleString ();
+				}
+				if (property.type >= 1000 && value) {
+					try {
+						let record = await store.getRecord (value);
+						value = record.getLabel ();
+					} catch (err) {
+					}
+				}
+				state.recs [i].value = value;
+			}
 		} else {
 			state.recs = [];
 		}
@@ -64,10 +79,7 @@ export default class Log extends Component {
 				<tbody>
 				{this.state.recs.map ((rec, i) => {
 					let value = rec.value || "";
-					
-					if (value && typeof (value) == "object" && value.getMonth) {
-						value = value.toLocaleString ();
-					}
+
 					return (
 						<tr key={i}>
 							<td key={"date-" + i}>{getTimestampString (rec.date)}</td>
