@@ -119,17 +119,13 @@ class Test extends Component {
 		window.OBJECTUM_APP.hideSeconds = true;
 		return (
 			<div className="container-fluid">
-				<div className="border p-1" style={{width: "10em"}}>
-					<Action label="test_test_test" icon="fas fa-check" />
-				</div>
-				<div className="text-right">
-					<Action label="time" onClick={async ({progress}) => {
-						for (let i = 0; i < 10; i ++) {
-	//						progress ({value: i + 1, max: 10});
-							await timeout (1000);
-						}
-					}} confirm />
-				</div>
+				<StringField label="СНИЛС" property="snils" regexp="/^[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{2}$/" exampleValue="111-111-111-11" onChange={opts => {
+					let v = opts.value || "";
+
+					if (/^[0-9]{3}$/.test (v) || /^[0-9]{3}-[0-9]{3}$/.test (v) || /^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test (v)) {
+						opts.value = v + "-";
+					}
+				}} />
 				<div className="row">
 					<div className="col-6">
 						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
@@ -188,7 +184,7 @@ class Demo extends Component {
 		//store.register ("t.org.product", TOrgProductModel);
 		//store.register ("brak", BrakModel);
 		//store.register ("t.brak.dish", TBrakDishModel);
-		//store.register ("item", ItemModel);
+		store.register ("item", ItemModel);
 		
 		this.onCustomRender = this.onCustomRender.bind (this);
 		

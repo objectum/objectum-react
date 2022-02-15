@@ -665,7 +665,8 @@ export default class Grid extends Component {
 		if (this.props.onRenderTable) {
 			return this.props.onRenderTable ({grid: this, cols: this.state.cols, colMap: this.colMap, recs: this.state.recs, store: this.props.store});
 		}
-		let rows = this.getHeaderRows (this.state.cols.map (col => col.name));
+		let cols = this.state.cols.filter (col => this.state.hideCols.indexOf (col.code) == -1);
+		let rows = this.getHeaderRows (cols.map (col => col.name));
 
 		return <div className={`p-1 ${gridChildren ? "border-top" : ""}`}>
 			<table className="table table-hover table-bordered table-striped table-sm mb-0 p-1 objectum-table">
@@ -675,8 +676,9 @@ export default class Grid extends Component {
 						{(this.state.inlineActions && !i) ? <th className="align-top" rowSpan={rows.length}>{i18n ("Actions")}</th> : null}
 						{(this.props.tree && !i) ? <th className="align-top" rowSpan={rows.length}><i className="far fa-folder-open ml-2" /></th> : null}
 						{row.map (o => {
-							let col = this.state.cols [o.index - 1];
-							
+							//let col = this.state.cols [o.index - 1];
+							let col = cols [o.index - 1];
+
 							if (this.state.hideCols.indexOf (col.code) > -1 || this.props.groupCol == col.code) {
 								if (o.colspan == 1) {
 									return;
