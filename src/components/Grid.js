@@ -493,7 +493,7 @@ export default class Grid extends Component {
 		return has;
 	}
 	
-	renderInlineActions (children, id, rowIdx, count = 1) {
+	renderInlineActions (children, id, rowIdx, count) {
 		let actions = [];
 		
 		React.Children.forEach (children, (child, i) => {
@@ -513,7 +513,10 @@ export default class Grid extends Component {
 					}
 					actions.push (<Action
 						{...opts}
-						key={`${id}-${i}`}
+/*
+						key={`${id}-${count ++}`}
+*/
+						key={newId ()}
 						store={this.props.store}
 						label=""
 						title={child.props.label}
@@ -528,7 +531,7 @@ export default class Grid extends Component {
 				}
 			}
 			if (child.props.children) {
-				actions = [...actions, ...this.renderInlineActions (child.props.children, id, rowIdx)];
+				actions = [...actions, ...this.renderInlineActions (child.props.children, id, rowIdx, count)];
 			}
 		});
 		return actions;
@@ -563,7 +566,7 @@ export default class Grid extends Component {
 				prevGroupColValue = rec [this.props.groupCol];
 			}
 			let row = <tr key={i} onClick={() => this.onRowClick (i)} className={this.state.selected == i ? "table-primary" : ""}>
-				{this.state.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{this.renderInlineActions (this.props.children, rec.id, i)}</div></td>}
+				{this.state.inlineActions && <td key={i + "-actions"} className="align-top"><div className="d-flex">{this.renderInlineActions (this.props.children, rec.id, i, 1)}</div></td>}
 				{this.props.tree && <td key={i + "-tree"} className="align-top"><button type="button" className="btn btn-sm btn-primary text-left treegrid-button" disabled={!child} onClick={() => this.onFolderClick (rec.id)}><i className="fas fa-folder" /> {child ? <span className="badge badge-info">{child}</span> : ""}</button></td>}
 				{this.state.cols.map ((col, j) => {
 					if (this.state.hideCols.indexOf (col.code) > -1 || this.props.groupCol == col.code) {

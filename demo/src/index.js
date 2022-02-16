@@ -119,6 +119,11 @@ class Test extends Component {
 		window.OBJECTUM_APP.hideSeconds = true;
 		return (
 			<div className="container-fluid">
+				<ChooseField
+					store={store}
+					label="Test"
+					choose={{cmp: ModelList, model: "item", ref: "list"}}
+				/>
 				<StringField label="СНИЛС" property="snils" regexp="/^[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{2}$/" exampleValue="111-111-111-11" onChange={opts => {
 					let v = opts.value || "";
 
