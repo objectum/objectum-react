@@ -367,6 +367,10 @@ export default class Grid extends Component {
 		}
 		if (!this.unmounted) {
 			this.setState (state);
+
+			if (this.state.page > state.pageNum) {
+				setHash (this, {[this.props.id]: {page: 1, selected: null}});
+			}
 		}
 	}
 
