@@ -128,6 +128,7 @@ class Test extends Component {
 					let v = opts.value || "";
 
 					if (/^[0-9]{3}$/.test (v) || /^[0-9]{3}-[0-9]{3}$/.test (v) || /^[0-9]{3}-[0-9]{3}-[0-9]{3}$/.test (v)) {
+						console.log (v);
 						opts.value = v + "-";
 					}
 				}} />

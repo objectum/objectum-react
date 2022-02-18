@@ -50,9 +50,9 @@ export default class StringField extends Component {
 			let opts = {...this.props, code: this.state.code, property: this.state.code, value, id: this.props.id, invalid: !valid};
 			this.props.onChange (opts);
 
-			if (valid) {
+			//if (valid) {
 				state.value = opts.value;
-			}
+			//}
 		}
 		this.setState (state);
 	}
