@@ -3,7 +3,7 @@
 import React, {useState} from "react";
 import {i18n, newId} from "..";
 
-export default function RadioField ({property, records, value:initialValue, label, hideLabel, notNull, error, onChange}) {
+export default function RadioField ({property, records, value:initialValue, label, hideLabel, notNull, error, onChange, disabled}) {
 	let id = newId ();
 	let name = Math.random ();
 	let [value, setValue] = useState (initialValue);
@@ -19,7 +19,7 @@ export default function RadioField ({property, records, value:initialValue, labe
 				if (onChange) {
 					onChange ({value: record.id, code: property, property});
 				}
-			}} />
+			}} disabled={disabled} />
 			<label className="form-check-label">{record.getLabel ? record.getLabel () : record.name}</label>
 		</div>;
 	});
