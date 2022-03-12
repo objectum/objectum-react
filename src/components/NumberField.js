@@ -77,11 +77,15 @@ export default class NumberField extends Component {
 		if (this.props.label || this.props.error) {
 			return <div className="form-group">
 				{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
-				<input type="text" className={`form-control ${addCls} numberfield`} id={this.id} value={this.state.value} onChange={this.onChange} onBlur={this.onBlur} disabled={disabled} autoComplete="off" />
+				<input type="text" className={`form-control ${addCls} numberfield`} id={this.id} value={this.state.value}
+					   placeholder={i18n (this.props.placeholder || this.props.label)}
+					   onChange={this.onChange} onBlur={this.onBlur} disabled={disabled} autoComplete="off" />
 				{this.props.error && <div className="invalid-feedback">{this.props.error}</div>}
 			</div>;
 		} else {
-			return <input type="text" className="form-control numberfield" value={this.state.value} onChange={this.onChange} onBlur={this.onBlur} disabled={disabled} autoComplete="off" />;
+			return <input type="text" className="form-control numberfield" value={this.state.value}
+						  placeholder={i18n (this.props.placeholder || this.props.label)}
+						  onChange={this.onChange} onBlur={this.onBlur} disabled={disabled} autoComplete="off" />;
 		}
 	}
 };
