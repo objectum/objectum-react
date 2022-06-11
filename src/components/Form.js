@@ -610,12 +610,18 @@ export default class Form extends Component {
 			</div>}
 			<div className={this.props.formClassName}>
 				{this.state._rid ? (!this.props.hideButtons && !this.props.autoSave && <div className="actions p-1 border-bottom">
-					<button type="button" className="btn btn-primary mr-1" onClick={this.onSave} disabled={disabledSave}>
-						{this.state._saving ?
-							<span><span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"/>{i18n ("Saving")}</span> :
-							<span>{(this.state._saved && disabledSave) ? <span><i className="fas fa-check-double mr-2"/>{i18n ("Saved")}</span> : <span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>}</span>
-						}
-					</button>
+					{!this.props.hideSaveButton &&
+						<button type="button" className="btn btn-primary mr-1" onClick={this.onSave}
+								disabled={disabledSave}>
+							{this.state._saving ?
+								<span><span className="spinner-border spinner-border-sm mr-2" role="status"
+											aria-hidden="true"/>{i18n ("Saving")}</span> :
+								<span>{(this.state._saved && disabledSave) ?
+									<span><i className="fas fa-check-double mr-2"/>{i18n ("Saved")}</span> :
+									<span><i className="fas fa-check mr-2"/>{i18n ("Save")}</span>}</span>
+							}
+						</button>
+					}
 					{this.props.rsc == "record" && !this.props.hideLogButton &&
 						<button type="button" className="btn btn-primary" onClick={() => this.setState ({_showLog: !this.state._showLog})}>
 							<i className="fas fa-history mr-2" />{i18n ("Log")}
