@@ -14,7 +14,9 @@ export default class StringField extends Component {
 			code: this.props.property,
 			value: this.props.value === null ? "" : this.props.value,
 			regexp: this.props.regexp,
-			showDialog: false
+			showDialog: false,
+			valueHashed: this.props.secure && this.props.value,
+			showValue: false
 		};
 		if (this.state.regexp && typeof (this.state.regexp) == "string") {
 			this.state.regexp = eval (this.state.regexp);
@@ -53,6 +55,9 @@ export default class StringField extends Component {
 			//if (valid) {
 				state.value = opts.value;
 			//}
+		}
+		if (this.props.secure) {
+			state.valueHashed = false;
 		}
 		this.setState (state);
 	}
@@ -193,19 +198,7 @@ export default class StringField extends Component {
 			}
 		}
 		let addCls = (error || !valid) ? " is-invalid" : "";
-
-		let cmp = <input
-			type={this.props.secure ? "password" : "text"}
-			className={"form-control" + addCls}
-			id={this.id}
-			value={this.state.value || ""}
-			onChange={this.onChange}
-			onBlur={this.onBlur}
-			disabled={disabled}
-			placeholder={i18n (this.props.placeholder || this.props.label)}
-			ref={this._refs ["input"]}
-			autoComplete="off"
-		/>;
+		let cmp;
 		if (this.props.textarea) {
 			cmp = <textarea
 				className={`form-control${addCls} ${this.props.monospace ? "text-monospace" : ""}`}
@@ -219,11 +212,9 @@ export default class StringField extends Component {
 				maxLength={this.props.maxLength || this.props.maxlength}
 				placeholder={i18n (this.props.placeholder || this.props.label)}
 			/>;
-		}
-		if (this.props.wysiwyg) {
+		} else if (this.props.wysiwyg) {
 			cmp = <div className="border p-1" id={this.id} />;
-		}
-		if (this.props.time) {
+		} else if (this.props.time) {
 			let hours = [], minutes = [];
 			
 			for (let i = 0; i < 60; i ++) {
@@ -262,6 +253,47 @@ export default class StringField extends Component {
 					})}
 				</select>
 			</div>;
+		} else {
+			if (this.props.secure) {
+				cmp = <div className="input-group">
+					<input
+						type={this.state.showValue ? "text" : "password"}
+						className={"form-control" + addCls}
+						id={this.id}
+						value={this.state.value || ""}
+						onChange={this.onChange}
+						onBlur={this.onBlur}
+						disabled={disabled}
+						placeholder={i18n (this.props.placeholder || this.props.label)}
+						ref={this._refs ["input"]}
+						autoComplete="off"
+					/>
+					<div className="input-group-append">
+						<button
+							type="button"
+							className={`btn btn-outline-primary rounded-right ${this.props.sm ? "btn-sm" : ""}`}
+							onClick={() => this.setState({showValue: !this.state.showValue})}
+							title={this.state.valueHashed ? i18n ("Unavailable") : (this.state.showValue ? i18n ("Hide") : i18n ("Show"))}
+							disabled={this.state.valueHashed}
+						>
+							<i className={`fas ${this.state.showValue ? "fa-eye-slash" : "fa-eye"}`} />
+						</button>
+					</div>
+				</div>
+			} else {
+				cmp = <input
+					type="text"
+					className={"input-group form-control" + addCls}
+					id={this.id}
+					value={this.state.value || ""}
+					onChange={this.onChange}
+					onBlur={this.onBlur}
+					disabled={disabled}
+					placeholder={i18n (this.props.placeholder || this.props.label)}
+					ref={this._refs ["input"]}
+					autoComplete="off"
+				/>;
+			}
 		}
 		return <div className={(this.props.label || error) ? "form-group stringfield" : "stringfield"}>
 			{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}

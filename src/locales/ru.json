@@ -214,5 +214,8 @@
 	"transactions": "транзакции",
 	"activity": "активность",
 	"revision": "ревизия",
-	"expires": "истекает"
+	"expires": "истекает",
+	"show": "показать",
+	"hide": "скрыть",
+	"unavailable": "недоступно"
 }

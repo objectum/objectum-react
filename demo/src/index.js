@@ -119,6 +119,7 @@ class Test extends Component {
 		window.OBJECTUM_APP.hideSeconds = true;
 		return (
 			<div className="container-fluid">
+				<StringField label="label" secure value="123" />
 				<RadioField property="nomination" records={[{id: 1, name: "a1"}, {id: 2, name: "a2"}]} disabled />
 				<ChooseField
 					store={store}
