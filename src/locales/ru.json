@@ -210,6 +210,7 @@
 	"dd.mm.yyyy hh:mm:ss": "дд.мм.гггг чч:мм:сс",
 	"dd.mm.yyyy hh:mm": "дд.мм.гггг чч:мм",
 	"export csv": "экспорт csv",
+	"import csv": "импорт csv",
 	"online": "онлайн",
 	"transactions": "транзакции",
 	"activity": "активность",
@@ -217,5 +218,9 @@
 	"expires": "истекает",
 	"show": "показать",
 	"hide": "скрыть",
-	"unavailable": "недоступно"
+	"unavailable": "недоступно",
+	"property not exist": "свойство не найдено",
+	"property not allowed for import": "свойство недоступно для импорта",
+	"add": "добавить",
+	"added successfully": "добавлено успешно"
 }

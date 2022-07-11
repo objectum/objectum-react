@@ -3,6 +3,7 @@
 
 import React, {Component} from "react";
 import {getHash, setHash, addHashListener, removeHashListener, timeout, newId} from "../modules/common";
+import FileField from "./FileField";
 import Action from "./Action";
 import Cell from "./Cell";
 import Filters from "./Filters";
@@ -16,12 +17,111 @@ import Fade from "./Fade";
 import PageTitle from "./PageTitle";
 import {execute} from "objectum-client";
 
+class ImportCSV extends Component {
+	constructor (props) {
+		super (props);
+
+		this.state = {
+			file: null,
+			cols: [],
+			rows: [],
+			loaded: false
+		};
+	}
+
+	onLoad = () => {
+		const reader = new FileReader ();
+
+		reader.onload = () => {
+			const body = reader.result;
+			const rows = body.split ("\n").filter(row => row.includes(";")).map(row => row.split (";"));
+			const cols = rows[0];
+			rows.splice(0, 1);
+			this.setState({ cols, rows, loaded: true });
+		};
+		reader.readAsText (this.state.file, "utf-8");
+	}
+
+	onAdd = async ({progress}) => {
+		const model = this.props.store.getModel(this.props.opts.model);
+
+		await this.props.store.transaction(async () => {
+			for (let i = 0; i < this.state.rows.length; i ++) {
+				progress ({value: i + 1, max: this.state.rows.length});
+				const data = {
+					_model: this.props.opts.model
+				};
+				this.state.rows[i].forEach((v, i) => {
+					if (v) {
+						let col = this.state.cols[i];
+						let property = model.properties[col];
+
+						if (property && this.props.opts.properties.includes(col)) {
+							if (property.type == 2) {
+								v = v.split(",").join(".");
+							}
+							data[col] = v;
+						}
+					}
+				});
+				await this.props.store.createRecord(data);
+			}
+		});
+		return i18n("Added successfully");
+	}
+
+	render () {
+		const model = this.props.store.getModel(this.props.opts.model);
+		const properties = this.props.opts.properties;
+
+		return <div>
+			<FileField label={i18n("File")} accept=".csv" onChange={({file}) => this.setState({file})} />
+			<Action label={i18n("Load")} icon="fas fa-file-import" disabled={!this.state.file} onClick={this.onLoad} />
+			<table className="table table-sm table-bordered my-3">
+				<thead><tr>
+				{this.state.cols.map((col, i) => {
+					let name = col;
+					let property = model.properties[col];
+
+					if (property) {
+						name = `${name} (${i18n(property.name)})`;
+					} else {
+						name = `"${name}" (${i18n("property not exist")})`;
+					}
+					if (!properties.includes(col)) {
+						name = `"${col}" (${i18n("property not allowed for import")})`;
+					}
+					return <th key={i}>{name}</th>;
+				})}
+				</tr></thead>
+				<tbody>
+				{this.state.rows.map((row, i) => {
+					return <tr key={i}>
+						{row.map((v, i) => {
+							let col = this.state.cols[i];
+							let property = model.properties[col];
+							let tdCls = "";
+
+							if (!property || !properties.includes(col)) {
+								tdCls = "table-danger";
+							}
+							return <td key={i} className={tdCls}>{v}</td>;
+						})}
+					</tr>;
+				})}
+				</tbody>
+			</table>
+			{this.state.loaded ? <Action label={i18n("Add")} icon="fas fa-file-import" confirm onClick={this.onAdd} /> : null}
+		</div>;
+	}
+}
+
 export default class Grid extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		let hash = getHash (this) [this.props.id];
-		
+
 		this.state = {
 			loading: false,
 			refresh: false,
@@ -94,7 +194,7 @@ export default class Grid extends Component {
 		this.colMap = {};
 		this.unmounted = false;
 	}
-	
+
 	hashChange = () => {
 		let hash = getHash (this) [this.props.id];
 		let state = {};
@@ -106,7 +206,7 @@ export default class Grid extends Component {
 			["page", "pageRecs", "selected", "parent", "showFilters", "dockFilters", "filters", "mode", "order", "showCols", "hideCols"].forEach (a => {
 				if (hash.hasOwnProperty (a) && JSON.stringify (hash [a]) !== JSON.stringify (this.state [a])) {
 					state [a] = hash [a];
-					
+
 					if (a == "filters" && this.props.onFilters) {
 						this.props.onFilters (_map (hash [a], f => {
 							return {
@@ -121,15 +221,15 @@ export default class Grid extends Component {
 			this.setState (state);
 		}
 	}
-	
+
 	async componentDidMount () {
 		addHashListener (this, this.hashChange);
 
 		await this.load ();
-		
+
 		let selected = this.state.selected;
 		let parent = this.state.parent;
-		
+
 		if (parent !== null && this.props.onSelectParent) {
 			this.props.onSelectParent (parent);
 		}
@@ -137,10 +237,10 @@ export default class Grid extends Component {
 			this.props.onSelect (this.state.recs [selected] && this.state.recs [selected].id);
 		}
 	}
-	
+
 	async componentDidUpdate (prevProps, prevState) {
 		let needRefresh = false;
-		
+
 		["refresh", "params", "query", "model"].forEach (a => {
 			if (JSON.stringify (prevProps [a]) !== JSON.stringify (this.props [a])) {
 				needRefresh = true;
@@ -161,24 +261,24 @@ export default class Grid extends Component {
 			this.props.onSelect (this.state.recs [this.state.selected] ? this.state.recs [this.state.selected].id : null);
 		}
 	}
-	
+
 	componentWillUnmount () {
 		removeHashListener (this, this.hashChange);
 		this.unmounted = true;
 	}
-	
+
 	onRowClick = (row) => {
 		setHash (this, {[this.props.id]: {selected: row}});
 	}
-	
+
 	onFolderClick = (id) => {
 		setHash (this, {[this.props.id]: {parent: id, selected: null, page: 1}});
 	}
-	
+
 	onChange = (val) => {
 		let id = val.target.id;
 		let v = val.target.value;
-		
+
 		if (val.target.type === "checkbox") {
 			v = val.target.checked;
 		}
@@ -189,47 +289,47 @@ export default class Grid extends Component {
 			setHash (this, {[this.props.id]: {[id]: v}});
 		}
 	}
-	
+
 	onFirst = () => {
 		setHash (this, {[this.props.id]: {page: 1, selected: null}});
 	}
-	
+
 	onPrev = () => {
 		setHash (this, {[this.props.id]: {page: Number (this.state.page) - 1, selected: null}});
 	}
-	
+
 	onNext = () => {
 		setHash (this, {[this.props.id]: {page: Number (this.state.page) + 1, selected: null}});
 	}
-	
+
 	onLast = () => {
 		setHash (this, {[this.props.id]: {page: this.state.pageNum, selected: null}});
 	}
-	
+
 	onShowFilters = () => {
 		setHash (this, {[this.props.id]: {showFilters: !this.state.showFilters}});
 	}
-	
+
 	onDockFilters = () => {
 		setHash (this, {[this.props.id]: {dockFilters: this.state.dockFilters == "bottom" ? "top" : "bottom"}});
 	}
-	
+
 	onShowCols = () => {
 		setHash (this, {[this.props.id]: {showCols: !this.state.showCols}});
 	}
-	
+
 	onImageMode = () => {
 		setHash (this, {[this.props.id]: {mode: this.state.mode == "images" ? "table" : "images"}});
 	}
-	
+
 	onEditMode = () => {
 		setHash (this, {[this.props.id]: {mode: this.state.mode == "edit" ? "table" : "edit"}});
 	}
-	
+
 	onFilter = (filters) => {
 		setHash (this, {[this.props.id]: {filters, selected: null}});
 	}
-	
+
 	onHideCols = (hideCols) => {
 		if (this.props.id) {
 			let id = `grid-${this.props.id}`;
@@ -239,10 +339,10 @@ export default class Grid extends Component {
 		}
 		setHash (this, {[this.props.id]: {hideCols}});
 	}
-	
+
 	onOrder = (colCode) => {
 		let order = [...this.state.order];
-		
+
 		if (this.state.order [0] === colCode) {
 			if (this.state.order [1] == "asc") {
 				order [1] = "desc";
@@ -254,7 +354,7 @@ export default class Grid extends Component {
 		}
 		setHash (this, {[this.props.id]: {order, selected: null}});
 	}
-	
+
 	prepareRequestOptions () {
 		let opts = {
 			offset: (this.state.page - 1) * this.state.pageRecs,
@@ -283,7 +383,7 @@ export default class Grid extends Component {
 		}
 		return opts;
 	}
-	
+
 	async load () {
 		let state = {
 			pageRecs: this.state.pageRecs
@@ -293,18 +393,18 @@ export default class Grid extends Component {
 				return;
 			}
 			this.setState ({loading: true});
-			
+
 			await timeout (100);
-			
+
 			let result = await this.props.store.getData (this.prepareRequestOptions ());
-			
+
 			state.recs = result.recs;
 			state.cols = _sortBy (result.cols, ["order", "name"]);
 			this.position = result.position;
 			state.length = result.length;
-			
+
 			this.childMap = {};
-			
+
 			if (this.props.tree) {
 				result.childs.forEach (rec => {
 					this.childMap [rec.parent] = rec.num;
@@ -314,9 +414,9 @@ export default class Grid extends Component {
 				});
 			}
 			this.colMap = {};
-			
+
 			state.cols.forEach (col => this.colMap [col.code] = col);
-			
+
 			if (!this.state.hideCols.length) {
 				state.cols.forEach (col => {
 					if (col.area === 0) {
@@ -328,9 +428,9 @@ export default class Grid extends Component {
 				let imageProperty = this.props.store.getProperty (this.colMap [this.props.card.image].property);
 				let imageModel = this.props.store.getModel (imageProperty.get ("type"));
 				let model = this.props.store.getModel (imageProperty.get ("model"));
-				
+
 				state.imageRecs = [];
-				
+
 				if (state.recs.length) {
 					let result = await this.props.store.getData ({
 						model: imageModel.getPath (),
@@ -342,16 +442,16 @@ export default class Grid extends Component {
 				}
 			}
 			state.pageNum = state.length / state.pageRecs | 0;
-			
+
 			if (state.length % state.pageRecs) {
 				state.pageNum ++;
 			}
 			for (let i = 0; i < state.cols.length; i ++) {
 				let c = state.cols [i];
-				
+
 				if (c.type >= 1000) {
 					let m = this.props.store.getModel (c.type);
-					
+
 					if (m.isDictionary () || this.props.store.dict [m.getPath ()]) {
 						c.recs = await this.props.store.getDict (c.type);
 					}
@@ -361,7 +461,7 @@ export default class Grid extends Component {
 			state.error = err.message;
 		}
 		state.loading = false;
-		
+
 		if (this.props.onLoad) {
 			this.props.onLoad (state);
 		}
@@ -377,7 +477,7 @@ export default class Grid extends Component {
 	getInfo () {
 		let pos = (this.state.page - 1) * this.state.pageRecs + 1;
 		let pos2 = pos + Number (this.state.pageRecs) - 1;
-		
+
 		if (pos2 > this.state.length) {
 			pos2 = this.state.length;
 		}
@@ -406,12 +506,12 @@ export default class Grid extends Component {
 				}
 				o.onClick = async (opts) => {
 					Object.assign (opts, {grid: this, store: this.props.store, parentId: this.props.parentId, parentModel: this.props.parentModel})
-					
+
 					if (child.props.selected || child.props.onClickSelected) {
 						opts.id = this.state.recs [this.state.selected].id;
 					}
 					let fn = child.props.onClick || child.props.onClickSelected;
-					
+
 					if (fn) {
 						return await execute (fn, opts);
 					}
@@ -437,10 +537,10 @@ export default class Grid extends Component {
 			return React.cloneElement (child, o);
 		});
 	}
-	
+
 	renderPosition () {
 		let active = !!this.position.length || this.state.parent;
-		
+
 		return <div className="p-1 border-top">
 			<nav aria-label="breadcrumb">
 				<ol className="breadcrumb m-0 p-1">
@@ -449,7 +549,7 @@ export default class Grid extends Component {
 					</li>
 					{this.position.map ((rec, i) => {
 						active = i < this.position.length - 1;
-						
+
 						return <li key={i} className={"breadcrumb-item" + (active ? " active" : "")} aria-current={active ? "page" : ""}>
 							<button type="button" className="btn btn-link btn-sm p-0" onClick={() => this.onFolderClick (rec.id)} disabled={!active}>{rec.name || "-"}</button>
 						</li>;
@@ -461,7 +561,7 @@ export default class Grid extends Component {
 
 	visibleColNum () {
 		let n = 0;
-		
+
 		this.state.cols.forEach (col => {
 			if (this.state.hideCols.indexOf (col.code) > - 1 || this.props.groupCol == col.code) {
 				return;
@@ -473,10 +573,10 @@ export default class Grid extends Component {
 		}
 		return n;
 	}
-	
+
 	hasInlineActions (children) {
 		let has = false;
-		
+
 		React.Children.forEach (children, child => {
 			if (!child || !child.props) {
 				return;
@@ -492,10 +592,10 @@ export default class Grid extends Component {
 		});
 		return has;
 	}
-	
+
 	renderInlineActions (children, id, rowIdx, count) {
 		let actions = [];
-		
+
 		React.Children.forEach (children, (child, i) => {
 			if (!child || !child.props) {
 				return;
@@ -503,7 +603,7 @@ export default class Grid extends Component {
 			if (child && child.type && child.type.displayName == "Action") {
 				if (child.props.onClickSelected || child.props.selected) {
 					let opts = {...child.props};
-					
+
 					if (child.props.modalComponent || child.props.popupComponent) {
 						opts.recordId = id;
 						opts.grid = this;
@@ -524,7 +624,7 @@ export default class Grid extends Component {
 						onClick={async (opts) => {
 							Object.assign (opts, {grid: this, store: this.props.store, parentId: this.props.parentId, parentModel: this.props.parentModel})
 							opts.id = id;
-							
+
 							return await execute (child.props.onClickSelected || child.props.onClick, opts);
 						}}
 					/>);
@@ -536,14 +636,14 @@ export default class Grid extends Component {
 		});
 		return actions;
 	}
-	
+
 	renderTableRows () {
 		let rows = [];
 		let prevGroupColValue = null;
-		
+
 		this.state.recs.forEach ((rec, i) => {
 			let child = this.childMap [rec.id];
-			
+
 			if (this.props.groupCol) {
 				if (rec [this.props.groupCol] != prevGroupColValue) {
 					rows.push (<tr key={newId ()} className="table-secondary">
@@ -573,7 +673,7 @@ export default class Grid extends Component {
 						return;
 					}
 					let cell = <Cell store={this.props.store} value={rec [col.code]} col={col} rec={rec} showImages={this.props.showImages} hideSeconds={this.props.hideSeconds} />;
-					
+
 					if (this.props.onRenderCell) {
 						cell = this.props.onRenderCell ({cell, col, rec});
 					}
@@ -589,14 +689,14 @@ export default class Grid extends Component {
 		});
 		return rows;
 	}
-	
+
 	getHeaderRows (cols) {
 		let rowNum = (function (cols) {
 			let r = 0;
-			
+
 			for (let i = 0; i < cols.length; i ++) {
 				let a = cols [i].split (":");
-				
+
 				if (a.length > r) {
 					r = a.length;
 				}
@@ -605,10 +705,10 @@ export default class Grid extends Component {
 		}) (cols);
 		// init matrix
 		let m = [];
-		
+
 		for (let i = 0; i < cols.length; i ++) {
 			let a = cols [i].split (":");
-			
+
 			for (let j = 0; j < a.length; j ++) {
 				a [j] = {text: a [j].trim (), colspan: 1, rowspan: 1};
 			}
@@ -621,7 +721,7 @@ export default class Grid extends Component {
 		for (let i = 1; i < cols.length; i ++) {
 			for (let j = 0; j < rowNum; j ++) {
 				let ref = m [i - 1][j].hasOwnProperty ('ref') ? m [i - 1][j].ref :  i - 1;
-				
+
 				if (m [i][j].text != null && m [i][j].text == m [ref][j].text) {
 					m [ref][j].colspan ++;
 					m [i][j].ref = ref;
@@ -632,7 +732,7 @@ export default class Grid extends Component {
 		for (let i = 0; i < cols.length; i ++) {
 			for (let j = 1; j < rowNum; j ++) {
 				let refR = m [i][j - 1].hasOwnProperty ('refR') ? m [i][j - 1].refR : j - 1;
-				
+
 				if (m [i][j].text == null) {
 					m [i][refR].rowspan ++;
 					m [i][j].refR = refR;
@@ -641,10 +741,10 @@ export default class Grid extends Component {
 		}
 		// rows
 		let rows = [];
-		
+
 		for (let i = 0; i < rowNum; i ++) {
 			let cells = [], index = 1;
-			
+
 			for (let j = 0; j < cols.length; j ++) {
 				if (m [j][i].hasOwnProperty ('refR')) {
 					index += m [j][i].colspan;
@@ -664,7 +764,7 @@ export default class Grid extends Component {
 		}
 		return rows;
 	}
-	
+
 	renderTableView ({gridChildren}) {
 		if (!this.state.cols.length) {
 			return (<div />);
@@ -699,12 +799,12 @@ export default class Grid extends Component {
 								}
 							});
 							let name = i18n (o.text);
-							
+
 							if (f) {
 								cls = "font-italic";
 							}
 							let orderClass = "sort";
-							
+
 							if (col.code === this.state.order [0]) {
 								if (this.state.order [1] == "asc") {
 									orderClass = "sort-up";
@@ -728,10 +828,10 @@ export default class Grid extends Component {
 			</table>
 		</div>;
 	}
-	
+
 	renderCardView () {
 		let card = this.props.card;
-		
+
 		if (!this.colMap [card.image]) {
 			return (<div />);
 		}
@@ -743,7 +843,7 @@ export default class Grid extends Component {
 			{this.state.recs.map ((rec, i) => {
 				let imageRecs = _filter (this.state.imageRecs, {[model.get ("code")]: rec.id});
 				let smallImageRec = null, bigImageRec = null;
-				
+
 				imageRecs.forEach (rec => {
 					if (!smallImageRec || rec.width < smallImageRec.width) {
 						smallImageRec = rec;
@@ -755,14 +855,14 @@ export default class Grid extends Component {
 				let smallImage = `${this.props.store.getUrl ()}/files/${smallImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${smallImageRec ["photo"]}`;
 				let bigImage = `${this.props.store.getUrl ()}/files/${bigImageRec.id}-${imageModel.properties ["photo"].get ("id")}-${bigImageRec ["photo"]}`;
 				let text = [];
-				
+
 				card.text.forEach (code => {
 					if (rec [code] !== null) {
 						text.push (`${this.colMap [code].name}: ${rec [code]}`);
 					}
 				});
 				text = text.join (", ");
-				
+
 				return (
 					<div key={i} className="col">
 						<div key={i} className="card my-1" style={{width: "18rem"}}>
@@ -779,7 +879,7 @@ export default class Grid extends Component {
 			})}
 		</div>;
 	}
-	
+
 	renderEditView () {
 		if (!this.colMap ["id"]) {
 			return (<div />);
@@ -857,8 +957,15 @@ export default class Grid extends Component {
 					{!this.props.system && <button type="button" className="btn btn-link btn-sm" onClick={this.onShowCols} title={i18n ("Columns")}>
 						<i className={`fas fa-eye ${this.state.showCols ? "border-bottom border-primary" : ""}`} />
 					</button>}
+					{!this.props.system && this.props.importCSV && <Action
+						btnClassName="btn btn-link btn-sm px-1"
+						title={i18n ("Import csv")}
+						modalComponent={ImportCSV}
+						store={this.props.store}
+						opts={this.props.importCSV}
+					><i className="fas fa-file-import" /></Action>}
 					{!this.props.system && <button type="button" className="btn btn-link btn-sm" onClick={this.onReport} title={i18n ("Export csv")}>
-						<i className="fas fa-print" />
+						<i className="fas fa-file-export" />
 					</button>}
 					{!this.props.system && this.props.editable && <button type="button" className="btn btn-link btn-sm" onClick={this.onEditMode} title={i18n ("Edit mode")}>
 						<i className={`fas fa-edit ${this.state.mode == "edit" ? "border-bottom border-primary" : ""}`} />
@@ -945,7 +1052,7 @@ export default class Grid extends Component {
 		document.body.appendChild (a);
 		a.click ();
 	}
-	
+
 	render () {
 		if (!this.props.store) {
 			return <div className="alert alert-danger">store not exist</div>;
@@ -962,7 +1069,7 @@ export default class Grid extends Component {
 				gridId={this.props.id}
 			/>
 		</div>;
-		
+
 		return <Fade><div className={this.props.className}>
 			<PageTitle label={this.props.label} />
 			<div className="border bg-white">
@@ -972,13 +1079,13 @@ export default class Grid extends Component {
 				</div>}
 
 				{this.props.tree && this.renderPosition ()}
-				
+
 				{this.state.showFilters && this.state.dockFilters == "top" && this.state.mode != "edit" && filters}
-				
+
 				{this.state.mode == "images" ? this.renderCardView () : (this.state.mode == "edit" ? this.renderEditView () : this.renderTableView ({gridChildren}))}
-				
+
 				{this.state.showFilters && this.state.dockFilters == "bottom" && this.state.mode != "edit" && filters}
-				
+
 				{this.state.showCols && this.state.mode != "edit" && <div className="border-top">
 					<GridColumns
 						cols={this.state.cols}

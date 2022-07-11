@@ -10,7 +10,7 @@ import Modal from "react-modal";
 export default class Action extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		this.state = {
 			processing: false,
 			label: "",
@@ -26,7 +26,7 @@ export default class Action extends Component {
 			"button": React.createRef ()
 		};
 	}
-	
+
 	onDocumentClick = (event) => {
 		if (this.state.confirm && !this._refs ["confirm"].current.contains (event.target) && !this._refs ["button"].current.contains (event.target)) {
 			this.confirm (false);
@@ -35,12 +35,12 @@ export default class Action extends Component {
 			this.setState ({showPopup: false});
 		}
 	}
-	
+
 	componentDidMount () {
 		Modal.setAppElement ("body");
 		document.addEventListener ("mousedown", this.onDocumentClick)
 	}
-	
+
 	componentDidUpdate (prevProps, prevState) {
 		if (prevProps.recordId != this.props.recordId) {
 			this.setState ({recordId: this.props.recordId});
@@ -54,17 +54,17 @@ export default class Action extends Component {
 		}
 */
 	}
-	
+
 	componentWillUnmount () {
 		this.unmounted = true;
 		document.removeEventListener ("mousedown", this.onDocumentClick);
 	}
-	
+
 	onClick = async () => {
 		let execute = async () => {
 			let handler = this.props.onClick || this.props.onClickSelected;
 			let state = {processing: false, abort: false};
-			
+
 			if (this.props.popupComponent) {
 				this.setState ({showPopup: !this.state.showPopup});
 			} else
@@ -79,7 +79,7 @@ export default class Action extends Component {
 					}
 					this.setState ({current: new Date ()});
 				}, 200);
-				
+
 				try {
 					if (this.props.transaction) {
 						if (!this.props.store) {
@@ -185,15 +185,15 @@ export default class Action extends Component {
 			execute ();
 		}
 	}
-	
+
 	async confirm (result) {
 		this.setState ({confirm: null});
 		this.confirmResolve (result);
 	}
-	
+
 	getDisabled () {
 		let disabled;
-		
+
 		if (this.props.disabled) {
 			if (typeof (this.props.disabled) == "function") {
 				disabled = this.props.disabled ();
@@ -208,30 +208,30 @@ export default class Action extends Component {
 		}
 		return disabled;
 	}
-	
+
 	onClose = () => {
 		this.setState ({error: "", result: ""});
 	}
-	
+
 	onCancel = () => {
 		this.setState ({abort: true});
 		this.props.store.abortAction ();
 	}
-	
+
 	render () {
 		let progressText;
-		
+
 		if (this.state.processing) {
 			progressText = this.state.label ? (this.state.label + ": ") : "";
 			progressText += this.state.value ? this.state.value : "";
 			progressText += this.state.max ? (" / " + this.state.max) : "";
 		}
 		progressText = progressText || i18n ("Processing") + " ...";
-		
+
 		let ModalComponent = this.props.modalComponent;
 		let PopupComponent = this.props.popupComponent;
 		let duration = (this.state.current && this.state.start) ? ((this.state.current.getTime () - this.state.start.getTime ()) / 1000) : 0;
-		
+
 		return <div className={this.props.className}>
 			<button
 				type="button"
@@ -314,7 +314,7 @@ export default class Action extends Component {
 						onClick={() => this.setState ({showModal: false})}
 					>{i18n ("Close")}</button>
 				</div>
-				<ModalComponent recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
+				<ModalComponent {...this.props} recordId={this.state.recordId} store={this.props.store} grid={this.props.grid} />
 			</Modal>}
 		</div>;
 	}
