@@ -7,6 +7,7 @@ import FileField from "./FileField";
 import Action from "./Action";
 import Cell from "./Cell";
 import Filters from "./Filters";
+import Loading from "./Loading";
 import _sortBy from "lodash.sortby";
 import _filter from "lodash.filter";
 import _map from "lodash.map";
@@ -22,6 +23,7 @@ class ImportCSV extends Component {
 		super (props);
 
 		this.state = {
+			loading: true,
 			file: null,
 			cols: [],
 			rows: [],
@@ -29,38 +31,107 @@ class ImportCSV extends Component {
 		};
 	}
 
+	async componentDidMount () {
+		const model = this.props.store.getModel(this.props.opts.model);
+		let properties = model.properties;
+		let dicts = {};
+
+		if (this.props.opts.properties) {
+			properties = {};
+			this.props.opts.properties.forEach(a => properties[a] = model.properties[a]);
+		}
+		for (let a in properties) {
+			let property = properties[a];
+
+			if (property.type >= 1000 && this.props.store.getModel(property.type).isDictionary()) {
+				dicts[property.type] = dicts[property.type] || {};
+				(await this.props.store.getDict(property.type)).forEach(record => {
+					dicts[property.type][record.id] = record.id;
+					dicts[property.type][record.code] = record.id;
+					dicts[property.type][record.name] = record.id;
+				});
+			}
+		}
+		this.setState({ model, properties, dicts, loading: false });
+	}
+
 	onLoad = () => {
 		const reader = new FileReader ();
 
-		reader.onload = () => {
+		reader.onload = async () => {
 			const body = reader.result;
-			const rows = body.split ("\n").filter(row => row.includes(";")).map(row => row.split (";"));
-			const cols = rows[0];
+			const rows = body.split ("\r\n").filter(row => row.includes(";")).map(row => row.split (";"));
+			const cols = rows[0].map(col => {
+				let property = this.state.properties[col];
+				let o = { code: col };
+
+				if (property) {
+					o.label = i18n(property.name);
+				} else {
+					o.error = i18n("property not exist or forbidden");
+				}
+				return o;
+			});
 			rows.splice(0, 1);
+
+			for (let i = 0; i < rows.length; i ++) {
+				const row = rows[i];
+				const newRow = [];
+
+				for (let j = 0; j < row.length; j ++) {
+					const o = { value: row[j] };
+					const col = cols[j].code;
+					const property = this.state.properties[col];
+
+					if (o.value) {
+						if (property) {
+							if (property.type == 2) {
+								o.value = o.value.split(",").join(".");
+
+								if (isNaN(o.value)) {
+									o.error = i18n("Invalid value");
+								}
+							}
+							if (property.type >= 1000) {
+								if (this.props.store.getModel (property.type).isDictionary ()) {
+									const v = this.state.dicts[property.type][o.value];
+
+									if (v) {
+										o.value = v;
+									} else {
+										o.error = i18n("Invalid value");
+									}
+								}
+							}
+						} else {
+							o.error = i18n ("property not exist or forbidden");
+						}
+					}
+					newRow.push(o);
+				}
+				rows[i] = newRow;
+			}
+			console.log(cols, rows);
 			this.setState({ cols, rows, loaded: true });
 		};
 		reader.readAsText (this.state.file, "utf-8");
 	}
 
 	onAdd = async ({progress}) => {
-		const model = this.props.store.getModel(this.props.opts.model);
-
 		await this.props.store.transaction(async () => {
 			for (let i = 0; i < this.state.rows.length; i ++) {
 				progress ({value: i + 1, max: this.state.rows.length});
 				const data = {
 					_model: this.props.opts.model
 				};
-				this.state.rows[i].forEach((v, i) => {
-					if (v) {
-						let col = this.state.cols[i];
-						let property = model.properties[col];
+				this.state.rows[i].forEach((cell, i) => {
+					let col = this.state.cols[i];
 
-						if (property && this.props.opts.properties.includes(col)) {
-							if (property.type == 2) {
-								v = v.split(",").join(".");
-							}
-							data[col] = v;
+					if (!col.error) {
+						let property = this.state.properties[col.code];
+
+						if (property && cell.value && !cell.error) {
+							data[col.code] = cell.value;
 						}
 					}
 				});
@@ -71,42 +142,22 @@ class ImportCSV extends Component {
 	}
 
 	render () {
-		const model = this.props.store.getModel(this.props.opts.model);
-		const properties = this.props.opts.properties;
-
+		if (this.state.loading) {
+			return <Loading />;
+		}
 		return <div>
 			<FileField label={i18n("File")} accept=".csv" onChange={({file}) => this.setState({file})} />
 			<Action label={i18n("Load")} icon="fas fa-file-import" disabled={!this.state.file} onClick={this.onLoad} />
 			<table className="table table-sm table-bordered my-3">
 				<thead><tr>
-				{this.state.cols.map((col, i) => {
-					let name = col;
-					let property = model.properties[col];
-
-					if (property) {
-						name = `${name} (${i18n(property.name)})`;
-					} else {
-						name = `"${name}" (${i18n("property not exist")})`;
-					}
-					if (!properties.includes(col)) {
-						name = `"${col}" (${i18n("property not allowed for import")})`;
-					}
-					return <th key={i}>{name}</th>;
-				})}
+				{this.state.cols.map((col, i) => <th key={i}>{`${col.code} (${col.label || col.error})`}</th>)}
 				</tr></thead>
 				<tbody>
 				{this.state.rows.map((row, i) => {
 					return <tr key={i}>
-						{row.map((v, i) => {
-							let col = this.state.cols[i];
-							let property = model.properties[col];
-							let tdCls = "";
-
-							if (!property || !properties.includes(col)) {
-								tdCls = "table-danger";
-							}
-							return <td key={i} className={tdCls}>{v}</td>;
-						})}
+						{row.map(
+							(cell, i) => <td key={i} className={cell.error ? "table-danger" : ""}>{cell.value}</td>
+						)}
 					</tr>;
 				})}
 				</tbody>

@@ -219,8 +219,7 @@
 	"show": "показать",
 	"hide": "скрыть",
 	"unavailable": "недоступно",
-	"property not exist": "свойство не найдено",
-	"property not allowed for import": "свойство недоступно для импорта",
+	"property not exist or forbidden": "свойство не найдено или недоступно",
 	"add": "добавить",
 	"added successfully": "добавлено успешно"
 }
