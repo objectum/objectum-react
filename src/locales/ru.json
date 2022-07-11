@@ -221,5 +221,6 @@
 	"unavailable": "недоступно",
 	"property not exist or forbidden": "свойство не найдено или недоступно",
 	"add": "добавить",
-	"added successfully": "добавлено успешно"
+	"added successfully": "добавлено успешно",
+	"load template": "загрузить шаблон"
 }
