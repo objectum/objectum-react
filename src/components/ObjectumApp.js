@@ -25,20 +25,20 @@ import {setStore} from "../modules/common";
 
 function usePageViews (pushLocation, locations) {
 	let location = useLocation ();
-	
+
 	React.useEffect (() => {
 		let pathname = window.location.pathname;
 		let hash = window.location.hash;
-		
+
 		if (locations.length && locations [locations.length - 1].pathname == pathname) {
 			locations [locations.length - 1].hash = hash;
 			return;
 		}
 		let needPop = false;
-		
+
 		if (locations.length) {
 			let tokens = locations [locations.length - 1].pathname.split ("/");
-			
+
 			if (tokens [tokens.length - 1] == "new") {
 				needPop = true;
 			}
@@ -55,7 +55,7 @@ function PageViews ({pushLocation, locations}) {
 export default class ObjectumApp extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		this.state = {
 			sidebarDocked: true,
 			headerVisible: true,
@@ -70,7 +70,7 @@ export default class ObjectumApp extends Component {
 		setStore (this.props.store);
 		this.store = this.props.store;
 		this.menuItemRecs = [];
-		
+
 		setLocale (this.props.locale || "en");
 
 		this.locationLabel = {
@@ -116,7 +116,7 @@ export default class ObjectumApp extends Component {
 		this.store.addListener ("connect", this.onConnect);
 		this.store.addListener ("disconnect", this.onDisconnect);
 		window.addEventListener ("scroll", this.onScroll)
-		
+
 		if (this.props.username && this.props.password) {
 			try {
 				await this.store.auth ({
@@ -135,24 +135,24 @@ export default class ObjectumApp extends Component {
 			});
 		}
 	}
-	
+
 	componentWillUnmount () {
 		this.store.removeListener ("connect", this.onConnect);
 		this.store.removeListener ("disconnect", this.onConnect);
 		window.removeEventListener ("scroll", this.onScroll);
 	}
-	
+
 	onConnect = async (opts) => {
 		let menuId = opts.menuId;
 		let state = {sid: opts.sid};
-		
+
 		if (menuId) {
 			let result = await this.store.getData ({
 				query: "objectum.userMenuItems",
 				menu: menuId
 			});
 			this.menuItemRecs = result.recs;
-			
+
 			let items = [];
 			let addItems = (items, recs) => {
 				recs.forEach (rec => {
@@ -163,9 +163,9 @@ export default class ObjectumApp extends Component {
 						path: rec.path
 					};
 					items.push (item);
-					
+
 					let childs = _filter (this.menuItemRecs, {parent: rec.id});
-					
+
 					if (childs.length) {
 						item.items = [];
 						addItems (item.items, childs);
@@ -173,7 +173,7 @@ export default class ObjectumApp extends Component {
 				});
 			};
 			addItems (items, _filter (this.menuItemRecs, {parent: null}));
-			
+
 			this.menuItems = items;
 		} else {
 			this.menuItemRecs = [];
@@ -184,17 +184,17 @@ export default class ObjectumApp extends Component {
 		}
 		this.setState (state);
 	}
-	
+
 	onDisconnect = async () => {
 		if (this.props.onDisconnect) {
 			await execute (this.props.onDisconnect);
 		}
 	}
-	
+
 	onClickMenu = (key) => {
 		this.setState ({[key]: !this.state [key]});
 	}
-	
+
 	renderSidebarMenu (size) {
 		function renderIcon (icon, key) {
 			if (icon) {
@@ -206,14 +206,14 @@ export default class ObjectumApp extends Component {
 		let items = [];
 		let renderItems = (parent, level, parentOpened) => {
 			let recs = this.menuItemRecs.filter (rec => rec.parent == parent);
-			
+
 			recs.forEach ((rec, i) => {
 				let childRecs = this.menuItemRecs.filter (menuItemRec => menuItemRec.parent == rec.id);
 				let key = `menu-${parent}-${i}`;
-				
+
 				if (childRecs.length) {
 					let opened = this.state [`open-${parent}-${i}`];
-					
+
 					items.push (
 						<div key={key} className="fade-in height-100-1">
 							<button className={`btn btn-link shadow-none pl-3 ml-${level * 2}`} onClick={() => this.onClickMenu (`open-${parent}-${i}`)}>
@@ -227,7 +227,7 @@ export default class ObjectumApp extends Component {
 				} else {
 					let selected = this.state.selectedItem == key;
 					let cls = selected ? "bg-primary" : "";
-					
+
 					if (parent) {
 						cls += ` menu-hidden ${parentOpened ? "menu-visible" : ""}`;
 					}
@@ -246,20 +246,20 @@ export default class ObjectumApp extends Component {
 			});
 		};
 		renderItems (null, 0);
-		
+
 		let menu = <div className="menu">
 			{items}
 			<div>
 				<LogoutButtonSB app={this} size={size} />
 			</div>
 		</div>;
-		
+
 		if (this.props.onRenderSidebar) {
 			menu = this.props.onRenderSidebar (menu);
 		}
 		return menu;
 	}
-	
+
 	renderNavbarMenu () {
 		return <Navbar iconsTop={this.props.iconsTop} className2="navbar navbar-expand navbar-light bg-info"
 			items={[
@@ -336,11 +336,12 @@ export default class ObjectumApp extends Component {
 			<Route key="objectum-17" path="/import_css" render={props => <ImportCSS {...props} />} />,
 			<Route key="objectum-18" path="/stat" render={props => <Stat {...props} store={this.store} />} />
 		];
+		let routeCount = 1
 		let SearchRoutes = (children) => {
 			React.Children.forEach (children, (child, i) => {
 				if (child && child.props) {
 					if (child && child.type && child.type.displayName == "ObjectumRoute") {
-						items.push (<Route key={`route-${i}`} {...child.props} app={this} />);
+						items.push (<Route key={`route-${routeCount ++}`} {...child.props} app={this} />);
 					}
 					if (child.props.children) {
 						SearchRoutes (child.props.children);
@@ -349,16 +350,16 @@ export default class ObjectumApp extends Component {
 			});
 		};
 		SearchRoutes (this.props.children);
-		
+
 		let model = {}, parent = {};
-		
+
 		_each (this.store.map ["model"], m => {
 			model [m.getPath ()] = true;
 			parent [m.get ("parent")] = true;
 		});
 		_each (_keys (model), path => {
 			let m = this.store.getModel (path);
-			
+
 			if (parent [m.get ("id")]) {
 				return;
 			}
@@ -386,10 +387,10 @@ export default class ObjectumApp extends Component {
 		});
 		return items;
 	}
-	
+
 	pushLocation = (pathname, hash, needPop) => {
 		let locations = [...this.state.locations];
-		
+
 		if (needPop) {
 			locations.splice (locations.length - 1, 1);
 		}
@@ -410,15 +411,15 @@ export default class ObjectumApp extends Component {
 			this.setState ({locations: [...locations, {pathname, hash}]});
 		}
 	}
-	
+
 	popLocation = () => {
 		let locations = [...this.state.locations];
 		let l = locations.splice (locations.length - 1, 1);
-		
+
 		this.setState ({locations});
 		return l;
 	}
-	
+
 	render () {
 		if (this.state.error) {
 			return <div className="container">
@@ -433,7 +434,7 @@ export default class ObjectumApp extends Component {
 		}
 */
 		let content;
-		
+
 		if (this.state.sid) {
 			if (this.props.onCustomRender) {
 				content = this.renderRoutes ();
@@ -460,14 +461,14 @@ export default class ObjectumApp extends Component {
 									}>
 										<i className="fas fa-bars mr-2"/><span className="text-dark">{i18n ("Menu")}</span>
 									</button>
-									
+
 									<HomeButtonSB />
 									<BackButtonSB popLocation={this.popLocation} locations={this.state.locations}/>
-									
+
 									<span className="ml-3 font-weight-bold">{`${this.state.name || "Objectum"} (${i18n ("version")}: ${this.state.version}, ${i18n ("user")}: ${this.store.username})`}</span>
 								</div>
 							</Fade>
-							
+
 							<div className="objectum-content">
 								{this.renderRoutes ()}
 							</div>
@@ -475,7 +476,7 @@ export default class ObjectumApp extends Component {
 					</div>;
 				} else {
 					let label = this.props.label || `${this.state.name || "Objectum"} (${i18n ("version")}: ${this.state.version}, ${i18n ("user")}: ${this.store.username})`;
-					
+
 					content = <Fade>
 {/*
 						<Navbar className="navbar navbar-expand" linkClassName="nav-item nav-link text-dark" items={[
@@ -524,7 +525,7 @@ export default class ObjectumApp extends Component {
 				</div>
 			;
 			let customContent;
-			
+
 			if (this.props.onCustomRender) {
 				customContent = this.props.onCustomRender ({content, app: this, location: this.state.locations.length ? this.state.locations [this.state.locations.length - 1]: {}});
 

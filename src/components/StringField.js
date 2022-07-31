@@ -8,7 +8,7 @@ import _isEmpty from "lodash.isempty";
 export default class StringField extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		this.state = {
 			rsc: this.props.rsc || "record",
 			code: this.props.property,
@@ -42,7 +42,7 @@ export default class StringField extends Component {
 		let value = val.target.value;
 		let valid = true;
 		let state = {value, showDialog: true};
-		
+
 		if (this.state.regexp && !this.state.regexp.test (value)) {
 			valid = false;
 		} else {
@@ -61,11 +61,15 @@ export default class StringField extends Component {
 		}
 		this.setState (state);
 	}
-	
+
+	setValue = value => this.onChange(value)
+
+	getValue = () => this.state.value
+
 	onChangeTime = ({hour, minute}) => {
 		hour = hour || this.state.hour || "00";
 		minute = minute || this.state.minute || "00";
-		
+
 		if (hour) {
 			this.setState ({hour});
 		}
@@ -109,7 +113,7 @@ export default class StringField extends Component {
 				this.quill.on ("text-change", (delta, oldDelta, source) => {
 					let value = this.quill.root.innerHTML;
 					this.setState ({value});
-					
+
 					if (this.props.onChange) {
 						this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 					}
@@ -120,13 +124,13 @@ export default class StringField extends Component {
 
 	async componentDidUpdate (prevProps) {
 		let state = {};
-		
+
 		if (prevProps.value !== this.props.value) {
 			state.value = this.props.value === null ? "" : this.props.value;
 		}
 		if (prevProps.regexp !== this.props.regexp) {
 			let regexp = this.props.regexp;
-			
+
 			if (regexp && typeof (regexp) == "string") {
 				regexp = eval (regexp);
 			}
@@ -144,13 +148,13 @@ export default class StringField extends Component {
 
 	onKeyDown (e) {
 		let ta = e.target;
-		
+
 		if (e.key === "Tab") {
 			let val = ta.value, start = ta.selectionStart, end = ta.selectionEnd;
-			
+
 			ta.value = val.substring (0, start) + "\t" + val.substring (end);
 			ta.selectionStart = ta.selectionEnd = start + 1;
-			
+
 			e.preventDefault ();
 		}
 	}
@@ -192,7 +196,7 @@ export default class StringField extends Component {
 		if (this.state.regexp && this.state.value && !this.state.regexp.test (this.state.value)) {
 			valid = false;
 			error = i18n ("Invalid value");
-			
+
 			if (this.props.exampleValue) {
 				error += `. ${i18n ("Example")}: ${this.props.exampleValue}`;
 			}
@@ -216,7 +220,7 @@ export default class StringField extends Component {
 			cmp = <div className="border p-1" id={this.id} />;
 		} else if (this.props.time) {
 			let hours = [], minutes = [];
-			
+
 			for (let i = 0; i < 60; i ++) {
 				if (i < 24) {
 					hours.push (String (i).padStart (2, "0"));
@@ -224,10 +228,10 @@ export default class StringField extends Component {
 				minutes.push (String (i).padStart (2, "0"));
 			}
 			let hour = "", minute = "";
-			
+
 			if (this.state.value) {
 				let tokens = this.state.value.split (":");
-				
+
 				if (tokens.length == 2) {
 					hour = tokens [0];
 					minute = tokens [1];

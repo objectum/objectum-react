@@ -40,7 +40,7 @@ store.addListener ("record", data => {
 
 function HomeButton (props) {
 	let history = useHistory ();
-	
+
 	function handleClick () {
 		history.push ("/");
 	}
@@ -60,7 +60,7 @@ class Cmp extends Component {
 class Test extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		this.onClick = this.onClick.bind (this);
 
 		this.state = {
@@ -72,11 +72,14 @@ class Test extends Component {
 			value: "",
 			tabs: [<div>1</div>, <div>2</div>, <div>3</div>]
 		};
-		this._refs = {"test": React.createRef ()};
+		this._refs = {
+			"test": React.createRef (),
+			"cmp": React.createRef ()
+		};
 		this.changed = {};
 		DateField.prototype.holidays = {"2021-05-20": "ee", "2021-05-19": "dd"};
 	}
-	
+
 	componentDidMount () {
 		this.setState ({
 			recs: [
@@ -108,13 +111,13 @@ class Test extends Component {
 			value: 5
 		});
 	}
-	
+
 	async onClick () {
 		let record = await store.getRecord (1023);
 		record.cost = record.cost + 1;
 		await record.sync ();
 	}
-	
+
 	render () {
 		window.OBJECTUM_APP.hideSeconds = true;
 		return (
@@ -143,6 +146,7 @@ class Test extends Component {
 							store={store} rsc="record" rid={this.state.id} mid="item"
 							onCreate={() => this.setState ({refresh: !this.state.refresh})}
 							onSave={() => this.setState ({refresh: !this.state.refresh})}
+							ref={this._refs ["cmp"]}
 						>
 							<DateField property="date" showTime />
 							<Field property="name" hideLabel onChange={opts => {
@@ -150,12 +154,12 @@ class Test extends Component {
 									opts.value = "123-"
 								}
 							}} />
-							<Action label={"test"} onClick={() => this.setState ({category: 1115})} />
+							<Action label={"test"} onClick={() => console.log(this._refs ["cmp"].current.setState({'name': '123'}))} />
 							<div className="row">
 								<div className="col-8">
 								</div>
 								<div className="col">
-									<DictField property="category" value={this.state.category} />
+									<DictField property="category" />
 								</div>
 							</div>
 							<JsonField property="opts" props={[
@@ -184,29 +188,29 @@ class Test extends Component {
 class Demo extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		store.setUrl ("/api");
-		
+
 		//store.register ("org", OrgModel);
 		//store.register ("tk", TkModelClient);
 		//store.register ("t.org.product", TOrgProductModel);
 		//store.register ("brak", BrakModel);
 		//store.register ("t.brak.dish", TBrakDishModel);
 		store.register ("item", ItemModel);
-		
+
 		this.onCustomRender = this.onCustomRender.bind (this);
-		
+
 		this.state = {};
 		//window.store = store;
 	}
-	
+
 	onConnect = async () => {
 		this.setState ({
 			username: store.username
 		});
 		window.store = store;
 	}
-	
+
 	onCustomRender ({content, app, location}) {
 		if (!app.state.sid) {
 			return <div>
@@ -215,10 +219,10 @@ class Demo extends Component {
 			</div>;
 		}
 	}
-	
+
 	render () {
 		let me = this;
-		
+
 		return <ObjectumApp
 			locale="ru"
 			store={store}
