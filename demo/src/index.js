@@ -148,7 +148,7 @@ class Test extends Component {
 							onSave={() => this.setState ({refresh: !this.state.refresh})}
 							ref={this._refs ["cmp"]}
 						>
-							<DateField property="date" showTime />
+							<Field property="date" disabled />
 							<Field property="name" hideLabel onChange={opts => {
 								if (opts.value == "123") {
 									opts.value = "123-"
