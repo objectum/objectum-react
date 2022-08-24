@@ -49,7 +49,7 @@ export default class StringField extends Component {
 			state.lastValidValue = value;
 		}
 		if (this.props.onChange) {
-			let opts = {...this.props, code: this.state.code, property: this.state.code, value, oldValue: this.state.value,  id: this.props.id, invalid: !valid};
+			let opts = {...this.props, code: this.state.code, property: this.state.code, value, oldValue: this.state.value || "",  id: this.props.id, invalid: !valid};
 			this.props.onChange (opts);
 
 			//if (valid) {
