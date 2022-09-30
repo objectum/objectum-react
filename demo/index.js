@@ -8,8 +8,6 @@ import {dirname} from "path";
 
 import Proxy from "objectum-proxy";
 
-const __filename = fileURLToPath (import.meta.url);
-const __dirname = dirname (__filename);
 const config = JSON.parse (fs.readFileSync ("./config.json", "utf8"));
 const proxy = new Proxy ();
 
@@ -17,4 +15,4 @@ proxy.register ("org", OrgModel);
 //proxy.register ("tk", TkModel);
 //proxy.register (Access);
 
-proxy.start ({config, path: "/api", __dirname});
+proxy.start ({config, path: "/api", __dirname: config.rootDir});
