@@ -12,11 +12,11 @@ import _isEmpty from "lodash.isempty";
 export default class Form extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		this.fileMap = {};
 		this.record = null;
 		this.model = null;
-		
+
 		this.state = {
 			_loading: true,
 			_saving: false,
@@ -29,7 +29,7 @@ export default class Form extends Component {
 			Object.assign (this.state, this.props.values);
 		}
 	}
-	
+
 	getValues (children) {
 		let values = {};
 
@@ -38,7 +38,7 @@ export default class Form extends Component {
 				return;
 			}
 			let code = child.props.property;
-			
+
 			if (code) {
 				values [code] = this.state [code];
 			} else
@@ -48,16 +48,16 @@ export default class Form extends Component {
 		});
 		return values;
 	}
-	
+
 	getFields (children) {
 		let fields = {};
-		
+
 		React.Children.forEach (children, child => {
 			if (!child || !child.props) {
 				return;
 			}
 			let code = child.props.property;
-			
+
 			if (code) {
 				fields [code] = child;
 			} else
@@ -67,19 +67,19 @@ export default class Form extends Component {
 		});
 		return fields;
 	}
-	
+
 	updateState = async (prevProps = {}, initStateValues) => {
 		let state = {};
 		//let getValue = (a) => state.hasOwnProperty (a) ? state [a] : this.state [a];
 		//let initStateValues = false;
-		
+
 		try {
 			// edit record
 			if (this.props.rsc && this.props.rid && this.props.rid != prevProps.rid) {
 				initStateValues = true;
 				state._rid = this.props.rid;
 				this.record = await this.props.store.getRsc (this.props.rsc, this.props.rid);
-				
+
 				if (this.props.rsc == "record") {
 					this.model = this.props.store.getModel (this.record.get ("_model"));
 				}
@@ -101,7 +101,7 @@ export default class Form extends Component {
 			}
 			if (initStateValues) {
 				let fields = this.getFields (this.props.children);
-				
+
 				for (let code in fields) {
 					let field = fields [code];
 					let value;
@@ -147,12 +147,12 @@ export default class Form extends Component {
 			this.setState (state);
 		}
 	}
-	
+
 	async componentDidMount () {
 		await this.updateState ({}, true);
 		this.autoSaveIntervalId = setInterval (this.autoSave, this.props.autoSaveInterval || 5000);
 	}
-	
+
 	async componentDidUpdate (prevProps) {
 		if (this.props.rsc && prevProps.rid && this.props.rid != prevProps.rid) {
 			await this.autoSave ();
@@ -182,12 +182,12 @@ export default class Form extends Component {
 			this.fileMap [code] = file;
 		}
 		state [code] = value;
-		
+
 		if (value && this.state [`${code}-error`]) {
 			state [`${code}-error`] = "";
 
 			let errors = false;
-			
+
 			_each (this.state, (v, a) => {
 				if (v && a.endsWith ("-error") && a != `${code}-error`) {
 					errors = true;
@@ -198,23 +198,23 @@ export default class Form extends Component {
 			}
 		}
 		this.setState (state);
-		
+
 		if (this.props.onChange) {
 			this.props.onChange ({property: code, code, value, file});
 		}
 	}
-	
+
 /*
 	async upload ({sessionId, objectId, classAttrId, name, file}) {
 		let formData = new FormData ();
-		
+
 		formData.append ("objectId", objectId);
 		formData.append ("classAttrId", classAttrId);
 		formData.append ("name", name);
 		formData.append ("file", file);
-		
+
 		let url = this.props.store.getUrl ();
-		
+
 		if (url [url.length - 1] == "/") {
 			url = url.substr (0, url.length - 1);
 		}
@@ -234,12 +234,12 @@ export default class Form extends Component {
 		let state = {_saving: false};
 		let values = this.getValues (this.props.children);
 		let changed = false;
-		
+
 		try {
 			for (let code in values) {
 				let value = values [code];
 				let property = this.model && this.model.properties [code];
-				
+
 				if (value && property && (property.type == 2 || property.type >= 1000)) {
 					value = Number (value);
 				}
@@ -258,26 +258,29 @@ export default class Form extends Component {
 				this.setState ({_saveProgress: 25});
 				await this.props.store.startTransaction (`${i18n ("Saving")}, id: ${this.state._rid}`);
 				this.setState ({_saveProgress: 50});
-				await this.record.sync ();
+
+				let fileNum = 0
 
 				for (let code in values) {
 					if (this.fileMap [code]) {
-/*
-						await this.upload ({
-							sessionId: this.props.store.getSessionId (),
-							objectId: this.record.get ("id"),
-							classAttrId: this.model.properties [code].get ("id"),
-							name: this.record.get (code),
-							file: this.fileMap [code]
-						});
-*/
+						fileNum ++
+					}
+				}
+				for (let code in values) {
+					if (this.fileMap [code]) {
 						await this.props.store.upload ({
 							recordId: this.record.get ("id"),
 							propertyId: this.model.properties [code].get ("id"),
 							name: this.record.get (code),
 							file: this.fileMap [code]
 						});
+						fileNum --
 					}
+				}
+				if (fileNum) {
+					throw new Error(i18n('File upload error'))
+				} else {
+					await this.record.sync ();
 				}
 				this.setState ({_saveProgress: 75});
 				await this.props.store.commitTransaction ();
@@ -302,24 +305,24 @@ export default class Form extends Component {
 			console.error (err.stack);
 		}
 		this.setState (state);
-		
+
 		return !state._error;
 	}
-	
+
 	onCreate = async () => {
 		if (!(await this.isValid ())) {
 			return false;
 		}
 		this.setState ({_creating: true});
-		
+
 		await this.props.store.startTransaction (`${i18n ("Creating")}${this.props.mid ? `, ${i18n ("model")}: ${this.props.mid}` : ""}`);
-		
+
 		let state = {_creating: false};
 		let values = this.getValues (this.props.children);
-		
+
 		try {
 			let data = {};
-			
+
 			if (this.props.rsc == "record") {
 				data ["_model"] = this.model.getPath ();
 			}
@@ -329,7 +332,7 @@ export default class Form extends Component {
 			for (let code in values) {
 				let value = values [code];
 				let property = this.model && this.model.properties [code];
-				
+
 				if (value && property && (property.type == 2 || property.type >= 1000)) {
 					value = Number (value);
 				}
@@ -342,10 +345,10 @@ export default class Form extends Component {
 				data [code] = value;
 			}
 			this.record = await this.props.store.createRsc (this.props.rsc, data);
-			
+
 			state._rid = this.record.get ("id");
 			state._error = "";
-			
+
 			for (let code in values) {
 				if (this.fileMap [code]) {
 /*
@@ -366,7 +369,7 @@ export default class Form extends Component {
 				}
 			}
 			await this.props.store.commitTransaction ();
-			
+
 			for (let code in values) {
 				state [code] = this.record.get (code);
 			}
@@ -389,12 +392,12 @@ export default class Form extends Component {
 		}
 		return !state._error;
 	}
-	
+
 	async isValid () {
 		let fields = this.getFields (this.props.children);
 		let state = {}, errors = {};
 		let values = {};
-		
+
 		for (let code in fields) {
 			values [code] = this.state [code];
 		}
@@ -404,7 +407,7 @@ export default class Form extends Component {
 			let property = this.model && this.model.properties [code];
 
 			state [`${code}-error`] = "";
-			
+
 			if (this.model && this.model.properties [code] && this.model.properties [code].notNull) {
 				notNull = true;
 			}
@@ -413,7 +416,7 @@ export default class Form extends Component {
 			}
 			if (field.props.onValidate) {
 				let result = field.props.onValidate ({value: this.state [code], values, errors, form: this});
-				
+
 				if (result) {
 					errors [code] = result;
 				}
@@ -428,20 +431,20 @@ export default class Form extends Component {
 			}
 			state._error = i18n ("Form contains errors");
 			this.setState (state);
-			
+
 			return false;
 		}
 		return true;
 	}
-	
+
 	isChanged () {
 		let changed = false;
 		let values = this.getValues (this.props.children);
-		
+
 		for (let code in values) {
 			let stateValue = this.state [code];
 			let recordValue = this.record && this.record [code];
-			
+
 			if (stateValue === "" || stateValue === undefined) {
 				stateValue = null;
 			}
@@ -474,7 +477,7 @@ export default class Form extends Component {
 			}
 			let key = `${parent}-${i}`;
 			let code = child.props.property;
-			
+
 			if (code) {
 				let value = this.state.hasOwnProperty (code) ? this.state [code] : (child.props.value || "");
 //				let value = child.props.value !== undefined ? child.props.value : (this.state [code] || ""); todo: button Save disabled
@@ -499,24 +502,24 @@ export default class Form extends Component {
 				};
 				if (this.model && this.model.properties [code]) {
 					let property = this.model.properties [code];
-					
+
 					if (property.notNull) {
 						props.notNull = true;
 					}
 					props.label = props.hasOwnProperty ("label") ? props.label : property.name;
 				}
 				props.rsc = props.rsc || this.props.rsc;
-				
+
 				let field;
-				
+
 				if (child.type.displayName == "Field") {
 					let type = child.props.type;
-					
+
 					if (!type && this.model && this.model.properties [code]) {
 						let property = this.model.properties [code];
-						
+
 						type = property.type;
-						
+
 						if (property.secure) {
 							props.secure = true;
 						}
@@ -543,7 +546,7 @@ export default class Form extends Component {
 					if (type >= 1000) {
 						let property = this.model.properties [code];
 						let model = this.props.store.getModel (property.type);
-						
+
 						if (child.props.dict || model.isDictionary () || this.props.store.dict [model.getPath ()] || this.props.store.dict [model.id]) {
 							field = <DictField {...props} />;
 						} else
@@ -579,7 +582,7 @@ export default class Form extends Component {
 			}
 			if (child.props.children) {
 				let o = {};
-				
+
 				o.children = this.renderChildren (child.props.children);
 				return (
 					React.cloneElement (child, {
@@ -591,7 +594,7 @@ export default class Form extends Component {
 			}
 		});
 	}
-	
+
 	render () {
 		if (!this.props.record && (!this.props.store || !this.props.rsc || (!this.props.rid && !this.props.mid && this.props.rsc == "record"))) {
 			return <EditForm {...this.props} />;
