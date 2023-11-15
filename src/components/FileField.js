@@ -9,15 +9,15 @@ import Modal from "react-modal";
 
 function FileInput (props) {
 	let propertyId = props.propertyId;
-	
+
 	if (!propertyId && props.model && props.property) {
 		let model = props.store.getModel (props.model);
 		let property = model.properties [props.property];
-		
+
 		propertyId = property.id;
 	}
 	let recordId = props.recordId;
-	
+
 	if (!recordId && props.record) {
 		recordId = props.record.id;
 	}
@@ -36,7 +36,7 @@ function FileInput (props) {
 
 	if (acceptedFiles.length) {
 		file = (<div>{acceptedFiles [0].path} - {acceptedFiles [0].size} {i18n ("bytes")}</div>);
-		
+
 		if (acceptedFiles [0].path != props.value) {
 			setTimeout (() => {
 				props.onFile (props.id, acceptedFiles [0]);
@@ -82,12 +82,13 @@ function FileInput (props) {
 		}
 	}, [acceptedFiles.length]);
 
-	if (info) {
-		fileEl = info;
-	} else if (props.value) {
+	if (props.value) {
 		if (recordId) {
 			fileEl = <div className="d-flex align-items-center">
-				{!props.disabled && <button className="btn btn-link" onClick={() => props.onChange ({target: {value: null}})} title={i18n ("Remove")}>
+				{!props.disabled && <button className="btn btn-link" onClick={() => {
+					setInfo('')
+					props.onChange ({target: {value: null}})
+				}} title={i18n ("Remove")}>
 					<i className="fas fa-times text-danger" />
 				</button>}
 				<a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a>
@@ -95,6 +96,8 @@ function FileInput (props) {
 		} else {
 			fileEl = <div>{props.value}</div>;
 		}
+	} else if (info) {
+		fileEl = info;
 	}
 	return <div className={`border p-1 ${props.error ? "border-danger" : ""}`}>
 		{props.disabled ? null : <div {...getRootProps ({className: "dropzone"})}>
@@ -109,7 +112,7 @@ function FileInput (props) {
 export default class FileField extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		this.state = {
 			rsc: this.props.rsc || "record",
 			code: this.props.property,
@@ -127,7 +130,7 @@ export default class FileField extends Component {
 			let model = this.props.store.getModel (this.props.model);
 			let property = model.properties [this.props.property];
 			let propertyOpts = property.getOpts ();
-			
+
 			if (propertyOpts.image) {
 				this.state.image = {
 					width: propertyOpts.image.width || 50,
@@ -139,13 +142,13 @@ export default class FileField extends Component {
 		}
 		this.id = newId ();
 	}
-	
+
 /*
 	onChange = (val) => {
 		let value = val.target.value;
-		
+
 		this.setState ({value});
-		
+
 		if (this.props.onChange && !this.state.image) {
 			this.props.onChange ({...this.props, code: this.state.code, value, id: this.props.id});
 		}
@@ -167,7 +170,7 @@ export default class FileField extends Component {
 
 		if (this.state.image) {
 			const reader = new FileReader ();
-			
+
 			reader.addEventListener ("load", () =>
 				this.setState ({src: reader.result, showModal: true})
 			);
@@ -187,25 +190,25 @@ export default class FileField extends Component {
 			await loadCSS (`${this.props.store.getUrl ()}/public/react-image-crop/ReactCrop.css`);
 		}
 	}
-	
+
 	async componentDidUpdate (prevProps) {
 		if (prevProps.value !== this.props.value) {
 			this.setState ({value: this.props.value});
 		}
 	}
-	
+
 	onImageLoaded = (image) => {
 		this.imageRef = image;
 	}
-	
+
 	getCroppedImg (image, crop, fileName) {
 		const canvas = document.createElement ("canvas");
 		const scaleX = image.naturalWidth / image.width;
 		const scaleY = image.naturalHeight / image.height;
-		
+
 		canvas.width = crop.width;
 		canvas.height = crop.height;
-		
+
 		const ctx = canvas.getContext ("2d");
 
 		ctx.drawImage (
@@ -229,7 +232,7 @@ export default class FileField extends Component {
 			}, "image/jpeg");
 		});
 	}
-	
+
 	async makeClientCrop (crop) {
 		if (this.imageRef && crop.width && crop.height) {
 			const file = await this.getCroppedImg (
@@ -240,15 +243,15 @@ export default class FileField extends Component {
 			this.setState ({file});
 		}
 	}
-	
+
 	onCropComplete = (crop) => {
 		this.makeClientCrop (crop);
 	}
-	
+
 	onCropChange = (crop, percentCrop) => {
 		this.setState ({image: crop});
 	}
-	
+
 	render () {
 		return <div className="form-group">
 			{this.props.label && !this.props.hideLabel && <label htmlFor={this.id}>{i18n (this.props.label)}{this.props.notNull ? <span className="text-danger ml-1">*</span> : null}</label>}
