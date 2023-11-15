@@ -94,7 +94,15 @@ function FileInput (props) {
 				<a target="_blank" rel="noopener noreferrer" href={"/files/" + recordId + "-" + propertyId + "-" + props.value}>{props.value}</a>
 			</div>;
 		} else {
-			fileEl = <div>{props.value}</div>;
+			fileEl = <div className="d-flex align-items-center">
+				{!props.disabled && <button className="btn btn-link" onClick={() => {
+					setInfo('')
+					props.onChange ({target: {value: null}})
+				}} title={i18n ("Remove")}>
+					<i className="fas fa-times text-danger" />
+				</button>}
+				{props.value}
+			</div>;
 		}
 	} else if (info) {
 		fileEl = info;
