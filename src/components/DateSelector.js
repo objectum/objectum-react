@@ -4,12 +4,12 @@ import {i18n} from "../i18n";
 export default class DateSelector extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		let value = this.checkValue (this.props.value || new Date ());
 		let localValue = new Date (value);
-		
+
 		localValue.setDate (1);
-		
+
 		this.state = {
 			showTime: this.props.showTime,
 			value,
@@ -39,13 +39,13 @@ export default class DateSelector extends Component {
 			]
 		};
 		let yearRecs = [], startYear = new Date ().getFullYear () - 100;
-		
+
 		for (let i = 0; i < 150; i ++) {
 			yearRecs.push ({id: i + startYear, name: i + startYear});
 		}
 		this.state.yearRecs = yearRecs;
 	}
-	
+
 	checkValue (value) {
 		if (typeof (value) == "string") {
 			value = new Date (value);
@@ -58,30 +58,30 @@ export default class DateSelector extends Component {
 		}
 		return value;
 	}
-	
+
 	componentDidUpdate (prevProps, prevState) {
 		if (this.props.value && this.props.value != this.state.value) {
 			let value = this.checkValue (this.props.value);
 			let localValue = new Date (value);
-			
+
 			localValue.setDate (1);
-			
+
 			this.setState ({value, localValue});
 		}
 	}
-	
+
 	renderDays () {
 		let rows = [], row = [], prevMonthWas = false;
 		let weekDay = 1, num = 0;
 		let d = new Date (this.state.localValue);
-		
+
 		while (d.getDay () != 1) {
 			d.setDate (d.getDate () - 1);
 		}
 		while (1) {
 			let color = (d.getDay () == 6 || d.getDay () == 0) ? "text-danger" : "", title = "";
 			let disabled = false;
-			
+
 			if (d.getMonth () == this.state.localValue.getMonth ()) {
 				prevMonthWas = true;
 			} else {
@@ -94,7 +94,7 @@ export default class DateSelector extends Component {
 				disabled = true;
 			}
 			let day = `${d.getFullYear ()}-${String (d.getMonth () + 1).padStart (2, "0")}-${String (d.getDate ()).padStart (2, "0")}`;
-			
+
 			if (this.props.holidays && this.props.holidays.hasOwnProperty (day)) {
 				title = this.props.holidays [day] || "";
 				color = "text-danger";
@@ -109,16 +109,18 @@ export default class DateSelector extends Component {
 			if (disabled) {
 				opts.className = "text-secondary text-center font-weight-light";
 			} else {
-				opts.onClick = () => this.onChange (cd);
-				opts.style = {cursor: "pointer"};
+				if (!(window.OBJECTUM_APP.hidePrevNextMonthDaysFromCalendar && color == "text-secondary")) {
+					opts.onClick = () => this.onChange (cd);
+					opts.style = {cursor: "pointer"};
+				}
 			}
 			row.push (<td {...opts}>
-				<div className={selected ? "text-white bg-info" : ""}>{d.getDate ()}</div>
+				<div className={selected ? "text-white bg-info" : ""}>{(window.OBJECTUM_APP.hidePrevNextMonthDaysFromCalendar && color == "text-secondary") ? "" : d.getDate ()}</div>
 			</td>);
 			num ++;
 			weekDay ++;
 			d.setDate (d.getDate () + 1);
-			
+
 			if (weekDay == 8) {
 				rows.push (<tr key={num}>{row}</tr>);
 				weekDay = 1;
@@ -130,18 +132,18 @@ export default class DateSelector extends Component {
 		}
 		return rows;
 	}
-	
+
 	onChange = (value) => {
 		this.setState ({value});
-		
+
 		if (this.props.onChange) {
 			this.props.onChange ({value});
 		}
 	}
-	
+
 	renderTime () {
 		let hours = [], minutes = [];
-		
+
 		for (let i = 0; i < 60; i ++) {
 			if (i < 24) {
 				hours.push (String (i).padStart (2, "0"));
@@ -150,7 +152,7 @@ export default class DateSelector extends Component {
 		}
 		let hour = String (this.state.value.getHours ()).padStart (2, "0");
 		let minute = String (this.state.value.getMinutes ()).padStart (2, "0");
-		
+
 		return <div className="d-flex justify-content-center">
 			<div className="my-auto mr-1">{i18n ("Time")}</div>
 			<select
@@ -183,7 +185,7 @@ export default class DateSelector extends Component {
 			</select>
 		</div>;
 	}
-	
+
 	render () {
 		return <div className="">
 			<div className="d-flex justify-content-between">

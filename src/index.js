@@ -282,5 +282,6 @@ window.OBJECTUM_APP = {
 		scrollOffset: -50,
 	},
 	scrollbarWidth: 18,
-	hideSeconds: false
+	hideSeconds: false,
+	hidePrevNextMonthDaysFromCalendar: false
 };

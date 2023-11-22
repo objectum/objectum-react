@@ -20,10 +20,10 @@ import Loading from "./Loading";
 export default class ModelRecord extends Component {
 	constructor (props) {
 		super (props);
-		
+
 		let rid = this.props.match.params.rid.split ("#")[0];
 		let hash = getHash ();
-		
+
 		this.state = {
 			rid: rid == "new" ? null : rid,
 			model: hash.opts.model,
@@ -35,39 +35,39 @@ export default class ModelRecord extends Component {
 		}
 		this.regModel = this.props.store.getRegistered (hash.opts.model) || {};
 	}
-	
+
 	async componentDidMount () {
 		let state = {loading: false};
-		
+
 		if (this.state.rid) {
 			this.record = await this.props.store.getRecord (this.state.rid);
-			
+
 			state.label = this.record.getLabel ();
 			state.disableActions = false;
-			
+
 			if (this.record._accessUpdate) {
 				state.disableActions = !(await this.record._accessUpdate ());
 			}
 		}
 		this.setState (state);
 	}
-	
+
 	onCreate = async (rid) => {
 		this.record = await this.props.store.getRecord (rid);
 		this.setState ({rid, label: this.record.getLabel ()});
 		goRidLocation (this.props, rid);
 	}
-	
+
 	getTables () {
 		let m = this.props.store.getModel (this.state.model);
-		
+
 		if (m.isTable ()) {
 			return [];
 		}
 		try {
 			let t = this.props.store.getModel (`t.${m.getPath ()}`);
 			let tables = [], has = {};
-			
+
 			_each (this.props.store.map ["model"], m => {
 				if (m.get ("parent") == t.get ("id") && !has [m.getPath ()]) {
 					tables.push (m);
@@ -79,7 +79,7 @@ export default class ModelRecord extends Component {
 			return [];
 		}
 	}
-	
+
 	async componentDidUpdate (prevProps, prevState) {
 		let rid = (rid => rid == "new" ? null : rid) (this.props.match.params.rid.split ("#")[0]);
 		let prevRid = (rid => rid == "new" ? null : rid) (prevProps.match.params.rid.split ("#")[0]);
@@ -87,10 +87,10 @@ export default class ModelRecord extends Component {
 		if (this.state.rid != prevState.rid || rid != prevRid) {
 			let hash = getHash ();
 			let label = "";
-			
+
 			if (rid) {
 				let o = await this.props.store.getRecord (rid);
-				
+
 				label = o.getLabel ();
 			}
 			this.regModel = this.props.store.getRegistered (hash.opts.model) || {};
@@ -113,12 +113,12 @@ export default class ModelRecord extends Component {
 	renderProperty (p, key, o, props = {}) {
 		let dict = false;
 		let chooseModel;
-		
+
 		if (p.get ("type") >= 1000) {
 			let m = this.props.store.getModel (p.get ("type"));
-			
+
 			dict = m.isDictionary ();
-			
+
 			if (!dict) {
 				chooseModel = m.getPath ();
 			}
@@ -127,7 +127,7 @@ export default class ModelRecord extends Component {
 		let disabled = false;
 		let hash = getHash ();
 		let rm = this.props.store.getRegistered (this.state.model);
-		
+
 		if (o && o.disabled) {
 			if (this.record && typeof (this.record [o.disabled]) == "function") {
 				disabled = this.record [o.disabled] ();
@@ -140,7 +140,7 @@ export default class ModelRecord extends Component {
 		}
 		if (hash.opts && hash.opts.parentModel) {
 			let pm = this.props.store.getModel (hash.opts.parentModel);
-			
+
 			if (pm.get ("code") == p.get ("code")) {
 				disabled = true;
 				value = hash.opts.parentId;
@@ -164,18 +164,18 @@ export default class ModelRecord extends Component {
 			);
 		}
 	}
-	
+
 	renderCol (o, key, property, model, result) {
 		let item;
-		
+
 		if ((typeof (o) == "string" && o.substr (0, 2) == "t.") || o.table) {
 			result.type = "table";
-			
+
 			try {
 				let tableModel = this.props.store.getModel (o.table || o);
 				let opts = tableModel.getOpts ();
-				let label = tableModel.getLabel ();
-				
+				let label = tableModel.get("name") || tableModel.getLabel (); // todo: option for label
+
 				if (opts.grid && opts.grid.hasOwnProperty ("label")) {
 					label = opts.grid.label;
 				}
@@ -205,7 +205,7 @@ export default class ModelRecord extends Component {
 				return o;
 			}
 			item = o.label;
-			
+
 			if (property || o.property) {
 				result.type = "property";
 				item = this.renderProperty (property || model.properties [o.property], key, o, o.props);
@@ -228,21 +228,21 @@ export default class ModelRecord extends Component {
 		}
 		return item || o;
 	}
-	
+
 	renderLayout (layout, model, level = 0, result = {propertyNum: 0, tableNum: 0, newRecordFormNum: 0}) {
 		let items = [];
 		let gen = 0;
-		
+
 		if (Array.isArray (layout)) {
 			if (!layout.length) {
 				return (<div />);
 			}
 			let formItems = [];
 			let rid = null;
-			
+
 			for (let i = 0; i < layout.length; i ++) {
 				let row = layout [i];
-				
+
 				if (typeof (row) == "string" && this.record && this.record [row]) {
 					rid = this.record [row];
 				}
@@ -251,7 +251,7 @@ export default class ModelRecord extends Component {
 						{row.map ((code, j) => {
 							let property = model.properties [code];
 							let cls = "";
-							
+
 							if (_isObject (code) && code ["class"]) {
 								if (Array.isArray (code ["class"])) {
 									cls = code ["class"].join (" ");
@@ -264,7 +264,7 @@ export default class ModelRecord extends Component {
 							}
 							let colResult = {};
 							let col = this.renderCol (code, `field-${j}`, property, model, colResult);
-							
+
 							if (colResult.type == "property") {
 								result.propertyNum ++;
 							}
@@ -288,7 +288,7 @@ export default class ModelRecord extends Component {
 					let form = <Form key={`form-${level}-${gen ++}`} store={this.props.store} rsc="record" rid={this.state.rid} mid={this.state.model} onCreate={this.onCreate} disableActions={this.state.disableActions}>
 						{formItems}
 					</Form>;
-					
+
 					if (this.regModel && this.regModel._renderForm) {
 						form = this.regModel._renderForm ({form, store: this.props.store});
 					}
@@ -300,13 +300,13 @@ export default class ModelRecord extends Component {
 		} else
 		if (_isObject (layout)) {
 			let tabs = [], newRecordFormNum = 0;
-			
+
 			Object.keys (layout).forEach ((tabName, i) => {
 				let result = {propertyNum: 0, tableNum: 0, newRecordFormNum: 0};
 				let tab = this.renderLayout (layout [tabName], model, level + 1, result);
-				
+
 				newRecordFormNum += result.newRecordFormNum;
-				
+
 				if (this.state.rid || (result.propertyNum && newRecordFormNum < 2) || (result.tableNum && (!result.propertyNum || newRecordFormNum < 2))) {
 					tabs.push (<Tab key={`tab-${level}-${gen ++}`} label={tabName}>
 						{tab}
@@ -321,17 +321,17 @@ export default class ModelRecord extends Component {
 		}
 		return items;
 	}
-	
+
 	render () {
 		let m = this.props.store.getModel (this.state.model);
 		let regModel = this.props.store.getRegistered (this.state.model) || {};
 		let properties = _sortBy (_values (m.properties), ["order", "name"]);
 		let label = i18n ("Record");
 		let columns = 1;
-		
+
 		if (regModel._form) {
 			let _form = regModel._form ();
-		
+
 			if (_form.label) {
 				label = _form.label;
 			}
@@ -350,7 +350,7 @@ export default class ModelRecord extends Component {
 			return form;
 		}
 		properties = _chunk (properties, columns);
-		
+
 		let colWidth = 12 / columns | 0;
 		let form = <Form key="form1" store={this.props.store} rsc="record" rid={this.state.rid} mid={this.state.model} onCreate={this.onCreate} disableActions={this.state.disableActions}>
 			{properties.map ((properties2, i) => {
@@ -367,7 +367,7 @@ export default class ModelRecord extends Component {
 				);
 			})}
 		</Form>;
-		
+
 		if (this.regModel && this.regModel._renderForm) {
 			form = this.regModel._renderForm ({form, store: this.props.store});
 		}

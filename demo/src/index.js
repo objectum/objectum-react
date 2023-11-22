@@ -120,6 +120,8 @@ class Test extends Component {
 
 	render () {
 		window.OBJECTUM_APP.hideSeconds = true;
+		window.OBJECTUM_APP.hidePrevNextMonthDaysFromCalendar = true
+
 		return (
 			<div className="container-fluid">
 				<StringField label="label" secure value="123" />
@@ -139,7 +141,7 @@ class Test extends Component {
 				}} />
 				<div className="row">
 					<div className="col-6">
-						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideCreate hideEdit refresh={this.state.refresh} />
+						<ModelList store={store} model="item" onSelect={id => this.setState ({id})} hideEdit hideCreate refresh={this.state.refresh} {...this.props} />
 					</div>
 					<div className="col-6 bg-white">
 						<Form
@@ -148,7 +150,7 @@ class Test extends Component {
 							onSave={() => this.setState ({refresh: !this.state.refresh})}
 							ref={this._refs ["cmp"]}
 						>
-							<Field property="date" disabled />
+							<Field property="date" />
 							<Field property="name" hideLabel onChange={opts => {
 								if (opts.value == "123") {
 									opts.value = "123-"
